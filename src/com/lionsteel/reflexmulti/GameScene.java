@@ -22,6 +22,8 @@ public class GameScene extends Scene implements ReflexConstants
 
 	private final Random		rand;
 
+	private final Sprite		barSprite;
+
 	private GameButton[]		gameButtons				= new GameButton[6];
 
 	public GameScene()
@@ -31,11 +33,15 @@ public class GameScene extends Scene implements ReflexConstants
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
+		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", 0, (int) backgroundRegion.getHeight());
 		sceneAtlas.load();
 		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 
+		barSprite = new Sprite((CAMERA_WIDTH-barRegion.getWidth())/2,CAMERA_HEIGHT-BAR_HEIGHT,barRegion,activity.getVertexBufferObjectManager());
+		
 		this.attachChild(backgroundSprite);
-
+		this.attachChild(barSprite);
+		
 		for (int x = 0; x < 6; x++)
 		{
 			GameButton button = new GameButton(x + 1, this, PLAYER_ONE);
@@ -46,7 +52,7 @@ public class GameScene extends Scene implements ReflexConstants
 		for (int x = 0; x < 6; x++)
 		{
 			GameButton button = new GameButton(x + 1, this, PLAYER_TWO);
-			button.buttonSprite.setPosition(500 + (int) ((5-x) / 3) * BUTTON_WIDTH, (x % 3) * BUTTON_WIDTH);
+			button.buttonSprite.setPosition(500 + (int) ((5 - x) / 3) * BUTTON_WIDTH, (x % 3) * BUTTON_WIDTH);
 			this.attachChild(button.buttonSprite);
 			this.registerTouchArea(button.buttonSprite);
 		}
@@ -54,7 +60,7 @@ public class GameScene extends Scene implements ReflexConstants
 		for (int x = 0; x < 6; x++)
 		{
 			gameButtons[x] = new GameButton(x + 1, this, -1);
-			gameButtons[x].buttonSprite.setPosition((CAMERA_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			gameButtons[x].buttonSprite.setPosition((CAMERA_WIDTH - BUTTON_WIDTH) / 2, ((CAMERA_HEIGHT - BUTTON_WIDTH - BAR_HEIGHT) / 2));
 			gameButtons[x].buttonSprite.setVisible(false);
 			this.attachChild(gameButtons[x].buttonSprite);
 		}
@@ -81,17 +87,25 @@ public class GameScene extends Scene implements ReflexConstants
 		switch (gameState)
 		{
 		case GameState.WAITING_FOR_BUTTON:
-			if (button.buttonNumber == (currentButton+1))
+			if (button.buttonNumber == (currentButton + 1))
 			{
-				gameButtons[currentButton].buttonSprite.registerEntityModifier(new MoveModifier(.5f, gameButtons[currentButton].buttonSprite.getX(), button.buttonSprite.getX()
-						, gameButtons[currentButton].buttonSprite.getY(), button.buttonSprite.getY())
+				gameButtons[currentButton].buttonSprite.registerEntityModifier(new MoveModifier(.4f, gameButtons[currentButton].buttonSprite.getX(), button.buttonSprite.getX(), gameButtons[currentButton].buttonSprite.getY(), button.buttonSprite.getY())
 				{
 					@Override
 					protected void onModifierFinished(IEntity pItem)
 					{
-						pItem.setPosition((CAMERA_WIDTH-BUTTON_WIDTH)/2, (CAMERA_HEIGHT-BUTTON_WIDTH)/2);
+						pItem.setPosition((CAMERA_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 						pItem.setVisible(false);
 						changeState(GameState.PICKING_NEW_BUTTON);
+						switch(button.getPlayer())
+						{
+						case PLAYER_ONE:
+							barSprite.setX(barSprite.getX()-10);
+							break;
+						case PLAYER_TWO:
+							barSprite.setX(barSprite.getX()+10);
+							break;
+						}
 						super.onModifierFinished(pItem);
 					}
 				});

@@ -31,10 +31,16 @@ public class GameButton implements ReflexConstants
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
 			{
-				onTouched();
+				if(pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
+					onTouched();
 				return false;//super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+	}
+	
+	public int getPlayer()
+	{
+		return playerOwner;
 	}
 
 	private void onTouched()
