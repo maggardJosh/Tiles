@@ -7,6 +7,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import com.lionsteel.reflexmulti.Scenes.GameScene;
+
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
 	

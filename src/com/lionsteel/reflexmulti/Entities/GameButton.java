@@ -1,10 +1,14 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Entities;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+
+import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.Scenes.GameScene;
 
 public class GameButton implements ReflexConstants
 {
@@ -14,7 +18,7 @@ public class GameButton implements ReflexConstants
 	public final Sprite			buttonSprite;
 	private final int			playerOwner;
 
-	final int buttonNumber;
+	private final int buttonNumber;
 	private final GameScene		parent;
 
 	public GameButton(final int buttonNumber, final GameScene parent, final int player)
@@ -33,11 +37,15 @@ public class GameButton implements ReflexConstants
 			{
 				if(pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
 					onTouched();
-				return false;//super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				return false;
 			}
 		};
 	}
 	
+	public int getButtonNumber()
+	{
+		return buttonNumber;
+	}
 	public int getPlayer()
 	{
 		return playerOwner;
