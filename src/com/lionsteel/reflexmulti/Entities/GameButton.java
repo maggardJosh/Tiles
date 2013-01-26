@@ -17,11 +17,12 @@ public class GameButton implements ReflexConstants
 	final TextureRegion			buttonRegion;
 	public final Sprite			buttonSprite;
 	private final int			playerOwner;
-
-	private final int buttonNumber;
+	
+	private final int			buttonNumber;
 	private final GameScene		parent;
-
-	public GameButton(final int buttonNumber, final GameScene parent, final int player)
+	
+	public GameButton(final int buttonNumber, final GameScene parent,
+			final int player)
 	{
 		activity = ReflexActivity.getInstance();
 		this.buttonNumber = buttonNumber;
@@ -33,10 +34,10 @@ public class GameButton implements ReflexConstants
 		buttonSprite = new Sprite(0, 0, buttonRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+					float pTouchAreaLocalX, float pTouchAreaLocalY)
 			{
-				if(pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
-					onTouched();
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) onTouched();
 				return false;
 			}
 		};
@@ -46,14 +47,15 @@ public class GameButton implements ReflexConstants
 	{
 		return buttonNumber;
 	}
+	
 	public int getPlayer()
 	{
 		return playerOwner;
 	}
-
+	
 	private void onTouched()
 	{
 		parent.buttonPressed(this);
 	}
-
+	
 }

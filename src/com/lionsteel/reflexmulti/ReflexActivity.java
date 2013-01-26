@@ -12,12 +12,11 @@ import com.lionsteel.reflexmulti.Scenes.GameScene;
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
 	
-	private static ReflexActivity instance;
+	private static ReflexActivity	instance;
 	
 	public static ReflexActivity getInstance()
 	{
-		if(instance == null)
-			instance = new ReflexActivity();
+		if (instance == null) instance = new ReflexActivity();
 		return instance;
 	}
 	
@@ -30,23 +29,27 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		
 		return engineOptions;
 	}
-
+	
 	@Override
-	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception
+	public void onCreateResources(
+			OnCreateResourcesCallback pOnCreateResourcesCallback)
+			throws Exception
 	{
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
-
+	
 	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
+	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
+			throws Exception
 	{
 		pOnCreateSceneCallback.onCreateSceneFinished(new GameScene());
 	}
-
+	
 	@Override
-	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
+	public void onPopulateScene(Scene pScene,
+			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-
+	
 }
