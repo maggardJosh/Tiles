@@ -7,6 +7,7 @@ import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -15,15 +16,16 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
-import org.andengine.util.modifier.ease.IEaseFunction;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.GameButton;
+import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
 
-public class GameScene extends Scene implements ReflexConstants
+public class GameScene extends Scene implements ReflexConstants,
+		IOnSceneTouchListener
 {
 	private static GameScene			instance;
 	
@@ -46,9 +48,11 @@ public class GameScene extends Scene implements ReflexConstants
 	
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	
-	private int							currentTilesetNum		= 0;
+	private int							currentTilesetNum		= 1;
 	
 	private Tileset						currentTileset;
+	
+	private GameOverScreen				gameOverScreen;
 	
 	public static GameScene getInstance()
 	{
@@ -60,7 +64,11 @@ public class GameScene extends Scene implements ReflexConstants
 	{
 		instance = this;
 		activity = ReflexActivity.getInstance();
-		currentTileset = new Tileset("base");
+		
+		gameOverScreen = new GameOverScreen();
+		gameOverScreen.setZIndex(GAME_OVER_Z);
+		this.attachChild(gameOverScreen);
+		currentTileset = new Tileset("second");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
@@ -121,6 +129,8 @@ public class GameScene extends Scene implements ReflexConstants
 		};
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
 		
+		this.setOnSceneTouchListener(this);
+		
 		this.registerTouchArea(playerOneIntro);
 		this.registerTouchArea(playerTwoIntro);
 		
@@ -165,7 +175,7 @@ public class GameScene extends Scene implements ReflexConstants
 				if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber() + 1))
 				{
 					final GameButton displayButton = currentTileset.getDisplayButton();
-					displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME/2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME/2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
+					displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 					displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), button.buttonSprite.getX(), displayButton.buttonSprite.getY(), button.buttonSprite.getY())
 					{
 						@Override
@@ -184,6 +194,25 @@ public class GameScene extends Scene implements ReflexConstants
 									barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, barSprite.getScaleX(), 1.5f, 1.0f, 1.0f), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.5f, 1.0f, 1.0f, 1.0f)));
 									break;
 							}
+							switch (button.getPlayer())
+							{
+								case PLAYER_ONE:
+									if (barSprite.getY() - BAR_SPEED < 0)
+									{
+										gameOverScreen.show(button.getPlayer());
+										changeState(GameState.GAME_OVER);
+									}
+									break;
+								case PLAYER_TWO:
+									if (barSprite.getY() + barSprite.getHeight() + BAR_SPEED > CAMERA_HEIGHT)
+									{
+										gameOverScreen.show(button.getPlayer());
+										changeState(GameState.GAME_OVER);
+									}
+									break;
+							
+							}
+							
 							super.onModifierFinished(pItem);
 						}
 						
@@ -258,6 +287,9 @@ public class GameScene extends Scene implements ReflexConstants
 			case GameState.WAITING_FOR_BUTTON:
 				
 				break;
+			case GameState.GAME_OVER:
+				
+				break;
 		}
 		
 		secondsOnCurrentState += pSecondsElapsed;
@@ -275,6 +307,7 @@ public class GameScene extends Scene implements ReflexConstants
 		public static final int	WAITING_FOR_BUTTON	= INTRO + 1;
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_BUTTON + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
+		public static final int	GAME_OVER			= SHOWING_WIN + 1;
 	}
 	
 	public void nextTileset()
@@ -296,6 +329,27 @@ public class GameScene extends Scene implements ReflexConstants
 		
 		currentTileset.setupScene();
 		changeState(GameState.PICKING_NEW_BUTTON);
+		
+	}
+	
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
+	{
+		switch (gameState)
+		{
+			case GameState.GAME_OVER:
+				resetGame();
+				break;
+		}
+		return false;
+	}
+	
+	private void resetGame()
+	{
+		barSprite.setY((CAMERA_HEIGHT - barSprite.getHeight()) / 2);
+		changeState(GameState.PICKING_NEW_BUTTON);
+		
+		gameOverScreen.setVisible(false);
 		
 	}
 }

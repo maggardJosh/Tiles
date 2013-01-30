@@ -7,7 +7,7 @@ public interface ReflexConstants
 
 	public static final int	BUTTON_WIDTH	= 150;
 	public static final int	BAR_WIDTH		= 30;
-	public static final int	BAR_SPEED		= 30;
+	public static final int	BAR_SPEED		= 35;
 
 	public static final int	DISPLAY_BUTTONS	= -1;
 	public static final int	PLAYER_ONE		= 0;
@@ -22,4 +22,5 @@ public interface ReflexConstants
 	public static final int BACKGROUND_Z = 0;
 	public static final int FOREGROUND_Z = 5;
 	public static final int BUTTON_Z = 3;
+	public static final int GAME_OVER_Z = FOREGROUND_Z+1;
 }
