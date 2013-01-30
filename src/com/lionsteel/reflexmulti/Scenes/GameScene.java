@@ -22,6 +22,8 @@ import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
 
 public class GameScene extends Scene implements ReflexConstants
 {
+	private static GameScene			instance;
+	
 	final BitmapTextureAtlas			sceneAtlas;
 	final ReflexActivity				activity;
 	private int							gameState				= GameState.INTRO;
@@ -41,12 +43,21 @@ public class GameScene extends Scene implements ReflexConstants
 	
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	
+	private int							currentTilesetNum		= 0;
+	
 	private Tileset						currentTileset;
+	
+	public static GameScene getInstance()
+	{
+		if (instance == null) instance = new GameScene();
+		return instance;
+	}
 	
 	public GameScene()
 	{
+		instance = this;
 		activity = ReflexActivity.getInstance();
-		currentTileset = new Tileset("base", this);
+		currentTileset = new Tileset("base");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
@@ -57,7 +68,10 @@ public class GameScene extends Scene implements ReflexConstants
 		
 		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		
+		backgroundSprite.setZIndex(BACKGROUND_Z);
+		
 		barSprite = new Sprite(0, (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
+		barSprite.setZIndex(FOREGROUND_Z);
 		
 		playerOneIntro = new Sprite(0, 0, playerOneIntroRegion, activity.getVertexBufferObjectManager())
 		{
@@ -80,6 +94,7 @@ public class GameScene extends Scene implements ReflexConstants
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		playerOneIntro.setZIndex(FOREGROUND_Z);
 		playerTwoIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerTwoIntroRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
@@ -101,6 +116,7 @@ public class GameScene extends Scene implements ReflexConstants
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		playerTwoIntro.setZIndex(FOREGROUND_Z);
 		
 		this.registerTouchArea(playerOneIntro);
 		this.registerTouchArea(playerTwoIntro);
@@ -130,7 +146,10 @@ public class GameScene extends Scene implements ReflexConstants
 		{
 			errorIndicators[i] = new WrongSelectionIndicator(i);
 			errorIndicators[i].setScene(this);
+			
 		}
+		
+		this.sortChildren();
 		
 	}
 	
@@ -254,4 +273,25 @@ public class GameScene extends Scene implements ReflexConstants
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 	}
 	
+	public void nextTileset()
+	{
+		
+		currentTileset.clearTileset();
+		switch (currentTilesetNum)
+		{
+			case 0:
+				currentTileset = new Tileset("second");
+				currentTilesetNum++;
+				break;
+			case 1:
+				
+				currentTileset = new Tileset("base");
+				currentTilesetNum = 0;
+				break;
+		}
+		
+		currentTileset.setupScene();
+		changeState(GameState.PICKING_NEW_BUTTON);
+		
+	}
 }

@@ -7,12 +7,16 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.view.KeyEvent;
+
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
 	
 	private static ReflexActivity	instance;
+	
+	private GameScene				gameScene;
 	
 	public static ReflexActivity getInstance()
 	{
@@ -42,7 +46,8 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception
 	{
-		pOnCreateSceneCallback.onCreateSceneFinished(new GameScene());
+		gameScene = new GameScene();
+		pOnCreateSceneCallback.onCreateSceneFinished(gameScene);
 	}
 	
 	@Override
@@ -50,6 +55,19 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_MENU)
+		{	
+			if(gameScene!= null)
+			{
+				gameScene.nextTileset();
+			}
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 	
 }

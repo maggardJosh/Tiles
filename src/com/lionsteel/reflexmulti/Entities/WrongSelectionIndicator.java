@@ -31,6 +31,7 @@ public class WrongSelectionIndicator implements ReflexConstants
 		atlas.load();
 
 		sprite = new Sprite(0, 0, region, activity.getVertexBufferObjectManager());
+		sprite.setZIndex(FOREGROUND_Z);
 		sprite.setScaleCenter(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setRotationCenter(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setVisible(false);
