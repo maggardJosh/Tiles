@@ -13,6 +13,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.modifier.ease.EaseCubicIn;
+import org.andengine.util.modifier.ease.EaseCubicOut;
+import org.andengine.util.modifier.ease.IEaseFunction;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -162,6 +165,7 @@ public class GameScene extends Scene implements ReflexConstants
 				if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber() + 1))
 				{
 					final GameButton displayButton = currentTileset.getDisplayButton();
+					displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME/2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME/2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 					displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), button.buttonSprite.getX(), displayButton.buttonSprite.getY(), button.buttonSprite.getY())
 					{
 						@Override
