@@ -2,6 +2,7 @@ package com.lionsteel.reflexmulti.Entities;
 
 import java.util.Random;
 
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -63,7 +64,7 @@ public class Tileset implements ReflexConstants
 
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				playerOneGameButtons[x].buttonSprite.setPosition((int) (x / 3) * BUTTON_WIDTH, (x % 3) * BUTTON_WIDTH);
+				playerOneGameButtons[x].buttonSprite.setPosition( BAR_WIDTH+ (x % 3) * BUTTON_WIDTH, (int) (x / 3) * BUTTON_WIDTH);
 				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
 				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
@@ -71,7 +72,7 @@ public class Tileset implements ReflexConstants
 		case PLAYER_TWO:
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				playerTwoGameButtons[x].buttonSprite.setPosition(500 + (int) ((5 - x) / 3) * BUTTON_WIDTH, (x % 3) * BUTTON_WIDTH);
+				playerTwoGameButtons[x].buttonSprite.setPosition(BAR_WIDTH+  (x % 3) * BUTTON_WIDTH,500 + (int) ((5 - x) / 3) * BUTTON_WIDTH);
 				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
 				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
@@ -80,8 +81,7 @@ public class Tileset implements ReflexConstants
 		case DISPLAY_BUTTONS:
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				displayGameButtons[x].buttonSprite.setPosition((CAMERA_WIDTH - BUTTON_WIDTH) / 2, ((CAMERA_HEIGHT - BUTTON_WIDTH - BAR_HEIGHT) / 2));
-				displayGameButtons[x].buttonSprite.setVisible(false);
+				resetDisplayButton(displayGameButtons[x].buttonSprite);
 				currentScene.attachChild(displayGameButtons[x].buttonSprite);
 			}
 			break;
@@ -97,5 +97,12 @@ public class Tileset implements ReflexConstants
 	{
 		currentButton = rand.nextInt(6);
 		displayGameButtons[currentButton].buttonSprite.setVisible(true);
+	}
+
+	public void resetDisplayButton(IEntity pItem)
+	{
+		pItem.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		pItem.setVisible(false);
+		
 	}
 }

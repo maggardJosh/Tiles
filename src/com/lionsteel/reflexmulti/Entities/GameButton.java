@@ -18,7 +18,7 @@ public class GameButton implements ReflexConstants
 	public final Sprite			buttonSprite;
 	private final int			playerOwner;
 
-	private final int			buttonNumber;
+	private final int			buttonNumber; 
 	private GameScene			parent;
 
 	public GameButton(final int buttonNumber, final GameScene parent, final int player)
