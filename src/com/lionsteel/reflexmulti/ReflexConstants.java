@@ -20,6 +20,8 @@ public interface ReflexConstants
 	public static final float STREAM_ON_SCREEN_SECONDS = .7f;
 	public static final float STREAM_OFF_SCREEN_SECONDS = 1.8f;
 	
+	public static final float COUNTDOWN_TIME = 1.0f;
+	
 	
 	//---- Z-Indexing
 	public static final int BACKGROUND_Z = 0;

@@ -36,6 +36,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	private boolean						playerOneReady			= false;
 	private boolean						playerTwoReady			= false;
 
+	private GameCountdown				gameCountdown;
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	private GameOverScreen				gameOverScreen;
 
@@ -50,6 +51,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		currentTileset = new Tileset("second", this);
 
 		currentTileset.setupScene();
+
+		gameCountdown = new GameCountdown(this);
 
 		gameOverScreen = new GameOverScreen();
 		gameOverScreen.setZIndex(GAME_OVER_Z);
@@ -151,7 +154,18 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		{
 		case GameState.INTRO:
 			if (playerOneReady && playerTwoReady)
-				changeState(GameState.PICKING_NEW_BUTTON);
+			{
+				changeState(GameState.START_COUNTDOWN);
+				gameCountdown.startCountdown(new Runnable()
+				{
+					
+					@Override
+					public void run()
+					{
+						changeState(GameState.PICKING_NEW_BUTTON);
+					}
+				});
+			}
 			break;
 		}
 
@@ -237,7 +251,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	public class GameState
 	{
 		public static final int	INTRO				= 0;
-		public static final int	WAITING_FOR_INPUT	= INTRO + 1;
+		public static final int	START_COUNTDOWN		= INTRO + 1;
+		public static final int	WAITING_FOR_INPUT	= START_COUNTDOWN + 1;
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 		public static final int	GAME_OVER			= SHOWING_WIN + 1;
