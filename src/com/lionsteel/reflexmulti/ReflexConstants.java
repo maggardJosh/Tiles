@@ -21,6 +21,7 @@ public interface ReflexConstants
 	public static final float STREAM_OFF_SCREEN_SECONDS = 1.8f;
 	
 	public static final float COUNTDOWN_TIME = 1.0f;
+	public static final float GAME_OVER_RESTART_DELAY = 2.0f;
 	
 	
 	//---- Z-Indexing

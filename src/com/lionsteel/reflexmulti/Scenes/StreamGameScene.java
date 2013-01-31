@@ -2,15 +2,12 @@ package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 
-public class StreamGameScene extends GameScene implements IOnSceneTouchListener
+public class StreamGameScene extends GameScene 
 {
 
 	public StreamGameScene()
@@ -18,7 +15,6 @@ public class StreamGameScene extends GameScene implements IOnSceneTouchListener
 		super();
 		activity = ReflexActivity.getInstance();
 
-		this.setOnSceneTouchListener(this);
 
 		this.sortChildren();
 
@@ -82,24 +78,15 @@ public class StreamGameScene extends GameScene implements IOnSceneTouchListener
 		super.Update(pSecondsElapsed);
 	}
 
+	
 	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
+	protected void resetGame()
 	{
-		switch (gameState)
-		{
-		case GameState.GAME_OVER:
-			resetGame();
-			break;
-		}
-		return false;
-	}
-
-	private void resetGame()
-	{
+		
 		currentTileset.reset();
 		resetBar();
 		turnOffGameOver();
-		changeState(GameState.PICKING_NEW_BUTTON);
+		startCountdown();
 
 	}
 }

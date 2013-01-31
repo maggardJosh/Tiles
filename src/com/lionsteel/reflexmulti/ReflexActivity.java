@@ -44,7 +44,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-		gameScene = new StreamGameScene();
+		gameScene = new OneTileGameScene();
 		pOnCreateSceneCallback.onCreateSceneFinished(gameScene);
 	}
 

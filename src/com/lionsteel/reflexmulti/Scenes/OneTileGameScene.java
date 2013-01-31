@@ -101,11 +101,11 @@ public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
 		return false;
 	}
 
-	private void resetGame()
+	@Override
+	protected void resetGame()
 	{
 		resetBar();
 		turnOffGameOver();
-		changeState(GameState.PICKING_NEW_BUTTON);
-
+		startCountdown();
 	}
 }
