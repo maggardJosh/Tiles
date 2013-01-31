@@ -7,7 +7,6 @@ import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.util.modifier.ease.EaseCubicIn;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -27,10 +26,10 @@ public class Tileset implements ReflexConstants
 
 	private final Random		rand;
 
-	public Tileset(final String basePath)
+	public Tileset(final String basePath, final GameScene currentScene)
 	{
 		activity = ReflexActivity.getInstance();
-		this.currentScene = GameScene.getInstance();
+		this.currentScene = currentScene;
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 		for (int i = 0; i < NUM_BUTTONS; i++)

@@ -7,23 +7,23 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import android.view.KeyEvent;
-
 import com.lionsteel.reflexmulti.Scenes.GameScene;
+import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
-	
+
 	private static ReflexActivity	instance;
-	
-	private GameScene				gameScene;
-	
+
+	private GameScene		gameScene;
+
 	public static ReflexActivity getInstance()
 	{
-		if (instance == null) instance = new ReflexActivity();
+		if (instance == null)
+			instance = new ReflexActivity();
 		return instance;
 	}
-	
+
 	@Override
 	public EngineOptions onCreateEngineOptions()
 	{
@@ -33,41 +33,24 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		return engineOptions;
 	}
-	
+
 	@Override
-	public void onCreateResources(
-			OnCreateResourcesCallback pOnCreateResourcesCallback)
-			throws Exception
+	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception
 	{
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
-	
+
 	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
-			throws Exception
+	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-		gameScene = new GameScene();
+		gameScene = new OneTileGameScene();
 		pOnCreateSceneCallback.onCreateSceneFinished(gameScene);
 	}
-	
+
 	@Override
-	public void onPopulateScene(Scene pScene,
-			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
+	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-	
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_MENU)
-		{	
-			if(gameScene!= null)
-			{
-				gameScene.nextTileset();
-			}
-		}
-		return super.onKeyUp(keyCode, event);
-	}
-	
+
 }
