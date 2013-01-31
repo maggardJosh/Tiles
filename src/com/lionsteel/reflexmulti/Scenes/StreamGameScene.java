@@ -31,7 +31,7 @@ public class StreamGameScene extends GameScene implements IOnSceneTouchListener
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
-			GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber()-1);
+			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber()-1);
 			if (displayButtonPressed != null)
 			{
 				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
@@ -40,7 +40,7 @@ public class StreamGameScene extends GameScene implements IOnSceneTouchListener
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
-						currentTileset.resetDisplayButton(pItem);
+						currentTileset.resetDisplayButton(displayButtonPressed);
 						switch (button.getPlayer())
 						{
 						case PLAYER_ONE:

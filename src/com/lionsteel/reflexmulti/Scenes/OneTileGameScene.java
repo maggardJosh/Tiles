@@ -43,7 +43,7 @@ public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
 					@Override
 					protected void onModifierFinished(IEntity pItem)
 					{
-						currentTileset.resetDisplayButton(pItem);
+						currentTileset.resetDisplayButton(displayButton);
 						changeState(GameState.PICKING_NEW_BUTTON);
 						switch (button.getPlayer())
 						{

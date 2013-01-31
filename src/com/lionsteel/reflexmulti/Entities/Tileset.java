@@ -114,7 +114,7 @@ public class Tileset implements ReflexConstants
 		case DISPLAY_BUTTONS:
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				resetDisplayButton(displayGameButtons[x].buttonSprite);
+				resetDisplayButton(displayGameButtons[x]);
 				displayGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				currentScene.attachChild(displayGameButtons[x].buttonSprite);
 			}
@@ -144,6 +144,7 @@ public class Tileset implements ReflexConstants
 			else
 				break;
 		}
+		final GameButton randomTileButton = displayGameButtons[randomTile];
 		final Sprite randomTileSprite = displayGameButtons[randomTile].buttonSprite;
 		displayedGameButtons.add(displayGameButtons[randomTile]);
 		randomTileSprite.setVisible(true);
@@ -161,7 +162,7 @@ public class Tileset implements ReflexConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
-				resetDisplayButton(pItem);
+				resetDisplayButton(randomTileButton);
 				super.onModifierFinished(pItem);
 			}
 		});
@@ -188,7 +189,7 @@ public class Tileset implements ReflexConstants
 		displayedGameButtons.remove(displayButton);
 	}
 
-	public void resetDisplayButton(final IEntity pItem)
+	public void resetDisplayButton(final GameButton pItem)
 	{
 		displayedGameButtons.remove(pItem);
 		activity.runOnUpdateThread(new Runnable()
@@ -196,11 +197,11 @@ public class Tileset implements ReflexConstants
 			@Override
 			public void run()
 			{
-				pItem.clearEntityModifiers();
+				pItem.buttonSprite.clearEntityModifiers();
 			}
 		});
-		pItem.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-		pItem.setVisible(false);
+		pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		pItem.buttonSprite.setVisible(false);
 
 	}
 
@@ -255,7 +256,7 @@ public class Tileset implements ReflexConstants
 	public void reset()
 	{
 		for (int i = 0; i < NUM_BUTTONS; i++)
-			resetDisplayButton(displayGameButtons[i].buttonSprite);
+			resetDisplayButton(displayGameButtons[i]);
 
 	}
 }
