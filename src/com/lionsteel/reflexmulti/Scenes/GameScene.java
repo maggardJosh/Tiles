@@ -237,8 +237,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	public class GameState
 	{
 		public static final int	INTRO				= 0;
-		public static final int	WAITING_FOR_BUTTON	= INTRO + 1;
-		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_BUTTON + 1;
+		public static final int	WAITING_FOR_INPUT	= INTRO + 1;
+		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 		public static final int	GAME_OVER			= SHOWING_WIN + 1;
 	}

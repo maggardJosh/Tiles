@@ -1,12 +1,23 @@
 package com.lionsteel.reflexmulti.Entities;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.util.modifier.SequenceModifier;
+import org.andengine.util.modifier.ease.EaseCubicIn;
+import org.andengine.util.modifier.ease.EaseCubicOut;
+
+import android.app.backup.RestoreObserver;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -14,17 +25,19 @@ import com.lionsteel.reflexmulti.Scenes.GameScene;
 
 public class Tileset implements ReflexConstants
 {
-	private ReflexActivity		activity;
-	private static final int	NUM_BUTTONS				= 6;
+	private ReflexActivity			activity;
+	private static final int		NUM_BUTTONS				= 6;
 
-	private GameButton[]		playerOneGameButtons	= new GameButton[NUM_BUTTONS];
-	private GameButton[]		playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
-	private GameButton[]		displayGameButtons		= new GameButton[NUM_BUTTONS];
+	private GameButton[]			playerOneGameButtons	= new GameButton[NUM_BUTTONS];
+	private GameButton[]			playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
+	private GameButton[]			displayGameButtons		= new GameButton[NUM_BUTTONS];
 
-	private GameScene			currentScene;
-	private int					currentButton			= -1;
+	private ArrayList<GameButton>	displayedGameButtons	= new ArrayList<GameButton>();
 
-	private final Random		rand;
+	private GameScene				currentScene;
+	private int						currentButton			= -1;
+
+	private final Random			rand;
 
 	public Tileset(final String basePath, final GameScene currentScene)
 	{
@@ -109,6 +122,51 @@ public class Tileset implements ReflexConstants
 		}
 	}
 
+	public void startStream()
+	{
+		spawnNewStreamTile();
+	}
+
+	private void spawnNewStreamTile()
+	{
+		boolean isTileAvailable = false;
+		for (int i = 0; i < NUM_BUTTONS; i++)
+			if (!displayGameButtons[i].buttonSprite.isVisible())
+				isTileAvailable = true;
+		if (!isTileAvailable)
+			return;
+
+		int randomTile = rand.nextInt(NUM_BUTTONS);
+		while (true)
+		{
+			if (displayGameButtons[randomTile].buttonSprite.isVisible())
+				randomTile = rand.nextInt(NUM_BUTTONS);
+			else
+				break;
+		}
+		final Sprite randomTileSprite = displayGameButtons[randomTile].buttonSprite;
+		displayedGameButtons.add(displayGameButtons[randomTile]);
+		randomTileSprite.setVisible(true);
+		randomTileSprite.setX(-randomTileSprite.getWidth());
+		randomTileSprite.registerEntityModifier(new SequenceEntityModifier(new MoveXModifier(STREAM_ON_SCREEN_SECONDS, -randomTileSprite.getWidth(), 0)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				spawnNewStreamTile();
+				super.onModifierFinished(pItem);
+			}
+		}, new MoveXModifier(STREAM_OFF_SCREEN_SECONDS, 0, CAMERA_WIDTH))
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				resetDisplayButton(pItem);
+				super.onModifierFinished(pItem);
+			}
+		});
+	}
+
 	public GameButton getDisplayButton()
 	{
 		return displayGameButtons[currentButton];
@@ -120,8 +178,27 @@ public class Tileset implements ReflexConstants
 		displayGameButtons[currentButton].buttonSprite.setVisible(true);
 	}
 
-	public void resetDisplayButton(IEntity pItem)
+	public void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
 	{
+		displayButton.buttonSprite.clearEntityModifiers();
+		if (displayButton.buttonSprite.getX() < 0)
+			spawnNewStreamTile();
+		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
+		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
+		displayedGameButtons.remove(displayButton);
+	}
+
+	public void resetDisplayButton(final IEntity pItem)
+	{
+		displayedGameButtons.remove(pItem);
+		activity.runOnUpdateThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				pItem.clearEntityModifiers();
+			}
+		});
 		pItem.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 		pItem.setVisible(false);
 
@@ -165,6 +242,20 @@ public class Tileset implements ReflexConstants
 			}
 			break;
 		}
+
+	}
+
+	public GameButton isButtonDisplayed(int buttonNumber)
+	{
+		if (displayedGameButtons.contains(displayGameButtons[buttonNumber]) && displayGameButtons[buttonNumber].buttonSprite.isVisible() && displayGameButtons[buttonNumber].buttonSprite.getX() > -displayGameButtons[buttonNumber].buttonSprite.getWidth())
+			return displayGameButtons[buttonNumber];
+		return null;
+	}
+
+	public void reset()
+	{
+		for (int i = 0; i < NUM_BUTTONS; i++)
+			resetDisplayButton(displayGameButtons[i].buttonSprite);
 
 	}
 }

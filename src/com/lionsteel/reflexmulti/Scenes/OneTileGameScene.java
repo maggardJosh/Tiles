@@ -31,7 +31,7 @@ public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
 	{
 		switch (gameState)
 		{
-		case GameState.WAITING_FOR_BUTTON:
+		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
 			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber() + 1))
@@ -81,7 +81,7 @@ public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
 				currentTileset.newButton();
 				enablePlayer(PLAYER_ONE);
 				enablePlayer(PLAYER_TWO);
-				changeState(GameState.WAITING_FOR_BUTTON);
+				changeState(GameState.WAITING_FOR_INPUT);
 			}
 			break;
 

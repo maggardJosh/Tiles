@@ -17,6 +17,9 @@ public interface ReflexConstants
 	public static final float WIN_MOVE_MOD_TIME = .4f;
 	public static final float DISABLE_TIME = .6f;
 	
+	public static final float STREAM_ON_SCREEN_SECONDS = .7f;
+	public static final float STREAM_OFF_SCREEN_SECONDS = 1.8f;
+	
 	
 	//---- Z-Indexing
 	public static final int BACKGROUND_Z = 0;

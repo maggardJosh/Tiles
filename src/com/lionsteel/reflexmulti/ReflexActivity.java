@@ -9,6 +9,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
+import com.lionsteel.reflexmulti.Scenes.StreamGameScene;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
@@ -43,7 +44,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-		gameScene = new OneTileGameScene();
+		gameScene = new StreamGameScene();
 		pOnCreateSceneCallback.onCreateSceneFinished(gameScene);
 	}
 
