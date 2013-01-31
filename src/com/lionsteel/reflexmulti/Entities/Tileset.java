@@ -7,6 +7,7 @@ import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.util.modifier.ease.EaseCubicIn;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -127,18 +128,42 @@ public class Tileset implements ReflexConstants
 
 	}
 
+	private final int	SHAKE_ANGLE	= 3;
+
 	public void disablePlayer(int player)
 	{
 		switch (player)
 		{
 		case PLAYER_ONE:
-			for(int i=0; i<NUM_BUTTONS; i++)
-				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME/6, 0,-20.0f), new RotationModifier(DISABLE_TIME/6, -20,20), new RotationModifier(DISABLE_TIME/6, 20,0)), 2));
-			
+			for (int i = 0; i < NUM_BUTTONS; i++)
+			{
+				playerOneGameButtons[i].buttonSprite.setAlpha(.7f);
+				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						pItem.setAlpha(1.0f);
+						super.onModifierFinished(pItem);
+					}
+				});
+			}
+
 			break;
 		case PLAYER_TWO:
-			for(int i=0; i<NUM_BUTTONS; i++)
-				playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME/6, 0,-20.0f), new RotationModifier(DISABLE_TIME/6, -20,20), new RotationModifier(DISABLE_TIME/6, 20,0)), 2));
+			for (int i = 0; i < NUM_BUTTONS; i++)
+			{
+				playerTwoGameButtons[i].buttonSprite.setAlpha(.7f);
+				playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						pItem.setAlpha(1.0f);
+						super.onModifierFinished(pItem);
+					}
+				});
+			}
 			break;
 		}
 
