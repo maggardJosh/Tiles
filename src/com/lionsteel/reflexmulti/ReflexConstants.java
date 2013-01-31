@@ -15,7 +15,7 @@ public interface ReflexConstants
 	
 	//------ Entity Modifier Timing
 	public static final float WIN_MOVE_MOD_TIME = .4f;
-	public static final float PUNISHMENT_TIME = .6f;
+	public static final float DISABLE_TIME = .6f;
 	
 	
 	//---- Z-Indexing

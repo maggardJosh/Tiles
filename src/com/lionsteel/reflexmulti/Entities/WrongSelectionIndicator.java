@@ -49,9 +49,9 @@ public class WrongSelectionIndicator implements ReflexConstants
 	{
 		sprite.setPosition(xPos - sprite.getWidth() / 2, yPos - sprite.getHeight() / 2);
 		sprite.setVisible(true);
-		sprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(PUNISHMENT_TIME/3, 1.2f, 1.3f), new ScaleModifier(PUNISHMENT_TIME*2/3,  1.3f, .9f)));
-		sprite.registerEntityModifier(new SequenceEntityModifier(new RotationModifier(PUNISHMENT_TIME/2, -20f, 20f), new RotationModifier(PUNISHMENT_TIME/2, 20, -20)));
-		sprite.registerEntityModifier(new AlphaModifier(PUNISHMENT_TIME, 1.0f, 0)
+		sprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(DISABLE_TIME/3, 1.2f, 1.3f), new ScaleModifier(DISABLE_TIME*2/3,  1.3f, .9f)));
+		sprite.registerEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME/2, -20f, 20f), new RotationModifier(DISABLE_TIME/2, 20, -20)));
+		sprite.registerEntityModifier(new AlphaModifier(DISABLE_TIME, 1.0f, 0)
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)

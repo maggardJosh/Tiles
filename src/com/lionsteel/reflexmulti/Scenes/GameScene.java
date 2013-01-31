@@ -228,6 +228,7 @@ public class GameScene extends Scene implements ReflexConstants,
 	
 	private void disablePlayer(GameButton button)
 	{
+		currentTileset.disablePlayer(button.getPlayer());
 		this.errorIndicators[button.getPlayer()].startIndicator(button.buttonSprite.getX() + button.buttonSprite.getWidth() / 2, button.buttonSprite.getY() + button.buttonSprite.getHeight() / 2);
 		switch (button.getPlayer())
 		{

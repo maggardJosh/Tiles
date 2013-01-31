@@ -3,6 +3,9 @@ package com.lionsteel.reflexmulti.Entities;
 import java.util.Random;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
@@ -13,16 +16,16 @@ public class Tileset implements ReflexConstants
 {
 	private ReflexActivity		activity;
 	private static final int	NUM_BUTTONS				= 6;
-	
+
 	private GameButton[]		playerOneGameButtons	= new GameButton[NUM_BUTTONS];
 	private GameButton[]		playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
 	private GameButton[]		displayGameButtons		= new GameButton[NUM_BUTTONS];
-	
+
 	private GameScene			currentScene;
 	private int					currentButton			= -1;
-	
+
 	private final Random		rand;
-	
+
 	public Tileset(final String basePath)
 	{
 		activity = ReflexActivity.getInstance();
@@ -36,21 +39,21 @@ public class Tileset implements ReflexConstants
 			displayGameButtons[i] = new GameButton(i + 1, currentScene, DISPLAY_BUTTONS);
 		}
 	}
-	
+
 	public void setupScene()
 	{
 		createButtons(PLAYER_ONE);
 		createButtons(PLAYER_TWO);
 		createButtons(DISPLAY_BUTTONS);
-		
+
 		currentScene.sortChildren();
 	}
-	
+
 	public void clearTileset()
 	{
 		activity.runOnUpdateThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -60,75 +63,84 @@ public class Tileset implements ReflexConstants
 					currentScene.detachChild(playerTwoGameButtons[i].buttonSprite);
 					currentScene.detachChild(displayGameButtons[i].buttonSprite);
 				}
-				
+
 			}
 		});
-		
-		//					playerOneGameButtons[i].buttonSprite.detachSelf();
-		//					playerOneGameButtons[i].buttonSprite.reset();
-		//					playerTwoGameButtons[i].buttonSprite.detachSelf();
-		//					playerTwoGameButtons[i].buttonSprite.reset();
-		//					displayGameButtons[i].buttonSprite.detachSelf();
-		//					displayGameButtons[i].buttonSprite.reset();
-		//				}
-		
+
 	}
-	
+
 	public int getCurrentButtonNumber()
 	{
 		return currentButton;
 	}
-	
+
 	private void createButtons(int player)
 	{
 		switch (player)
 		{
-			case PLAYER_ONE:
-				
-				for (int x = 0; x < NUM_BUTTONS; x++)
-				{
-					playerOneGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, (int) (x / 3) * BUTTON_WIDTH);
-					playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-					currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
-					currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
-				}
-				break;
-			case PLAYER_TWO:
-				for (int x = 0; x < NUM_BUTTONS; x++)
-				{
-					playerTwoGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, 500 + (int) ((5 - x) / 3) * BUTTON_WIDTH);
-					playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-					currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
-					currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
-				}
-				
-				break;
-			case DISPLAY_BUTTONS:
-				for (int x = 0; x < NUM_BUTTONS; x++)
-				{
-					resetDisplayButton(displayGameButtons[x].buttonSprite);
-					displayGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-					currentScene.attachChild(displayGameButtons[x].buttonSprite);
-				}
-				break;
+		case PLAYER_ONE:
+
+			for (int x = 0; x < NUM_BUTTONS; x++)
+			{
+				playerOneGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, (int) (x / 3) * BUTTON_WIDTH);
+				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
+				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
+			}
+			break;
+		case PLAYER_TWO:
+			for (int x = 0; x < NUM_BUTTONS; x++)
+			{
+				playerTwoGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, 500 + (int) ((5 - x) / 3) * BUTTON_WIDTH);
+				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
+				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
+			}
+
+			break;
+		case DISPLAY_BUTTONS:
+			for (int x = 0; x < NUM_BUTTONS; x++)
+			{
+				resetDisplayButton(displayGameButtons[x].buttonSprite);
+				displayGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+				currentScene.attachChild(displayGameButtons[x].buttonSprite);
+			}
+			break;
 		}
 	}
-	
+
 	public GameButton getDisplayButton()
 	{
 		return displayGameButtons[currentButton];
 	}
-	
+
 	public void newButton()
 	{
 		currentButton = rand.nextInt(6);
 		displayGameButtons[currentButton].buttonSprite.setVisible(true);
 	}
-	
+
 	public void resetDisplayButton(IEntity pItem)
 	{
 		pItem.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 		pItem.setVisible(false);
-		
+
+	}
+
+	public void disablePlayer(int player)
+	{
+		switch (player)
+		{
+		case PLAYER_ONE:
+			for(int i=0; i<NUM_BUTTONS; i++)
+				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME/6, 0,-20.0f), new RotationModifier(DISABLE_TIME/6, -20,20), new RotationModifier(DISABLE_TIME/6, 20,0)), 2));
+			
+			break;
+		case PLAYER_TWO:
+			for(int i=0; i<NUM_BUTTONS; i++)
+				playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME/6, 0,-20.0f), new RotationModifier(DISABLE_TIME/6, -20,20), new RotationModifier(DISABLE_TIME/6, 20,0)), 2));
+			break;
+		}
+
 	}
 }
