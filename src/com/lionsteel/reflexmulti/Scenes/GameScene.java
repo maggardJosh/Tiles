@@ -50,7 +50,7 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 	public GameScene()
 	{
 		activity = ReflexActivity.getInstance();
-		currentTileset = new Tileset("second", this);
+		currentTileset = new Tileset("three", this);
 
 		currentTileset.setupScene();
 
