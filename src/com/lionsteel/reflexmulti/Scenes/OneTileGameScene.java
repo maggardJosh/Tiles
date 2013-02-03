@@ -13,16 +13,14 @@ import org.andengine.util.modifier.ease.EaseCubicOut;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 
-public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
+public class OneTileGameScene extends GameScene 
 {
 
 	public OneTileGameScene()
 	{
 		super();
 		activity = ReflexActivity.getInstance();
-
-		this.setOnSceneTouchListener(this);
-
+		
 		this.sortChildren();
 
 	}
@@ -87,18 +85,6 @@ public class OneTileGameScene extends GameScene implements IOnSceneTouchListener
 
 		}
 		super.Update(pSecondsElapsed);
-	}
-
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
-	{
-		switch (gameState)
-		{
-		case GameState.GAME_OVER:
-			resetGame();
-			break;
-		}
-		return false;
 	}
 
 	@Override
