@@ -26,7 +26,7 @@ import com.lionsteel.reflexmulti.Scenes.GameScene;
 public class Tileset implements ReflexConstants
 {
 	private ReflexActivity			activity;
-	private static final int		NUM_BUTTONS				= 6;
+	private static final int		NUM_BUTTONS				= 9;
 
 	private GameButton[]			playerOneGameButtons	= new GameButton[NUM_BUTTONS];
 	private GameButton[]			playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
@@ -93,23 +93,66 @@ public class Tileset implements ReflexConstants
 		{
 		case PLAYER_ONE:
 
+			//Easy Buttons
+			for (int x = 0; x < 3; x++)
+			{
+				playerOneGameButtons[x].buttonSprite.setPosition(90 + ((2-x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+			}
+
+			//Medium Buttons
+			{
+				playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
+				playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
+			}
+
+			//Hard Buttons
+			{
+
+				playerOneGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH *2);
+				playerOneGameButtons[6].buttonSprite.setPosition(90 , BUTTON_WIDTH * 2);
+				playerOneGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
+				playerOneGameButtons[8].buttonSprite.setPosition(90 , 0);
+
+			}
+
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				playerOneGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, (int) (x / 3) * BUTTON_WIDTH);
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
 				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
+
 			break;
 		case PLAYER_TWO:
+
+			//Easy Buttons
+			for (int x = 0; x < 3; x++)
+			{
+				playerTwoGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
+			}
+
+			//Medium Buttons
+			{
+				playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
+				playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
+			}
+
+			//Hard Buttons
+			{
+
+				playerTwoGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
+				playerTwoGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
+				playerTwoGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
+				playerTwoGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
+
+			}
+
 			for (int x = 0; x < NUM_BUTTONS; x++)
 			{
-				playerTwoGameButtons[x].buttonSprite.setPosition(BAR_WIDTH + (x % 3) * BUTTON_WIDTH, 500 + (int) ((5 - x) / 3) * BUTTON_WIDTH);
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
 				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
-
 			break;
 		case DISPLAY_BUTTONS:
 			for (int x = 0; x < NUM_BUTTONS; x++)
@@ -175,7 +218,7 @@ public class Tileset implements ReflexConstants
 
 	public void newButton()
 	{
-		currentButton = rand.nextInt(6);
+		currentButton = rand.nextInt(NUM_BUTTONS);
 		displayGameButtons[currentButton].buttonSprite.setVisible(true);
 	}
 
