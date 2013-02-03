@@ -15,6 +15,9 @@ import org.andengine.util.modifier.IModifier;
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
 import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
+import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Scenes.StreamGameScene;
+import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene.GameMode;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
@@ -108,7 +111,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
-	public void startGame()
+	public void startGame(final int gameMode)
 	{
 		Scene currentScene = mEngine.getScene();
 		while (currentScene.hasChildScene())
@@ -122,8 +125,15 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
-				if (gameScene == null)
-					gameScene = new OneTileGameScene();
+				switch (gameMode)
+				{
+					case GameMode.ONE_TILE:
+						gameScene = new OneTileGameScene();
+						break;
+					case GameMode.STREAM:
+						gameScene = new StreamGameScene();
+						break;
+				}
 				mEngine.setScene(gameScene);
 			}
 		}));
@@ -134,6 +144,13 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	public void onBackPressed()
 	{
 		Scene parentScene = this.mEngine.getScene();
+		
+		if (parentScene instanceof GameScene)
+		{
+			backToMainMenu();
+			return;
+		}
+		
 		if (!parentScene.hasChildScene())
 		{
 			super.onBackPressed();
@@ -144,6 +161,21 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			parentScene = parentScene.getChildScene();
 		
 		parentScene.clearChildScene();
+	}
+	
+	public void backToMainMenu()
+	{
+		//Clear all child scene's
+		ReflexMenuScene parentScene = mainMenuScene;
+		while (parentScene.hasChildScene())
+		{
+			final ReflexMenuScene childScene = (ReflexMenuScene) parentScene.getChildScene();
+			parentScene.setChildSceneNull();
+			parentScene = childScene;
+		}
+		
+		mainMenuScene.setX(0);
+		mEngine.setScene(mainMenuScene);
 	}
 	
 }

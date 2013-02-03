@@ -1,8 +1,5 @@
 package com.lionsteel.reflexmulti.Scenes;
 
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.MoveXModifier;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -10,9 +7,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 
-public class MainMenuScene extends Scene implements ReflexConstants
+public class MainMenuScene extends ReflexMenuScene
 {
 	ReflexActivity						activity;
 	BitmapTextureAtlas					sceneAtlas;
@@ -20,6 +16,12 @@ public class MainMenuScene extends Scene implements ReflexConstants
 	private MultiplayerModeSelectScene	multiplayerModeSelectScene;
 	
 	final int							BUTTON_SPACING	= 150;
+	
+	final Sprite						backgroundSprite;
+	final Sprite						titleSprite;
+	final Sprite						versusButton;
+	final Sprite						practiceButton;
+	final Sprite						exitButton;
 	
 	public MainMenuScene()
 	{
@@ -40,9 +42,9 @@ public class MainMenuScene extends Scene implements ReflexConstants
 		
 		this.setBackgroundEnabled(false);
 		
-		final Sprite backgroundSprite = new Sprite(0, 0, background, activity.getVertexBufferObjectManager());
-		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		final Sprite versusButton = new Sprite((CAMERA_WIDTH - versusRegion.getWidth()) / 2, 230, versusRegion, activity.getVertexBufferObjectManager())
+		backgroundSprite = new Sprite(0, 0, background, activity.getVertexBufferObjectManager());
+		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		versusButton = new Sprite((CAMERA_WIDTH - versusRegion.getWidth()) / 2, 230, versusRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -51,19 +53,15 @@ public class MainMenuScene extends Scene implements ReflexConstants
 				switch (pSceneTouchEvent.getAction())
 				{
 					case TouchEvent.ACTION_UP:
-						setChildScene(multiplayerModeSelectScene, false, false, true);
-						multiplayerModeSelectScene.setX(CAMERA_WIDTH);
-						transitionOff();
-						multiplayerModeSelectScene.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, CAMERA_WIDTH, 0));
-						
+						transitionChildScene(multiplayerModeSelectScene);
 						break;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		final Sprite practiceButton = new Sprite((CAMERA_WIDTH - practiceRegion.getWidth()) / 2, 230 + BUTTON_SPACING, practiceRegion, activity.getVertexBufferObjectManager());
+		practiceButton = new Sprite((CAMERA_WIDTH - practiceRegion.getWidth()) / 2, 230 + BUTTON_SPACING, practiceRegion, activity.getVertexBufferObjectManager());
 		practiceButton.setAlpha(.5f);
-		final Sprite exitButton = new Sprite((CAMERA_WIDTH - exitRegion.getWidth()) / 2, 230 + BUTTON_SPACING * 2, exitRegion, activity.getVertexBufferObjectManager())
+		exitButton = new Sprite((CAMERA_WIDTH - exitRegion.getWidth()) / 2, 230 + BUTTON_SPACING * 2, exitRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -85,32 +83,22 @@ public class MainMenuScene extends Scene implements ReflexConstants
 		this.attachChild(practiceButton);
 		this.attachChild(exitButton);
 		
+		//Must register own touch areas as first screen
+		registerTouchAreas();
+	}
+	
+	@Override
+	protected void registerTouchAreas()
+	{
 		this.registerTouchArea(versusButton);
 		this.registerTouchArea(exitButton);
 	}
 	
-	private void transitionOff()
-	{
-		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), -CAMERA_WIDTH));
-	}
-	
-	private void setChildSceneNull()
-	{
-		super.clearChildScene();
-	}
-	
 	@Override
-	public void clearChildScene()
+	protected void deregisterTouchAreas()
 	{
-		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
-		this.getChildScene().registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, this.getChildScene().getX(), CAMERA_WIDTH)
-		{
-			@Override
-			protected void onModifierFinished(IEntity pItem)
-			{
-				setChildSceneNull();
-				super.onModifierFinished(pItem);
-			}
-		});
+		this.unregisterTouchArea(versusButton);
+		this.unregisterTouchArea(exitButton);
 	}
+	
 }
