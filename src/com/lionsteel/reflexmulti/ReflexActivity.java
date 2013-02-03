@@ -8,6 +8,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import com.lionsteel.reflexmulti.Scenes.GameScene;
+import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
 import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
 import com.lionsteel.reflexmulti.Scenes.PrototypeScene;
 import com.lionsteel.reflexmulti.Scenes.StreamGameScene;
@@ -46,13 +47,20 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
 		gameScene = new OneTileGameScene();
-		pOnCreateSceneCallback.onCreateSceneFinished(gameScene);
+		pOnCreateSceneCallback.onCreateSceneFinished(new MainMenuScene());
+		
 	}
 
 	@Override
 	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	
+	public void startGame()
+	{
+		mEngine.setScene(gameScene);
+		
 	}
 
 }
