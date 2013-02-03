@@ -7,27 +7,28 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.SetupScene;
 
 public class MainMenuScene extends ReflexMenuScene
 {
-	ReflexActivity						activity;
-	BitmapTextureAtlas					sceneAtlas;
+	ReflexActivity		activity;
+	BitmapTextureAtlas	sceneAtlas;
 	
-	private MultiplayerModeSelectScene	multiplayerModeSelectScene;
+	private SetupScene	setupScene;
 	
-	final int							BUTTON_SPACING	= 150;
+	final int			BUTTON_SPACING	= 150;
 	
-	final Sprite						backgroundSprite;
-	final Sprite						titleSprite;
-	final Sprite						versusButton;
-	final Sprite						practiceButton;
-	final Sprite						exitButton;
+	final Sprite		backgroundSprite;
+	final Sprite		titleSprite;
+	final Sprite		versusButton;
+	final Sprite		practiceButton;
+	final Sprite		exitButton;
 	
 	public MainMenuScene()
 	{
 		activity = ReflexActivity.getInstance();
 		
-		multiplayerModeSelectScene = new MultiplayerModeSelectScene();
+		setupScene = new SetupScene();
 		
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
@@ -53,7 +54,7 @@ public class MainMenuScene extends ReflexMenuScene
 				switch (pSceneTouchEvent.getAction())
 				{
 					case TouchEvent.ACTION_UP:
-						transitionChildScene(multiplayerModeSelectScene);
+						transitionChildScene(setupScene);
 						break;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);

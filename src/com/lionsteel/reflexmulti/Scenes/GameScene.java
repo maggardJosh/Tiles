@@ -63,15 +63,10 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 		setOnSceneTouchListener(this);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
-		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
-		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", (int) backgroundRegion.getWidth(), 0);
+		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", 0, 0);
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png", (int) (barRegion.getTextureX() + barRegion.getWidth()), 0);
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png", (int) (playerOneIntroRegion.getTextureX() + playerOneIntroRegion.getWidth()), 0);
 		sceneAtlas.load();
-
-		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
-
-		backgroundSprite.setZIndex(BACKGROUND_Z);
 
 		barSprite = new Sprite(0, (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
@@ -123,7 +118,6 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 		this.registerTouchArea(playerTwoIntro);
 
 		this.attachChild(barSprite);
-		this.attachChild(backgroundSprite);
 
 		this.attachChild(playerOneIntro);
 		this.attachChild(playerTwoIntro);

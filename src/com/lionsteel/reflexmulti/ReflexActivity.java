@@ -12,12 +12,12 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
+import com.lionsteel.reflexmulti.SetupScene.GameMode;
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
 import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Scenes.StreamGameScene;
-import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene.GameMode;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
@@ -111,7 +111,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
-	public void startGame(final int gameMode)
+	public void startGame()
 	{
 		Scene currentScene = mEngine.getScene();
 		while (currentScene.hasChildScene())
@@ -125,7 +125,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
-				switch (gameMode)
+				switch (SetupScene.getGameMode())
 				{
 					case GameMode.ONE_TILE:
 						gameScene = new OneTileGameScene();

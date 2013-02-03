@@ -8,12 +8,12 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SetupScene;
+import com.lionsteel.reflexmulti.SetupScene.GameMode;
 
 public class MultiplayerModeSelectScene extends ReflexMenuScene
 {
 	ReflexActivity		activity;
 	BitmapTextureAtlas	sceneAtlas;
-	SetupScene			setupScene;
 	
 	final Sprite		oneTileButton;
 	final Sprite		streamTileButton;
@@ -22,7 +22,6 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 	{
 		activity = ReflexActivity.getInstance();
 		
-		setupScene = new SetupScene();
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 2048);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
 		
@@ -46,8 +45,8 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 				switch (pSceneTouchEvent.getAction())
 				{
 					case TouchEvent.ACTION_UP:
-						setupScene.setMode(GameMode.ONE_TILE);
-						transitionChildScene(setupScene);
+						SetupScene.setGameMode(GameMode.ONE_TILE);
+						mParentScene.clearChildScene();
 						break;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
@@ -64,8 +63,8 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 				switch (pSceneTouchEvent.getAction())
 				{
 					case TouchEvent.ACTION_UP:
-						setupScene.setMode(GameMode.STREAM);
-						transitionChildScene(setupScene);
+						SetupScene.setGameMode(GameMode.STREAM);
+						mParentScene.clearChildScene();
 						break;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
@@ -95,9 +94,5 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		unregisterTouchArea(streamTileButton);
 	}
 	
-	public class GameMode
-	{
-		public static final int	ONE_TILE	= 0;
-		public static final int	STREAM		= ONE_TILE + 1;
-	}
+	
 }

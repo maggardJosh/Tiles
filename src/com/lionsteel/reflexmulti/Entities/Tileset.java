@@ -12,12 +12,11 @@ import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.util.modifier.SequenceModifier;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
-
-import android.app.backup.RestoreObserver;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -28,10 +27,12 @@ public class Tileset implements ReflexConstants
 	private ReflexActivity			activity;
 	private static final int		NUM_BUTTONS				= 9;
 
-	private GameButton[]			playerOneGameButtons	= new GameButton[NUM_BUTTONS];
-	private GameButton[]			playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
-	private GameButton[]			displayGameButtons		= new GameButton[NUM_BUTTONS];
+	private final GameButton[]			playerOneGameButtons	= new GameButton[NUM_BUTTONS];
+	private final GameButton[]			playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
+	private final GameButton[]			displayGameButtons		= new GameButton[NUM_BUTTONS];
 
+	private final  Sprite background;
+	
 	private ArrayList<GameButton>	displayedGameButtons	= new ArrayList<GameButton>();
 
 	private GameScene				currentScene;
@@ -51,6 +52,13 @@ public class Tileset implements ReflexConstants
 			playerTwoGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_TWO);
 			displayGameButtons[i] = new GameButton(i + 1, currentScene, DISPLAY_BUTTONS);
 		}
+		
+		//load background
+		final BitmapTextureAtlas backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024);
+		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
+		backgroundAtlas.load();
+		background = new Sprite(0,0,backgroundRegion,activity.getVertexBufferObjectManager());
+		background.setZIndex(BACKGROUND_Z);
 	}
 
 	public void setupScene()
@@ -59,6 +67,8 @@ public class Tileset implements ReflexConstants
 		createButtons(PLAYER_TWO);
 		createButtons(DISPLAY_BUTTONS);
 
+		currentScene.attachChild(background);
+		
 		currentScene.sortChildren();
 	}
 
@@ -76,6 +86,7 @@ public class Tileset implements ReflexConstants
 					currentScene.detachChild(playerTwoGameButtons[i].buttonSprite);
 					currentScene.detachChild(displayGameButtons[i].buttonSprite);
 				}
+				currentScene.detachChild(background);
 
 			}
 		});
