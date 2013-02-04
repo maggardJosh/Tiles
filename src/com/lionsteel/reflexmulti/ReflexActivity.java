@@ -14,6 +14,7 @@ import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.reflexmulti.SetupScene.GameMode;
 import com.lionsteel.reflexmulti.Scenes.GameScene;
+import com.lionsteel.reflexmulti.Scenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
 import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
