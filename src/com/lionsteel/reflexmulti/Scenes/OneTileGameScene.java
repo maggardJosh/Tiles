@@ -1,12 +1,12 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
-import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
@@ -34,12 +34,20 @@ public class OneTileGameScene extends GameScene
 				return;
 			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber() + 1))
 			{
+				
 				final GameButton displayButton = currentTileset.getDisplayButton();
-				displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
-				displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), button.buttonSprite.getX(), displayButton.buttonSprite.getY(), button.buttonSprite.getY())
+				currentTileset.animateDisplayButton(displayButton, button, new IEntityModifierListener()
 				{
+					
 					@Override
-					protected void onModifierFinished(IEntity pItem)
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
+					{
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButton);
 						changeState(GameState.PICKING_NEW_BUTTON);
@@ -54,10 +62,9 @@ public class OneTileGameScene extends GameScene
 							moveBar(BAR_SPEED);
 							break;
 						}
-						super.onModifierFinished(pItem);
 					}
-
 				});
+				
 				changeState(GameState.SHOWING_WIN);
 			} else
 			{

@@ -52,8 +52,8 @@ public class Tileset implements ReflexConstants
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			playerOneGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_ONE);
-			playerTwoGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_TWO);
+			playerOneGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_TWO);
+			playerTwoGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_ONE);
 			displayGameButtons[i] = new GameButton(i + 1, currentScene, DISPLAY_BUTTONS);
 		}
 		
@@ -96,10 +96,10 @@ public class Tileset implements ReflexConstants
 			@Override
 			public void run()
 			{
-				for (int i = 0; i < playerOneGameButtons.length; i++)
+				for (int i = 0; i < playerTwoGameButtons.length; i++)
 				{
-					currentScene.detachChild(playerOneGameButtons[i].buttonSprite);
 					currentScene.detachChild(playerTwoGameButtons[i].buttonSprite);
+					currentScene.detachChild(playerOneGameButtons[i].buttonSprite);
 					currentScene.detachChild(displayGameButtons[i].buttonSprite);
 				}
 				currentScene.detachChild(background);
@@ -123,30 +123,31 @@ public class Tileset implements ReflexConstants
 				//Easy Buttons
 				for (int x = 0; x < 3; x++)
 				{
-					playerOneGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+					playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
 				}
 				
 				//Medium Buttons
 				{
-					playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
-					playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
+					playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
+					playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
 				}
 				
 				//Hard Buttons
 				{
 					
-					playerOneGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
-					playerOneGameButtons[6].buttonSprite.setPosition(90, BUTTON_WIDTH * 2);
-					playerOneGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
-					playerOneGameButtons[8].buttonSprite.setPosition(90, 0);
+					playerTwoGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
+					playerTwoGameButtons[6].buttonSprite.setPosition(90, BUTTON_WIDTH * 2);
+					playerTwoGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
+					playerTwoGameButtons[8].buttonSprite.setPosition(90, 0);
 					
 				}
 				
 				for (int x = 0; x < numberOfButtonsToUse; x++)
 				{
-					playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-					currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
-					currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
+					playerTwoGameButtons[x].buttonSprite.setRotation(180);
+					playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+					currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
+					currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 				}
 				
 				break;
@@ -155,30 +156,30 @@ public class Tileset implements ReflexConstants
 				//Easy Buttons
 				for (int x = 0; x < 3; x++)
 				{
-					playerTwoGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
+					playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
 				}
 				
 				//Medium Buttons
 				{
-					playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
-					playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
+					playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
+					playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
 				}
 				
 				//Hard Buttons
 				{
 					
-					playerTwoGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
-					playerTwoGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
-					playerTwoGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
-					playerTwoGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
+					playerOneGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
+					playerOneGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
+					playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
+					playerOneGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
 					
 				}
 				
 				for (int x = 0; x < numberOfButtonsToUse; x++)
 				{
-					playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-					currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
-					currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
+					playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+					currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
+					currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 				}
 				break;
 			case DISPLAY_BUTTONS:
@@ -257,6 +258,7 @@ public class Tileset implements ReflexConstants
 			spawnNewStreamTile();
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
+		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME*2/3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
 		displayedGameButtons.remove(displayButton);
 	}
 	
@@ -271,6 +273,7 @@ public class Tileset implements ReflexConstants
 				pItem.buttonSprite.clearEntityModifiers();
 			}
 		});
+		pItem.buttonSprite.setRotation(90);
 		pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 		pItem.buttonSprite.setVisible(false);
 		
@@ -285,8 +288,8 @@ public class Tileset implements ReflexConstants
 			case PLAYER_ONE:
 				for (int i = 0; i < NUM_BUTTONS; i++)
 				{
-					playerOneGameButtons[i].buttonSprite.setAlpha(.7f);
-					playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
+					playerTwoGameButtons[i].buttonSprite.setAlpha(.7f);
+					playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
 					{
 						@Override
 						protected void onModifierFinished(IEntity pItem)
@@ -301,8 +304,8 @@ public class Tileset implements ReflexConstants
 			case PLAYER_TWO:
 				for (int i = 0; i < NUM_BUTTONS; i++)
 				{
-					playerTwoGameButtons[i].buttonSprite.setAlpha(.7f);
-					playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
+					playerOneGameButtons[i].buttonSprite.setAlpha(.7f);
+					playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
 					{
 						@Override
 						protected void onModifierFinished(IEntity pItem)
