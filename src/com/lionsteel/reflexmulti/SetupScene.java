@@ -9,7 +9,6 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.util.modifier.SequenceModifier;
 
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene;

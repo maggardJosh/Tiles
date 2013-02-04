@@ -3,7 +3,6 @@ package com.lionsteel.reflexmulti.Entities;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.LoopEntityModifier;
@@ -23,8 +22,8 @@ import org.andengine.util.modifier.ease.EaseCubicOut;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.SetupScene;
-import com.lionsteel.reflexmulti.Scenes.GameScene;
 import com.lionsteel.reflexmulti.SetupScene.Difficulty;
+import com.lionsteel.reflexmulti.Scenes.GameScene;
 
 public class Tileset implements ReflexConstants
 {
@@ -87,6 +86,7 @@ public class Tileset implements ReflexConstants
 
 	public void setupScene()
 	{
+		checkForNoParent();
 		switch (SetupScene.getDifficulty())
 		{
 		case Difficulty.EASY:
@@ -106,6 +106,18 @@ public class Tileset implements ReflexConstants
 		currentScene.attachChild(background);
 
 		currentScene.sortChildren();
+	}
+
+	private void checkForNoParent()
+	{
+		for(int x=0; x<NUM_BUTTONS; x++)
+		{
+			playerOneGameButtons[x].buttonSprite.detachSelf();
+			playerTwoGameButtons[x].buttonSprite.detachSelf();
+			displayGameButtons[x].buttonSprite.detachSelf();
+			background.detachSelf();
+		}
+		
 	}
 
 	public void clearTileset()
