@@ -2,6 +2,7 @@ package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -22,7 +23,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 	{
 		activity = ReflexActivity.getInstance();
 		
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 2048);
+		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 2048, TextureOptions.NEAREST);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
 		
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
