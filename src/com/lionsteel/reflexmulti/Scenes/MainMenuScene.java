@@ -26,6 +26,7 @@ public class MainMenuScene extends ReflexMenuScene
 	
 	public MainMenuScene()
 	{
+		super();
 		activity = ReflexActivity.getInstance();
 		
 		setupScene = new SetupScene();
@@ -93,13 +94,6 @@ public class MainMenuScene extends ReflexMenuScene
 	{
 		this.registerTouchArea(versusButton);
 		this.registerTouchArea(exitButton);
-	}
-	
-	@Override
-	protected void deregisterTouchAreas()
-	{
-		this.unregisterTouchArea(versusButton);
-		this.unregisterTouchArea(exitButton);
 	}
 	
 }

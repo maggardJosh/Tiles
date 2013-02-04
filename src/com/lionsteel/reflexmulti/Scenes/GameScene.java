@@ -71,14 +71,14 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 		barSprite = new Sprite(0, (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
 
-		playerOneIntro = new Sprite(0, 0, playerOneIntroRegion, activity.getVertexBufferObjectManager())
+		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
 			{
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
 				{
-					playerOneIntro.registerEntityModifier(new MoveYModifier(1.0f, playerOneIntro.getY(), -playerOneIntro.getHeight())
+					playerOneIntro.registerEntityModifier(new MoveYModifier(1.0f, playerOneIntro.getY(), CAMERA_HEIGHT)
 					{
 						@Override
 						protected void onModifierFinished(IEntity pItem)
@@ -92,14 +92,14 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 			}
 		};
 		playerOneIntro.setZIndex(FOREGROUND_Z);
-		playerTwoIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerTwoIntroRegion, activity.getVertexBufferObjectManager())
+		playerTwoIntro = new Sprite(0, 0, playerTwoIntroRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
 			{
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
 				{
-					playerTwoIntro.registerEntityModifier(new MoveYModifier(1.0f, playerTwoIntro.getY(), CAMERA_HEIGHT)
+					playerTwoIntro.registerEntityModifier(new MoveYModifier(1.0f, playerTwoIntro.getY(), -playerTwoIntro.getHeight())
 					{
 						@Override
 						protected void onModifierFinished(IEntity pItem)

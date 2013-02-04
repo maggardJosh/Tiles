@@ -4,6 +4,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
@@ -24,7 +25,7 @@ public class GameCountdown implements ReflexConstants
 	{
 		activity = ReflexActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameCountdown/");
-		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256);
+		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		final TiledTextureRegion countdownRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, "countdown.png", 0, 0, 3, 1);
 		atlas.load();
 

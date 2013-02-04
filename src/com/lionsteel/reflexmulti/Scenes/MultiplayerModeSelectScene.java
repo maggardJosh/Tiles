@@ -21,19 +21,23 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 	
 	public MultiplayerModeSelectScene()
 	{
+		super();
 		activity = ReflexActivity.getInstance();
 		
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 2048, TextureOptions.NEAREST);
+		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
 		
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, (int) backgroundRegion.getHeight());
 		final TextureRegion oneTileButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTileButton.png", (int) backgroundRegion.getWidth(), 0);
 		final TextureRegion threeTileButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "threeTilesButton.png", (int) (oneTileButtonRegion.getTextureX()), (int) (oneTileButtonRegion.getHeight()));
-		final TextureRegion streamButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "streamButton.png", (int) (threeTileButtonRegion.getTextureX()), (int) (threeTileButtonRegion.getTextureY() + threeTileButtonRegion.getHeight()));
+		final TextureRegion streamButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "streamButton.png", (int)oneTileButtonRegion.getTextureX(), (int)(threeTileButtonRegion.getTextureY()+threeTileButtonRegion.getHeight()));
+		
 		
 		this.setBackgroundEnabled(false);
 		sceneAtlas.load();
+		
+		
 		
 		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
@@ -55,7 +59,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		};
 		final Sprite threeTileButton = new Sprite(0, oneTileButton.getY() + oneTileButton.getHeight(), threeTileButtonRegion, activity.getVertexBufferObjectManager());
 		threeTileButton.setAlpha(.5f);
-		streamTileButton = new Sprite(0, threeTileButton.getY() + threeTileButton.getHeight(), streamButtonRegion, activity.getVertexBufferObjectManager())
+		streamTileButton = new Sprite(0, (int)(threeTileButton.getY() + threeTileButton.getHeight()), streamButtonRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -87,13 +91,5 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		registerTouchArea(streamTileButton);
 		
 	}
-	
-	@Override
-	protected void deregisterTouchAreas()
-	{
-		unregisterTouchArea(oneTileButton);
-		unregisterTouchArea(streamTileButton);
-	}
-	
 	
 }

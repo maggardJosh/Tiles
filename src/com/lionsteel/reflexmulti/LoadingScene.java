@@ -39,11 +39,5 @@ public class LoadingScene extends ReflexMenuScene implements ReflexConstants
 	{
 		
 	}
-
-	@Override
-	protected void deregisterTouchAreas()
-	{
-		
-	}
 	
 }
