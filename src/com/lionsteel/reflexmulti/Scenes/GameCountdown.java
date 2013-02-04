@@ -26,7 +26,7 @@ public class GameCountdown implements ReflexConstants
 		activity = ReflexActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameCountdown/");
 		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-		final TiledTextureRegion countdownRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, "countdown.png", 0, 0, 3, 1);
+		final TiledTextureRegion countdownRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, "countdown.png", 0, 0, 1,3);
 		atlas.load();
 
 		countdownSprite = new TiledSprite((CAMERA_WIDTH - countdownRegion.getWidth(0)) / 2, (CAMERA_HEIGHT - countdownRegion.getHeight(0)) / 2, countdownRegion, activity.getVertexBufferObjectManager());

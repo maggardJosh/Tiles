@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.Entities.Tileset;
+import com.lionsteel.reflexmulti.Entities.TilesetEntity;
 import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Scenes.SkillSelectScene;
@@ -114,7 +115,7 @@ public class SetupScene extends ReflexMenuScene
 		activity = ReflexActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
-		currentTileset = new Tileset("Rune");
+		currentTileset = new Tileset("three");
 
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
@@ -125,25 +126,39 @@ public class SetupScene extends ReflexMenuScene
 
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", (int) backgroundRegion.getWidth(), 0);
-		final TextureRegion tilesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tiles.png", (int) titleRegion.getTextureX(), (int) titleRegion.getHeight());
 		final TextureRegion[] difficultyRegion = new TextureRegion[3];
 
-		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png", (int) tilesRegion.getTextureX(), (int) (tilesRegion.getTextureY() + tilesRegion.getHeight()));
-		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png", (int) tilesRegion.getTextureX(), (int) (difficultyRegion[0].getTextureY() + difficultyRegion[0].getHeight()));
-		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png", (int) tilesRegion.getTextureX(), (int) (difficultyRegion[1].getTextureY() + difficultyRegion[1].getHeight()));
+		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png", (int) titleRegion.getTextureX(), (int) (titleRegion.getTextureY() + titleRegion.getHeight()));
+		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[0].getTextureY() + difficultyRegion[0].getHeight()));
+		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[1].getTextureY() + difficultyRegion[1].getHeight()));
 
-		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) tilesRegion.getTextureX(), (int) (difficultyRegion[2].getTextureY() + difficultyRegion[2].getHeight()));
+		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[2].getTextureY() + difficultyRegion[2].getHeight()));
 
 		final TextureRegion[] modeRegion = new TextureRegion[3];
-		modeRegion[GameMode.ONE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTile.png", (int) tilesRegion.getTextureX(), (int) (playRegion.getTextureY() + playRegion.getHeight()));
-		modeRegion[GameMode.THREE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "threeTiles.png", (int) tilesRegion.getTextureX(), (int) (modeRegion[GameMode.ONE_TILE].getTextureY() + modeRegion[GameMode.ONE_TILE].getHeight()));
-		modeRegion[GameMode.STREAM] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "stream.png", (int) tilesRegion.getTextureX(), (int) (modeRegion[GameMode.THREE_TILE].getTextureY() + modeRegion[GameMode.THREE_TILE].getHeight()));
+		modeRegion[GameMode.ONE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTile.png", (int) titleRegion.getTextureX(), (int) (playRegion.getTextureY() + playRegion.getHeight()));
+		modeRegion[GameMode.THREE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "threeTiles.png", (int) titleRegion.getTextureX(), (int) (modeRegion[GameMode.ONE_TILE].getTextureY() + modeRegion[GameMode.ONE_TILE].getHeight()));
+		modeRegion[GameMode.STREAM] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "stream.png", (int) titleRegion.getTextureX(), (int) (modeRegion[GameMode.THREE_TILE].getTextureY() + modeRegion[GameMode.THREE_TILE].getHeight()));
 
 		sceneAtlas.load();
 
 		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		tilesSprite = new Sprite((CAMERA_WIDTH - tilesRegion.getWidth()) / 2, titleSprite.getY() + titleSprite.getHeight(), tilesRegion, activity.getVertexBufferObjectManager());
+		
+		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
+		tilesetEntity.setAction(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				//TODO: tilesetScene
+				transitionChildScene(skillSelectScene);
+				
+			}
+		});
+		tilesSprite = tilesetEntity.getButtonSprite();
+		tilesSprite.setPosition((CAMERA_WIDTH - tilesSprite.getWidth()) / 2, titleSprite.getY() + titleSprite.getHeight());
+		
 		for (int x = 0; x < 3; x++)
 			difficultySprite[x] = new Sprite((CAMERA_WIDTH - difficultyRegion[x].getWidth()) / 2, tilesSprite.getY() + tilesSprite.getHeight(), difficultyRegion[x], activity.getVertexBufferObjectManager())
 			{
@@ -218,6 +233,7 @@ public class SetupScene extends ReflexMenuScene
 	protected void registerTouchAreas()
 	{
 		registerTouchArea(playSprite);
+		registerTouchArea(tilesSprite);
 		for (int x = 0; x < 3; x++)
 		{
 			registerTouchArea(difficultySprite[x]);
