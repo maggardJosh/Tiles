@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.SequenceModifier;
 
+import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Scenes.SkillSelectScene;
@@ -27,6 +28,8 @@ public class SetupScene extends ReflexMenuScene
 	
 	final MultiplayerModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
+	
+	private static Tileset				currentTileset;
 	
 	private static SetupScene			instance;
 	
@@ -48,6 +51,17 @@ public class SetupScene extends ReflexMenuScene
 	public static int getDifficulty()
 	{
 		return difficulty;
+	}
+	
+	public static Tileset getTileset()
+	{
+		return currentTileset;
+	}
+	
+	public static void loadTileset(String tileset)
+	{
+		currentTileset = new Tileset(tileset);
+		//TODO: Update stuff here
 	}
 	
 	public static void setGameMode(final int gameMode)
@@ -89,6 +103,8 @@ public class SetupScene extends ReflexMenuScene
 		
 		activity = ReflexActivity.getInstance();
 		this.setBackgroundEnabled(false);
+		
+		currentTileset = new Tileset("three");
 		
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();

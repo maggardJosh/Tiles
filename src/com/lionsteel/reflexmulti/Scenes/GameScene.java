@@ -16,6 +16,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SetupScene;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
@@ -50,7 +51,8 @@ public abstract class GameScene extends Scene implements ReflexConstants, IOnSce
 	public GameScene()
 	{
 		activity = ReflexActivity.getInstance();
-		currentTileset = new Tileset("Rune", this);
+		currentTileset = SetupScene.getTileset();
+		currentTileset.setParent(this);
 
 		currentTileset.setupScene();
 

@@ -44,10 +44,9 @@ public class Tileset implements ReflexConstants
 	private int						numberOfButtonsToUse	= 3;
 	private final Random			rand;
 	
-	public Tileset(final String basePath, final GameScene currentScene)
+	public Tileset(final String basePath)
 	{
 		activity = ReflexActivity.getInstance();
-		this.currentScene = currentScene;
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 		for (int i = 0; i < NUM_BUTTONS; i++)
@@ -63,6 +62,17 @@ public class Tileset implements ReflexConstants
 		backgroundAtlas.load();
 		background = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		background.setZIndex(BACKGROUND_Z);
+	}
+	
+	public void setParent(GameScene parent)
+	{
+		this.currentScene = parent;
+		for(int i=0; i< NUM_BUTTONS; i++)
+		{
+			playerOneGameButtons[i].setParent(parent);
+			playerTwoGameButtons[i].setParent(parent);
+			displayGameButtons[i].setParent(parent);
+		}
 	}
 	
 	public void setupScene()
@@ -258,7 +268,7 @@ public class Tileset implements ReflexConstants
 			spawnNewStreamTile();
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
-		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME*2/3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
+		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
 		displayedGameButtons.remove(displayButton);
 	}
 	

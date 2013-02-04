@@ -2,13 +2,7 @@ package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
-import org.andengine.entity.modifier.MoveModifier;
-import org.andengine.entity.modifier.RotationModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.ease.EaseCubicIn;
-import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.Entities.GameButton;
@@ -42,8 +36,7 @@ public class OneTileGameScene extends GameScene
 					@Override
 					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
 					{
-						// TODO Auto-generated method stub
-						
+					
 					}
 					
 					@Override
@@ -81,7 +74,7 @@ public class OneTileGameScene extends GameScene
 		{
 
 		case GameState.PICKING_NEW_BUTTON:
-			if (secondsOnCurrentState >= 1)
+			if (secondsOnCurrentState >= 1.0f)
 			{
 				currentTileset.newButton();
 				enablePlayer(PLAYER_ONE);
