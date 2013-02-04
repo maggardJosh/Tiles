@@ -4,6 +4,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.Scene;
 
+import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 
 public abstract class ReflexMenuScene extends Scene implements ReflexConstants
@@ -14,6 +15,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 	
 	protected void transitionChildScene(final ReflexMenuScene childScene)
 	{
+		ReflexActivity.getInstance().backEnabled = false;
 		setChildScene(childScene, false, false, true);
 		childScene.setX(CAMERA_WIDTH);
 		transitionOff();
@@ -22,6 +24,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
+				ReflexActivity.getInstance().backEnabled = true;
 				childScene.registerTouchAreas();
 				super.onModifierFinished(pItem);
 			}
@@ -43,6 +46,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 	@Override
 	public void clearChildScene()
 	{
+		ReflexActivity.getInstance().backEnabled = false;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
 		
 		this.getChildScene().registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, this.getChildScene().getX(), CAMERA_WIDTH)
@@ -50,6 +54,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
+				ReflexActivity.getInstance().backEnabled = true;
 				setChildSceneNull();
 				super.onModifierFinished(pItem);
 			}

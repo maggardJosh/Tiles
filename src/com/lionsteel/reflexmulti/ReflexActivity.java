@@ -28,6 +28,8 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	private MainMenuScene			mainMenuScene;
 	private SplashScene				splashScene;
 	
+	public boolean backEnabled = true;
+	
 	public static ReflexActivity getInstance()
 	{
 		if (instance == null)
@@ -143,6 +145,8 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	@Override
 	public void onBackPressed()
 	{
+		if(!backEnabled)
+			return;
 		Scene parentScene = this.mEngine.getScene();
 		
 		if (parentScene instanceof GameScene)
