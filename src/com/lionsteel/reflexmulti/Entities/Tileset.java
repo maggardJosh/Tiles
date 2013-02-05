@@ -309,7 +309,8 @@ public class Tileset implements ReflexConstants
 
 	}
 
-	private final int	SHAKE_ANGLE	= 3;
+	private final int	SHAKE_ANGLE	= 5;
+	private final float COLOR_VALUE = .4f;
 
 	public void disablePlayer(int player)
 	{
@@ -318,13 +319,13 @@ public class Tileset implements ReflexConstants
 		case PLAYER_ONE:
 			for (int i = 0; i < NUM_BUTTONS; i++)
 			{
-				playerTwoGameButtons[i].buttonSprite.setAlpha(.7f);
+				playerTwoGameButtons[i].buttonSprite.setColor(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE,1.0f);
 				playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
 				{
 					@Override
 					protected void onModifierFinished(IEntity pItem)
 					{
-						pItem.setAlpha(1.0f);
+						pItem.setColor(1.0f,1.0f,1.0f,1.0f);
 						super.onModifierFinished(pItem);
 					}
 				});
@@ -334,13 +335,14 @@ public class Tileset implements ReflexConstants
 		case PLAYER_TWO:
 			for (int i = 0; i < NUM_BUTTONS; i++)
 			{
-				playerOneGameButtons[i].buttonSprite.setAlpha(.7f);
+			
+				playerOneGameButtons[i].buttonSprite.setColor(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE,1.0f);
 				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
 				{
 					@Override
 					protected void onModifierFinished(IEntity pItem)
 					{
-						pItem.setAlpha(1.0f);
+						pItem.setColor(1.0f,1.0f,1.0f,1.0f);
 						super.onModifierFinished(pItem);
 					}
 				});
