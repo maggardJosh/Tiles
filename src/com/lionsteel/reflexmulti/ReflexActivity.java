@@ -190,14 +190,16 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			return;
 		}
 		
+		
+		while (parentScene.getChildScene().hasChildScene())
+			parentScene = parentScene.getChildScene();
+		
+
 		if (parentScene instanceof BackgroundMenuScene)
 		{
 			super.onBackPressed();
 			return;
 		}
-		
-		while (parentScene.getChildScene().hasChildScene())
-			parentScene = parentScene.getChildScene();
 		
 		parentScene.clearChildScene();
 	}
