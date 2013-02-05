@@ -250,6 +250,7 @@ public class SetupScene extends ReflexMenuScene
 	
 	public void resetGraphics()
 	{
+		skillSelectScene.resetGraphics();
 		tilesSprite.detachSelf();
 		final float oldY = tilesSprite.getY();
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
