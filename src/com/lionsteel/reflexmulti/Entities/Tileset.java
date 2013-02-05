@@ -12,9 +12,9 @@ import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
@@ -29,11 +29,18 @@ public class Tileset implements ReflexConstants
 {
 	private ReflexActivity			activity;
 	
-	private final GameButton[]		playerOneGameButtons	= new GameButton[NUM_BUTTONS];
-	private final GameButton[]		playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
-	private final GameButton[]		displayGameButtons		= new GameButton[NUM_BUTTONS];
+	private BitmapTextureAtlas		atlas;
 	
-	private final Sprite			background;
+	private final TextureRegion[]	buttonRegions			= new TextureRegion[NUM_BUTTONS];
+	private final TextureRegion		backgroundRegion;
+	
+	private GameButton[]			playerOneGameButtons	= new GameButton[NUM_BUTTONS];
+	private GameButton[]			playerTwoGameButtons	= new GameButton[NUM_BUTTONS];
+	private GameButton[]			displayGameButtons		= new GameButton[NUM_BUTTONS];
+	
+	private Sprite					background;
+	
+	private boolean					gameAssetsCreated		= false;
 	
 	private ArrayList<GameButton>	displayedGameButtons	= new ArrayList<GameButton>();
 	
@@ -42,42 +49,55 @@ public class Tileset implements ReflexConstants
 	
 	private int						numberOfButtonsToUse	= 3;
 	private final Random			rand;
+	private final String			basePath;
 	
 	private DifficultyEntity		difficultyEntity[]		= new DifficultyEntity[3];
 	private TilesetEntity			tilesetEntity;
 	
-	public Tileset(final String basePath)
+	public Tileset(final String basePath, final boolean onlyLoadTextureRegions)
 	{
+		this.basePath = basePath;
 		activity = ReflexActivity.getInstance();
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
+		
+		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		for (int i = 0; i < NUM_BUTTONS; i++)
+			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png", (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png", BUTTON_WIDTH * 3, 0);
+		atlas.load();
+		
+		if (!onlyLoadTextureRegions)
+		{
+			
+			createDifficultyEntities();
+			createTilesetEntity();
+			
+		}
+	}
+	
+	public void createGameAssets()
+	{
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			playerOneGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_TWO);
-			playerTwoGameButtons[i] = new GameButton(i + 1, currentScene, PLAYER_ONE);
-			displayGameButtons[i] = new GameButton(i + 1, currentScene, DISPLAY_BUTTONS);
+			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
+			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
+			displayGameButtons[i] = new GameButton(i, this, currentScene, DISPLAY_BUTTONS);
 		}
-		
-		createDifficultyEntities();
-		createTilesetEntity();
-		
-		//load background
-		final BitmapTextureAtlas backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, TextureOptions.BILINEAR);
-		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
-		backgroundAtlas.load();
 		background = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		background.setZIndex(BACKGROUND_Z);
+		gameAssetsCreated = true;
 	}
 	
 	private void createDifficultyEntities()
 	{
 		for (int x = 0; x < 3; x++)
-			difficultyEntity[x] = new DifficultyEntity(x);
+			difficultyEntity[x] = new DifficultyEntity(x, this);
 	}
 	
 	private void createTilesetEntity()
 	{
-		tilesetEntity = new TilesetEntity();
+		tilesetEntity = new TilesetEntity(this);
 	}
 	
 	public void setParent(GameScene parent)
@@ -135,13 +155,20 @@ public class Tileset implements ReflexConstants
 			@Override
 			public void run()
 			{
-				for (int i = 0; i < playerTwoGameButtons.length; i++)
+				if (gameAssetsCreated)
 				{
-					currentScene.detachChild(playerTwoGameButtons[i].buttonSprite);
-					currentScene.detachChild(playerOneGameButtons[i].buttonSprite);
-					currentScene.detachChild(displayGameButtons[i].buttonSprite);
+					for (int i = 0; i < playerTwoGameButtons.length; i++)
+					{
+						playerTwoGameButtons[i].clear();
+						playerOneGameButtons[i].clear();
+						displayGameButtons[i].clear();
+					}
+					background.detachSelf();
 				}
-				currentScene.detachChild(background);
+				tilesetEntity.clear();
+				for (DifficultyEntity d : difficultyEntity)
+					d.clear();
+				System.gc();
 				
 			}
 		});
@@ -381,5 +408,15 @@ public class Tileset implements ReflexConstants
 	public TilesetEntity getTilesetEntity()
 	{
 		return tilesetEntity;
+	}
+	
+	public String getBasePath()
+	{
+		return basePath;
+	}
+	
+	public ITextureRegion getButtonRegion(int buttonNumber)
+	{
+		return buttonRegions[buttonNumber];
 	}
 }

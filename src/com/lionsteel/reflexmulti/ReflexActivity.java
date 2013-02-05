@@ -28,8 +28,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	private GameScene				gameScene;
 	private MainMenuScene			mainMenuScene;
 	private SplashScene				splashScene;
+	private BackgroundMenuScene		backgroundScene;
 	
-	public boolean backEnabled = true;
+	private LoadingScene			loadingScene;
+	
+	public boolean					backEnabled	= true;
 	
 	public static ReflexActivity getInstance()
 	{
@@ -73,7 +76,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			{
 				mEngine.unregisterUpdateHandler(pTimerHandler);
 				
+				SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
+				loadingScene = new LoadingScene();
+				
 				mainMenuScene = new MainMenuScene();
+				backgroundScene = new BackgroundMenuScene(mainMenuScene);
 				
 				mEngine.registerUpdateHandler(new TimerHandler(2.0f, new ITimerCallback()
 				{
@@ -95,7 +102,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 							public void onModifierFinished(
 									IModifier<IEntity> pModifier, IEntity pItem)
 							{
-								mEngine.setScene(mainMenuScene);
+								mEngine.setScene(backgroundScene);
 							}
 						});
 					}
@@ -115,13 +122,13 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
-	public void startGame()
+	public void load(final Runnable loadAction)
 	{
 		Scene currentScene = mEngine.getScene();
 		while (currentScene.hasChildScene())
 			currentScene = currentScene.getChildScene();
-		
-		currentScene.setChildScene(new LoadingScene(), false, false, true);
+		loadingScene.setPosition(0, 0);
+		currentScene.setChildScene(loadingScene, false, false, true);
 		
 		mEngine.registerUpdateHandler(new TimerHandler(.1f, new ITimerCallback()
 		{
@@ -129,6 +136,27 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
+				loadAction.run();
+			}
+		}));
+	}
+	
+	@Override
+	public void onDestroyResources() throws Exception
+	{
+		SharedResources.clear();
+		super.onDestroyResources();
+	}
+	
+	public void startGame()
+	{
+		load(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				SetupScene.getTileset().createGameAssets();
 				switch (SetupScene.getGameMode())
 				{
 					case GameMode.ONE_TILE:
@@ -140,14 +168,19 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 				}
 				mEngine.setScene(gameScene);
 			}
-		}));
+		});
 		
+	}
+	
+	public void backToSetupScene()
+	{
+		SetupScene.getInstance().clearChildScene();
 	}
 	
 	@Override
 	public void onBackPressed()
 	{
-		if(!backEnabled)
+		if (!backEnabled)
 			return;
 		Scene parentScene = this.mEngine.getScene();
 		
@@ -157,7 +190,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			return;
 		}
 		
-		if (!parentScene.hasChildScene())
+		if (parentScene instanceof BackgroundMenuScene)
 		{
 			super.onBackPressed();
 			return;
@@ -181,7 +214,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		}
 		
 		mainMenuScene.setX(0);
-		mEngine.setScene(mainMenuScene);
+		mEngine.setScene(backgroundScene);
 	}
 	
 }

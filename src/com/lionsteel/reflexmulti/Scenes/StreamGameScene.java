@@ -27,7 +27,7 @@ public class StreamGameScene extends GameScene
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
-			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber()-1);
+			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
 				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()

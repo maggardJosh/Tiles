@@ -2,36 +2,31 @@ package com.lionsteel.reflexmulti.Entities;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SetupScene;
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 
 public class GameButton implements ReflexConstants
 {
-	final ReflexActivity		activity;
-	final BitmapTextureAtlas	buttonAtlas;
-	final TextureRegion			buttonRegion;
-	public final Sprite			buttonSprite;
-	private final int			playerOwner;
+	final ReflexActivity	activity;
 	
-	private final int			buttonNumber;
-	private GameScene			parent;
+	public final Sprite		buttonSprite;
+	private final int		playerOwner;
 	
-	public GameButton(final int buttonNumber, final GameScene parent,
+	private final int		buttonNumber;
+	private GameScene		parent;
+	
+	public GameButton(final int buttonNumber,final Tileset tileset, final GameScene parent,
 			final int player)
 	{
 		activity = ReflexActivity.getInstance();
 		this.buttonNumber = buttonNumber;
 		this.parent = parent;
 		playerOwner = player;
-		buttonAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512);
-		buttonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buttonAtlas, activity, "" + buttonNumber + ".png", 0, 0);
-		buttonAtlas.load();
-		buttonSprite = new Sprite(0, 0, buttonRegion, activity.getVertexBufferObjectManager())
+		
+		buttonSprite = new Sprite(0, 0, tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -42,6 +37,11 @@ public class GameButton implements ReflexConstants
 				return false;
 			}
 		};
+	}
+	
+	public void clear()
+	{
+		buttonSprite.detachSelf();
 	}
 	
 	public void setParent(GameScene parent)

@@ -18,7 +18,6 @@ public class MainMenuScene extends ReflexMenuScene
 	
 	final int			BUTTON_SPACING	= 150;
 	
-	final Sprite		backgroundSprite;
 	final Sprite		titleSprite;
 	final Sprite		versusButton;
 	final Sprite		practiceButton;
@@ -31,20 +30,18 @@ public class MainMenuScene extends ReflexMenuScene
 		
 		setupScene = new SetupScene();
 		
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
 		
-		final TextureRegion background = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, (int) background.getHeight());
-		final TextureRegion versusRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "versusButton.png", (int) background.getWidth(), 0);
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
+		final TextureRegion versusRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "versusButton.png", (int) titleRegion.getWidth(), 0);
 		final TextureRegion practiceRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceButton.png", (int) versusRegion.getTextureX(), (int) versusRegion.getHeight());
-		final TextureRegion exitRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "exitButton.png", (int) versusRegion.getTextureX(), (int) (practiceRegion.getTextureY() + practiceRegion.getHeight()));
+		final TextureRegion exitRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "exitButton.png", (int) 0, (int)(titleRegion.getHeight()));
 		
 		sceneAtlas.load();
 		
 		this.setBackgroundEnabled(false);
 		
-		backgroundSprite = new Sprite(0, 0, background, activity.getVertexBufferObjectManager());
 		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
 		versusButton = new Sprite((CAMERA_WIDTH - versusRegion.getWidth()) / 2, 230, versusRegion, activity.getVertexBufferObjectManager())
 		{
@@ -79,7 +76,6 @@ public class MainMenuScene extends ReflexMenuScene
 			}
 		};
 		
-		this.attachChild(backgroundSprite);
 		this.attachChild(titleSprite);
 		this.attachChild(versusButton);
 		this.attachChild(practiceButton);

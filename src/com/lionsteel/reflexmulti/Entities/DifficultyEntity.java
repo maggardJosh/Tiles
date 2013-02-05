@@ -4,6 +4,7 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.AlphaModifier;
 
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SetupScene;
 import com.lionsteel.reflexmulti.SetupScene.Difficulty;
 
 public class DifficultyEntity extends Entity implements ReflexConstants
@@ -12,12 +13,12 @@ public class DifficultyEntity extends Entity implements ReflexConstants
 	private final float	buttonScale		= .3f;
 	final GameButton[]	difficultyDisplayButtons;
 
-	public DifficultyEntity(final int difficulty)
+	public DifficultyEntity(final int difficulty, final Tileset tileset)
 	{
 		difficultyDisplayButtons = new GameButton[NUM_BUTTONS];
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			difficultyDisplayButtons[i] = new GameButton(i + 1, null, -1);
+			difficultyDisplayButtons[i] = new GameButton(i,tileset, null, -1);
 			difficultyDisplayButtons[i].buttonSprite.setScale(buttonScale);
 			if (i < 3 || (i < 5 && difficulty > Difficulty.EASY) || (difficulty > Difficulty.NORMAL))
 				alphaValues[i] = 1.0f;
@@ -52,6 +53,13 @@ public class DifficultyEntity extends Entity implements ReflexConstants
 		}
 		for (int x = 0; x < NUM_BUTTONS; x++)
 			this.attachChild(difficultyDisplayButtons[x].buttonSprite);
+	}
+	
+	public void clear()
+	{
+		this.detachChildren();
+		for(GameButton b:difficultyDisplayButtons)
+			b.clear();
 	}
 
 	public void fadeIn()

@@ -26,7 +26,7 @@ public class OneTileGameScene extends GameScene
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
-			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber() + 1))
+			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber()))
 			{
 				
 				final GameButton displayButton = currentTileset.getDisplayButton();

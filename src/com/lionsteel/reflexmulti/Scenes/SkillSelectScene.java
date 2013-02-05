@@ -26,16 +26,14 @@ public class SkillSelectScene extends ReflexMenuScene
 		
 		this.setBackgroundEnabled(false);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SkillSelectScene/");
-		
-		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png", 0, 0);
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png", 0, (int) backgroundRegion.getHeight());
-		final TextureRegion easyButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "easyButton.png", (int) backgroundRegion.getWidth(), 0);
+	
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png", 0, 0);
+		final TextureRegion easyButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "easyButton.png", (int) titleRegion.getWidth(), 0);
 		final TextureRegion normalButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "normalButton.png", (int) easyButtonRegion.getTextureX(), (int) easyButtonRegion.getHeight());
 		final TextureRegion hardButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "hardButton.png", (int) easyButtonRegion.getTextureX(), (int) (normalButtonRegion.getTextureY() + normalButtonRegion.getHeight()));
 		
 		atlas.load();
 		
-		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
 		
 		easyButton = new Sprite((CAMERA_WIDTH - easyButtonRegion.getWidth()) / 2, 200, easyButtonRegion, activity.getVertexBufferObjectManager())
@@ -90,7 +88,6 @@ public class SkillSelectScene extends ReflexMenuScene
 			}
 		};
 		
-		this.attachChild(backgroundSprite);
 		this.attachChild(titleSprite);
 		this.attachChild(easyButton);
 		this.attachChild(normalButton);

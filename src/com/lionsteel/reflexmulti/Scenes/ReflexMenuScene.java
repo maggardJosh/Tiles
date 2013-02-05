@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SharedResources;
 
 public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 {
@@ -38,6 +39,9 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 			}
 		};
 		
+		////final Sprite backgroundSprite = new Sprite(0,0,SharedResources.getInstance().backgroundRegion, activity.getVertexBufferObjectManager());
+		//backgroundSprite.setZIndex(BACKGROUND_Z);
+		//this.attachChild(backgroundSprite);
 		this.attachChild(backArrow);
 		backArrow.setZIndex(FOREGROUND_Z);
 		backArrow.setVisible(false);
@@ -57,6 +61,8 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		childScene.showBackArrow();
 		ReflexActivity.getInstance().backEnabled = false;
 		setChildScene(childScene, false, false, true);
+		if(childScene.hasChildScene())
+			childScene.clearChildScene();
 		childScene.setX(CAMERA_WIDTH);
 		transitionOff();
 		childScene.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, CAMERA_WIDTH, 0)
@@ -87,6 +93,12 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 	@Override
 	public void clearChildScene()
 	{
+		if(this.mChildScene instanceof LoadingScene)
+		{
+			
+			this.mChildScene = null;
+			return;
+		}
 		ReflexActivity.getInstance().backEnabled = false;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
 		

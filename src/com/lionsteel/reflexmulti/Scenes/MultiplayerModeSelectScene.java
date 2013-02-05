@@ -27,9 +27,8 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
 		
-		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "background.png", 0, 0);
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, (int) backgroundRegion.getHeight());
-		final TextureRegion oneTileButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTileButton.png", (int) backgroundRegion.getWidth(), 0);
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
+		final TextureRegion oneTileButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTileButton.png", (int) titleRegion.getWidth(), 0);
 		final TextureRegion threeTileButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "threeTilesButton.png", (int) (oneTileButtonRegion.getTextureX()), (int) (oneTileButtonRegion.getHeight()));
 		final TextureRegion streamButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "streamButton.png", (int)oneTileButtonRegion.getTextureX(), (int)(threeTileButtonRegion.getTextureY()+threeTileButtonRegion.getHeight()));
 		
@@ -37,9 +36,6 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		this.setBackgroundEnabled(false);
 		sceneAtlas.load();
 		
-		
-		
-		final Sprite backgroundSprite = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
 		oneTileButton = new Sprite(0, 210, oneTileButtonRegion, activity.getVertexBufferObjectManager())
 		{
@@ -76,7 +72,6 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 			}
 		};
 		
-		this.attachChild(backgroundSprite);
 		this.attachChild(titleSprite);
 		this.attachChild(oneTileButton);
 		this.attachChild(threeTileButton);
