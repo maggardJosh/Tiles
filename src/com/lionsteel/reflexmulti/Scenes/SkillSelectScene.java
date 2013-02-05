@@ -20,6 +20,8 @@ public class SkillSelectScene extends ReflexMenuScene
 	final Sprite		hardButton;
 
 	DifficultyEntity[]	diffEntities	= new DifficultyEntity[3];
+	
+	final int Y_START = 218;
 
 	public SkillSelectScene()
 	{
@@ -46,7 +48,7 @@ public class SkillSelectScene extends ReflexMenuScene
 			diffEntities[x].fadeIn();
 		}
 
-		easyButton = new Sprite((CAMERA_WIDTH - easyButtonRegion.getWidth()) / 2, 200, easyButtonRegion, activity.getVertexBufferObjectManager())
+		easyButton = new Sprite((CAMERA_WIDTH - easyButtonRegion.getWidth()) / 2, Y_START, easyButtonRegion, activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
