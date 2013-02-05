@@ -57,6 +57,8 @@ public class StreamGameScene extends GameScene
 
 					}
 				});
+
+				sortChildren();
 			} else
 			{
 				disablePlayer(button);
