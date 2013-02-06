@@ -53,7 +53,6 @@ public class StreamGameScene extends GameScene
 					@Override
 					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
 					{
-						// TODO Auto-generated method stub
 
 					}
 				});

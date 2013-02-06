@@ -178,6 +178,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	}
 	
 	@Override
+	
 	public void onBackPressed()
 	{
 		if (!backEnabled)
