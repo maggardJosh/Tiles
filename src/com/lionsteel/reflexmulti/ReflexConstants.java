@@ -30,6 +30,9 @@ public interface ReflexConstants
 	public static final float		SCENE_TRANSITION_SECONDS		= .5f;
 	public static final float		SETUP_SCENE_BUTTON_TRANSITION	= .3f;
 	
+	public static final float		BUTTON_ANIMATE_IN_TIME			= .6f;
+	public static final float		BUTTON_ANIMATE_IN_START_SCALE	= 3.0f;
+	
 	//---- Z-Indexing
 	public static final int			BACKGROUND_Z					= 0;
 	public static final int			FOREGROUND_Z					= 5;

@@ -3,6 +3,8 @@ package com.lionsteel.reflexmulti.Entities;
 import java.util.Random;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
@@ -214,6 +216,7 @@ public class Tileset implements ReflexConstants
 				{
 					playerTwoGameButtons[x].buttonSprite.setRotation(180);
 					playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+					playerTwoGameButtons[x].buttonSprite.setAlpha(0);
 					currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
 					currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 				}
@@ -246,6 +249,7 @@ public class Tileset implements ReflexConstants
 				for (int x = 0; x < numberOfButtonsToUse; x++)
 				{
 					playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+					playerOneGameButtons[x].buttonSprite.setAlpha(0);
 					currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
 					currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 				}
@@ -422,5 +426,41 @@ public class Tileset implements ReflexConstants
 	public ITextureRegion getButtonRegion(int buttonNumber)
 	{
 		return buttonRegions[buttonNumber];
+	}
+	final float BUTTON_DELAY = .6f;
+	public void animatePlayerTilesIn(final Runnable onFinishedAction)
+	{
+		for (int i = 0; i < numberOfButtonsToUse; i++)
+		{
+			if (i == numberOfButtonsToUse - 1) //If last button the use the onFinishedAction
+				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new DelayModifier(BUTTON_ANIMATE_IN_TIME * (i + 1) * BUTTON_DELAY)
+				{
+					protected void onModifierFinished(IEntity pItem)
+					{
+						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()));
+						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
+						onFinishedAction.run();
+						
+					};
+				});
+			else
+				playerOneGameButtons[i].buttonSprite.registerEntityModifier(new DelayModifier(BUTTON_ANIMATE_IN_TIME * (i + 1) * BUTTON_DELAY)
+				{
+					protected void onModifierFinished(IEntity pItem)
+					{
+						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()));
+						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
+						
+					};
+				});
+			playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new DelayModifier(BUTTON_ANIMATE_IN_TIME * (i + 1) * BUTTON_DELAY)
+			{
+				protected void onModifierFinished(IEntity pItem)
+				{
+					pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f));
+					pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
+				};
+			});
+		}
 	}
 }
