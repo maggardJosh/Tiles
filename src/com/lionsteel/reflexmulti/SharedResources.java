@@ -11,6 +11,7 @@ public class SharedResources
 	private static SharedResources	instance;
 	
 	public TextureRegion			backgroundRegion;
+	public TextureRegion			touchImageRegion;
 	
 	public static SharedResources getInstance()
 	{
@@ -23,13 +24,14 @@ public class SharedResources
 	{
 		instance = this;
 		activity = ReflexActivity.getInstance();
-		final BitmapTextureAtlas atlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024);
+		final BitmapTextureAtlas atlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
 		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png", 0, 0);
+		touchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "touchImage.png", (int)backgroundRegion.getWidth(), 0);
 		atlas.load();
 		
 	}
-
+	
 	public static void clear()
 	{
 		instance = null;

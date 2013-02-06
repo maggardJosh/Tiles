@@ -17,6 +17,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.SetupScene;
+import com.lionsteel.reflexmulti.TouchControl;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
@@ -36,6 +37,8 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 	private final Sprite				playerTwoIntro;
 	private final Sprite				barSprite;
 	
+	private final TouchControl[]		introTouchControls		= new TouchControl[2];
+	
 	private boolean						playerOneReady			= false;
 	private boolean						playerTwoReady			= false;
 	
@@ -53,6 +56,10 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 	public GameScene()
 	{
 		activity = ReflexActivity.getInstance();
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
+		
+		
 		currentTileset = SetupScene.getTileset();
 		currentTileset.setParent(this);
 		
@@ -120,8 +127,7 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 		};
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
 		
-		this.registerTouchArea(playerOneIntro);
-		this.registerTouchArea(playerTwoIntro);
+		prepareTouchControls();
 		
 		this.attachChild(barSprite);
 		
@@ -151,13 +157,66 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 		});
 	}
 	
+	private void prepareTouchControls()
+	{
+		introTouchControls[PLAYER_ONE] = new TouchControl(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				playerOneReady = true;
+				
+			}
+		}, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				playerOneReady = false;
+				
+			}
+		});
+		final Sprite touchImage = introTouchControls[PLAYER_ONE].touchImage;
+		touchImage.setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, 150);
+		playerOneIntro.attachChild(touchImage);
+		this.registerTouchArea(touchImage);
+		
+		introTouchControls[PLAYER_TWO] = new TouchControl(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				playerTwoReady = true;
+				
+			}
+		}, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				playerTwoReady = false;
+				
+			}
+		});
+		final Sprite secondTouchImage = introTouchControls[PLAYER_TWO].touchImage;
+		secondTouchImage.setPosition((CAMERA_WIDTH  - secondTouchImage.getWidth()) / 2, 50);
+		playerTwoIntro.attachChild(secondTouchImage);
+		this.registerTouchArea(secondTouchImage);
+		
+	}
+	
 	protected void Update(final float pSecondsElapsed)
 	{
 		switch (gameState)
 		{
 			case GameState.INTRO:
 				if (playerOneReady && playerTwoReady)
+				{
+					playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
+					playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 					startAnimateIn();
+				}
 				break;
 		}
 		
@@ -172,6 +231,7 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 			changeState(GameState.GAME_OVER);
 		}
 	}
+	
 	protected void startAnimateIn()
 	{
 		changeState(GameState.START_COUNTDOWN);
@@ -184,6 +244,7 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 			}
 		});
 	}
+	
 	protected void startCountdown()
 	{
 		changeState(GameState.START_COUNTDOWN);

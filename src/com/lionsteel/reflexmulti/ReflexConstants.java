@@ -33,6 +33,11 @@ public interface ReflexConstants
 	public static final float		BUTTON_ANIMATE_IN_TIME			= .6f;
 	public static final float		BUTTON_ANIMATE_IN_START_SCALE	= 3.0f;
 	
+	public static final float		INTRO_OUT_DURATION				= .3f;
+	
+	public static final float		TOUCH_CONTROL_DURATION			= 1.0f;
+	public static final float		TOUCH_CONTROL_RESET				= .5f;
+	
 	//---- Z-Indexing
 	public static final int			BACKGROUND_Z					= 0;
 	public static final int			FOREGROUND_Z					= 5;
