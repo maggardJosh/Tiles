@@ -18,6 +18,9 @@ public interface ReflexConstants
 	public static final int			BACK_ARROW_PADDING				= 10;
 	public static final int			REMATCH_TOUCH_PADDING			= 200;
 	
+	public static final float		REFLEX_MIN_TIME					= 1.0f;
+	public static final float		REFLEX_MAX_TIME					= 2.5f;
+	
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
 	public static final float		DISABLE_TIME					= .4f;

@@ -45,7 +45,6 @@ public class Tileset implements ReflexConstants
 	
 	private GameButton[]			currentStreamButtons		= new GameButton[3];
 	private GameScene				currentScene;
-	private int						currentButton				= -1;
 	
 	private int						numberOfButtonsToUse		= 3;
 	private int						numberOfStreamTilesToSpawn	= 1;
@@ -55,6 +54,11 @@ public class Tileset implements ReflexConstants
 	private DifficultyEntity		difficultyEntity[]			= new DifficultyEntity[3];
 	private TilesetEntity			tilesetEntity;
 	
+	/**
+	 * 
+	 * @param basePath Name of folder under /gfx/tilesets/ that contains tile images
+	 * @param onlyLoadTextureRegions Use this when loading in tileset previews. It only loads the parts needed for tileset previews
+	 */
 	public Tileset(final String basePath, final boolean onlyLoadTextureRegions)
 	{
 		this.basePath = basePath;
@@ -182,11 +186,6 @@ public class Tileset implements ReflexConstants
 		
 	}
 	
-	public int getCurrentButtonNumber()
-	{
-		return currentButton;
-	}
-	
 	private void createButtons(int player)
 	{
 		switch (player)
@@ -268,18 +267,6 @@ public class Tileset implements ReflexConstants
 		}
 	}
 	
-	public GameButton getDisplayButton()
-	{
-		return displayGameButtons[currentButton];
-	}
-	
-	public void newButton()
-	{
-		currentButton = rand.nextInt(numberOfButtonsToUse);
-		displayGameButtons[currentButton].buttonSprite.setVisible(true);
-		displayGameButtons[currentButton].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
-	}
-	
 	public void animateDisplayButton(GameButton displayButton,
 			GameButton playerButton, IEntityModifierListener listener)
 	{
@@ -297,12 +284,40 @@ public class Tileset implements ReflexConstants
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
+		} else if (SetupScene.getGameMode() == GameMode.ONE_TILE)
+		{
+			int i = 0;
+			for (; i < numberOfStreamTilesToSpawn; i++)
+			{
+				if (displayButton == currentStreamButtons[i])
+					break;
+			}
+			currentStreamButtons[i] = null;
+			checkAllButtonsGone();
 		}
 		displayButton.buttonSprite.setZIndex(FOREGROUND_Z);
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
 		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
 		
+	}
+	
+	private void checkAllButtonsGone()
+	{
+		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
+			if (currentStreamButtons[i] != null)
+				return;
+		
+		//TODO: Rigged delay. Maybe change this later.
+		playerOneGameButtons[0].buttonSprite.registerEntityModifier(new DelayModifier(REFLEX_MIN_TIME + rand.nextFloat() * (REFLEX_MAX_TIME - REFLEX_MIN_TIME))
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				startStream();
+				super.onModifierFinished(pItem);
+			}
+		});
 	}
 	
 	public void resetDisplayButton(final GameButton pItem)
@@ -373,14 +388,14 @@ public class Tileset implements ReflexConstants
 			
 			for (int x = 0; x < 3; x++)
 			{
-				if (!displayGameButtons[nextButtonValue+NUM_BUTTONS*x].buttonSprite.isVisible())
+				if (!displayGameButtons[nextButtonValue + NUM_BUTTONS * x].buttonSprite.isVisible())
 				{
-					newStreamButton = displayGameButtons[nextButtonValue+NUM_BUTTONS*x];
+					newStreamButton = displayGameButtons[nextButtonValue + NUM_BUTTONS * x];
 					break;
 				}
 			}
 		}
-	
+		
 		return newStreamButton;
 	}
 	
@@ -389,6 +404,7 @@ public class Tileset implements ReflexConstants
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 		{
 			currentStreamButtons[i] = newStreamButton();
+			currentStreamButtons[i].buttonSprite.setScale(0.1f);
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 		}
@@ -412,8 +428,11 @@ public class Tileset implements ReflexConstants
 	public GameButton isButtonDisplayed(int buttonNumber)
 	{
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
-			if (currentStreamButtons[i].getButtonNumber() == buttonNumber)
-				return currentStreamButtons[i];
+		{
+			if (currentStreamButtons[i] != null)
+				if (currentStreamButtons[i].getButtonNumber() == buttonNumber)
+					return currentStreamButtons[i];
+		}
 		return null;
 	}
 	

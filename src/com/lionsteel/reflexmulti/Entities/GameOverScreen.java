@@ -111,7 +111,10 @@ public class GameOverScreen extends Entity implements ReflexConstants
 	
 	public void show(final int winningPlayer)
 	{
+		if(this.isVisible())
+			return;
 		this.setX(CAMERA_WIDTH);
+		this.clearEntityModifiers();
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, CAMERA_WIDTH, 0));
 		switch (winningPlayer)
 		{
@@ -139,6 +142,8 @@ public class GameOverScreen extends Entity implements ReflexConstants
 	
 	public void hide()
 	{
+		if(!this.isVisible())
+			return;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, 0, CAMERA_WIDTH){
 			@Override
 			protected void onModifierFinished(IEntity pItem)

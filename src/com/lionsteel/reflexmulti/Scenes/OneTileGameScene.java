@@ -1,6 +1,7 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.util.modifier.IModifier;
 
@@ -26,6 +27,43 @@ public class OneTileGameScene extends GameScene
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
+			
+			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber());
+			if (displayButtonPressed != null)
+			{
+				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
+				{
+
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
+					{
+						currentTileset.resetDisplayButton(displayButtonPressed);
+						switch (button.getPlayer())
+						{
+						case PLAYER_ONE:
+							checkPlayerWillWin(PLAYER_ONE);
+							moveBar(-BAR_SPEED);
+							break;
+						case PLAYER_TWO:
+							checkPlayerWillWin(PLAYER_TWO);
+							moveBar(BAR_SPEED);
+							break;
+						}
+					}
+
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
+					{
+
+					}
+				});
+
+				sortChildren();
+			} else
+			{
+				disablePlayer(button);
+			}
+			/*
 			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber()))
 			{
 				
@@ -62,7 +100,7 @@ public class OneTileGameScene extends GameScene
 			} else
 			{
 				disablePlayer(button);
-			}
+			}*/
 			break;
 		}
 	}
@@ -76,8 +114,7 @@ public class OneTileGameScene extends GameScene
 		case GameState.PICKING_NEW_BUTTON:
 			if (secondsOnCurrentState >= 1.0f)
 			{
-				currentTileset.newButton();
-				
+				currentTileset.startStream();
 				enablePlayer(PLAYER_ONE);
 				enablePlayer(PLAYER_TWO);
 				changeState(GameState.WAITING_FOR_INPUT);
@@ -91,6 +128,7 @@ public class OneTileGameScene extends GameScene
 	@Override
 	protected void resetGame()
 	{
+		currentTileset.reset();
 		resetBar();
 		turnOffGameOver();
 		startCountdown();
