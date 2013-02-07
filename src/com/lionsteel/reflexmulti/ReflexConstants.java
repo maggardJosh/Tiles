@@ -16,6 +16,7 @@ public interface ReflexConstants
 	public static final int			PLAYER_TWO						= 1;
 	
 	public static final int			BACK_ARROW_PADDING				= 10;
+	public static final int			REMATCH_TOUCH_PADDING			= 200;
 	
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
@@ -35,7 +36,7 @@ public interface ReflexConstants
 	
 	public static final float		INTRO_OUT_DURATION				= .3f;
 	
-	public static final float		TOUCH_CONTROL_DURATION			= 1.0f;
+	public static final float		TOUCH_CONTROL_DURATION			= .5f;
 	public static final float		TOUCH_CONTROL_RESET				= .5f;
 	
 	//---- Z-Indexing

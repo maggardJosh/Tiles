@@ -23,8 +23,7 @@ import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
 
-public abstract class GameScene extends Scene implements ReflexConstants,
-		IOnSceneTouchListener
+public abstract class GameScene extends Scene implements ReflexConstants
 {
 	protected ReflexActivity			activity;
 	private boolean						playerOneDisabled		= false;
@@ -67,11 +66,10 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 		
 		gameCountdown = new GameCountdown(this);
 		
-		gameOverScreen = new GameOverScreen();
+		gameOverScreen = new GameOverScreen(this);
 		gameOverScreen.setZIndex(GAME_OVER_Z);
 		this.attachChild(gameOverScreen);
 		
-		setOnSceneTouchListener(this);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
 		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", 0, 0);
@@ -178,8 +176,8 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 			}
 		});
 		final Sprite touchImage = introTouchControls[PLAYER_ONE].touchImage;
-		touchImage.setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, 150);
-		playerOneIntro.attachChild(touchImage);
+		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH-touchImage.getWidth())/2, 150);
+		playerOneIntro.attachChild(introTouchControls[PLAYER_ONE]);
 		this.registerTouchArea(touchImage);
 		
 		introTouchControls[PLAYER_TWO] = new TouchControl(new Runnable()
@@ -200,8 +198,9 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 			}
 		});
 		final Sprite secondTouchImage = introTouchControls[PLAYER_TWO].touchImage;
-		secondTouchImage.setPosition((CAMERA_WIDTH  - secondTouchImage.getWidth()) / 2, 50);
-		playerTwoIntro.attachChild(secondTouchImage);
+		introTouchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH  - secondTouchImage.getWidth()) / 2, 50);
+		playerTwoIntro.attachChild(introTouchControls[PLAYER_TWO]);
+		introTouchControls[PLAYER_TWO].setRotation(180);
 		this.registerTouchArea(secondTouchImage);
 		
 	}
@@ -217,6 +216,10 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 					playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 					startAnimateIn();
 				}
+				break;
+			case GameState.GAME_OVER:
+				if(gameOverScreen.isRematchTrue())
+					resetGame();
 				break;
 		}
 		
@@ -273,7 +276,7 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 	
 	protected void turnOffGameOver()
 	{
-		gameOverScreen.setVisible(false);
+		gameOverScreen.hide();
 	}
 	
 	protected boolean checkPlayerDisabled(int player)
@@ -289,19 +292,6 @@ public abstract class GameScene extends Scene implements ReflexConstants,
 					return true;
 				break;
 		
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
-	{
-		switch (gameState)
-		{
-			case GameState.GAME_OVER:
-				if (secondsOnCurrentState > GAME_OVER_RESTART_DELAY)
-					resetGame();
-				break;
 		}
 		return false;
 	}
