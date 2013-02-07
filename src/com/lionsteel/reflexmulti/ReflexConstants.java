@@ -9,7 +9,7 @@ public interface ReflexConstants
 	
 	public static final int			BUTTON_WIDTH					= 110;
 	public static final int			BAR_WIDTH						= 30;
-	public static final int			BAR_SPEED						= 35;
+	public static final int			BAR_SPEED						= 20;
 	
 	public static final int			DISPLAY_BUTTONS					= -1;
 	public static final int			PLAYER_ONE						= 0;

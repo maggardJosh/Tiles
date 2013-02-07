@@ -361,7 +361,7 @@ public class Tileset implements ReflexConstants
 				for (int i = 0; i < NUM_BUTTONS; i++)
 				{
 					playerTwoGameButtons[i].buttonSprite.setColor(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE, 1.0f);
-					playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 0, -SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, SHAKE_ANGLE, 0)), 4)
+					playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(DISABLE_TIME / 12, 180, 180-SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, 180-SHAKE_ANGLE, 180+SHAKE_ANGLE), new RotationModifier(DISABLE_TIME / 12, 180+SHAKE_ANGLE, 180)), 4)
 					{
 						@Override
 						protected void onModifierFinished(IEntity pItem)
