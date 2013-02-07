@@ -6,7 +6,12 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -17,7 +22,7 @@ public class TilesetEntity extends Entity implements ReflexConstants
 	private ReflexActivity	activity;
 	private GameButton[]	displayButtons;
 	private Sprite			buttonSprite;
-	final BitmapTextureAtlas atlas;
+	final BuildableBitmapTextureAtlas atlas;
 	final private float		buttonScale	= .33f;
 	
 	final private int		START_X		= 70;
@@ -28,9 +33,16 @@ public class TilesetEntity extends Entity implements ReflexConstants
 	public TilesetEntity(final Tileset tileset)
 	{
 		activity = ReflexActivity.getInstance();
-		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 256);
-		final TextureRegion buttonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "tileButton.png", 0, 0);
-		atlas.load();
+		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256);
+		final TextureRegion buttonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "tileButton.png");
+		try
+		{	
+			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			atlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
 		
 		buttonSprite = new Sprite(0, 0, buttonRegion, activity.getVertexBufferObjectManager())
 		{

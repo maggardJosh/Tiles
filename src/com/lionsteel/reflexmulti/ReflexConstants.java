@@ -42,6 +42,9 @@ public interface ReflexConstants
 	public static final float		TOUCH_CONTROL_DURATION			= .5f;
 	public static final float		TOUCH_CONTROL_RESET				= .5f;
 	
+	public static final float		INSANE_PREVIEW_DELAY			= 4.0f;
+	public static final float		INSANE_PREVIEW_MOVE_DURATION	= 1.0f;
+	
 	//---- Z-Indexing
 	public static final int			BACKGROUND_Z					= 0;
 	public static final int			FOREGROUND_Z					= 5;

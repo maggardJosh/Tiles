@@ -14,8 +14,13 @@ import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
@@ -30,7 +35,7 @@ public class Tileset implements ReflexConstants
 {
 	private ReflexActivity			activity;
 	
-	private BitmapTextureAtlas		atlas;
+	private BuildableBitmapTextureAtlas atlas;
 	
 	private final TextureRegion[]	buttonRegions				= new TextureRegion[NUM_BUTTONS];
 	private final TextureRegion		backgroundRegion;
@@ -51,7 +56,7 @@ public class Tileset implements ReflexConstants
 	private final Random			rand;
 	private final String			basePath;
 	
-	private DifficultyEntity		difficultyEntity[]			= new DifficultyEntity[3];
+	private DifficultyEntity		difficultyEntity[]			= new DifficultyEntity[4];
 	private TilesetEntity			tilesetEntity;
 	
 	/**
@@ -68,12 +73,18 @@ public class Tileset implements ReflexConstants
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 		
-		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		for (int i = 0; i < NUM_BUTTONS; i++)
-			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png", (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
-		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png", BUTTON_WIDTH * 3, 0);
-		atlas.load();
-		
+			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png");//, BUTTON_WIDTH * 3, 0);
+		try
+		{	
+			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			atlas.load();// load(activity.getTextureManager());
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
 		if (!onlyLoadTextureRegions)
 		{
 			
@@ -100,7 +111,7 @@ public class Tileset implements ReflexConstants
 	
 	private void createDifficultyEntities()
 	{
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 4; x++)
 			difficultyEntity[x] = new DifficultyEntity(x, this);
 	}
 	
@@ -134,6 +145,7 @@ public class Tileset implements ReflexConstants
 				numberOfStreamTilesToSpawn = 2;
 				break;
 			case Difficulty.HARD:
+			case Difficulty.INSANE:
 				numberOfButtonsToUse = 9;
 				numberOfStreamTilesToSpawn = 3;
 				break;
@@ -420,6 +432,7 @@ public class Tileset implements ReflexConstants
 				currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 				break;
 			case Difficulty.HARD:
+			case Difficulty.INSANE:
 				currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 				currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 				currentStreamButtons[2].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);

@@ -24,7 +24,7 @@ public class SetupScene extends ReflexMenuScene
 	final BitmapTextureAtlas			sceneAtlas;
 	
 	Sprite								tilesSprite;
-	final Sprite[]						difficultySprite	= new Sprite[3];
+	final Sprite[]						difficultySprite	= new Sprite[4];
 	final Sprite[]						gameModeSprite		= new Sprite[3];
 	final Sprite						playSprite;
 	
@@ -145,14 +145,15 @@ public class SetupScene extends ReflexMenuScene
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SetupScene/");
 		
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
-		final TextureRegion[] difficultyRegion = new TextureRegion[3];
+		final TextureRegion[] difficultyRegion = new TextureRegion[4];
 		
 		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png", (int) titleRegion.getTextureX(), (int) (titleRegion.getTextureY() + titleRegion.getHeight()));
 		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[0].getTextureY() + difficultyRegion[0].getHeight()));
 		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[1].getTextureY() + difficultyRegion[1].getHeight()));
+		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "insane.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[2].getTextureY() + difficultyRegion[2].getHeight()));
 		
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) titleRegion.getWidth(), 0);
-
+		
 		sceneAtlas.load();
 		
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
@@ -171,7 +172,7 @@ public class SetupScene extends ReflexMenuScene
 		tilesSprite = tilesetEntity.getButtonSprite();
 		tilesSprite.setPosition((CAMERA_WIDTH - tilesSprite.getWidth()) / 2, titleSprite.getY() + titleSprite.getHeight());
 		
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 4; x++)
 			difficultySprite[x] = new Sprite((CAMERA_WIDTH - difficultyRegion[x].getWidth()) / 2, tilesSprite.getY() + tilesSprite.getHeight(), difficultyRegion[x], activity.getVertexBufferObjectManager())
 			{
 				@Override
@@ -221,7 +222,7 @@ public class SetupScene extends ReflexMenuScene
 		
 		attachChild(titleSprite);
 		attachChild(tilesSprite);
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 4; x++)
 		{
 			attachChild(difficultySprite[x]);
 			difficultySprite[x].setAlpha(0);
@@ -237,7 +238,7 @@ public class SetupScene extends ReflexMenuScene
 		
 		attachChild(playSprite);
 		
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 4; x++)
 			difficultySprite[x].attachChild(currentTileset.getDifficultySprite(x));
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 		
@@ -264,13 +265,11 @@ public class SetupScene extends ReflexMenuScene
 		tilesSprite.setZIndex(FOREGROUND_Z);
 		this.attachChild(tilesSprite);
 		
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 4; x++)
 		{
 			difficultySprite[x].detachChildren();
 			difficultySprite[x].attachChild(currentTileset.getDifficultySprite(x));
 			
-			//TODO: game mode per tile? maybe...
-			//gameModeSprite[x].detachChildren();
 		}
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 		this.sortChildren();
@@ -282,10 +281,9 @@ public class SetupScene extends ReflexMenuScene
 		registerTouchArea(playSprite);
 		registerTouchArea(tilesSprite);
 		for (int x = 0; x < 3; x++)
-		{
-			registerTouchArea(difficultySprite[x]);
 			registerTouchArea(gameModeSprite[x]);
-		}
+		for (int x = 0; x < 4; x++)
+			registerTouchArea(difficultySprite[x]);
 		
 	}
 	
@@ -301,5 +299,6 @@ public class SetupScene extends ReflexMenuScene
 		public static final int	EASY	= 0;
 		public static final int	NORMAL	= EASY + 1;
 		public static final int	HARD	= NORMAL + 1;
+		public static final int	INSANE	= HARD + 1;
 	}
 }
