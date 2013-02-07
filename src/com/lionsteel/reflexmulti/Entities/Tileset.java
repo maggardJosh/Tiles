@@ -80,7 +80,7 @@ public class Tileset implements ReflexConstants
 		try
 		{	
 			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
-			atlas.load();// load(activity.getTextureManager());
+			atlas.load();
 		} catch (TextureAtlasBuilderException e)
 		{
 			Debug.e(e);
@@ -310,6 +310,7 @@ public class Tileset implements ReflexConstants
 			checkAllButtonsGone();
 		}
 		displayButton.buttonSprite.setZIndex(FOREGROUND_Z);
+		displayButton.buttonSprite.clearEntityModifiers();
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
 		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
 		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
