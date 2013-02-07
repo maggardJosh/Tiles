@@ -9,6 +9,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SetupScene;
+import com.lionsteel.reflexmulti.SharedResources;
 import com.lionsteel.reflexmulti.SetupScene.GameMode;
 
 public class MultiplayerModeSelectScene extends ReflexMenuScene
@@ -25,19 +26,17 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		super();
 		activity = ReflexActivity.getInstance();
 		
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
 		
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
-		final TextureRegion reflexButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "reflexButton.png", (int) titleRegion.getWidth(), 0);
-		final TextureRegion nonStopButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "nonStopButton.png", (int) (reflexButtonRegion.getTextureX()), (int) (reflexButtonRegion.getHeight()));
-		final TextureRegion raceButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "raceButton.png", (int) reflexButtonRegion.getTextureX(), (int) (nonStopButtonRegion.getTextureY() + nonStopButtonRegion.getHeight()));
 		
 		this.setBackgroundEnabled(false);
 		sceneAtlas.load();
 		
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		reflexButton = new Sprite(0, 210, reflexButtonRegion, activity.getVertexBufferObjectManager())
+		final float BUTTON_WIDTH = SharedResources.getInstance().modeRegion[0].getWidth();
+		reflexButton = new Sprite((CAMERA_WIDTH-BUTTON_WIDTH)/2, 210, SharedResources.getInstance().modeRegion[GameMode.REFLEX], activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -53,7 +52,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		nonStopButton = new Sprite(0, reflexButton.getY() + reflexButton.getHeight(), nonStopButtonRegion, activity.getVertexBufferObjectManager())
+		nonStopButton = new Sprite((CAMERA_WIDTH-BUTTON_WIDTH)/2, reflexButton.getY() + reflexButton.getHeight(), SharedResources.getInstance().modeRegion[GameMode.NON_STOP], activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -70,7 +69,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 			}
 		};
 		
-		raceButton = new Sprite(0, (int) (nonStopButton.getY() + nonStopButton.getHeight()), raceButtonRegion, activity.getVertexBufferObjectManager())
+		raceButton = new Sprite((CAMERA_WIDTH-BUTTON_WIDTH)/2, (int) (nonStopButton.getY() + nonStopButton.getHeight()), SharedResources.getInstance().modeRegion[GameMode.RACE], activity.getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,

@@ -152,12 +152,7 @@ public class SetupScene extends ReflexMenuScene
 		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[1].getTextureY() + difficultyRegion[1].getHeight()));
 		
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) titleRegion.getWidth(), 0);
-		
-		final TextureRegion[] modeRegion = new TextureRegion[3];
-		modeRegion[GameMode.REFLEX] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "reflex.png", (int) playRegion.getTextureX(), (int) (playRegion.getTextureY() + playRegion.getHeight()));
-		modeRegion[GameMode.NON_STOP] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "nonStop.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.REFLEX].getTextureY() + modeRegion[GameMode.REFLEX].getHeight()));
-		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "race.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.NON_STOP].getTextureY() + modeRegion[GameMode.NON_STOP].getHeight()));
-		
+
 		sceneAtlas.load();
 		
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
@@ -193,7 +188,7 @@ public class SetupScene extends ReflexMenuScene
 				}
 			};
 		for (int x = 0; x < 3; x++)
-			gameModeSprite[x] = new Sprite((CAMERA_WIDTH - modeRegion[x].getWidth()) / 2, difficultySprite[0].getY() + difficultySprite[0].getHeight(), modeRegion[x], activity.getVertexBufferObjectManager())
+			gameModeSprite[x] = new Sprite((CAMERA_WIDTH - SharedResources.getInstance().modeRegion[x].getWidth()) / 2, difficultySprite[0].getY() + difficultySprite[0].getHeight(), SharedResources.getInstance().modeRegion[x], activity.getVertexBufferObjectManager())
 			{
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
