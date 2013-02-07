@@ -1,7 +1,6 @@
 package com.lionsteel.reflexmulti.Entities;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -15,7 +14,6 @@ import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.SetupScene;
 
 public class TilesetEntity extends Entity implements ReflexConstants
 {

@@ -2,10 +2,7 @@ package com.lionsteel.reflexmulti.Entities;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.MoveXModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;

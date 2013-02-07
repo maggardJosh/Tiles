@@ -2,7 +2,6 @@ package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.reflexmulti.ReflexActivity;

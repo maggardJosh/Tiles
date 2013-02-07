@@ -170,7 +170,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	{
 		SetupScene.getInstance().clearChildScene();
 	}
-	
+
 	public void superOnBackPressed()
 	{
 		super.onBackPressed();
@@ -195,7 +195,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		if (parentScene instanceof BackgroundMenuScene)
 		{
 			quitPromptScene.setX(0);
-			 parentScene.getChildScene().setChildScene(quitPromptScene, false, false, true);
+			parentScene.getChildScene().setChildScene(quitPromptScene, false, false, true);
 			return;
 		}
 
@@ -204,7 +204,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 	public void backToMainMenu()
 	{
-		//Clear all child scene's
+		//Clear all child scenes
 		ReflexMenuScene parentScene = mainMenuScene;
 		while (parentScene.hasChildScene())
 		{
