@@ -37,7 +37,7 @@ public class Tileset implements ReflexConstants
 	
 	private GameButton[]			playerOneGameButtons		= new GameButton[NUM_BUTTONS];
 	private GameButton[]			playerTwoGameButtons		= new GameButton[NUM_BUTTONS];
-	private GameButton[]			displayGameButtons			= new GameButton[NUM_BUTTONS];
+	private GameButton[]			displayGameButtons			= new GameButton[NUM_BUTTONS * 3];
 	
 	private Sprite					background;
 	
@@ -83,8 +83,10 @@ public class Tileset implements ReflexConstants
 		{
 			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
 			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
-			displayGameButtons[i] = new GameButton(i, this, currentScene, DISPLAY_BUTTONS);
+			
 		}
+		for (int i = 0; i < NUM_BUTTONS * 3; i++)
+			displayGameButtons[i] = new GameButton(i % NUM_BUTTONS, this, currentScene, DISPLAY_BUTTONS);
 		background = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		background.setZIndex(BACKGROUND_Z);
 		gameAssetsCreated = true;
@@ -145,9 +147,10 @@ public class Tileset implements ReflexConstants
 		{
 			playerOneGameButtons[x].buttonSprite.detachSelf();
 			playerTwoGameButtons[x].buttonSprite.detachSelf();
-			displayGameButtons[x].buttonSprite.detachSelf();
 			background.detachSelf();
 		}
+		for (int x = 0; x < NUM_BUTTONS * 3; x++)
+			displayGameButtons[x].buttonSprite.detachSelf();
 		
 	}
 	
@@ -255,7 +258,7 @@ public class Tileset implements ReflexConstants
 				}
 				break;
 			case DISPLAY_BUTTONS:
-				for (int x = 0; x < NUM_BUTTONS; x++)
+				for (int x = 0; x < NUM_BUTTONS * 3; x++)
 				{
 					resetDisplayButton(displayGameButtons[x]);
 					displayGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
@@ -363,10 +366,22 @@ public class Tileset implements ReflexConstants
 	
 	private GameButton newStreamButton()
 	{
-		GameButton newButton = displayGameButtons[rand.nextInt(this.numberOfButtonsToUse)];
-		while (newButton.buttonSprite.isVisible())
-			newButton = displayGameButtons[rand.nextInt(this.numberOfButtonsToUse)];
-		return newButton;
+		GameButton newStreamButton = null;
+		while (newStreamButton == null)
+		{
+			final int nextButtonValue = rand.nextInt(this.numberOfButtonsToUse);
+			
+			for (int x = 0; x < 3; x++)
+			{
+				if (!displayGameButtons[nextButtonValue+NUM_BUTTONS*x].buttonSprite.isVisible())
+				{
+					newStreamButton = displayGameButtons[nextButtonValue+NUM_BUTTONS*x];
+					break;
+				}
+			}
+		}
+	
+		return newStreamButton;
 	}
 	
 	public void startStream()
@@ -404,7 +419,7 @@ public class Tileset implements ReflexConstants
 	
 	public void reset()
 	{
-		for (int i = 0; i < NUM_BUTTONS; i++)
+		for (int i = 0; i < NUM_BUTTONS * 3; i++)
 			resetDisplayButton(displayGameButtons[i]);
 		
 	}
@@ -428,7 +443,9 @@ public class Tileset implements ReflexConstants
 	{
 		return buttonRegions[buttonNumber];
 	}
-	final float BUTTON_DELAY = .6f;
+	
+	final float	BUTTON_DELAY	= .6f;
+	
 	public void animatePlayerTilesIn(final Runnable onFinishedAction)
 	{
 		for (int i = 0; i < numberOfButtonsToUse; i++)
