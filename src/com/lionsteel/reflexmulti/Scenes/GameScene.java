@@ -6,7 +6,6 @@ import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -14,6 +13,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.lionsteel.reflexmulti.ReadyTouchControl;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.SetupScene;
@@ -157,7 +157,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	
 	private void prepareTouchControls()
 	{
-		introTouchControls[PLAYER_ONE] = new TouchControl(new Runnable()
+		introTouchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
 		{
 			
 			@Override
@@ -180,7 +180,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		playerOneIntro.attachChild(introTouchControls[PLAYER_ONE]);
 		this.registerTouchArea(touchImage);
 		
-		introTouchControls[PLAYER_TWO] = new TouchControl(new Runnable()
+		introTouchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
 		{
 			@Override
 			public void run()

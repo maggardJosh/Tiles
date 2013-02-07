@@ -56,7 +56,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		backArrow.setVisible(true);
 	}
 	
-	protected void transitionChildScene(final ReflexMenuScene childScene)
+	public void transitionChildScene(final ReflexMenuScene childScene)
 	{
 		childScene.showBackArrow();
 		ReflexActivity.getInstance().backEnabled = false;

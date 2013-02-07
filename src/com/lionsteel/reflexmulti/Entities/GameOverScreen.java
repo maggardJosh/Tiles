@@ -15,6 +15,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.TouchControl;
+import com.lionsteel.reflexmulti.YesTouchControl;
 
 public class GameOverScreen extends Entity implements ReflexConstants
 {
@@ -64,7 +65,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 	
 	private void prepareTouchControls()
 	{
-		playerRematchControls[PLAYER_ONE] = new TouchControl(new Runnable()
+		playerRematchControls[PLAYER_ONE] = new YesTouchControl(new Runnable()
 		{
 			
 			@Override
@@ -82,7 +83,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 				playerOneRematch = false;
 			}
 		});
-		playerRematchControls[PLAYER_TWO] = new TouchControl(new Runnable()
+		playerRematchControls[PLAYER_TWO] = new YesTouchControl(new Runnable()
 		{
 			@Override
 			public void run()
