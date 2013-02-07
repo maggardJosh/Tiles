@@ -77,6 +77,7 @@ public class OneTileGameScene extends GameScene
 			if (secondsOnCurrentState >= 1.0f)
 			{
 				currentTileset.newButton();
+				
 				enablePlayer(PLAYER_ONE);
 				enablePlayer(PLAYER_TWO);
 				changeState(GameState.WAITING_FOR_INPUT);

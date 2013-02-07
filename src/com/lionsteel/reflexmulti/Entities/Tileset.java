@@ -274,6 +274,7 @@ public class Tileset implements ReflexConstants
 	{
 		currentButton = rand.nextInt(numberOfButtonsToUse);
 		displayGameButtons[currentButton].buttonSprite.setVisible(true);
+		displayGameButtons[currentButton].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 	}
 	
 	public void animateDisplayButton(GameButton displayButton,
