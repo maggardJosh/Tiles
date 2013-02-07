@@ -40,7 +40,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 		
 		parentScene = scene;
 		
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameOverScene/");
 		
 		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
 		final TextureRegion backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "gameOverBackground.png", 0, 0);
