@@ -56,8 +56,10 @@ public class Tileset implements ReflexConstants
 	
 	/**
 	 * 
-	 * @param basePath Name of folder under /gfx/tilesets/ that contains tile images
-	 * @param onlyLoadTextureRegions Use this when loading in tileset previews. It only loads the parts needed for tileset previews
+	 * @param basePath
+	 *            Name of folder under /gfx/tilesets/ that contains tile images
+	 * @param onlyLoadTextureRegions
+	 *            Use this when loading in tileset previews. It only loads the parts needed for tileset previews
 	 */
 	public Tileset(final String basePath, final boolean onlyLoadTextureRegions)
 	{
@@ -270,7 +272,7 @@ public class Tileset implements ReflexConstants
 	public void animateDisplayButton(GameButton displayButton,
 			GameButton playerButton, IEntityModifierListener listener)
 	{
-		if (SetupScene.getGameMode() == GameMode.STREAM)
+		if (SetupScene.getGameMode() == GameMode.NON_STOP)
 		{
 			int i = 0;
 			for (; i < numberOfStreamTilesToSpawn; i++)
@@ -284,7 +286,7 @@ public class Tileset implements ReflexConstants
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
-		} else if (SetupScene.getGameMode() == GameMode.ONE_TILE)
+		} else if (SetupScene.getGameMode() == GameMode.REFLEX)
 		{
 			int i = 0;
 			for (; i < numberOfStreamTilesToSpawn; i++)

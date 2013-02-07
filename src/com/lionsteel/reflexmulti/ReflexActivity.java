@@ -16,9 +16,9 @@ import com.lionsteel.reflexmulti.SetupScene.GameMode;
 import com.lionsteel.reflexmulti.Scenes.GameScene;
 import com.lionsteel.reflexmulti.Scenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
-import com.lionsteel.reflexmulti.Scenes.OneTileGameScene;
+import com.lionsteel.reflexmulti.Scenes.ReflexGameScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
-import com.lionsteel.reflexmulti.Scenes.StreamGameScene;
+import com.lionsteel.reflexmulti.Scenes.NonStopGameScene;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
@@ -159,11 +159,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 				SetupScene.getTileset().createGameAssets();
 				switch (SetupScene.getGameMode())
 				{
-					case GameMode.ONE_TILE:
-						gameScene = new OneTileGameScene();
+					case GameMode.REFLEX:
+						gameScene = new ReflexGameScene();
 						break;
-					case GameMode.STREAM:
-						gameScene = new StreamGameScene();
+					case GameMode.NON_STOP:
+						gameScene = new NonStopGameScene();
 						break;
 				}
 				mEngine.setScene(gameScene);

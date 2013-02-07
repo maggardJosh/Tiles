@@ -36,7 +36,7 @@ public class SetupScene extends ReflexMenuScene
 	
 	private static SetupScene			instance;
 	
-	private static int					gameMode			= GameMode.ONE_TILE;
+	private static int					gameMode			= GameMode.REFLEX;
 	private static int					difficulty			= Difficulty.NORMAL;
 	
 	public static SetupScene getInstance()
@@ -154,9 +154,9 @@ public class SetupScene extends ReflexMenuScene
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) titleRegion.getWidth(), 0);
 		
 		final TextureRegion[] modeRegion = new TextureRegion[3];
-		modeRegion[GameMode.ONE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "oneTile.png", (int) playRegion.getTextureX(), (int) (playRegion.getTextureY() + playRegion.getHeight()));
-		modeRegion[GameMode.THREE_TILE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "threeTiles.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.ONE_TILE].getTextureY() + modeRegion[GameMode.ONE_TILE].getHeight()));
-		modeRegion[GameMode.STREAM] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "stream.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.THREE_TILE].getTextureY() + modeRegion[GameMode.THREE_TILE].getHeight()));
+		modeRegion[GameMode.REFLEX] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "reflex.png", (int) playRegion.getTextureX(), (int) (playRegion.getTextureY() + playRegion.getHeight()));
+		modeRegion[GameMode.NON_STOP] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "nonStop.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.REFLEX].getTextureY() + modeRegion[GameMode.REFLEX].getHeight()));
+		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "race.png", (int) playRegion.getTextureX(), (int) (modeRegion[GameMode.NON_STOP].getTextureY() + modeRegion[GameMode.NON_STOP].getHeight()));
 		
 		sceneAtlas.load();
 		
@@ -296,9 +296,9 @@ public class SetupScene extends ReflexMenuScene
 	
 	public class GameMode
 	{
-		public static final int	ONE_TILE	= 0;
-		public static final int	THREE_TILE	= ONE_TILE + 1;
-		public static final int	STREAM		= THREE_TILE + 1;
+		public static final int	REFLEX		= 0;
+		public static final int	NON_STOP	= REFLEX + 1;
+		public static final int	RACE		= NON_STOP + 1;
 	}
 	
 	public class Difficulty
