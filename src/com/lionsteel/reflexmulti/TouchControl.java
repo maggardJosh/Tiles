@@ -8,6 +8,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import android.sax.StartElementListener;
+
 public class TouchControl extends Entity implements ReflexConstants
 {
 	public final Sprite	touchImage;
@@ -84,8 +86,14 @@ public class TouchControl extends Entity implements ReflexConstants
 		touchImage.setPosition(pX, pY);
 		readyImage.setPosition(pX + touchImage.getWidth() / 2 - readyImage.getWidth() / 2, pY - 80);
 	}
+	
+	public void initButton()
+	{
+		touchImage.setScale(1.0f);
+		readyImage.setAlpha(READY_ALPHA);
+	}
 
-	private void resetButton()
+	protected void resetButton()
 	{
 		touchImage.clearEntityModifiers();
 		readyImage.clearEntityModifiers();

@@ -18,11 +18,14 @@ public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 	ReflexActivity					activity;
 
 	private final Sprite			areYouSureSprite;
-	private final YesTouchControl	touchControl;
+	private final TouchControl[]	touchControls	= new TouchControl[2];
 
-	public QuitPromptScene()
+	private final Runnable			quitAction;
+
+	public QuitPromptScene(final Runnable quitAction)
 	{
 		activity = ReflexActivity.getInstance();
+		this.quitAction = quitAction;
 		this.setBackgroundEnabled(false);
 		final BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 128);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/QuitPromptScene/");
@@ -37,32 +40,52 @@ public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 			Debug.e(e);
 		}
 
-		touchControl = new YesTouchControl(new Runnable()
+		touchControls[0] = new YesTouchControl(new Runnable()
 		{
 
 			@Override
 			public void run()
 			{
-				activity.finish();
+				quitAction.run();
+			}
+		}, null);
+
+		touchControls[1] = new NoTouchControl(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				touchControls[1].resetButton();
+				mParentScene.clearChildScene();
 			}
 		}, null);
 
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		background.setColor(0, 0, 0, .7f);
-		final float TOUCH_CONTROL_WIDTH = touchControl.touchImage.getWidth();
+		final float TOUCH_CONTROL_WIDTH = touchControls[0].touchImage.getWidth();
 		areYouSureSprite = new Sprite((CAMERA_WIDTH - areYouSureRegion.getWidth()) / 2, (CAMERA_HEIGHT - areYouSureRegion.getHeight()) / 2, areYouSureRegion, activity.getVertexBufferObjectManager());
-		touchControl.setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) / 2, areYouSureSprite.getY() + 140);
+		touchControls[0].setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) / 3, areYouSureSprite.getY() + 140);
+		touchControls[1].setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) * 2 / 3, areYouSureSprite.getY() + 140);
 
 		this.attachChild(background);
 		this.attachChild(areYouSureSprite);
-		this.attachChild(touchControl);
+		this.attachChild(touchControls[0]);
+		this.attachChild(touchControls[1]);
 
+	}
+
+	public void callQuitAction()
+	{
+		quitAction.run();
 	}
 
 	@Override
 	protected void registerTouchAreas()
 	{
-		this.registerTouchArea(touchControl.touchImage);
+		touchControls[0].initButton();
+		touchControls[1].initButton();
+		this.registerTouchArea(touchControls[0].touchImage);
+		this.registerTouchArea(touchControls[1].touchImage);
 
 	}
 

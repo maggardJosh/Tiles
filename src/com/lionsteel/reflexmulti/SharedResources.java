@@ -21,6 +21,7 @@ public class SharedResources
 	public final TextureRegion		touchImageRegion;
 	public final TextureRegion		readyRegion;
 	public final TextureRegion		yesRegion;
+	public final TextureRegion		noRegion;
 	public final TextureRegion		modeRegion[]	= new TextureRegion[3];
 
 	public static SharedResources getInstance()
@@ -44,6 +45,7 @@ public class SharedResources
 		modeRegion[GameMode.NON_STOP] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "nonStop.png");
 		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "race.png");
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
+		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
 
 		try
 		{

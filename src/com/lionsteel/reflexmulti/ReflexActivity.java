@@ -29,7 +29,8 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	private MainMenuScene			mainMenuScene;
 	private SplashScene				splashScene;
 	private BackgroundMenuScene		backgroundScene;
-	private QuitPromptScene			quitPromptScene;
+	private QuitPromptScene			menuQuitPromptScene;
+	private QuitPromptScene			gameQuitPromptScene;
 
 	private LoadingScene			loadingScene;
 
@@ -74,7 +75,22 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 				SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
 				loadingScene = new LoadingScene();
-				quitPromptScene = new QuitPromptScene();
+				menuQuitPromptScene = new QuitPromptScene(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						finish();
+					}
+				});
+				gameQuitPromptScene = new QuitPromptScene(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						backToMainMenu();
+					}
+				});
 
 				mainMenuScene = new MainMenuScene();
 				backgroundScene = new BackgroundMenuScene(mainMenuScene);
@@ -183,9 +199,9 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			return;
 		Scene parentScene = this.mEngine.getScene();
 
-		if (parentScene instanceof GameScene)
+		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
 		{
-			backToMainMenu();
+			((GameScene) parentScene).transitionChildScene(gameQuitPromptScene);
 			return;
 		}
 
@@ -194,8 +210,13 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		if (parentScene instanceof BackgroundMenuScene)
 		{
-			quitPromptScene.setX(0);
-			parentScene.getChildScene().setChildScene(quitPromptScene, false, false, true);
+			((ReflexMenuScene) parentScene.getChildScene()).transitionChildScene(menuQuitPromptScene, true);
+			return;
+		}
+		
+		if (parentScene.getChildScene() instanceof QuitPromptScene)
+		{
+			((QuitPromptScene) parentScene.getChildScene()).callQuitAction();
 			return;
 		}
 
@@ -215,6 +236,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		mainMenuScene.setX(0);
 		mEngine.setScene(backgroundScene);
+		
 	}
 
 }

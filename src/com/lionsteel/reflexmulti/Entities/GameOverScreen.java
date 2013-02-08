@@ -9,6 +9,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.lionsteel.reflexmulti.ReadyTouchControl;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.TouchControl;
@@ -62,7 +63,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 	
 	private void prepareTouchControls()
 	{
-		playerRematchControls[PLAYER_ONE] = new YesTouchControl(new Runnable()
+		playerRematchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
 		{
 			
 			@Override
@@ -80,7 +81,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 				playerOneRematch = false;
 			}
 		});
-		playerRematchControls[PLAYER_TWO] = new YesTouchControl(new Runnable()
+		playerRematchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
 		{
 			@Override
 			public void run()
