@@ -63,13 +63,14 @@ public class MainMenuScene extends ReflexMenuScene
 		});
 		practiceButton.center(versusButton.getBottom());
 		addButton(practiceButton);
-
+		
+		final MainMenuScene instance = this;
 		final ReflexMenuButton exitButton = new ReflexMenuButton(exitRegion, new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				activity.finish();
+				activity.showQuitPrompt(instance);
 			}
 		});
 		exitButton.center(practiceButton.getBottom());

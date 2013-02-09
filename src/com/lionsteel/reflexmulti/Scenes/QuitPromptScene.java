@@ -13,8 +13,8 @@ import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.BaseClasses.TouchControl;
 import com.lionsteel.reflexmulti.Entities.TouchControls.NoTouchControl;
-import com.lionsteel.reflexmulti.Entities.TouchControls.TouchControl;
 import com.lionsteel.reflexmulti.Entities.TouchControls.YesTouchControl;
 
 public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants

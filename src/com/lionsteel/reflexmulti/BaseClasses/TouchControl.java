@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Entities.TouchControls;
+package com.lionsteel.reflexmulti.BaseClasses;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
@@ -14,7 +14,7 @@ import com.lionsteel.reflexmulti.SharedResources;
 
 import android.sax.StartElementListener;
 
-public class TouchControl extends Entity implements ReflexConstants
+public abstract class TouchControl extends Entity implements ReflexConstants
 {
 	public final Sprite	touchImage;
 	public final Sprite	readyImage;

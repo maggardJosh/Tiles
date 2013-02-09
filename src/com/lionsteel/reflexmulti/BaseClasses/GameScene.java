@@ -21,7 +21,6 @@ import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
 import com.lionsteel.reflexmulti.Entities.TouchControls.ReadyTouchControl;
-import com.lionsteel.reflexmulti.Entities.TouchControls.TouchControl;
 import com.lionsteel.reflexmulti.Scenes.GameCountdown;
 import com.lionsteel.reflexmulti.Scenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;

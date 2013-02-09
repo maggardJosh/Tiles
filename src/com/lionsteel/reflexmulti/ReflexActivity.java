@@ -214,7 +214,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		if (parentScene instanceof BackgroundMenuScene)
 		{
-			((ReflexMenuScene) parentScene.getChildScene()).transitionChildScene(menuQuitPromptScene, true);
+			showQuitPrompt((ReflexMenuScene)parentScene.getChildScene());
 			return;
 		}
 		
@@ -225,6 +225,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		}
 
 		parentScene.clearChildScene();
+	}
+	
+	public void showQuitPrompt(ReflexMenuScene scene)
+	{
+		scene.transitionChildScene(menuQuitPromptScene, true);
 	}
 
 	public void backToMainMenu()
