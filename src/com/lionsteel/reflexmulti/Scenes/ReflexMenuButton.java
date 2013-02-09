@@ -26,19 +26,19 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 				{
 				case TouchEvent.ACTION_DOWN:
 					mPointerID = pSceneTouchEvent.getPointerID();
-					buttonSprite.setAlpha(.8f);
+					buttonSprite.setColor(.8f,.8f,.8f);
 					break;
 				case TouchEvent.ACTION_MOVE:
 					if (pTouchAreaLocalX < 0 || pTouchAreaLocalY < 0 || pTouchAreaLocalX > buttonSprite.getWidth() || pTouchAreaLocalY > buttonSprite.getHeight())
 					{
 						mPointerID = -1;
-						buttonSprite.setAlpha(1.0f);
+						buttonSprite.setColor(1.0f,1.0f,1.0f);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
 					if (pSceneTouchEvent.getPointerID() == mPointerID)
 					{
-						buttonSprite.setAlpha(1.0f);
+						buttonSprite.setColor(1.0f,1.0f,1.0f);
 						mPointerID = -1;
 						action.run();
 					}
@@ -55,9 +55,9 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 		this.setPosition((CAMERA_WIDTH - buttonSprite.getWidth()) / 2, pY);
 	}
 
-	public float getHeight()
+	public float getBottom()
 	{
-		return buttonSprite.getHeight();
+		return this.getY() + buttonSprite.getHeight();
 	}
 
 	public void registerOwnTouchArea(Scene scene)

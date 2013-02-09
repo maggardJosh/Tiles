@@ -1,5 +1,7 @@
 package com.lionsteel.reflexmulti.Scenes;
 
+import java.util.ArrayList;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.Scene;
@@ -14,8 +16,10 @@ import com.lionsteel.reflexmulti.ReflexConstants;
 
 public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 {
-	final ReflexActivity	activity;
-	final Sprite			backArrow;
+	final ReflexActivity				activity;
+	final ReflexMenuButton				backButton;
+
+	final ArrayList<ReflexMenuButton>	buttonList	= new ArrayList<ReflexMenuButton>();
 
 	public ReflexMenuScene()
 	{
@@ -27,39 +31,51 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		final TextureRegion backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "backArrow.png", 0, 0);
 		sceneAtlas.load();
 
-		backArrow = new Sprite(BACK_ARROW_PADDING, BACK_ARROW_PADDING, backArrowRegion, activity.getVertexBufferObjectManager())
+		backButton = new ReflexMenuButton(backArrowRegion, new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-
-				if (this.isVisible() && pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP)
+				if (backButton.isVisible())
 					mParentScene.clearChildScene();
-
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
-		};
+		});
 
-		////final Sprite backgroundSprite = new Sprite(0,0,SharedResources.getInstance().backgroundRegion, activity.getVertexBufferObjectManager());
-		//backgroundSprite.setZIndex(BACKGROUND_Z);
-		//this.attachChild(backgroundSprite);
-		this.attachChild(backArrow);
-		backArrow.setZIndex(FOREGROUND_Z);
-		backArrow.setVisible(false);
-		this.registerTouchArea(backArrow);
+		this.attachChild(backButton);
+		backButton.setZIndex(FOREGROUND_Z);
+		backButton.setVisible(false);
+		backButton.registerOwnTouchArea(this);
 		this.sortChildren(false);
+	}
+
+	protected void registerButtonTouchAreas()
+	{
+		for (ReflexMenuButton button : buttonList)
+			button.registerOwnTouchArea(this);
 	}
 
 	protected abstract void registerTouchAreas();
 
 	public void showBackArrow()
 	{
-		backArrow.setVisible(true);
+		backButton.setVisible(true);
 	}
-	
+
 	public void transitionChildScene(final ReflexMenuScene childScene)
 	{
 		transitionChildScene(childScene, false);
+	}
+
+	protected void addButton(ReflexMenuButton button)
+	{
+		buttonList.add(button);
+		this.attachChild(button);
+	}
+	
+	protected void removeButton(ReflexMenuButton button)
+	{
+		buttonList.remove(button);
+		this.detachChild(button);
 	}
 
 	public void transitionChildScene(final ReflexMenuScene childScene, final boolean overlay)
@@ -72,6 +88,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		{
 			childScene.setX(0);
 			childScene.registerTouchAreas();
+			registerButtonTouchAreas();
 
 		} else
 		{
@@ -86,7 +103,8 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 				{
 					ReflexActivity.getInstance().backEnabled = true;
 					childScene.registerTouchAreas();
-					childScene.registerTouchArea(childScene.backArrow);
+					childScene.registerButtonTouchAreas();
+					childScene.backButton.registerOwnTouchArea(childScene);
 					super.onModifierFinished(pItem);
 				}
 			});

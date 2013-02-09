@@ -61,7 +61,7 @@ public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 		}, null);
 
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
-		background.setColor(0, 0, 0, .7f);
+		background.setColor(0, 0, 0, .9f);
 		final float TOUCH_CONTROL_WIDTH = touchControls[0].touchImage.getWidth();
 		areYouSureSprite = new Sprite((CAMERA_WIDTH - areYouSureRegion.getWidth()) / 2, (CAMERA_HEIGHT - areYouSureRegion.getHeight()) / 2, areYouSureRegion, activity.getVertexBufferObjectManager());
 		touchControls[0].setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) / 3, areYouSureSprite.getY() + 140);
