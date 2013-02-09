@@ -32,7 +32,7 @@ public interface ReflexConstants
 	public static final float		GAME_OVER_RESTART_DELAY			= 2.0f;
 	
 	public static final float		SCENE_TRANSITION_SECONDS		= .5f;
-	public static final float		SETUP_SCENE_BUTTON_TRANSITION	= .3f;
+	public static final float		SETUP_SCENE_BUTTON_TRANSITION	= .6f;
 	
 	public static final float		BUTTON_ANIMATE_IN_TIME			= .6f;
 	public static final float		BUTTON_ANIMATE_IN_START_SCALE	= 3.0f;

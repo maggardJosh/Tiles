@@ -26,8 +26,7 @@ public class SetupScene extends ReflexMenuScene
 	//	Sprite								tilesSprite;
 	ReflexMenuButton					tilesButton;
 	final ReflexMenuButton[]			difficultyButtons	= new ReflexMenuButton[4];
-	//final Sprite[]						difficultySprite	= new Sprite[4];
-	final Sprite[]						gameModeSprite		= new Sprite[3];
+	final ReflexMenuButton[]			gameModeSprite		= new ReflexMenuButton[3];
 	final ReflexMenuButton				playButton;
 
 	final MultiplayerModeSelectScene	modeSelectScreen;
@@ -89,11 +88,18 @@ public class SetupScene extends ReflexMenuScene
 	{
 		if (SetupScene.getGameMode() == gameMode)
 			return;
-		instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
+		final int currentGameMode = SetupScene.gameMode;
+		instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS*2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
+				instance.removeButton(instance.gameModeSprite[currentGameMode]);
+				instance.addButton(instance.gameModeSprite[gameMode]);
+				instance.clearTouchAreas();
+				instance.registerButtonTouchAreas();
+				instance.registerTouchAreas();
+
 				instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
 				super.onModifierFinished(pItem);
 			}
@@ -108,7 +114,7 @@ public class SetupScene extends ReflexMenuScene
 			return;
 		final int currentDifficulty = SetupScene.difficulty;
 
-		instance.difficultyButtons[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS*2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
+		instance.difficultyButtons[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
 		{
 			protected void onModifierStarted(IEntity pItem)
 			{
@@ -126,7 +132,7 @@ public class SetupScene extends ReflexMenuScene
 				instance.clearTouchAreas();
 				instance.registerButtonTouchAreas();
 				instance.registerTouchAreas();
-				
+
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
 				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
 				super.onModifierFinished(pItem);
@@ -195,20 +201,17 @@ public class SetupScene extends ReflexMenuScene
 		}
 
 		for (int x = 0; x < 3; x++)
-			gameModeSprite[x] = new Sprite((CAMERA_WIDTH - SharedResources.getInstance().modeRegion[x].getWidth()) / 2, difficultyButtons[0].getBottom(), SharedResources.getInstance().modeRegion[x], activity.getVertexBufferObjectManager())
+		{
+			gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
 			{
 				@Override
-				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+				public void run()
 				{
-					switch (pSceneTouchEvent.getAction())
-					{
-					case TouchEvent.ACTION_UP:
-						transitionChildScene(modeSelectScreen);
-						break;
-					}
-					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+					transitionChildScene(modeSelectScreen);
 				}
-			};
+			});
+			gameModeSprite[x].center(difficultyButtons[0].getBottom());
+		}
 		playButton = new ReflexMenuButton(playRegion, new Runnable()
 		{
 			@Override
@@ -230,9 +233,9 @@ public class SetupScene extends ReflexMenuScene
 
 		for (int x = 0; x < 3; x++)
 		{
-			attachChild(gameModeSprite[x]);
 			gameModeSprite[x].setAlpha(0);
 		}
+		addButton(gameModeSprite[getGameMode()]);
 		gameModeSprite[getGameMode()].setAlpha(1.0f);
 
 		for (int x = 0; x < 4; x++)
@@ -276,8 +279,6 @@ public class SetupScene extends ReflexMenuScene
 	@Override
 	protected void registerTouchAreas()
 	{
-		for (int x = 0; x < 3; x++)
-			registerTouchArea(gameModeSprite[x]);
 
 	}
 
