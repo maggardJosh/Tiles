@@ -58,6 +58,11 @@ public class GameButton implements ReflexConstants
 		return playerOwner;
 	}
 	
+	public float getX()
+	{
+		return buttonSprite.getX();
+	}
+	
 	private void onTouched()
 	{
 		parent.buttonPressed(this);

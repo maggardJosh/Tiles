@@ -38,7 +38,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		try
 		{
 			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
-			sceneAtlas.load();// load(activity.getTextureManager());
+			sceneAtlas.load();
 		} catch (TextureAtlasBuilderException e)
 		{
 			Debug.e(e);
@@ -79,8 +79,9 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
-				SetupScene.setGameMode(GameMode.RACE);
-				mParentScene.clearChildScene();
+				//TODO: Race mode
+				//SetupScene.setGameMode(GameMode.RACE);
+				//mParentScene.clearChildScene();
 			}
 		});
 		raceButton.center(nonStopButton.getBottom());
