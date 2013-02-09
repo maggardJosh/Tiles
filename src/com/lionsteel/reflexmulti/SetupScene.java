@@ -23,9 +23,10 @@ public class SetupScene extends ReflexMenuScene
 	final ReflexActivity				activity;
 	final BitmapTextureAtlas			sceneAtlas;
 
-//	Sprite								tilesSprite;
+	//	Sprite								tilesSprite;
 	ReflexMenuButton					tilesButton;
-	final Sprite[]						difficultySprite	= new Sprite[4];
+	final ReflexMenuButton[]			difficultyButtons	= new ReflexMenuButton[4];
+	//final Sprite[]						difficultySprite	= new Sprite[4];
 	final Sprite[]						gameModeSprite		= new Sprite[3];
 	final ReflexMenuButton				playButton;
 
@@ -107,11 +108,12 @@ public class SetupScene extends ReflexMenuScene
 			return;
 		final int currentDifficulty = SetupScene.difficulty;
 
-		instance.difficultySprite[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
+		instance.difficultyButtons[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS*2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
 		{
 			protected void onModifierStarted(IEntity pItem)
 			{
 				currentTileset.getDifficultySprite(currentDifficulty).fadeOut();
+				super.onModifierStarted(pItem);
 			};
 		})
 		{
@@ -119,8 +121,14 @@ public class SetupScene extends ReflexMenuScene
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
+				instance.removeButton(instance.difficultyButtons[currentDifficulty]);
+				instance.addButton(instance.difficultyButtons[difficulty]);
+				instance.clearTouchAreas();
+				instance.registerButtonTouchAreas();
+				instance.registerTouchAreas();
+				
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
-				instance.difficultySprite[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
 				super.onModifierFinished(pItem);
 			}
 		});
@@ -160,8 +168,9 @@ public class SetupScene extends ReflexMenuScene
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
 
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
-		
-		tilesButton = new ReflexMenuButton(tilesetEntity.getButtonRegion(), new Runnable(){
+
+		tilesButton = new ReflexMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -171,24 +180,22 @@ public class SetupScene extends ReflexMenuScene
 		tilesButton.center(titleSprite.getY() + titleSprite.getHeight());
 		tilesButton.attachChild(tilesetEntity.getButtonEntity());
 		addButton(tilesButton);
-		
+
 		for (int x = 0; x < 4; x++)
-			difficultySprite[x] = new Sprite((CAMERA_WIDTH - difficultyRegion[x].getWidth()) / 2, tilesButton.getBottom(), difficultyRegion[x], activity.getVertexBufferObjectManager())
+		{
+			difficultyButtons[x] = new ReflexMenuButton(difficultyRegion[x], new Runnable()
 			{
 				@Override
-				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+				public void run()
 				{
-					switch (pSceneTouchEvent.getAction())
-					{
-					case TouchEvent.ACTION_UP:
-						transitionChildScene(skillSelectScene);
-						break;
-					}
-					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+					transitionChildScene(skillSelectScene);
 				}
-			};
+			});
+			difficultyButtons[x].center(tilesButton.getBottom());
+		}
+
 		for (int x = 0; x < 3; x++)
-			gameModeSprite[x] = new Sprite((CAMERA_WIDTH - SharedResources.getInstance().modeRegion[x].getWidth()) / 2, difficultySprite[0].getY() + difficultySprite[0].getHeight(), SharedResources.getInstance().modeRegion[x], activity.getVertexBufferObjectManager())
+			gameModeSprite[x] = new Sprite((CAMERA_WIDTH - SharedResources.getInstance().modeRegion[x].getWidth()) / 2, difficultyButtons[0].getBottom(), SharedResources.getInstance().modeRegion[x], activity.getVertexBufferObjectManager())
 			{
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
@@ -216,10 +223,10 @@ public class SetupScene extends ReflexMenuScene
 		attachChild(titleSprite);
 		for (int x = 0; x < 4; x++)
 		{
-			attachChild(difficultySprite[x]);
-			difficultySprite[x].setAlpha(0);
+			difficultyButtons[x].setAlpha(0);
 		}
-		difficultySprite[getDifficulty()].setAlpha(1.0f);
+		difficultyButtons[getDifficulty()].setAlpha(1.0f);
+		addButton(difficultyButtons[getDifficulty()]);
 
 		for (int x = 0; x < 3; x++)
 		{
@@ -229,7 +236,7 @@ public class SetupScene extends ReflexMenuScene
 		gameModeSprite[getGameMode()].setAlpha(1.0f);
 
 		for (int x = 0; x < 4; x++)
-			difficultySprite[x].attachChild(currentTileset.getDifficultySprite(x));
+			difficultyButtons[x].attachChild(currentTileset.getDifficultySprite(x));
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 
 	}
@@ -239,7 +246,8 @@ public class SetupScene extends ReflexMenuScene
 		skillSelectScene.resetGraphics();
 		removeButton(tilesButton);
 		final float oldY = tilesButton.getY();
-		tilesButton = new ReflexMenuButton(currentTileset.getTilesetEntity().getButtonRegion(), new Runnable(){
+		tilesButton = new ReflexMenuButton(currentTileset.getTilesetEntity().getButtonRegion(), new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -253,13 +261,13 @@ public class SetupScene extends ReflexMenuScene
 
 		for (int x = 0; x < 4; x++)
 		{
-			difficultySprite[x].detachChildren();
-			difficultySprite[x].attachChild(currentTileset.getDifficultySprite(x));
+			difficultyButtons[x].clearButtonChildren();
+			difficultyButtons[x].attachChild(currentTileset.getDifficultySprite(x));
 
 		}
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 		this.sortChildren();
-		
+
 		this.clearTouchAreas();
 		this.registerTouchAreas();
 		this.registerButtonTouchAreas();
@@ -270,8 +278,6 @@ public class SetupScene extends ReflexMenuScene
 	{
 		for (int x = 0; x < 3; x++)
 			registerTouchArea(gameModeSprite[x]);
-		for (int x = 0; x < 4; x++)
-			registerTouchArea(difficultySprite[x]);
 
 	}
 
