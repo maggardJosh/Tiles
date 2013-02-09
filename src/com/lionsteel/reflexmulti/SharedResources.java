@@ -9,7 +9,7 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
-import com.lionsteel.reflexmulti.SetupScene.GameMode;
+import com.lionsteel.reflexmulti.Scenes.SetupScene.GameMode;
 
 public class SharedResources
 {

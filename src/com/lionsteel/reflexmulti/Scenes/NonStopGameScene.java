@@ -5,6 +5,7 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 
 public class NonStopGameScene extends GameScene 

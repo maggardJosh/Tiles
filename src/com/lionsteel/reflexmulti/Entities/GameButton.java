@@ -5,7 +5,7 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.Scenes.GameScene;
+import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 
 public class GameButton implements ReflexConstants
 {

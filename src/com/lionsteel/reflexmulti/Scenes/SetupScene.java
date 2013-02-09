@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -10,13 +10,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.SharedResources;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
-import com.lionsteel.reflexmulti.Scenes.MultiplayerModeSelectScene;
-import com.lionsteel.reflexmulti.Scenes.ReflexMenuButton;
-import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
-import com.lionsteel.reflexmulti.Scenes.SkillSelectScene;
-import com.lionsteel.reflexmulti.Scenes.TilesetSelectScene;
 
 public class SetupScene extends ReflexMenuScene
 {

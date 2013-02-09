@@ -52,7 +52,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 			button.registerOwnTouchArea(this);
 	}
 
-	protected void registerTouchAreas()
+	public void registerTouchAreas()
 	{
 		registerButtonTouchAreas();
 		backButton.registerOwnTouchArea(this);

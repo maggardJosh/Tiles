@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
@@ -11,7 +11,11 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
-import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
+import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.Entities.TouchControls.NoTouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.TouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.YesTouchControl;
 
 public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 {
@@ -80,8 +84,9 @@ public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 	}
 
 	@Override
-	protected void registerTouchAreas()
+	public void registerTouchAreas()
 	{
+		super.registerTouchAreas();
 		touchControls[0].initButton();
 		touchControls[1].initButton();
 		this.registerTouchArea(touchControls[0].touchImage);

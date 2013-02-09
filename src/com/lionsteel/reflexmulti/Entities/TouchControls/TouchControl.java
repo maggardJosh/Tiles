@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Entities.TouchControls;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
@@ -7,6 +7,10 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
+
+import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SharedResources;
 
 import android.sax.StartElementListener;
 
@@ -93,7 +97,7 @@ public class TouchControl extends Entity implements ReflexConstants
 		readyImage.setAlpha(READY_ALPHA);
 	}
 
-	protected void resetButton()
+	public void resetButton()
 	{
 		touchImage.clearEntityModifiers();
 		readyImage.clearEntityModifiers();

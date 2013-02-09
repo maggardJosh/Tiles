@@ -12,13 +12,17 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
-import com.lionsteel.reflexmulti.SetupScene.GameMode;
-import com.lionsteel.reflexmulti.Scenes.GameScene;
+import com.lionsteel.reflexmulti.BaseClasses.GameScene;
+import com.lionsteel.reflexmulti.Scenes.BackgroundMenuScene;
 import com.lionsteel.reflexmulti.Scenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
 import com.lionsteel.reflexmulti.Scenes.NonStopGameScene;
+import com.lionsteel.reflexmulti.Scenes.QuitPromptScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexGameScene;
 import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Scenes.SetupScene;
+import com.lionsteel.reflexmulti.Scenes.SplashScene;
+import com.lionsteel.reflexmulti.Scenes.SetupScene.GameMode;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {

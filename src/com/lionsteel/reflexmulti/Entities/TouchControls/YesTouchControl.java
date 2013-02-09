@@ -1,4 +1,6 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Entities.TouchControls;
+
+import com.lionsteel.reflexmulti.SharedResources;
 
 public class YesTouchControl extends TouchControl
 {

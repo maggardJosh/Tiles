@@ -15,11 +15,11 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
-import com.lionsteel.reflexmulti.ReadyTouchControl;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.TouchControl;
-import com.lionsteel.reflexmulti.YesTouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.ReadyTouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.TouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.YesTouchControl;
 
 public class GameOverScreen extends Entity implements ReflexConstants
 {

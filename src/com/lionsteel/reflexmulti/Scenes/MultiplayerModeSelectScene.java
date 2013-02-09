@@ -12,8 +12,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.SetupScene;
-import com.lionsteel.reflexmulti.SetupScene.GameMode;
+import com.lionsteel.reflexmulti.Scenes.SetupScene.GameMode;
 import com.lionsteel.reflexmulti.SharedResources;
 
 public class MultiplayerModeSelectScene extends ReflexMenuScene

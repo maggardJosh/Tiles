@@ -15,7 +15,7 @@ import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.SetupScene.Difficulty;
+import com.lionsteel.reflexmulti.Scenes.SetupScene.Difficulty;
 
 public class DifficultyEntity extends Entity implements ReflexConstants
 {

@@ -11,8 +11,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.SetupScene;
-import com.lionsteel.reflexmulti.SetupScene.Difficulty;
+import com.lionsteel.reflexmulti.Scenes.SetupScene.Difficulty;
 import com.lionsteel.reflexmulti.Entities.DifficultyEntity;
 
 public class SkillSelectScene extends ReflexMenuScene

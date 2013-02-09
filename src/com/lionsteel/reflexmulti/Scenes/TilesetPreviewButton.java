@@ -5,7 +5,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.SetupScene;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
 

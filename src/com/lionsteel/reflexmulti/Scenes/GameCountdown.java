@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 
 public class GameCountdown implements ReflexConstants
 {

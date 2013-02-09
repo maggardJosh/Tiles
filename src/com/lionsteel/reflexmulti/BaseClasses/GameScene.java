@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.BaseClasses;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
@@ -7,7 +7,6 @@ import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -15,15 +14,18 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
-import com.lionsteel.reflexmulti.ReadyTouchControl;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
-import com.lionsteel.reflexmulti.SetupScene;
-import com.lionsteel.reflexmulti.TouchControl;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
+import com.lionsteel.reflexmulti.Entities.TouchControls.ReadyTouchControl;
+import com.lionsteel.reflexmulti.Entities.TouchControls.TouchControl;
+import com.lionsteel.reflexmulti.Scenes.GameCountdown;
+import com.lionsteel.reflexmulti.Scenes.LoadingScene;
+import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Scenes.SetupScene;
 
 public abstract class GameScene extends Scene implements ReflexConstants
 {
