@@ -1,6 +1,7 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -47,6 +48,12 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 				return true;
 			}
 		};
+		this.attachChild(buttonSprite);
+	}
+	
+	public void clearButtonChildren()
+	{
+		this.detachChildren();
 		this.attachChild(buttonSprite);
 	}
 

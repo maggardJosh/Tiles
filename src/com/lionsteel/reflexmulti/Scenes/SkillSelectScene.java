@@ -18,40 +18,40 @@ import com.lionsteel.reflexmulti.Entities.DifficultyEntity;
 
 public class SkillSelectScene extends ReflexMenuScene
 {
-	ReflexActivity		activity;
-	
-	final Sprite		easyButton;
-	final Sprite		normalButton;
-	final Sprite		hardButton;
-	final Sprite		insaneButton;
-	
-	DifficultyEntity[]	diffEntities	= new DifficultyEntity[3];
-	
+	ReflexActivity			activity;
+
+	final ReflexMenuButton	easyButton;
+	final ReflexMenuButton	normalButton;
+	final ReflexMenuButton	hardButton;
+	final ReflexMenuButton	insaneButton;
+
+	DifficultyEntity[]		diffEntities	= new DifficultyEntity[3];
+
 	public SkillSelectScene()
 	{
 		super();
-		
+
 		activity = ReflexActivity.getInstance();
 		final BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-		
+
 		this.setBackgroundEnabled(false);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SkillSelectScene/");
-		
+
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png");//, 0, 0);
 		final TextureRegion easyButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "easy.png");//, (int) titleRegion.getWidth(), 0);
 		final TextureRegion normalButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "normal.png");//, (int) easyButtonRegion.getTextureX(), (int) easyButtonRegion.getHeight());
 		final TextureRegion hardButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "hard.png");//, (int) easyButtonRegion.getTextureX(), (int) (normalButtonRegion.getTextureY() + normalButtonRegion.getHeight()));
 		final TextureRegion insaneButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "insane.png");//, (int) easyButtonRegion.getTextureX(), (int) (hardButtonRegion.getTextureY() + hardButtonRegion.getHeight()));
-		
+
 		try
-		{	
+		{
 			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
 			atlas.load();
 		} catch (TextureAtlasBuilderException e)
 		{
 			Debug.e(e);
 		}
-		
+
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
 		diffEntities = new DifficultyEntity[4];
 		for (int x = 0; x < 4; x++)
@@ -59,95 +59,72 @@ public class SkillSelectScene extends ReflexMenuScene
 			diffEntities[x] = new DifficultyEntity(x, SetupScene.getTileset());
 			diffEntities[x].fadeIn();
 		}
-		
-		easyButton = new Sprite((CAMERA_WIDTH - easyButtonRegion.getWidth()) / 2, titleSprite.getHeight(), easyButtonRegion, activity.getVertexBufferObjectManager())
+
+		easyButton = new ReflexMenuButton(easyButtonRegion, new Runnable()
 		{
+
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setDifficulty(Difficulty.EASY);
-						mParentScene.clearChildScene();
-						
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setDifficulty(Difficulty.EASY);
+				mParentScene.clearChildScene();
 			}
-		};
+		});
+		easyButton.center(titleSprite.getHeight());
 		easyButton.attachChild(diffEntities[Difficulty.EASY]);
-		normalButton = new Sprite((CAMERA_WIDTH - normalButtonRegion.getWidth()) / 2, easyButton.getY() + easyButton.getHeight(), normalButtonRegion, activity.getVertexBufferObjectManager())
+		addButton(easyButton);
+
+		normalButton = new ReflexMenuButton(normalButtonRegion, new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setDifficulty(Difficulty.NORMAL);
-						mParentScene.clearChildScene();
-						
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setDifficulty(Difficulty.NORMAL);
+				mParentScene.clearChildScene();
+
 			}
-		};
+		});
+		normalButton.center(easyButton.getBottom());
 		normalButton.attachChild(diffEntities[Difficulty.NORMAL]);
-		hardButton = new Sprite((CAMERA_WIDTH - hardButtonRegion.getWidth()) / 2, normalButton.getY() + normalButton.getHeight(), hardButtonRegion, activity.getVertexBufferObjectManager())
+		addButton(normalButton);
+
+		hardButton = new ReflexMenuButton(hardButtonRegion, new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setDifficulty(Difficulty.HARD);
-						mParentScene.clearChildScene();
-						
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setDifficulty(Difficulty.HARD);
+				mParentScene.clearChildScene();
 			}
-		};
+		});
+		hardButton.center(normalButton.getBottom());
 		hardButton.attachChild(diffEntities[Difficulty.HARD]);
-		insaneButton = new Sprite((CAMERA_WIDTH - insaneButtonRegion.getWidth()) / 2, (hardButton.getY() + hardButton.getHeight()), insaneButtonRegion, activity.getVertexBufferObjectManager())
+		addButton(hardButton);
+
+		insaneButton = new ReflexMenuButton(insaneButtonRegion, new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setDifficulty(Difficulty.INSANE);
-						mParentScene.clearChildScene();
-						
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setDifficulty(Difficulty.INSANE);
+				mParentScene.clearChildScene();
 			}
-		};;
+		});
+		insaneButton.center(hardButton.getBottom());
 		insaneButton.attachChild(diffEntities[Difficulty.INSANE]);
-		
+		addButton(insaneButton);
+
 		this.attachChild(titleSprite);
-		this.attachChild(easyButton);
-		this.attachChild(normalButton);
-		this.attachChild(hardButton);
-		this.attachChild(insaneButton);
-		
+
 	}
-	
+
 	public void resetGraphics()
 	{
-		easyButton.detachChildren();
-		normalButton.detachChildren();
-		hardButton.detachChildren();
-		insaneButton.detachChildren();
-		
+		easyButton.clearButtonChildren();
+		normalButton.clearButtonChildren();
+		hardButton.clearButtonChildren();
+		insaneButton.clearButtonChildren();
+
 		for (DifficultyEntity dEntities : diffEntities)
 			dEntities.clear();
 		diffEntities = new DifficultyEntity[4];
@@ -156,20 +133,16 @@ public class SkillSelectScene extends ReflexMenuScene
 			diffEntities[x] = new DifficultyEntity(x, SetupScene.getTileset());
 			diffEntities[x].fadeIn();
 		}
-		
+
 		easyButton.attachChild(diffEntities[Difficulty.EASY]);
 		normalButton.attachChild(diffEntities[Difficulty.NORMAL]);
 		hardButton.attachChild(diffEntities[Difficulty.HARD]);
 		insaneButton.attachChild(diffEntities[Difficulty.INSANE]);
 	}
-	
+
 	@Override
 	protected void registerTouchAreas()
 	{
-		registerTouchArea(easyButton);
-		registerTouchArea(normalButton);
-		registerTouchArea(hardButton);
-		registerTouchArea(insaneButton);
-		
+
 	}
 }
