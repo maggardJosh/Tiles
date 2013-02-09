@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -48,13 +46,17 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		this.sortChildren(false);
 	}
 
-	protected void registerButtonTouchAreas()
+	private void registerButtonTouchAreas()
 	{
 		for (ReflexMenuButton button : buttonList)
 			button.registerOwnTouchArea(this);
 	}
 
-	protected abstract void registerTouchAreas();
+	protected void registerTouchAreas()
+	{
+		registerButtonTouchAreas();
+		backButton.registerOwnTouchArea(this);
+	}
 
 	public void showBackArrow()
 	{
@@ -71,7 +73,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		buttonList.add(button);
 		this.attachChild(button);
 	}
-	
+
 	protected void removeButton(ReflexMenuButton button)
 	{
 		buttonList.remove(button);
@@ -88,7 +90,6 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		{
 			childScene.setX(0);
 			childScene.registerTouchAreas();
-			registerButtonTouchAreas();
 
 		} else
 		{
@@ -103,7 +104,6 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 				{
 					ReflexActivity.getInstance().backEnabled = true;
 					childScene.registerTouchAreas();
-					childScene.registerButtonTouchAreas();
 					childScene.backButton.registerOwnTouchArea(childScene);
 					super.onModifierFinished(pItem);
 				}

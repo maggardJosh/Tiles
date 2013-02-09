@@ -1,7 +1,5 @@
 package com.lionsteel.reflexmulti.Scenes;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 
@@ -27,11 +25,5 @@ public class TilesetSelectScene extends ReflexMenuScene implements ReflexConstan
 			
 		}
 
-	}
-
-	@Override
-	protected void registerTouchAreas()
-	{
-	
 	}
 }

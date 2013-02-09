@@ -1,7 +1,6 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -140,9 +139,4 @@ public class SkillSelectScene extends ReflexMenuScene
 		insaneButton.attachChild(diffEntities[Difficulty.INSANE]);
 	}
 
-	@Override
-	protected void registerTouchAreas()
-	{
-
-	}
 }

@@ -1,7 +1,6 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -21,23 +20,23 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 {
 	ReflexActivity				activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
-	
-	final Sprite				reflexButton;
-	final Sprite				nonStopButton;
-	final Sprite				raceButton;
-	
+
+	final ReflexMenuButton		reflexButton;
+	final ReflexMenuButton		nonStopButton;
+	final ReflexMenuButton		raceButton;
+
 	public MultiplayerModeSelectScene()
 	{
 		super();
 		activity = ReflexActivity.getInstance();
-		
+
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
-		
+
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
-		
+
 		try
-		{	
+		{
 			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
 			sceneAtlas.load();// load(activity.getTextureManager());
 		} catch (TextureAtlasBuilderException e)
@@ -45,77 +44,50 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 			Debug.e(e);
 		}
 		this.setBackgroundEnabled(false);
-		
+
 		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		final float BUTTON_WIDTH = SharedResources.getInstance().modeRegion[0].getWidth();
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
-		
+
 		final int START_Y = (int) ((CAMERA_HEIGHT + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
-		reflexButton = new Sprite((CAMERA_WIDTH - BUTTON_WIDTH) / 2, START_Y, SharedResources.getInstance().modeRegion[GameMode.REFLEX], activity.getVertexBufferObjectManager())
+		reflexButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setGameMode(GameMode.REFLEX);
-						mParentScene.clearChildScene();
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setGameMode(GameMode.REFLEX);
+				mParentScene.clearChildScene();
+
 			}
-		};
-		nonStopButton = new Sprite((CAMERA_WIDTH - BUTTON_WIDTH) / 2, reflexButton.getY() + reflexButton.getHeight(), SharedResources.getInstance().modeRegion[GameMode.NON_STOP], activity.getVertexBufferObjectManager())
+		});
+		reflexButton.center(START_Y);
+		addButton(reflexButton);
+
+		nonStopButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.NON_STOP], new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setGameMode(GameMode.NON_STOP);
-						mParentScene.clearChildScene();
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setGameMode(GameMode.NON_STOP);
+				mParentScene.clearChildScene();
 			}
-		};
-		
-		raceButton = new Sprite((CAMERA_WIDTH - BUTTON_WIDTH) / 2, (int) (nonStopButton.getY() + nonStopButton.getHeight()), SharedResources.getInstance().modeRegion[GameMode.RACE], activity.getVertexBufferObjectManager())
+		});
+		nonStopButton.center(reflexButton.getBottom());
+		addButton(nonStopButton);
+
+		raceButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.RACE], new Runnable()
 		{
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			public void run()
 			{
-				switch (pSceneTouchEvent.getAction())
-				{
-					case TouchEvent.ACTION_UP:
-						SetupScene.setGameMode(GameMode.RACE);
-						mParentScene.clearChildScene();
-						break;
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				SetupScene.setGameMode(GameMode.RACE);
+				mParentScene.clearChildScene();
 			}
-		};
-		
+		});
+		raceButton.center(nonStopButton.getBottom());
+		addButton(raceButton);
+
 		this.attachChild(titleSprite);
-		this.attachChild(reflexButton);
-		this.attachChild(nonStopButton);
-		this.attachChild(raceButton);
-		
+
 	}
-	
-	@Override
-	protected void registerTouchAreas()
-	{
-		registerTouchArea(reflexButton);
-		registerTouchArea(nonStopButton);
-		raceButton.setColor(.5f, .5f, .5f);
-		//registerTouchArea(raceButton);
-		
-	}
-	
+
 }

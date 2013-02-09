@@ -1,7 +1,6 @@
 package com.lionsteel.reflexmulti.Scenes;
 
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -81,13 +80,7 @@ public class MainMenuScene extends ReflexMenuScene
 
 		//Have to register own touch areas because we are the first scene
 		registerTouchAreas();
-		registerButtonTouchAreas();
 	}
 
-	@Override
-	protected void registerTouchAreas()
-	{
-
-	}
 
 }

@@ -97,7 +97,6 @@ public class SetupScene extends ReflexMenuScene
 				instance.removeButton(instance.gameModeSprite[currentGameMode]);
 				instance.addButton(instance.gameModeSprite[gameMode]);
 				instance.clearTouchAreas();
-				instance.registerButtonTouchAreas();
 				instance.registerTouchAreas();
 
 				instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
@@ -130,7 +129,6 @@ public class SetupScene extends ReflexMenuScene
 				instance.removeButton(instance.difficultyButtons[currentDifficulty]);
 				instance.addButton(instance.difficultyButtons[difficulty]);
 				instance.clearTouchAreas();
-				instance.registerButtonTouchAreas();
 				instance.registerTouchAreas();
 
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
@@ -273,13 +271,6 @@ public class SetupScene extends ReflexMenuScene
 
 		this.clearTouchAreas();
 		this.registerTouchAreas();
-		this.registerButtonTouchAreas();
-	}
-
-	@Override
-	protected void registerTouchAreas()
-	{
-
 	}
 
 	public class GameMode
