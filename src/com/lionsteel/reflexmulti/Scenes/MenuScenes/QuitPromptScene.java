@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
@@ -13,6 +13,7 @@ import org.andengine.util.debug.Debug;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.BaseClasses.TouchControl;
 import com.lionsteel.reflexmulti.Entities.TouchControls.NoTouchControl;
 import com.lionsteel.reflexmulti.Entities.TouchControls.YesTouchControl;

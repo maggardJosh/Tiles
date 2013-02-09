@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;

@@ -7,6 +7,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.ReflexMenuButton;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
 public class TilesetPreviewButton extends Entity implements ReflexConstants
 {

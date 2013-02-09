@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -10,8 +10,12 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.Difficulty;
+import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
 
@@ -20,7 +24,6 @@ public class SetupScene extends ReflexMenuScene
 	final ReflexActivity				activity;
 	final BitmapTextureAtlas			sceneAtlas;
 
-	//	Sprite								tilesSprite;
 	ReflexMenuButton					tilesButton;
 	final ReflexMenuButton[]			difficultyButtons	= new ReflexMenuButton[4];
 	final ReflexMenuButton[]			gameModeSprite		= new ReflexMenuButton[3];
@@ -86,7 +89,7 @@ public class SetupScene extends ReflexMenuScene
 		if (SetupScene.getGameMode() == gameMode)
 			return;
 		final int currentGameMode = SetupScene.gameMode;
-		instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS*2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
+		instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
@@ -175,6 +178,7 @@ public class SetupScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				FlurryAgent.logEvent("Tileset_Select_Scene");
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
@@ -189,6 +193,7 @@ public class SetupScene extends ReflexMenuScene
 				@Override
 				public void run()
 				{
+					FlurryAgent.logEvent("Skill_Select_Scene");
 					transitionChildScene(skillSelectScene);
 				}
 			});
@@ -202,6 +207,7 @@ public class SetupScene extends ReflexMenuScene
 				@Override
 				public void run()
 				{
+					FlurryAgent.logEvent("Mode_Select_Scene");
 					transitionChildScene(modeSelectScreen);
 				}
 			});
@@ -249,6 +255,7 @@ public class SetupScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				FlurryAgent.logEvent("Tileset_Select_Scene");
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
@@ -270,18 +277,9 @@ public class SetupScene extends ReflexMenuScene
 		this.registerTouchAreas();
 	}
 
-	public class GameMode
+	public void clearChildScene()
 	{
-		public static final int	REFLEX		= 0;
-		public static final int	NON_STOP	= REFLEX + 1;
-		public static final int	RACE		= NON_STOP + 1;
-	}
-
-	public class Difficulty
-	{
-		public static final int	EASY	= 0;
-		public static final int	NORMAL	= EASY + 1;
-		public static final int	HARD	= NORMAL + 1;
-		public static final int	INSANE	= HARD + 1;
-	}
+		FlurryAgent.logEvent("Multiplayer_Setup");
+		super.clearChildScene();
+	};
 }

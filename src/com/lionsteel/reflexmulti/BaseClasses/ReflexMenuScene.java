@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.BaseClasses;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.ReflexMenuButton;
 
 public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 {

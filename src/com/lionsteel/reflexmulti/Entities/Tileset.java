@@ -25,12 +25,12 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
+import com.lionsteel.reflexmulti.Difficulty;
+import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
-import com.lionsteel.reflexmulti.Scenes.SetupScene;
-import com.lionsteel.reflexmulti.Scenes.SetupScene.Difficulty;
-import com.lionsteel.reflexmulti.Scenes.SetupScene.GameMode;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
 public class Tileset implements ReflexConstants
 {

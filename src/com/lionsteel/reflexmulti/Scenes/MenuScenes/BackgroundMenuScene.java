@@ -1,10 +1,11 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 
 public class BackgroundMenuScene extends Scene
 {	

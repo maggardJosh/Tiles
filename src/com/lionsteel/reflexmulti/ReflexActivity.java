@@ -1,5 +1,7 @@
 package com.lionsteel.reflexmulti;
 
+import java.util.HashMap;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -12,17 +14,17 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
-import com.lionsteel.reflexmulti.Scenes.BackgroundMenuScene;
-import com.lionsteel.reflexmulti.Scenes.LoadingScene;
-import com.lionsteel.reflexmulti.Scenes.MainMenuScene;
-import com.lionsteel.reflexmulti.Scenes.NonStopGameScene;
-import com.lionsteel.reflexmulti.Scenes.QuitPromptScene;
-import com.lionsteel.reflexmulti.Scenes.ReflexGameScene;
-import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
-import com.lionsteel.reflexmulti.Scenes.SetupScene;
-import com.lionsteel.reflexmulti.Scenes.SplashScene;
-import com.lionsteel.reflexmulti.Scenes.SetupScene.GameMode;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.NonStopGameScene;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.ReflexGameScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.BackgroundMenuScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.MainMenuScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.QuitPromptScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.SplashScene;
 
 public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 {
@@ -45,6 +47,20 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		if (instance == null)
 			instance = new ReflexActivity();
 		return instance;
+	}
+
+	@Override
+	protected void onStart()
+	{
+		FlurryAgent.onStartSession(this, "FXGSVHGQ3D5D78PB9DH3");
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		FlurryAgent.onEndSession(this);
+		super.onStop();
 	}
 
 	@Override
@@ -92,6 +108,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 					@Override
 					public void run()
 					{
+						FlurryAgent.endTimedEvent("Game_Played");
 						backToMainMenu();
 					}
 				});
@@ -170,6 +187,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			@Override
 			public void run()
 			{
+				HashMap<String, String> gameParams = new HashMap<String, String>();
+				gameParams.put("Tileset", SetupScene.getTileset().getBasePath());
+				gameParams.put("Game_Difficulty", Difficulty.getName(SetupScene.getDifficulty()));
+				gameParams.put("Game_Mode", GameMode.getName(SetupScene.getGameMode()));
+				FlurryAgent.logEvent("Game_Played", gameParams, true);
 				SetupScene.getTileset().createGameAssets();
 				switch (SetupScene.getGameMode())
 				{
@@ -178,6 +200,10 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 					break;
 				case GameMode.NON_STOP:
 					gameScene = new NonStopGameScene();
+					break;
+				case GameMode.RACE:
+					//TODO: Race Mode
+					gameScene = new ReflexGameScene();
 					break;
 				}
 				mEngine.setScene(gameScene);
@@ -214,10 +240,10 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		if (parentScene instanceof BackgroundMenuScene)
 		{
-			showQuitPrompt((ReflexMenuScene)parentScene.getChildScene());
+			showQuitPrompt((ReflexMenuScene) parentScene.getChildScene());
 			return;
 		}
-		
+
 		if (parentScene.getChildScene() instanceof QuitPromptScene)
 		{
 			((QuitPromptScene) parentScene.getChildScene()).callQuitAction();
@@ -226,7 +252,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		parentScene.clearChildScene();
 	}
-	
+
 	public void showQuitPrompt(ReflexMenuScene scene)
 	{
 		scene.transitionChildScene(menuQuitPromptScene, true);
@@ -245,7 +271,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 		mainMenuScene.setX(0);
 		mEngine.setScene(backgroundScene);
-		
+
 	}
 
 }

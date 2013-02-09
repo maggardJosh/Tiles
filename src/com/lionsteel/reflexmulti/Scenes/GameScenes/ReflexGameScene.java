@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -63,44 +63,7 @@ public class ReflexGameScene extends GameScene
 			{
 				disablePlayer(button);
 			}
-			/*
-			if (button.getButtonNumber() == (currentTileset.getCurrentButtonNumber()))
-			{
-				
-				final GameButton displayButton = currentTileset.getDisplayButton();
-				currentTileset.animateDisplayButton(displayButton, button, new IEntityModifierListener()
-				{
-					
-					@Override
-					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
-					{
-					
-					}
-					
-					@Override
-					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
-					{
-						currentTileset.resetDisplayButton(displayButton);
-						changeState(GameState.PICKING_NEW_BUTTON);
-						switch (button.getPlayer())
-						{
-						case PLAYER_ONE:
-							checkPlayerWillWin(PLAYER_ONE);
-							moveBar(-BAR_SPEED);
-							break;
-						case PLAYER_TWO:
-							checkPlayerWillWin(PLAYER_TWO);
-							moveBar(BAR_SPEED);
-							break;
-						}
-					}
-				});
-				
-				changeState(GameState.SHOWING_WIN);
-			} else
-			{
-				disablePlayer(button);
-			}*/
+			
 			break;
 		}
 	}

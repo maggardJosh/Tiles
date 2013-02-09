@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.GameButton;
@@ -21,10 +22,9 @@ import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.WrongSelectionIndicator;
 import com.lionsteel.reflexmulti.Entities.TouchControls.ReadyTouchControl;
-import com.lionsteel.reflexmulti.Scenes.GameCountdown;
-import com.lionsteel.reflexmulti.Scenes.LoadingScene;
-import com.lionsteel.reflexmulti.Scenes.ReflexMenuScene;
-import com.lionsteel.reflexmulti.Scenes.SetupScene;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.GameCountdown;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
 public abstract class GameScene extends Scene implements ReflexConstants
 {
@@ -259,7 +259,10 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			break;
 		case GameState.GAME_OVER:
 			if (gameOverScreen.isRematchTrue())
+			{
+				FlurryAgent.logEvent("Rematch");
 				resetGame();
+			}
 			break;
 		}
 

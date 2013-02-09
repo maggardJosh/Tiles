@@ -1,11 +1,13 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 
 public class MainMenuScene extends ReflexMenuScene
 {
@@ -17,9 +19,6 @@ public class MainMenuScene extends ReflexMenuScene
 	final int			BUTTON_SPACING	= 150;
 
 	final Sprite		titleSprite;
-
-	int					quitPointerID	= -1;
-	int					versusPointerID	= -1;
 
 	public MainMenuScene()
 	{
@@ -46,6 +45,7 @@ public class MainMenuScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				FlurryAgent.logEvent("Multiplayer_Setup");
 				transitionChildScene(setupScene);
 
 			}
@@ -58,6 +58,7 @@ public class MainMenuScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				FlurryAgent.logEvent("Practice_Menu");
 				//TODO: Practice Scene
 			}
 		});
@@ -70,6 +71,7 @@ public class MainMenuScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				FlurryAgent.logEvent("Quit_Button");
 				activity.showQuitPrompt(instance);
 			}
 		});
@@ -80,6 +82,13 @@ public class MainMenuScene extends ReflexMenuScene
 
 		//Have to register own touch areas because we are the first scene
 		registerTouchAreas();
+	}
+	
+	@Override
+	public void clearChildScene()
+	{
+		FlurryAgent.logEvent("Main_Menu");
+		super.clearChildScene();
 	}
 
 

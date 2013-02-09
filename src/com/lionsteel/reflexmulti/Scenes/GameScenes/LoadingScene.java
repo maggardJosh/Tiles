@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.GameScenes;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
@@ -8,6 +8,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 
 public class LoadingScene extends ReflexMenuScene implements ReflexConstants
 {

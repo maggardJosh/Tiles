@@ -1,7 +1,9 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Scenes.TilesetPreviewButton;
 
 public class TilesetSelectScene extends ReflexMenuScene implements ReflexConstants
 {

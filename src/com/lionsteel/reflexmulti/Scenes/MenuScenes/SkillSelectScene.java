@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes;
+package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -10,8 +10,10 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.Difficulty;
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.Scenes.SetupScene.Difficulty;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Entities.DifficultyEntity;
 
 public class SkillSelectScene extends ReflexMenuScene
