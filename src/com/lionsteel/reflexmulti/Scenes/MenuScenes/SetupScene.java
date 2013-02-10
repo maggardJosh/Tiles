@@ -12,9 +12,11 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.Difficulty;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
@@ -39,6 +41,13 @@ public class SetupScene extends ReflexMenuScene
 
 	private static int					gameMode			= GameMode.REFLEX;
 	private static int					difficulty			= Difficulty.NORMAL;
+
+	@Override
+	public void logFlurryEvent()
+	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_SETUP);
+
+	};
 
 	public static SetupScene getInstance()
 	{
@@ -111,6 +120,7 @@ public class SetupScene extends ReflexMenuScene
 
 		if (SetupScene.getDifficulty() == difficulty)
 			return;
+
 		final int currentDifficulty = SetupScene.difficulty;
 
 		instance.difficultyButtons[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
@@ -178,7 +188,6 @@ public class SetupScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
-				FlurryAgent.logEvent("Tileset_Select_Scene");
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
@@ -193,7 +202,6 @@ public class SetupScene extends ReflexMenuScene
 				@Override
 				public void run()
 				{
-					FlurryAgent.logEvent("Skill_Select_Scene");
 					transitionChildScene(skillSelectScene);
 				}
 			});
@@ -207,7 +215,6 @@ public class SetupScene extends ReflexMenuScene
 				@Override
 				public void run()
 				{
-					FlurryAgent.logEvent("Mode_Select_Scene");
 					transitionChildScene(modeSelectScreen);
 				}
 			});
@@ -255,7 +262,6 @@ public class SetupScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
-				FlurryAgent.logEvent("Tileset_Select_Scene");
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
@@ -277,9 +283,4 @@ public class SetupScene extends ReflexMenuScene
 		this.registerTouchAreas();
 	}
 
-	public void clearChildScene()
-	{
-		FlurryAgent.logEvent("Multiplayer_Setup");
-		super.clearChildScene();
-	};
 }

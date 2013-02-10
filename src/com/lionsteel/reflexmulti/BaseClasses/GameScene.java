@@ -9,12 +9,12 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.GameButton;
@@ -51,6 +51,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
 
+	public static boolean				isGameEventStarted		= false;
+
 	public abstract void buttonPressed(GameButton button);
 
 	protected abstract void resetGame();
@@ -81,47 +83,9 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		barSprite = new Sprite(0, (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
 
-		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager())
-		{
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
-			{
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
-				{
-					playerOneIntro.registerEntityModifier(new MoveYModifier(1.0f, playerOneIntro.getY(), CAMERA_HEIGHT)
-					{
-						@Override
-						protected void onModifierFinished(IEntity pItem)
-						{
-							playerOneReady = true;
-							super.onModifierFinished(pItem);
-						}
-					});
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-			}
-		};
+		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);
-		playerTwoIntro = new Sprite(0, 0, playerTwoIntroRegion, activity.getVertexBufferObjectManager())
-		{
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
-			{
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
-				{
-					playerTwoIntro.registerEntityModifier(new MoveYModifier(1.0f, playerTwoIntro.getY(), -playerTwoIntro.getHeight())
-					{
-						@Override
-						protected void onModifierFinished(IEntity pItem)
-						{
-							playerTwoReady = true;
-							super.onModifierFinished(pItem);
-						}
-					});
-				}
-				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-			}
-		};
+		playerTwoIntro = new Sprite(0, 0, playerTwoIntroRegion, activity.getVertexBufferObjectManager());
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
 
 		prepareTouchControls();
@@ -215,6 +179,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 			}
 		});
+
 		final Sprite touchImage = introTouchControls[PLAYER_ONE].touchImage;
 		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, 150);
 		playerOneIntro.attachChild(introTouchControls[PLAYER_ONE]);
@@ -260,7 +225,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		case GameState.GAME_OVER:
 			if (gameOverScreen.isRematchTrue())
 			{
-				FlurryAgent.logEvent("Rematch");
+				FlurryAgent.logEvent(FlurryAgentEventStrings.REMATCH);
+				ReflexActivity.startGameEvent();
 				resetGame();
 			}
 			break;
@@ -300,6 +266,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			@Override
 			public void run()
 			{
+				ReflexActivity.startGameEvent();
 				changeState(GameState.PICKING_NEW_BUTTON);
 
 			}
@@ -326,6 +293,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	{
 		switch (player)
 		{
+
 		case GameButton.PLAYER_ONE:
 			if (playerOneDisabled)
 				return true;
@@ -341,6 +309,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	protected void disablePlayer(GameButton button)
 	{
+
 		currentTileset.disablePlayer(button.getPlayer());
 		this.errorIndicators[button.getPlayer()].startIndicator(button.buttonSprite.getX() + button.buttonSprite.getWidth() / 2, button.buttonSprite.getY() + button.buttonSprite.getHeight() / 2);
 		switch (button.getPlayer())

@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti.Scenes.MenuScenes;
+package com.lionsteel.reflexmulti.BaseClasses;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntityMatcher;

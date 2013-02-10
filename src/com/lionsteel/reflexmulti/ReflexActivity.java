@@ -52,7 +52,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	@Override
 	protected void onStart()
 	{
-		FlurryAgent.onStartSession(this, "FXGSVHGQ3D5D78PB9DH3");
+		FlurryAgent.onStartSession(this, "3ZV4J886JJR56QBBF9YX");
 		super.onStart();
 	}
 
@@ -61,6 +61,22 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 	{
 		FlurryAgent.onEndSession(this);
 		super.onStop();
+	}
+
+	public static void startGameEvent()
+	{
+		HashMap<String, String> gameParams = new HashMap<String, String>();
+		gameParams.put("Tileset", SetupScene.getTileset().getBasePath());
+		gameParams.put("Game_Difficulty", Difficulty.getName(SetupScene.getDifficulty()));
+		gameParams.put("Game_Mode", GameMode.getName(SetupScene.getGameMode()));
+		FlurryAgent.logEvent(FlurryAgentEventStrings.GAME_PLAYED, gameParams, true);
+		GameScene.isGameEventStarted = true;
+	}
+
+	public static void endGameEvent()
+	{
+		GameScene.isGameEventStarted = false;
+		FlurryAgent.endTimedEvent(FlurryAgentEventStrings.GAME_PLAYED);
 	}
 
 	@Override
@@ -108,7 +124,8 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 					@Override
 					public void run()
 					{
-						FlurryAgent.endTimedEvent("Game_Played");
+						if (GameScene.isGameEventStarted)
+							ReflexActivity.endGameEvent();
 						backToMainMenu();
 					}
 				});
@@ -134,6 +151,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 							@Override
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
+								mainMenuScene.logFlurryEvent();
 								mEngine.setScene(backgroundScene);
 							}
 						});
@@ -187,11 +205,6 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 			@Override
 			public void run()
 			{
-				HashMap<String, String> gameParams = new HashMap<String, String>();
-				gameParams.put("Tileset", SetupScene.getTileset().getBasePath());
-				gameParams.put("Game_Difficulty", Difficulty.getName(SetupScene.getDifficulty()));
-				gameParams.put("Game_Mode", GameMode.getName(SetupScene.getGameMode()));
-				FlurryAgent.logEvent("Game_Played", gameParams, true);
 				SetupScene.getTileset().createGameAssets();
 				switch (SetupScene.getGameMode())
 				{
@@ -270,6 +283,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		}
 
 		mainMenuScene.setX(0);
+		mainMenuScene.logFlurryEvent();
 		mEngine.setScene(backgroundScene);
 
 	}

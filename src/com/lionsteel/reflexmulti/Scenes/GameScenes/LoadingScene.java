@@ -36,4 +36,11 @@ public class LoadingScene extends ReflexMenuScene implements ReflexConstants
 		
 	}
 	
+	@Override
+	public void logFlurryEvent()
+	{
+		//DON'T LOG LOADING SCREEN EVENTS
+		//We don't care about them
+	}
+	
 }

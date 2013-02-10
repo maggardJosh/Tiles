@@ -15,6 +15,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.TouchControl;
@@ -124,6 +126,7 @@ public class GameOverScreen extends Entity implements ReflexConstants
 
 	public void show(final int winningPlayer)
 	{
+		ReflexActivity.endGameEvent();
 		if (this.isVisible())
 			return;
 		this.setX(CAMERA_WIDTH);

@@ -12,7 +12,9 @@ import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.Difficulty;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Entities.DifficultyEntity;
 
@@ -26,6 +28,12 @@ public class SkillSelectScene extends ReflexMenuScene
 	final ReflexMenuButton	insaneButton;
 
 	DifficultyEntity[]		diffEntities	= new DifficultyEntity[3];
+
+	@Override
+	public void logFlurryEvent()
+	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.DIFFICULTY_MENU);
+	}
 
 	public SkillSelectScene()
 	{

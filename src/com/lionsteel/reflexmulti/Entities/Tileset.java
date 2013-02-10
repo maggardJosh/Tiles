@@ -25,7 +25,9 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.Difficulty;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
@@ -158,18 +160,18 @@ public class Tileset implements ReflexConstants
 		createButtons(DISPLAY_BUTTONS);
 
 		final float TILE_BASE_PADDING = 10;
-		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH*3 + TILE_BASE_PADDING*2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
-		tileBase.setColor(0,0,0,0);
-		
+		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
+		tileBase.setColor(0, 0, 0, 0);
+
 		currentScene.attachChild(background);
 		currentScene.attachChild(tileBase);
 
 		currentScene.sortChildren();
 	}
-	
+
 	public void animateTileBaseIn()
 	{
-		tileBase.setColor(0,0,0,0);
+		tileBase.setColor(0, 0, 0, 0);
 		tileBase.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, TILE_BASE_ALPHA));
 	}
 
@@ -297,14 +299,13 @@ public class Tileset implements ReflexConstants
 
 	public void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
 	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
 		if (SetupScene.getGameMode() == GameMode.NON_STOP)
 		{
 			int i = 0;
 			for (; i < numberOfStreamTilesToSpawn; i++)
-			{
 				if (displayButton == currentStreamButtons[i])
 					break;
-			}
 
 			currentStreamButtons[i] = newStreamButton();
 			currentStreamButtons[i].buttonSprite.setPosition(displayButton.buttonSprite);
@@ -369,6 +370,7 @@ public class Tileset implements ReflexConstants
 
 	public void disablePlayer(int player)
 	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.WRONG_TILE);
 		switch (player)
 		{
 		case PLAYER_ONE:

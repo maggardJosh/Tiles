@@ -12,9 +12,11 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
+import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 
 public class MultiplayerModeSelectScene extends ReflexMenuScene
@@ -26,6 +28,12 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 	final ReflexMenuButton		nonStopButton;
 	final ReflexMenuButton		raceButton;
 
+	@Override
+	public void logFlurryEvent()
+	{	
+		FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_GAME_MODE_MENU);
+	}
+	
 	public MultiplayerModeSelectScene()
 	{
 		super();

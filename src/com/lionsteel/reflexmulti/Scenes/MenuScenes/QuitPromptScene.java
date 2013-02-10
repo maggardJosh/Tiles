@@ -11,6 +11,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.flurry.android.FlurryAgent;
+import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
@@ -26,6 +28,13 @@ public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
 	private final TouchControl[]	touchControls	= new TouchControl[2];
 
 	private final Runnable			quitAction;
+
+	@Override
+	public void logFlurryEvent()
+	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.QUIT_PROMPT);
+
+	}
 
 	public QuitPromptScene(final Runnable quitAction)
 	{

@@ -12,7 +12,6 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
-import com.lionsteel.reflexmulti.Scenes.MenuScenes.ReflexMenuButton;
 
 public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 {
@@ -47,6 +46,8 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		backButton.registerOwnTouchArea(this);
 		this.sortChildren(false);
 	}
+	
+	public abstract void logFlurryEvent();
 
 	private void registerButtonTouchAreas()
 	{
@@ -67,6 +68,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 
 	public void transitionChildScene(final ReflexMenuScene childScene)
 	{
+
 		transitionChildScene(childScene, false);
 	}
 
@@ -84,6 +86,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 
 	public void transitionChildScene(final ReflexMenuScene childScene, final boolean overlay)
 	{
+		childScene.logFlurryEvent();
 
 		setChildScene(childScene, false, false, true);
 		if (childScene.hasChildScene())
@@ -128,6 +131,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 	@Override
 	public void clearChildScene()
 	{
+		logFlurryEvent();
 		if (this.mChildScene instanceof LoadingScene)
 		{
 
