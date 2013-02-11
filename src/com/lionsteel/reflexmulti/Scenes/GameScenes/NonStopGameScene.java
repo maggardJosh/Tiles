@@ -8,14 +8,13 @@ import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 
-public class NonStopGameScene extends GameScene 
+public class NonStopGameScene extends GameScene
 {
 
 	public NonStopGameScene()
 	{
 		super();
 		activity = ReflexActivity.getInstance();
-
 
 		this.sortChildren();
 
@@ -28,7 +27,7 @@ public class NonStopGameScene extends GameScene
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
-			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber());
+			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
 				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
@@ -61,7 +60,8 @@ public class NonStopGameScene extends GameScene
 				sortChildren();
 			} else
 			{
-				disablePlayer(button);
+				if (!currentTileset.isButtonVisible(button.getButtonNumber()))
+					disablePlayer(button);
 			}
 			break;
 		}
@@ -80,11 +80,10 @@ public class NonStopGameScene extends GameScene
 		super.Update(pSecondsElapsed);
 	}
 
-	
 	@Override
 	protected void resetGame()
 	{
-		
+
 		currentTileset.reset();
 		resetBar();
 		turnOffGameOver();

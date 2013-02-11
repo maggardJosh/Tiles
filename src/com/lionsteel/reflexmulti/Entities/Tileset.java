@@ -456,7 +456,7 @@ public class Tileset implements ReflexConstants
 		}
 	}
 
-	public GameButton isButtonDisplayed(int buttonNumber)
+	public GameButton isButtonCurrentlyActive(int buttonNumber)
 	{
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 		{
@@ -531,5 +531,13 @@ public class Tileset implements ReflexConstants
 				};
 			});
 		}
+	}
+
+	public boolean isButtonVisible(final int buttonNumber)
+	{
+		for(int i=0; i< 3; i++)
+			if(displayGameButtons[buttonNumber +NUM_BUTTONS*i].buttonSprite.isVisible())
+				return true;
+		return false;
 	}
 }

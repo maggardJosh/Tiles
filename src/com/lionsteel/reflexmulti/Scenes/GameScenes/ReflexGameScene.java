@@ -8,14 +8,14 @@ import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 
-public class ReflexGameScene extends GameScene 
+public class ReflexGameScene extends GameScene
 {
 
 	public ReflexGameScene()
 	{
 		super();
 		activity = ReflexActivity.getInstance();
-		
+
 		this.sortChildren();
 
 	}
@@ -27,8 +27,8 @@ public class ReflexGameScene extends GameScene
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
 				return;
-			
-			final GameButton displayButtonPressed = currentTileset.isButtonDisplayed(button.getButtonNumber());
+
+			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
 				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
@@ -61,9 +61,10 @@ public class ReflexGameScene extends GameScene
 				sortChildren();
 			} else
 			{
-				disablePlayer(button);
+				if (!currentTileset.isButtonVisible(button.getButtonNumber()))
+					disablePlayer(button);
 			}
-			
+
 			break;
 		}
 	}
