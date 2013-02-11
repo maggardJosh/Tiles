@@ -17,8 +17,13 @@ import org.andengine.util.modifier.IModifier;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Constants.Difficulty;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.GameMode;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.NonStopGameScene;
+import com.lionsteel.reflexmulti.Scenes.GameScenes.RaceGameScene;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.ReflexGameScene;
 import com.lionsteel.reflexmulti.Scenes.MenuScenes.BackgroundMenuScene;
 import com.lionsteel.reflexmulti.Scenes.MenuScenes.MainMenuScene;
@@ -218,8 +223,7 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 					gameScene = new NonStopGameScene();
 					break;
 				case GameMode.RACE:
-					//TODO: Race Mode
-					gameScene = new ReflexGameScene();
+					gameScene = new RaceGameScene();
 					break;
 				}
 				mEngine.setScene(gameScene);

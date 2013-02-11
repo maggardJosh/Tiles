@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Constants;
 
 public class GameMode
 {

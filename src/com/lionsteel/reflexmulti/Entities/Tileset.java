@@ -26,13 +26,13 @@ import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.reflexmulti.Difficulty;
-import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
-import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.SharedResources;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
+import com.lionsteel.reflexmulti.Constants.Difficulty;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.GameMode;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
 public class Tileset implements ReflexConstants
@@ -65,6 +65,10 @@ public class Tileset implements ReflexConstants
 	private TilesetEntity				tilesetEntity;
 
 	private Rectangle					tileBase;
+	private Rectangle					playerOneTiles;
+	private Rectangle					playerOneDisplay;
+	private Rectangle					playerTwoTiles;
+	private Rectangle					playerTwoDisplay;
 
 	/**
 	 * 
@@ -162,7 +166,6 @@ public class Tileset implements ReflexConstants
 		createButtons(PLAYER_ONE);
 		createButtons(PLAYER_TWO);
 		createButtons(DISPLAY_BUTTONS);
-		
 
 		final float TILE_BASE_PADDING = 10;
 		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
@@ -172,41 +175,76 @@ public class Tileset implements ReflexConstants
 		currentScene.attachChild(tileBase);
 		setupIndicators();
 
+		
+		if (SetupScene.getGameMode() == GameMode.RACE)
+		{
+			numberOfStreamTilesToSpawn = 2;
+			{//Player One Tiles
+				playerOneTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_TILE_PADDING, playerOneGameButtons[3].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerOneDisplay = new Rectangle(displayIndicators[1].getX() - tileBase.getX() - PLAYER_TILE_PADDING, displayIndicators[1].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, 1, activity.getVertexBufferObjectManager());
+				playerOneDisplay.setHeight(playerOneTiles.getY() - playerOneDisplay.getY());
+				playerOneTiles.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
+				playerOneDisplay.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
+				playerOneTiles.setAlpha(0);
+				playerOneDisplay.setAlpha(0);
+				tileBase.attachChild(playerOneTiles);
+				tileBase.attachChild(playerOneDisplay);
+			}
+			{//Player Two Tiles
+				playerTwoTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_TILE_PADDING, playerTwoGameButtons[4].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoDisplay = new Rectangle(displayIndicators[0].getX() - tileBase.getX() - PLAYER_TILE_PADDING, displayIndicators[0].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoDisplay.setHeight((playerTwoDisplay.getY() + playerTwoDisplay.getHeight()) - (playerTwoTiles.getY() + playerTwoTiles.getHeight()));
+				playerTwoDisplay.setY(playerTwoTiles.getY() + playerTwoTiles.getHeight());
+				playerTwoTiles.setColor(0, 0, 1.0f, PLAYER_TILES_ALPHA);
+				playerTwoDisplay.setColor(0, 0, 1.0f, PLAYER_TILES_ALPHA);
+				playerTwoTiles.setAlpha(0);
+				playerTwoDisplay.setAlpha(0);
+				tileBase.attachChild(playerTwoTiles);
+				tileBase.attachChild(playerTwoDisplay);
+			}
+
+		}
+
 		currentScene.sortChildren();
 	}
 
 	private void setupIndicators()
 	{
-		switch(SetupScene.getGameMode())
+		switch (SetupScene.getGameMode())
 		{
 		case GameMode.NON_STOP:
 		case GameMode.REFLEX:
-			switch(SetupScene.getDifficulty())
+			switch (SetupScene.getDifficulty())
 			{
 			case Difficulty.EASY:
-				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			case Difficulty.NORMAL:
-				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2 - displayIndicators[0].getWidth()/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
-				displayIndicators[1].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[1].getWidth())/2 + displayIndicators[1].getWidth()/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			case Difficulty.HARD:
 			case Difficulty.INSANE:
-				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
-				displayIndicators[1].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[1].getWidth())/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
-				displayIndicators[2].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[2].getWidth())/2 + displayIndicators[2].getWidth(), (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[2].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[2].getWidth()) / 2 + displayIndicators[2].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			}
-			
-			for(int i=0; i<numberOfStreamTilesToSpawn; i++)
+
+			for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 			{
 				currentScene.attachChild(displayIndicators[i]);
 				displayIndicators[i].setAlpha(0);
-		//		displayIndicators[i].setZIndex(FOREGROUND_Z+1);
 			}
 			break;
 		case GameMode.RACE:
-			//TODO: Race display indicators
+			displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+			displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+			for (int i = 0; i < 2; i++)
+			{
+				currentScene.attachChild(displayIndicators[i]);
+				displayIndicators[i].setAlpha(0);
+			}
 			break;
 		}
 	}
@@ -215,7 +253,11 @@ public class Tileset implements ReflexConstants
 	{
 		tileBase.setColor(0, 0, 0, 0);
 		tileBase.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, TILE_BASE_ALPHA));
-		for(int i=0; i<numberOfStreamTilesToSpawn;i++)
+		playerOneTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		playerOneDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		playerTwoTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		playerTwoDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 			displayIndicators[i].registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 	}
 
@@ -344,7 +386,7 @@ public class Tileset implements ReflexConstants
 	public void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
-		if (SetupScene.getGameMode() == GameMode.NON_STOP)
+		if (SetupScene.getGameMode() == GameMode.NON_STOP || SetupScene.getGameMode() == GameMode.RACE)
 		{
 			int i = 0;
 			for (; i < numberOfStreamTilesToSpawn; i++)
@@ -500,6 +542,19 @@ public class Tileset implements ReflexConstants
 		}
 	}
 
+	public void startRace()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			currentStreamButtons[i] = newStreamButton();
+			currentStreamButtons[i].buttonSprite.setScale(.1f);
+			currentStreamButtons[i].buttonSprite.setVisible(true);
+			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
+		}
+		currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+	}
+
 	public GameButton isButtonCurrentlyActive(int buttonNumber)
 	{
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
@@ -508,6 +563,14 @@ public class Tileset implements ReflexConstants
 				if (currentStreamButtons[i].getButtonNumber() == buttonNumber)
 					return currentStreamButtons[i];
 		}
+		return null;
+	}
+
+	public GameButton isRaceButtonCurrentlyActive(GameButton button)
+	{
+
+		if (currentStreamButtons[button.getPlayer()].getButtonNumber() == button.getButtonNumber())
+			return currentStreamButtons[button.getPlayer()];
 		return null;
 	}
 
@@ -584,4 +647,5 @@ public class Tileset implements ReflexConstants
 				return true;
 		return false;
 	}
+
 }

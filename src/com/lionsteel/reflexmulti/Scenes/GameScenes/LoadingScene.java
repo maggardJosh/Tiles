@@ -7,8 +7,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 
 public class LoadingScene extends ReflexMenuScene implements ReflexConstants
 {

@@ -1,11 +1,10 @@
 package com.lionsteel.reflexmulti.Entities;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
 public class TilesetPreviewButton extends Entity implements ReflexConstants

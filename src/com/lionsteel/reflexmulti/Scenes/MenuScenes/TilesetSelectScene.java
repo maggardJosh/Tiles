@@ -1,10 +1,10 @@
 package com.lionsteel.reflexmulti.Scenes.MenuScenes;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.TilesetPreviewButton;
 
 public class TilesetSelectScene extends ReflexMenuScene implements ReflexConstants

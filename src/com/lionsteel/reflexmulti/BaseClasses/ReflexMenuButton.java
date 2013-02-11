@@ -1,7 +1,6 @@
 package com.lionsteel.reflexmulti.BaseClasses;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -9,7 +8,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 
 public class ReflexMenuButton extends Entity implements ReflexConstants
 {

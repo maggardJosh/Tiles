@@ -9,10 +9,8 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.SharedResources;
-
-import android.sax.StartElementListener;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 
 public abstract class TouchControl extends Entity implements ReflexConstants
 {

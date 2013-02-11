@@ -4,8 +4,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 
 public class GameButton implements ReflexConstants
 {
@@ -66,6 +66,11 @@ public class GameButton implements ReflexConstants
 	private void onTouched()
 	{
 		parent.buttonPressed(this);
+	}
+
+	public float getY()
+	{
+		return buttonSprite.getY();
 	}
 	
 }

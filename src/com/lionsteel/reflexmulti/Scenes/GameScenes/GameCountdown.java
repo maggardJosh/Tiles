@@ -10,8 +10,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 
 public class GameCountdown implements ReflexConstants
 {

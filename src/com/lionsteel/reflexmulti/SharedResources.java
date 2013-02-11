@@ -1,5 +1,9 @@
 package com.lionsteel.reflexmulti;
 
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -8,6 +12,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
+
+import com.lionsteel.reflexmulti.Constants.GameMode;
 
 public class SharedResources
 {
@@ -22,6 +28,8 @@ public class SharedResources
 	public final TextureRegion		noRegion;
 	public final TextureRegion		modeRegion[]	= new TextureRegion[3];
 	public final TextureRegion		displayIndicatorRegion;
+	public final Font				mFont;
+	public final ITexture			fontTexture;
 
 	public static SharedResources getInstance()
 	{
@@ -34,6 +42,13 @@ public class SharedResources
 	{
 		instance = this;
 		activity = ReflexActivity.getInstance();
+
+		FontFactory.setAssetBasePath("fonts/");
+		fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
+		fontTexture.load();
+		mFont.load();
+		
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		//final BitmapTextureAtlas atlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");

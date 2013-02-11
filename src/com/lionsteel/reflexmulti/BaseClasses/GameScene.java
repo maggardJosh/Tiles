@@ -14,9 +14,9 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
-import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.GameButton;
 import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Entities.Tileset;
@@ -294,11 +294,11 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		switch (player)
 		{
 
-		case GameButton.PLAYER_ONE:
+		case PLAYER_ONE:
 			if (playerOneDisabled)
 				return true;
 			break;
-		case GameButton.PLAYER_TWO:
+		case PLAYER_TWO:
 			if (playerTwoDisabled)
 				return true;
 			break;

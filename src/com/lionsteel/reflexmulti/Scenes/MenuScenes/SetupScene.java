@@ -5,19 +5,18 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.reflexmulti.Difficulty;
-import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
-import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Constants.Difficulty;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.GameMode;
 import com.lionsteel.reflexmulti.Entities.Tileset;
 import com.lionsteel.reflexmulti.Entities.TilesetEntity;
 

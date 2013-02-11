@@ -6,10 +6,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
+import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
 
 public class MainMenuScene extends ReflexMenuScene
 {

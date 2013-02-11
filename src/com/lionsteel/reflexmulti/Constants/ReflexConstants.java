@@ -1,4 +1,4 @@
-package com.lionsteel.reflexmulti;
+package com.lionsteel.reflexmulti.Constants;
 
 public interface ReflexConstants
 {
@@ -20,6 +20,9 @@ public interface ReflexConstants
 
 	public static final float		REFLEX_MIN_TIME					= 1.0f;
 	public static final float		REFLEX_MAX_TIME					= 2.5f;
+
+	final float						PLAYER_TILES_ALPHA				= .3f;
+	final int						PLAYER_TILE_PADDING				= 5;
 
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
