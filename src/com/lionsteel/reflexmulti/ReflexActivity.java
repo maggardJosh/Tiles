@@ -75,8 +75,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 
 	public static void endGameEvent()
 	{
-		GameScene.isGameEventStarted = false;
-		FlurryAgent.endTimedEvent(FlurryAgentEventStrings.GAME_PLAYED);
+		if (GameScene.isGameEventStarted)
+		{
+			GameScene.isGameEventStarted = false;
+			FlurryAgent.endTimedEvent(FlurryAgentEventStrings.GAME_PLAYED);
+		}
 	}
 
 	@Override
