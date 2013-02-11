@@ -140,7 +140,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		}
 		ReflexActivity.getInstance().backEnabled = false;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
-
+		mChildScene.clearTouchAreas();
 		this.getChildScene().registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, this.getChildScene().getX(), CAMERA_WIDTH)
 		{
 			@Override

@@ -175,7 +175,6 @@ public class Tileset implements ReflexConstants
 		currentScene.attachChild(tileBase);
 		setupIndicators();
 
-		
 		if (SetupScene.getGameMode() == GameMode.RACE)
 		{
 			numberOfStreamTilesToSpawn = 2;
@@ -253,10 +252,13 @@ public class Tileset implements ReflexConstants
 	{
 		tileBase.setColor(0, 0, 0, 0);
 		tileBase.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, TILE_BASE_ALPHA));
-		playerOneTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
-		playerOneDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
-		playerTwoTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
-		playerTwoDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		if (SetupScene.getGameMode() == GameMode.RACE)
+		{
+			playerOneTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+			playerOneDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+			playerTwoTiles.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+			playerTwoDisplay.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, PLAYER_TILES_ALPHA));
+		}
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 			displayIndicators[i].registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 	}

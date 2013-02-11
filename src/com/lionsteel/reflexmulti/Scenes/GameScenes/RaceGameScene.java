@@ -1,6 +1,7 @@
 package com.lionsteel.reflexmulti.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.text.Text;
 import org.andengine.util.modifier.IModifier;
@@ -23,7 +24,7 @@ public class RaceGameScene extends ReflexGameScene
 		{
 			playerTileCount[i] = 0;
 			playerTileCountTexts[i] = new Text(0, 0, SharedResources.getInstance().mFont, "0",3, activity.getVertexBufferObjectManager());
-			
+			playerTileCountTexts[i].setAlpha(0);
 			this.attachChild(playerTileCountTexts[i]);
 		}
 		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH+BAR_WIDTH-playerTileCountTexts[PLAYER_ONE].getWidth())/2, (CAMERA_HEIGHT)/2 + playerTileCountTexts[PLAYER_ONE].getHeight());
@@ -83,6 +84,12 @@ public class RaceGameScene extends ReflexGameScene
 			break;
 		}
 	}
+	
+	private void fadeInCounter()
+	{
+		for(Text tileCount : playerTileCountTexts)
+			tileCount.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f));
+	}
 
 	@Override
 	protected void Update(float pSecondsElapsed)
@@ -91,6 +98,7 @@ public class RaceGameScene extends ReflexGameScene
 		{
 		case GameState.PICKING_NEW_BUTTON:
 			currentTileset.startRace();
+			fadeInCounter();
 			changeState(GameState.WAITING_FOR_INPUT);
 			break;
 		}
