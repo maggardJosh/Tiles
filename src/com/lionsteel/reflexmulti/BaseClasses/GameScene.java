@@ -37,7 +37,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	final BitmapTextureAtlas			sceneAtlas;
 	private final Sprite				playerOneIntro;
 	private final Sprite				playerTwoIntro;
-	private final Sprite				barSprite;
+	protected final Sprite				barSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
 
@@ -46,7 +46,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	protected GameCountdown				gameCountdown;
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
-	private GameOverScreen				gameOverScreen;
+	protected GameOverScreen				gameOverScreen;
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;

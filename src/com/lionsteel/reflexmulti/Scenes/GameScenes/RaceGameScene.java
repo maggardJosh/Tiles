@@ -3,8 +3,13 @@ package com.lionsteel.reflexmulti.Scenes.GameScenes;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.text.Text;
 import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.SequenceModifier;
+import org.andengine.util.modifier.ease.EaseCubicIn;
+import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.SharedResources;
@@ -100,9 +105,33 @@ public class RaceGameScene extends ReflexGameScene
 			currentTileset.startRace();
 			fadeInCounter();
 			changeState(GameState.WAITING_FOR_INPUT);
+			startTimer();
 			break;
 		}
 		super.Update(pSecondsElapsed);
+	}
+	final float RACE_SECONDS = 30.0f;
+	private void startTimer()
+	{
+		final float currentScale = barSprite.getScaleY();
+		if(currentScale < .01f)
+		{
+			if(playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
+				gameOverScreen.show(PLAYER_ONE);
+			else
+				if(playerTileCount[PLAYER_TWO]>playerTileCount[PLAYER_ONE])
+					gameOverScreen.show(PLAYER_TWO);
+			return;
+		}
+		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(.5f, 1.0f, 2.0f, currentScale, currentScale-(1.0f/RACE_SECONDS)*.5f, EaseCubicIn.getInstance()), new ScaleModifier(.5f, 2.0f, 1.0f, currentScale-(1.0f/RACE_SECONDS)/2, currentScale-(1.0f/RACE_SECONDS), EaseCubicOut.getInstance())){
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				startTimer();
+				super.onModifierFinished(pItem);
+			}
+		});
+		
 	}
 
 	@Override
