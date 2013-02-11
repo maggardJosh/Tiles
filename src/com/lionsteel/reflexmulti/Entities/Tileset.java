@@ -31,6 +31,7 @@ import com.lionsteel.reflexmulti.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.GameMode;
 import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.ReflexConstants;
+import com.lionsteel.reflexmulti.SharedResources;
 import com.lionsteel.reflexmulti.BaseClasses.GameScene;
 import com.lionsteel.reflexmulti.Scenes.MenuScenes.SetupScene;
 
@@ -51,6 +52,7 @@ public class Tileset implements ReflexConstants
 
 	private boolean						gameAssetsCreated			= false;
 
+	private Sprite[]					displayIndicators			= new Sprite[3];
 	private GameButton[]				currentStreamButtons		= new GameButton[3];
 	private GameScene					currentScene;
 
@@ -109,6 +111,8 @@ public class Tileset implements ReflexConstants
 		}
 		for (int i = 0; i < NUM_BUTTONS * 3; i++)
 			displayGameButtons[i] = new GameButton(i % NUM_BUTTONS, this, currentScene, DISPLAY_BUTTONS);
+		for (int i = 0; i < 3; i++)
+			displayIndicators[i] = new Sprite(0, 0, SharedResources.getInstance().displayIndicatorRegion, activity.getVertexBufferObjectManager());
 		background = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		background.setZIndex(BACKGROUND_Z);
 		gameAssetsCreated = true;
@@ -158,6 +162,7 @@ public class Tileset implements ReflexConstants
 		createButtons(PLAYER_ONE);
 		createButtons(PLAYER_TWO);
 		createButtons(DISPLAY_BUTTONS);
+		
 
 		final float TILE_BASE_PADDING = 10;
 		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
@@ -165,14 +170,53 @@ public class Tileset implements ReflexConstants
 
 		currentScene.attachChild(background);
 		currentScene.attachChild(tileBase);
+		setupIndicators();
 
 		currentScene.sortChildren();
+	}
+
+	private void setupIndicators()
+	{
+		switch(SetupScene.getGameMode())
+		{
+		case GameMode.NON_STOP:
+		case GameMode.REFLEX:
+			switch(SetupScene.getDifficulty())
+			{
+			case Difficulty.EASY:
+				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				break;
+			case Difficulty.NORMAL:
+				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2 - displayIndicators[0].getWidth()/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[1].getWidth())/2 + displayIndicators[1].getWidth()/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				break;
+			case Difficulty.HARD:
+			case Difficulty.INSANE:
+				displayIndicators[0].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[0].getWidth())/2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[1].getWidth())/2, (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				displayIndicators[2].setPosition((CAMERA_WIDTH+BAR_WIDTH-displayIndicators[2].getWidth())/2 + displayIndicators[2].getWidth(), (CAMERA_HEIGHT-displayIndicators[0].getHeight())/2);
+				break;
+			}
+			
+			for(int i=0; i<numberOfStreamTilesToSpawn; i++)
+			{
+				currentScene.attachChild(displayIndicators[i]);
+				displayIndicators[i].setAlpha(0);
+		//		displayIndicators[i].setZIndex(FOREGROUND_Z+1);
+			}
+			break;
+		case GameMode.RACE:
+			//TODO: Race display indicators
+			break;
+		}
 	}
 
 	public void animateTileBaseIn()
 	{
 		tileBase.setColor(0, 0, 0, 0);
 		tileBase.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, TILE_BASE_ALPHA));
+		for(int i=0; i<numberOfStreamTilesToSpawn;i++)
+			displayIndicators[i].registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 	}
 
 	private void checkForNoParent()
@@ -535,8 +579,8 @@ public class Tileset implements ReflexConstants
 
 	public boolean isButtonVisible(final int buttonNumber)
 	{
-		for(int i=0; i< 3; i++)
-			if(displayGameButtons[buttonNumber +NUM_BUTTONS*i].buttonSprite.isVisible())
+		for (int i = 0; i < 3; i++)
+			if (displayGameButtons[buttonNumber + NUM_BUTTONS * i].buttonSprite.isVisible())
 				return true;
 		return false;
 	}

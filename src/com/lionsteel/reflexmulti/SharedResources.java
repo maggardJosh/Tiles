@@ -9,7 +9,6 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
-
 public class SharedResources
 {
 	private ReflexActivity			activity;
@@ -22,6 +21,7 @@ public class SharedResources
 	public final TextureRegion		yesRegion;
 	public final TextureRegion		noRegion;
 	public final TextureRegion		modeRegion[]	= new TextureRegion[3];
+	public final TextureRegion		displayIndicatorRegion;
 
 	public static SharedResources getInstance()
 	{
@@ -45,6 +45,7 @@ public class SharedResources
 		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "race.png");
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
 		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
+		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
 
 		try
 		{
