@@ -13,7 +13,8 @@ public interface ReflexConstants
 
 	public static final int			DISPLAY_BUTTONS					= -1;
 	public static final int			PLAYER_ONE						= 0;
-	public static final int			PLAYER_TWO						= 1;
+	public static final int			PLAYER_TWO						= PLAYER_ONE + 1;
+	public static final int			TIE								= PLAYER_TWO + 1;
 
 	public static final int			BACK_ARROW_PADDING				= 10;
 	public static final int			REMATCH_TOUCH_PADDING			= 200;
@@ -24,7 +25,7 @@ public interface ReflexConstants
 	final float						PLAYER_TILES_ALPHA				= .3f;
 	final int						PLAYER_TILE_PADDING				= 5;
 
-	final float	RACE_SECONDS	= 30.0f;
+	final float						RACE_SECONDS					= 30.0f;
 
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
@@ -52,6 +53,8 @@ public interface ReflexConstants
 
 	public static final float		TILE_BASE_ANIMATE_IN			= 2.0f;
 	public static final float		TILE_BASE_ALPHA					= .5f;
+
+	public static final float		INSANE_RANDOMIZE_DELAY			= 5.0f;
 
 	//---- Z-Indexing
 	public static final int			BACKGROUND_Z					= 0;

@@ -15,6 +15,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.ReflexActivity;
+import com.lionsteel.reflexmulti.Constants.Difficulty;
 import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.Constants.ReflexConstants;
 import com.lionsteel.reflexmulti.Entities.GameButton;
@@ -46,7 +47,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	protected GameCountdown				gameCountdown;
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
-	protected GameOverScreen				gameOverScreen;
+	protected GameOverScreen			gameOverScreen;
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
@@ -69,9 +70,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 		gameCountdown = new GameCountdown(this);
 
-		gameOverScreen = new GameOverScreen(this);
-		gameOverScreen.setZIndex(GAME_OVER_Z);
-		this.attachChild(gameOverScreen);
+		gameOverScreen = new GameOverScreen();
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
@@ -120,12 +119,13 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	public void transitionChildScene(ReflexMenuScene childScene)
 	{
-
+		if(childScene.hasParent())
+			childScene.detachSelf();
 		setChildScene(childScene, false, true, true);
 		if (childScene.hasChildScene())
 			childScene.clearChildScene();
-
 		childScene.setX(0);
+		
 		childScene.registerTouchAreas();
 
 	}
@@ -222,26 +222,32 @@ public abstract class GameScene extends Scene implements ReflexConstants
 				startAnimateIn();
 			}
 			break;
-		case GameState.GAME_OVER:
-			if (gameOverScreen.isRematchTrue())
-			{
-				FlurryAgent.logEvent(FlurryAgentEventStrings.REMATCH);
-				ReflexActivity.startGameEvent();
-				resetGame();
-			}
-			break;
 		}
 
 		secondsOnCurrentState += pSecondsElapsed;
+	}
+	
+	public void startRematch()
+	{
+		this.clearChildScene();
+		FlurryAgent.logEvent(FlurryAgentEventStrings.REMATCH);
+		ReflexActivity.startGameEvent();
+		resetGame();
 	}
 
 	protected void checkPlayerWillWin(int player)
 	{
 		if ((player == PLAYER_TWO && barSprite.getY() + barSprite.getHeight() + BAR_SPEED > CAMERA_HEIGHT) || (player == PLAYER_ONE && barSprite.getY() - BAR_SPEED < 0))
 		{
-			gameOverScreen.show(player);
+			showGameOver(player);
 			changeState(GameState.GAME_OVER);
 		}
+	}
+
+	protected void showGameOver(int player)
+	{
+		gameOverScreen.setWinner(player);
+		transitionChildScene(gameOverScreen);
 	}
 
 	protected void startAnimateIn()
@@ -256,7 +262,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			}
 		});
 	}
-
+	
 	protected void startCountdown()
 	{
 		changeState(GameState.START_COUNTDOWN);
@@ -267,6 +273,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			public void run()
 			{
 				ReflexActivity.startGameEvent();
+				if(SetupScene.getDifficulty()==Difficulty.INSANE)
+					currentTileset.startInsaneDelay();
 				changeState(GameState.PICKING_NEW_BUTTON);
 
 			}
@@ -281,12 +289,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	protected void resetBar()
 	{
+		barSprite.clearEntityModifiers();
 		barSprite.setY((CAMERA_HEIGHT - barSprite.getHeight()) / 2);
-	}
-
-	protected void turnOffGameOver()
-	{
-		gameOverScreen.hide();
 	}
 
 	protected boolean checkPlayerDisabled(int player)

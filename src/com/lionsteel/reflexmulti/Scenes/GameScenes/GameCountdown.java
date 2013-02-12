@@ -46,6 +46,7 @@ public class GameCountdown implements ReflexConstants
 		countdownSprite.setVisible(true);
 		countdownSprite.setAlpha(1.0f);
 		final float startScale = 1.0f;
+		countdownSprite.setScale(startScale);
 		final float finalScale = 3.0f;
 		countdownSprite.registerEntityModifier(new ScaleModifier(COUNTDOWN_TIME, startScale, finalScale));
 		countdownSprite.registerEntityModifier(new AlphaModifier(COUNTDOWN_TIME, 1.0f, 0.0f)

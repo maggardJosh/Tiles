@@ -87,7 +87,6 @@ public class NonStopGameScene extends GameScene implements ReflexConstants
 
 		currentTileset.reset();
 		resetBar();
-		turnOffGameOver();
 		startCountdown();
 
 	}

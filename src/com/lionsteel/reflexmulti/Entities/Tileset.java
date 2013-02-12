@@ -1,5 +1,6 @@
 package com.lionsteel.reflexmulti.Entities;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.andengine.entity.IEntity;
@@ -24,6 +25,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
+
+import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.ReflexActivity;
@@ -497,6 +500,183 @@ public class Tileset implements ReflexConstants
 
 	}
 
+	private void animateMove(GameButton buttonToMove, GameButton buttonToMoveTo)
+	{
+		buttonToMove.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(INSANE_PREVIEW_MOVE_DURATION / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(INSANE_PREVIEW_MOVE_DURATION / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
+		buttonToMove.buttonSprite.registerEntityModifier(new MoveModifier(INSANE_PREVIEW_MOVE_DURATION, buttonToMove.buttonSprite.getX(), buttonToMoveTo.buttonSprite.getX(), buttonToMove.buttonSprite.getY(), buttonToMoveTo.buttonSprite.getY()));
+
+	}
+
+	public void resetPlayerTiles()
+	{
+		{ //Player Two Buttons
+			for (int x = 0; x < 3; x++)
+				playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+
+			//Medium Buttons
+			{
+				playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
+			}
+
+			//Hard Buttons
+			{
+
+				playerTwoGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[6].buttonSprite.setPosition(90, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
+				playerTwoGameButtons[8].buttonSprite.setPosition(90, 0);
+
+			}
+
+			for (int x = 0; x < numberOfButtonsToUse; x++)
+			{
+				playerTwoGameButtons[x].buttonSprite.clearEntityModifiers();
+				playerTwoGameButtons[x].buttonSprite.setRotation(180);
+				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+				playerTwoGameButtons[x].buttonSprite.setAlpha(1);
+				playerTwoGameButtons[x].buttonSprite.setScale(1.0f);
+			}
+		}
+
+		{ // Player One
+			//Easy Buttons
+			for (int x = 0; x < 3; x++)
+			{
+				playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
+			}
+
+			//Medium Buttons
+			{
+				playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
+				playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
+			}
+
+			//Hard Buttons
+			{
+
+				playerOneGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
+				playerOneGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
+				playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
+				playerOneGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
+
+			}
+
+			for (int x = 0; x < numberOfButtonsToUse; x++)
+			{
+				playerOneGameButtons[x].buttonSprite.clearEntityModifiers();
+				playerOneGameButtons[x].buttonSprite.setRotation(0);
+				playerOneGameButtons[x].buttonSprite.setScale(1.0f);
+				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
+				playerOneGameButtons[x].buttonSprite.setAlpha(1);
+			}
+		}
+	}
+
+	private void insaneRandomize()
+	{
+		final float SHAKE_ANGLE = 10.0f;
+		final float SHAKE_DURATION = 2.0f;
+		final int[] buttons = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+		final int NUM_SWITCHES = 12;
+		for (int i = 0; i < NUM_SWITCHES; i++)
+		{
+			int firstTile = rand.nextInt(NUM_BUTTONS);
+			int secondTile = rand.nextInt(NUM_BUTTONS);
+			while (secondTile == firstTile)
+				secondTile = rand.nextInt(NUM_BUTTONS);
+			int temp = buttons[firstTile];
+			buttons[firstTile] = buttons[secondTile];
+			buttons[secondTile] = temp;
+		}
+		
+		for (int i = 0; i < NUM_BUTTONS - 1; i++)
+			playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4));
+		playerOneGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				
+				for (int x = 0; x < NUM_BUTTONS; x++)
+				{
+					if (x != buttons[x])
+					{
+						animateMove(playerOneGameButtons[x], playerOneGameButtons[buttons[x]]);
+						playerOneGameButtons[x].buttonSprite.setZIndex(FOREGROUND_Z + 1);
+					} else
+					{
+						playerOneGameButtons[x].buttonSprite.setZIndex(FOREGROUND_Z);
+					}
+					if (x == NUM_BUTTONS - 1)
+						playerOneGameButtons[x].buttonSprite.registerEntityModifier(new DelayModifier(INSANE_PREVIEW_MOVE_DURATION)
+						{
+							protected void onModifierFinished(IEntity pItem)
+							{
+								super.onModifierFinished(pItem);
+
+							};
+						});
+				}
+				currentScene.sortChildren();
+				super.onModifierFinished(pItem);
+			}
+		});
+		for (int i = 0; i < NUM_BUTTONS - 1; i++)
+			playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4));
+		playerTwoGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				for (int x = 0; x < NUM_BUTTONS; x++)
+				{
+					if (x != buttons[x])
+					{
+						animateMove(playerTwoGameButtons[x], playerTwoGameButtons[buttons[x]]);
+						playerTwoGameButtons[x].buttonSprite.setZIndex(FOREGROUND_Z + 1);
+					} else
+					{
+						playerTwoGameButtons[x].buttonSprite.setZIndex(FOREGROUND_Z);
+					}
+					if (x == NUM_BUTTONS - 1)
+						playerTwoGameButtons[x].buttonSprite.registerEntityModifier(new DelayModifier(INSANE_PREVIEW_MOVE_DURATION)
+						{
+							protected void onModifierFinished(IEntity pItem)
+							{
+								startInsaneDelay();
+								super.onModifierFinished(pItem);
+							};
+						});
+				}
+				currentScene.sortChildren();
+				super.onModifierFinished(pItem);
+			}
+		});
+	}
+
+	public void startInsaneDelay()
+	{
+		resetPlayerButtonsZIndex();
+		playerOneGameButtons[0].buttonSprite.registerEntityModifier(new DelayModifier(INSANE_RANDOMIZE_DELAY)
+		{
+			protected void onModifierFinished(IEntity pItem)
+			{
+				insaneRandomize();
+			};
+		});
+	}
+
+	private void resetPlayerButtonsZIndex()
+	{
+		for(int i=0; i<NUM_BUTTONS; i++)
+		{
+			playerOneGameButtons[i].buttonSprite.setZIndex(BUTTON_Z);
+			playerTwoGameButtons[i].buttonSprite.setZIndex(BUTTON_Z);
+		}
+		currentScene.sortChildren();
+	}
+
 	private GameButton newStreamButton()
 	{
 		GameButton newStreamButton = null;
@@ -578,6 +758,7 @@ public class Tileset implements ReflexConstants
 
 	public void reset()
 	{
+		resetPlayerTiles();
 		for (int i = 0; i < NUM_BUTTONS * 3; i++)
 			resetDisplayButton(displayGameButtons[i]);
 

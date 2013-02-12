@@ -94,7 +94,6 @@ public class ReflexGameScene extends GameScene
 	{
 		currentTileset.reset();
 		resetBar();
-		turnOffGameOver();
 		startCountdown();
 	}
 }

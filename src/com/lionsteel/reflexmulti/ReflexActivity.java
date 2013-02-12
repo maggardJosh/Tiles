@@ -21,6 +21,7 @@ import com.lionsteel.reflexmulti.Constants.Difficulty;
 import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
 import com.lionsteel.reflexmulti.Constants.GameMode;
 import com.lionsteel.reflexmulti.Constants.ReflexConstants;
+import com.lionsteel.reflexmulti.Entities.GameOverScreen;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.NonStopGameScene;
 import com.lionsteel.reflexmulti.Scenes.GameScenes.RaceGameScene;
@@ -267,6 +268,11 @@ public class ReflexActivity extends BaseGameActivity implements ReflexConstants
 		if (parentScene.getChildScene() instanceof QuitPromptScene)
 		{
 			((QuitPromptScene) parentScene.getChildScene()).callQuitAction();
+			return;
+		}
+		else if(parentScene.getChildScene() instanceof GameOverScreen)
+		{
+			((GameOverScreen)parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
 		}
 

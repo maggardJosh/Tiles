@@ -9,7 +9,6 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.text.Text;
 import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.SequenceModifier;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
@@ -28,6 +27,7 @@ public class RaceGameScene extends ReflexGameScene
 	public RaceGameScene()
 	{
 		super();
+		this.setBackgroundEnabled(false);
 		activity = ReflexActivity.getInstance();
 
 		for (int i = 0; i < 2; i++)
@@ -46,12 +46,12 @@ public class RaceGameScene extends ReflexGameScene
 		timerText.setRotation(90);
 		timerTextShadow = new Text(0, 0, SharedResources.getInstance().mFont, (int) Math.floor(mSecondsLeft) + ".000", activity.getVertexBufferObjectManager());
 		timerTextShadow.setRotation(90);
-		timerTextShadow.setColor(0,0,0);
+		timerTextShadow.setColor(0, 0, 0);
 		timerTextShadow.setZIndex(FOREGROUND_Z);
-		
+
 		this.attachChild(timerTextShadow);
 		this.attachChild(timerText);
-		
+
 		updateTimerText();
 
 		this.sortChildren();
@@ -78,17 +78,6 @@ public class RaceGameScene extends ReflexGameScene
 						playerTileCount[button.getPlayer()]++;
 						playerTileCountTexts[button.getPlayer()].setText("" + playerTileCount[button.getPlayer()]);
 						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[button.getPlayer()].getWidth()) / 2);
-						switch (button.getPlayer())
-						{
-						case PLAYER_ONE:
-							//checkPlayerWillWin(PLAYER_ONE);
-							//moveBar(-BAR_SPEED);
-							break;
-						case PLAYER_TWO:
-							//checkPlayerWillWin(PLAYER_TWO);
-							//moveBar(BAR_SPEED);
-							break;
-						}
 					}
 
 					@Override
@@ -127,19 +116,30 @@ public class RaceGameScene extends ReflexGameScene
 			break;
 		case GameState.WAITING_FOR_INPUT:
 			mSecondsLeft -= pSecondsElapsed;
+			if (mSecondsLeft < 0)
+				mSecondsLeft = 0;
 			updateTimerText();
 			break;
 		}
 		super.Update(pSecondsElapsed);
 	}
-	
+
+	private void updateTexts()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			playerTileCountTexts[i].setText("" + playerTileCount[i]);
+			playerTileCountTexts[i].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[i].getWidth()) / 2);
+		}
+	}
+
 	private void updateTimerText()
 	{
 		final String timerString = String.format(Locale.US, "%2.3f", this.mSecondsLeft);
 		timerText.setText(timerString);
-		timerText.setPosition((BAR_WIDTH-timerText.getWidth())/2, (CAMERA_HEIGHT-timerText.getHeight())/2);
+		timerText.setPosition((BAR_WIDTH - timerText.getWidth()) / 2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
 		timerTextShadow.setText(timerString);
-		timerTextShadow.setPosition(timerText.getX()-2, timerText.getY()+2);
+		timerTextShadow.setPosition(timerText.getX() - 2, timerText.getY() + 2);
 	}
 
 	private void startTimer()
@@ -148,12 +148,14 @@ public class RaceGameScene extends ReflexGameScene
 		if (currentScale < .01f)
 		{
 			if (playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
-				gameOverScreen.show(PLAYER_ONE);
+				showGameOver(PLAYER_ONE);
 			else if (playerTileCount[PLAYER_TWO] > playerTileCount[PLAYER_ONE])
-				gameOverScreen.show(PLAYER_TWO);
+				showGameOver(PLAYER_TWO);
+			else
+				showGameOver(TIE);
 			return;
 		}
-		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(.5f, 1.0f, 2.0f, currentScale, currentScale - (1.0f / RACE_SECONDS) * .5f, EaseCubicIn.getInstance()), new ScaleModifier(.5f, 2.0f, 1.0f, currentScale - (1.0f / RACE_SECONDS) / 2, currentScale - (1.0f / RACE_SECONDS), EaseCubicOut.getInstance()))
+		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(.5f, 1.0f, 2.0f, currentScale, currentScale - (1.0f / RACE_SECONDS) * .5f, EaseCubicOut.getInstance()), new ScaleModifier(.5f, 2.0f, 1.0f, currentScale - (1.0f / RACE_SECONDS) / 2, currentScale - (1.0f / RACE_SECONDS), EaseCubicIn.getInstance()))
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
@@ -168,11 +170,15 @@ public class RaceGameScene extends ReflexGameScene
 	@Override
 	protected void resetGame()
 	{
-
 		currentTileset.reset();
-		resetBar();
-		turnOffGameOver();
+		playerTileCount[0] = 0;
+		playerTileCount[1] = 0;
+		updateTexts();
+		barSprite.setScale(1.0f);
+		mSecondsLeft = RACE_SECONDS;
+		updateTimerText();
 		startCountdown();
 
 	}
+
 }
