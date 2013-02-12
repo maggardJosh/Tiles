@@ -7,7 +7,12 @@ import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.reflexmulti.ReflexActivity;
@@ -23,16 +28,20 @@ import com.lionsteel.reflexmulti.Entities.TilesetEntity;
 public class SetupScene extends ReflexMenuScene
 {
 	final ReflexActivity				activity;
-	final BitmapTextureAtlas			sceneAtlas;
+	final BuildableBitmapTextureAtlas	sceneAtlas;
 
 	ReflexMenuButton					tilesButton;
 	final ReflexMenuButton[]			difficultyButtons	= new ReflexMenuButton[4];
-	final ReflexMenuButton[]			gameModeSprite		= new ReflexMenuButton[3];
+	final ReflexMenuButton[]			gameModeSprite		= new ReflexMenuButton[6];
 	final ReflexMenuButton				playButton;
 
 	final MultiplayerModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
 	final TilesetSelectScene			tilesetSelectScene;
+	final PracticeModeSelectScene		practiceModeSelectScene;
+
+	final Sprite						titleSprite;
+	final Sprite						practiceTitleSprite;
 
 	private static Tileset				currentTileset;
 
@@ -44,7 +53,10 @@ public class SetupScene extends ReflexMenuScene
 	@Override
 	public void logFlurryEvent()
 	{
-		FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_SETUP);
+		if (getGameMode() < 3)
+			FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_SETUP);
+		else
+			FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_SETUP);
 
 	};
 
@@ -94,23 +106,48 @@ public class SetupScene extends ReflexMenuScene
 
 	public static void setGameMode(final int gameMode)
 	{
+		setGameMode(gameMode, false);
+	}
+
+	public static void setGameMode(final int gameMode, final boolean instant)
+	{
+		if (gameMode < 3)
+		{
+			instance.titleSprite.setVisible(true);
+			instance.practiceTitleSprite.setVisible(false);
+		} else
+		{
+			instance.titleSprite.setVisible(false);
+			instance.practiceTitleSprite.setVisible(true);
+		}
 		if (SetupScene.getGameMode() == gameMode)
 			return;
-		final int currentGameMode = SetupScene.gameMode;
-		instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
+		if (instant)
 		{
-			@Override
-			protected void onModifierFinished(IEntity pItem)
+			instance.removeButton(instance.gameModeSprite[SetupScene.gameMode]);
+			instance.addButton(instance.gameModeSprite[gameMode]);
+			instance.clearTouchAreas();
+			instance.registerTouchAreas();
+			instance.gameModeSprite[SetupScene.gameMode].setAlpha(0);
+			instance.gameModeSprite[gameMode].setAlpha(1.0f);
+		} else
+		{
+			final int currentGameMode = SetupScene.gameMode;
+			instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
 			{
-				instance.removeButton(instance.gameModeSprite[currentGameMode]);
-				instance.addButton(instance.gameModeSprite[gameMode]);
-				instance.clearTouchAreas();
-				instance.registerTouchAreas();
+				@Override
+				protected void onModifierFinished(IEntity pItem)
+				{
+					instance.removeButton(instance.gameModeSprite[currentGameMode]);
+					instance.addButton(instance.gameModeSprite[gameMode]);
+					instance.clearTouchAreas();
+					instance.registerTouchAreas();
 
-				instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
-				super.onModifierFinished(pItem);
-			}
-		});
+					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+					super.onModifierFinished(pItem);
+				}
+			});
+		}
 		SetupScene.gameMode = gameMode;
 	}
 
@@ -161,24 +198,33 @@ public class SetupScene extends ReflexMenuScene
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = new TilesetSelectScene();
+		practiceModeSelectScene = new PracticeModeSelectScene();
 
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SetupScene/");
 
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
+		final TextureRegion practiceTitleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceTitle.png");
 		final TextureRegion[] difficultyRegion = new TextureRegion[4];
 
-		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png", (int) titleRegion.getTextureX(), (int) (titleRegion.getTextureY() + titleRegion.getHeight()));
-		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[0].getTextureY() + difficultyRegion[0].getHeight()));
-		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[1].getTextureY() + difficultyRegion[1].getHeight()));
-		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "insane.png", (int) titleRegion.getTextureX(), (int) (difficultyRegion[2].getTextureY() + difficultyRegion[2].getHeight()));
+		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png");
+		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png");
+		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png");
+		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "insane.png");
 
-		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png", (int) titleRegion.getWidth(), 0);
+		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
 
-		sceneAtlas.load();
-
-		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		try
+		{
+			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			sceneAtlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
+		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		practiceTitleSprite = new Sprite(0, 0, practiceTitleRegion, activity.getVertexBufferObjectManager());
 
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
 
@@ -207,18 +253,29 @@ public class SetupScene extends ReflexMenuScene
 			difficultyButtons[x].center(tilesButton.getBottom());
 		}
 
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 6; x++)
 		{
-			gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
-			{
-				@Override
-				public void run()
+			if (x < 3)
+				gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
 				{
-					transitionChildScene(modeSelectScreen);
-				}
-			});
+					@Override
+					public void run()
+					{
+						transitionChildScene(modeSelectScreen);
+					}
+				});
+			else
+				gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						transitionChildScene(practiceModeSelectScene);
+					}
+				});
 			gameModeSprite[x].center(difficultyButtons[0].getBottom());
 		}
+
 		playButton = new ReflexMenuButton(playRegion, new Runnable()
 		{
 			@Override
@@ -231,6 +288,13 @@ public class SetupScene extends ReflexMenuScene
 		addButton(playButton);
 
 		attachChild(titleSprite);
+		attachChild(practiceTitleSprite);
+
+		if (getGameMode() < 3)
+			titleSprite.setVisible(false);
+		else
+			titleSprite.setVisible(true);
+
 		for (int x = 0; x < 4; x++)
 		{
 			difficultyButtons[x].setAlpha(0);
@@ -238,7 +302,7 @@ public class SetupScene extends ReflexMenuScene
 		difficultyButtons[getDifficulty()].setAlpha(1.0f);
 		addButton(difficultyButtons[getDifficulty()]);
 
-		for (int x = 0; x < 3; x++)
+		for (int x = 0; x < 6; x++)
 		{
 			gameModeSprite[x].setAlpha(0);
 		}

@@ -10,6 +10,7 @@ import com.lionsteel.reflexmulti.ReflexActivity;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuButton;
 import com.lionsteel.reflexmulti.BaseClasses.ReflexMenuScene;
 import com.lionsteel.reflexmulti.Constants.FlurryAgentEventStrings;
+import com.lionsteel.reflexmulti.Constants.GameMode;
 
 public class MainMenuScene extends ReflexMenuScene
 {
@@ -53,6 +54,7 @@ public class MainMenuScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
+				SetupScene.setGameMode(GameMode.REFLEX, true);
 				transitionChildScene(setupScene);
 
 			}
@@ -65,7 +67,8 @@ public class MainMenuScene extends ReflexMenuScene
 			@Override
 			public void run()
 			{
-				//TODO: Practice Scene
+				SetupScene.setGameMode(GameMode.FREE_PLAY, true);
+				transitionChildScene(setupScene);
 			}
 		});
 		practiceButton.center(versusButton.getBottom());

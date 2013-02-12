@@ -26,7 +26,7 @@ public class SharedResources
 	public final TextureRegion		readyRegion;
 	public final TextureRegion		yesRegion;
 	public final TextureRegion		noRegion;
-	public final TextureRegion		modeRegion[]	= new TextureRegion[3];
+	public final TextureRegion		modeRegion[]	= new TextureRegion[6];
 	public final TextureRegion		displayIndicatorRegion;
 	public final Font				mFont;
 	public final ITexture			fontTexture;
@@ -58,6 +58,11 @@ public class SharedResources
 		modeRegion[GameMode.REFLEX] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "reflex.png");
 		modeRegion[GameMode.NON_STOP] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "nonStop.png");
 		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "race.png");
+		modeRegion[GameMode.FREE_PLAY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "freePlay.png");
+		modeRegion[GameMode.FRENZY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "frenzy.png");
+		modeRegion[GameMode.TIME_ATTACK] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "timeAttack.png");
+		
+		
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
 		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
