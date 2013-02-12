@@ -1,5 +1,7 @@
 package com.lionsteel.reflexmulti.Scenes.GameScenes;
 
+import java.util.Locale;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -19,6 +21,9 @@ public class RaceGameScene extends ReflexGameScene
 {
 	private int[]			playerTileCount			= new int[2];
 	private final Text[]	playerTileCountTexts	= new Text[2];
+	private final Text		timerText;
+	private final Text		timerTextShadow;
+	private float			mSecondsLeft			= RACE_SECONDS;
 
 	public RaceGameScene()
 	{
@@ -28,14 +33,27 @@ public class RaceGameScene extends ReflexGameScene
 		for (int i = 0; i < 2; i++)
 		{
 			playerTileCount[i] = 0;
-			playerTileCountTexts[i] = new Text(0, 0, SharedResources.getInstance().mFont, "0",3, activity.getVertexBufferObjectManager());
+			playerTileCountTexts[i] = new Text(0, 0, SharedResources.getInstance().mFont, "0", 3, activity.getVertexBufferObjectManager());
 			playerTileCountTexts[i].setAlpha(0);
 			this.attachChild(playerTileCountTexts[i]);
 		}
-		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH+BAR_WIDTH-playerTileCountTexts[PLAYER_ONE].getWidth())/2, (CAMERA_HEIGHT)/2 + playerTileCountTexts[PLAYER_ONE].getHeight());
-		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH+BAR_WIDTH-playerTileCountTexts[PLAYER_TWO].getWidth())/2, (CAMERA_HEIGHT)/2 - playerTileCountTexts[PLAYER_ONE].getHeight()*2);
-		playerTileCountTexts[PLAYER_ONE].setRotation(180);		
+		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_ONE].getWidth()) / 2, (CAMERA_HEIGHT) / 2 + playerTileCountTexts[PLAYER_ONE].getHeight());
+		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_TWO].getWidth()) / 2, (CAMERA_HEIGHT) / 2 - playerTileCountTexts[PLAYER_ONE].getHeight() * 2);
+		playerTileCountTexts[PLAYER_ONE].setRotation(180);
+
+		timerText = new Text(0, 0, SharedResources.getInstance().mFont, (int) Math.floor(mSecondsLeft) + ".000", activity.getVertexBufferObjectManager());
+		timerText.setZIndex(FOREGROUND_Z);
+		timerText.setRotation(90);
+		timerTextShadow = new Text(0, 0, SharedResources.getInstance().mFont, (int) Math.floor(mSecondsLeft) + ".000", activity.getVertexBufferObjectManager());
+		timerTextShadow.setRotation(90);
+		timerTextShadow.setColor(0,0,0);
+		timerTextShadow.setZIndex(FOREGROUND_Z);
 		
+		this.attachChild(timerTextShadow);
+		this.attachChild(timerText);
+		
+		updateTimerText();
+
 		this.sortChildren();
 
 	}
@@ -58,8 +76,8 @@ public class RaceGameScene extends ReflexGameScene
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
 						playerTileCount[button.getPlayer()]++;
-						playerTileCountTexts[button.getPlayer()].setText(""+playerTileCount[button.getPlayer()]);
-						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH+BAR_WIDTH-playerTileCountTexts[button.getPlayer()].getWidth())/2);
+						playerTileCountTexts[button.getPlayer()].setText("" + playerTileCount[button.getPlayer()]);
+						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[button.getPlayer()].getWidth()) / 2);
 						switch (button.getPlayer())
 						{
 						case PLAYER_ONE:
@@ -89,10 +107,10 @@ public class RaceGameScene extends ReflexGameScene
 			break;
 		}
 	}
-	
+
 	private void fadeInCounter()
 	{
-		for(Text tileCount : playerTileCountTexts)
+		for (Text tileCount : playerTileCountTexts)
 			tileCount.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f));
 	}
 
@@ -107,23 +125,36 @@ public class RaceGameScene extends ReflexGameScene
 			changeState(GameState.WAITING_FOR_INPUT);
 			startTimer();
 			break;
+		case GameState.WAITING_FOR_INPUT:
+			mSecondsLeft -= pSecondsElapsed;
+			updateTimerText();
+			break;
 		}
 		super.Update(pSecondsElapsed);
 	}
-	final float RACE_SECONDS = 30.0f;
+	
+	private void updateTimerText()
+	{
+		final String timerString = String.format(Locale.US, "%2.3f", this.mSecondsLeft);
+		timerText.setText(timerString);
+		timerText.setPosition((BAR_WIDTH-timerText.getWidth())/2, (CAMERA_HEIGHT-timerText.getHeight())/2);
+		timerTextShadow.setText(timerString);
+		timerTextShadow.setPosition(timerText.getX()-2, timerText.getY()+2);
+	}
+
 	private void startTimer()
 	{
 		final float currentScale = barSprite.getScaleY();
-		if(currentScale < .01f)
+		if (currentScale < .01f)
 		{
-			if(playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
+			if (playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
 				gameOverScreen.show(PLAYER_ONE);
-			else
-				if(playerTileCount[PLAYER_TWO]>playerTileCount[PLAYER_ONE])
-					gameOverScreen.show(PLAYER_TWO);
+			else if (playerTileCount[PLAYER_TWO] > playerTileCount[PLAYER_ONE])
+				gameOverScreen.show(PLAYER_TWO);
 			return;
 		}
-		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(.5f, 1.0f, 2.0f, currentScale, currentScale-(1.0f/RACE_SECONDS)*.5f, EaseCubicIn.getInstance()), new ScaleModifier(.5f, 2.0f, 1.0f, currentScale-(1.0f/RACE_SECONDS)/2, currentScale-(1.0f/RACE_SECONDS), EaseCubicOut.getInstance())){
+		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(.5f, 1.0f, 2.0f, currentScale, currentScale - (1.0f / RACE_SECONDS) * .5f, EaseCubicIn.getInstance()), new ScaleModifier(.5f, 2.0f, 1.0f, currentScale - (1.0f / RACE_SECONDS) / 2, currentScale - (1.0f / RACE_SECONDS), EaseCubicOut.getInstance()))
+		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
@@ -131,7 +162,7 @@ public class RaceGameScene extends ReflexGameScene
 				super.onModifierFinished(pItem);
 			}
 		});
-		
+
 	}
 
 	@Override

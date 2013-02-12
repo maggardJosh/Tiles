@@ -24,6 +24,8 @@ public interface ReflexConstants
 	final float						PLAYER_TILES_ALPHA				= .3f;
 	final int						PLAYER_TILE_PADDING				= 5;
 
+	final float	RACE_SECONDS	= 30.0f;
+
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
 	public static final float		DISABLE_TIME					= .4f;
