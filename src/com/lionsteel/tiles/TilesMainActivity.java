@@ -22,6 +22,7 @@ import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 import com.lionsteel.tiles.Entities.GameOverScreen;
+import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.NonStopGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.RaceGameScene;
@@ -225,6 +226,9 @@ public class TilesMainActivity extends BaseGameActivity implements ReflexConstan
 					break;
 				case GameMode.RACE:
 					gameScene = new RaceGameScene();
+					break;
+				case GameMode.FREE_PLAY:
+					gameScene = new FreePlayGameScene();
 					break;
 				}
 				mEngine.setScene(gameScene);

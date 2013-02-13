@@ -22,10 +22,11 @@ public interface ReflexConstants
 	public static final float		REFLEX_MIN_TIME					= 1.0f;
 	public static final float		REFLEX_MAX_TIME					= 2.5f;
 
-	final float						PLAYER_TILES_ALPHA				= .3f;
-	final int						PLAYER_TILE_PADDING				= 5;
+	public static final float		PLAYER_TILES_ALPHA				= .3f;
+	public static final int			PLAYER_TILE_PADDING				= 5;
 
-	final float						RACE_SECONDS					= 30.0f;
+	public static final float		RACE_SECONDS					= 30.0f;
+	public static final int			BIG_PULSE_MOD					= 25;
 
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
@@ -55,6 +56,10 @@ public interface ReflexConstants
 	public static final float		TILE_BASE_ALPHA					= .5f;
 
 	public static final float		INSANE_RANDOMIZE_DELAY			= 5.0f;
+	public static final float		INSANE_RANDOMIZE_DURATION		= .5f;
+
+	public static final float		TEXT_PULSE_DURATION				= 1.0f;
+	public static final float		TEXT_PULSE_START_SCALE			= 4.0f;
 
 	//---- Z-Indexing
 	public static final int			BACKGROUND_Z					= 0;

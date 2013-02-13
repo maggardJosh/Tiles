@@ -36,14 +36,14 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected Tileset					currentTileset;
 
 	final BitmapTextureAtlas			sceneAtlas;
-	private final Sprite				playerOneIntro;
-	private final Sprite				playerTwoIntro;
+	protected final Sprite				playerOneIntro;
+	protected final Sprite				playerTwoIntro;
 	protected final Sprite				barSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
 
-	private boolean						playerOneReady			= false;
-	private boolean						playerTwoReady			= false;
+	protected boolean						playerOneReady			= false;
+	protected boolean						playerTwoReady			= false;
 
 	protected GameCountdown				gameCountdown;
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];

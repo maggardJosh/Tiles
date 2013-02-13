@@ -74,7 +74,7 @@ public class NonStopGameScene extends GameScene implements ReflexConstants
 		switch (gameState)
 		{
 		case GameState.PICKING_NEW_BUTTON:
-			currentTileset.startStream();
+			currentTileset.startNonStop();
 			changeState(GameState.WAITING_FOR_INPUT);
 			break;
 		}

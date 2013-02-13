@@ -18,7 +18,7 @@ public class GameCountdown implements ReflexConstants
 	TilesMainActivity		activity;
 
 	BitmapTextureAtlas	atlas;
-	TiledSprite			countdownSprite;
+	public TiledSprite			countdownSprite;
 
 	GameScene			currentScene;
 
@@ -32,6 +32,7 @@ public class GameCountdown implements ReflexConstants
 
 		countdownSprite = new TiledSprite((CAMERA_WIDTH - countdownRegion.getWidth(0)) / 2, (CAMERA_HEIGHT - countdownRegion.getHeight(0)) / 2, countdownRegion, activity.getVertexBufferObjectManager());
 		countdownSprite.setScaleCenter(countdownSprite.getWidth() / 2, countdownSprite.getHeight() / 2);
+		countdownSprite.setRotationCenter(countdownSprite.getWidth() / 2, countdownSprite.getHeight() / 2);
 		countdownSprite.setVisible(false);
 		countdownSprite.setZIndex(FOREGROUND_Z);
 		

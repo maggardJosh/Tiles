@@ -193,7 +193,7 @@ public class SetupScene extends ReflexMenuScene
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
-		currentTileset = new Tileset("three", false);
+		currentTileset = new Tileset(tileset[0], false);
 
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();

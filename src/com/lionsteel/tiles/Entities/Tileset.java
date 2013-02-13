@@ -37,7 +37,7 @@ import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
 public class Tileset implements ReflexConstants
 {
-	private TilesMainActivity				activity;
+	private TilesMainActivity			activity;
 
 	private BuildableBitmapTextureAtlas	atlas;
 
@@ -213,6 +213,9 @@ public class Tileset implements ReflexConstants
 		{
 		case GameMode.NON_STOP:
 		case GameMode.REFLEX:
+		case GameMode.FREE_PLAY:
+		case GameMode.FRENZY:
+		case GameMode.TIME_ATTACK:
 			switch (SetupScene.getDifficulty())
 			{
 			case Difficulty.EASY:
@@ -388,7 +391,17 @@ public class Tileset implements ReflexConstants
 	public void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
-		if (SetupScene.getGameMode() == GameMode.NON_STOP || SetupScene.getGameMode() == GameMode.RACE)
+		if (SetupScene.getGameMode() == GameMode.REFLEX)
+		{
+			int i = 0;
+			for (; i < numberOfStreamTilesToSpawn; i++)
+			{
+				if (displayButton == currentStreamButtons[i])
+					break;
+			}
+			currentStreamButtons[i] = null;
+			checkAllButtonsGone();
+		} else
 		{
 			int i = 0;
 			for (; i < numberOfStreamTilesToSpawn; i++)
@@ -400,16 +413,6 @@ public class Tileset implements ReflexConstants
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
-		} else if (SetupScene.getGameMode() == GameMode.REFLEX)
-		{
-			int i = 0;
-			for (; i < numberOfStreamTilesToSpawn; i++)
-			{
-				if (displayButton == currentStreamButtons[i])
-					break;
-			}
-			currentStreamButtons[i] = null;
-			checkAllButtonsGone();
 		}
 		displayButton.buttonSprite.setZIndex(FOREGROUND_Z);
 		displayButton.buttonSprite.clearEntityModifiers();
@@ -431,7 +434,7 @@ public class Tileset implements ReflexConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
-				startStream();
+				startNonStop();
 				super.onModifierFinished(pItem);
 			}
 		});
@@ -497,10 +500,19 @@ public class Tileset implements ReflexConstants
 
 	}
 
-	private void animateMove(GameButton buttonToMove, GameButton buttonToMoveTo)
+	private void animateMove(final GameButton buttonToMove, GameButton buttonToMoveTo)
 	{
-		buttonToMove.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(INSANE_PREVIEW_MOVE_DURATION / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(INSANE_PREVIEW_MOVE_DURATION / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
-		buttonToMove.buttonSprite.registerEntityModifier(new MoveModifier(INSANE_PREVIEW_MOVE_DURATION, buttonToMove.buttonSprite.getX(), buttonToMoveTo.buttonSprite.getX(), buttonToMove.buttonSprite.getY(), buttonToMoveTo.buttonSprite.getY()));
+		buttonToMove.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(INSANE_RANDOMIZE_DURATION / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(INSANE_RANDOMIZE_DURATION / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
+		currentScene.unregisterTouchArea(buttonToMove.buttonSprite);
+		buttonToMove.buttonSprite.registerEntityModifier(new MoveModifier(INSANE_RANDOMIZE_DURATION, buttonToMove.buttonSprite.getX(), buttonToMoveTo.buttonSprite.getX(), buttonToMove.buttonSprite.getY(), buttonToMoveTo.buttonSprite.getY())
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				currentScene.registerTouchArea(buttonToMove.buttonSprite);
+				super.onModifierFinished(pItem);
+			}
+		});
 
 	}
 
@@ -586,7 +598,7 @@ public class Tileset implements ReflexConstants
 			buttons[firstTile] = buttons[secondTile];
 			buttons[secondTile] = temp;
 		}
-		
+
 		for (int i = 0; i < NUM_BUTTONS - 1; i++)
 			playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4));
 		playerOneGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4)
@@ -594,7 +606,7 @@ public class Tileset implements ReflexConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
-				
+
 				for (int x = 0; x < NUM_BUTTONS; x++)
 				{
 					if (x != buttons[x])
@@ -606,10 +618,11 @@ public class Tileset implements ReflexConstants
 						playerOneGameButtons[x].buttonSprite.setZIndex(FOREGROUND_Z);
 					}
 					if (x == NUM_BUTTONS - 1)
-						playerOneGameButtons[x].buttonSprite.registerEntityModifier(new DelayModifier(INSANE_PREVIEW_MOVE_DURATION)
+						playerOneGameButtons[x].buttonSprite.registerEntityModifier(new DelayModifier(INSANE_RANDOMIZE_DURATION)
 						{
 							protected void onModifierFinished(IEntity pItem)
 							{
+								startInsaneDelay();
 								super.onModifierFinished(pItem);
 
 							};
@@ -641,7 +654,6 @@ public class Tileset implements ReflexConstants
 						{
 							protected void onModifierFinished(IEntity pItem)
 							{
-								startInsaneDelay();
 								super.onModifierFinished(pItem);
 							};
 						});
@@ -666,7 +678,7 @@ public class Tileset implements ReflexConstants
 
 	private void resetPlayerButtonsZIndex()
 	{
-		for(int i=0; i<NUM_BUTTONS; i++)
+		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			playerOneGameButtons[i].buttonSprite.setZIndex(BUTTON_Z);
 			playerTwoGameButtons[i].buttonSprite.setZIndex(BUTTON_Z);
@@ -694,7 +706,7 @@ public class Tileset implements ReflexConstants
 		return newStreamButton;
 	}
 
-	public void startStream()
+	public void startNonStop()
 	{
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 		{
@@ -826,6 +838,15 @@ public class Tileset implements ReflexConstants
 			if (displayGameButtons[buttonNumber + NUM_BUTTONS * i].buttonSprite.isVisible())
 				return true;
 		return false;
+	}
+
+	public void detachPlayerTwo()
+	{
+		for (int i = 0; i < NUM_BUTTONS; i++)
+		{
+			currentScene.unregisterTouchArea(playerTwoGameButtons[i].buttonSprite);
+			playerTwoGameButtons[i].buttonSprite.detachSelf();
+		}
 	}
 
 }

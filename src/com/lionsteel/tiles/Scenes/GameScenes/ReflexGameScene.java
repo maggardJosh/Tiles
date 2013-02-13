@@ -78,7 +78,7 @@ public class ReflexGameScene extends GameScene
 		case GameState.PICKING_NEW_BUTTON:
 			if (secondsOnCurrentState >= 1.0f)
 			{
-				currentTileset.startStream();
+				currentTileset.startNonStop();
 				enablePlayer(PLAYER_ONE);
 				enablePlayer(PLAYER_TWO);
 				changeState(GameState.WAITING_FOR_INPUT);
