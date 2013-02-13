@@ -633,8 +633,8 @@ public class Tileset implements ReflexConstants
 			}
 		});
 		for (int i = 0; i < NUM_BUTTONS - 1; i++)
-			playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4));
-		playerTwoGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4)
+			playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 180, 180 - SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, 180 - SHAKE_ANGLE, 180 + SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, 180 + SHAKE_ANGLE, 180)), 4));
+		playerTwoGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 180, 180 - SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, 180 - SHAKE_ANGLE, 180 + SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, 180 + SHAKE_ANGLE, 180)), 4)
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
