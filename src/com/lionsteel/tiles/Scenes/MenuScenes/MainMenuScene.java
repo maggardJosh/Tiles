@@ -7,12 +7,12 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuButton;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 
-public class MainMenuScene extends ReflexMenuScene
+public class MainMenuScene extends TilesMenuScene
 {
 	TilesMainActivity		activity;
 	BitmapTextureAtlas	sceneAtlas;
@@ -49,7 +49,7 @@ public class MainMenuScene extends ReflexMenuScene
 		this.setBackgroundEnabled(false);
 
 		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		final ReflexMenuButton versusButton = new ReflexMenuButton(versusRegion, new Runnable()
+		final TilesMenuButton versusButton = new TilesMenuButton(versusRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -62,7 +62,7 @@ public class MainMenuScene extends ReflexMenuScene
 		versusButton.center(230);
 		addButton(versusButton);
 
-		final ReflexMenuButton practiceButton = new ReflexMenuButton(practiceRegion, new Runnable()
+		final TilesMenuButton practiceButton = new TilesMenuButton(practiceRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -75,7 +75,7 @@ public class MainMenuScene extends ReflexMenuScene
 		addButton(practiceButton);
 
 		final MainMenuScene instance = this;
-		final ReflexMenuButton exitButton = new ReflexMenuButton(exitRegion, new Runnable()
+		final TilesMenuButton exitButton = new TilesMenuButton(exitRegion, new Runnable()
 		{
 			@Override
 			public void run()

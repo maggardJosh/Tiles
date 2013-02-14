@@ -16,5 +16,6 @@ public class FlurryAgentEventStrings
 	public static final String	PRACTICE_MENU				= "Practice";
 	public static final String	WRONG_TILE					= "Wrong_Tile";
 	public static final String	WON_TILE					= "Correct_Tile";
+	public static final String	PAUSE						= "Pause";
 
 }

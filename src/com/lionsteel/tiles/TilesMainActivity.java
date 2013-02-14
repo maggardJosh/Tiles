@@ -16,7 +16,7 @@ import org.andengine.util.modifier.IModifier;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
@@ -25,6 +25,7 @@ import com.lionsteel.tiles.Entities.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.NonStopGameScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.GameScenes.RaceGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.ReflexGameScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.BackgroundMenuScene;
@@ -265,7 +266,7 @@ public class TilesMainActivity extends BaseGameActivity implements ReflexConstan
 
 		if (parentScene instanceof BackgroundMenuScene)
 		{
-			showQuitPrompt((ReflexMenuScene) parentScene.getChildScene());
+			showQuitPrompt((TilesMenuScene) parentScene.getChildScene());
 			return;
 		}
 
@@ -278,12 +279,16 @@ public class TilesMainActivity extends BaseGameActivity implements ReflexConstan
 		{
 			((GameOverScreen)parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
+		}else if(parentScene.getChildScene() instanceof PauseScene)
+		{
+			((PauseScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
+			return;
 		}
 
 		parentScene.clearChildScene();
 	}
 
-	public void showQuitPrompt(ReflexMenuScene scene)
+	public void showQuitPrompt(TilesMenuScene scene)
 	{
 		scene.transitionChildScene(menuQuitPromptScene, true);
 	}
@@ -291,10 +296,10 @@ public class TilesMainActivity extends BaseGameActivity implements ReflexConstan
 	public void backToMainMenu()
 	{
 		//Clear all child scenes
-		ReflexMenuScene parentScene = mainMenuScene;
+		TilesMenuScene parentScene = mainMenuScene;
 		while (parentScene.hasChildScene())
 		{
-			final ReflexMenuScene childScene = (ReflexMenuScene) parentScene.getChildScene();
+			final TilesMenuScene childScene = (TilesMenuScene) parentScene.getChildScene();
 			parentScene.setChildSceneNull();
 			parentScene = childScene;
 		}

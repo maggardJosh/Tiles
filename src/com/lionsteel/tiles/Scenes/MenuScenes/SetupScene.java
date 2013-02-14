@@ -17,23 +17,23 @@ import org.andengine.util.debug.Debug;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuButton;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetEntity;
 
-public class SetupScene extends ReflexMenuScene
+public class SetupScene extends TilesMenuScene
 {
 	final TilesMainActivity				activity;
 	final BuildableBitmapTextureAtlas	sceneAtlas;
 
-	ReflexMenuButton					tilesButton;
-	final ReflexMenuButton[]			difficultyButtons	= new ReflexMenuButton[4];
-	final ReflexMenuButton[]			gameModeSprite		= new ReflexMenuButton[6];
-	final ReflexMenuButton				playButton;
+	TilesMenuButton					tilesButton;
+	final TilesMenuButton[]			difficultyButtons	= new TilesMenuButton[4];
+	final TilesMenuButton[]			gameModeSprite		= new TilesMenuButton[6];
+	final TilesMenuButton				playButton;
 
 	final MultiplayerModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
@@ -228,7 +228,7 @@ public class SetupScene extends ReflexMenuScene
 
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
 
-		tilesButton = new ReflexMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
+		tilesButton = new TilesMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
 		{
 			@Override
 			public void run()
@@ -242,7 +242,7 @@ public class SetupScene extends ReflexMenuScene
 
 		for (int x = 0; x < 4; x++)
 		{
-			difficultyButtons[x] = new ReflexMenuButton(difficultyRegion[x], new Runnable()
+			difficultyButtons[x] = new TilesMenuButton(difficultyRegion[x], new Runnable()
 			{
 				@Override
 				public void run()
@@ -256,7 +256,7 @@ public class SetupScene extends ReflexMenuScene
 		for (int x = 0; x < 6; x++)
 		{
 			if (x < 3)
-				gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
+				gameModeSprite[x] = new TilesMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
 				{
 					@Override
 					public void run()
@@ -265,7 +265,7 @@ public class SetupScene extends ReflexMenuScene
 					}
 				});
 			else
-				gameModeSprite[x] = new ReflexMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
+				gameModeSprite[x] = new TilesMenuButton(SharedResources.getInstance().modeRegion[x], new Runnable()
 				{
 					@Override
 					public void run()
@@ -276,7 +276,7 @@ public class SetupScene extends ReflexMenuScene
 			gameModeSprite[x].center(difficultyButtons[0].getBottom());
 		}
 
-		playButton = new ReflexMenuButton(playRegion, new Runnable()
+		playButton = new TilesMenuButton(playRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -320,7 +320,7 @@ public class SetupScene extends ReflexMenuScene
 		skillSelectScene.resetGraphics();
 		removeButton(tilesButton);
 		final float oldY = tilesButton.getY();
-		tilesButton = new ReflexMenuButton(currentTileset.getTilesetEntity().getButtonRegion(), new Runnable()
+		tilesButton = new TilesMenuButton(currentTileset.getTilesetEntity().getButtonRegion(), new Runnable()
 		{
 			@Override
 			public void run()

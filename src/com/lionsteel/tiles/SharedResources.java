@@ -16,7 +16,7 @@ import com.lionsteel.tiles.Constants.GameMode;
 
 public class SharedResources
 {
-	private TilesMainActivity			activity;
+	private TilesMainActivity		activity;
 
 	private static SharedResources	instance;
 
@@ -27,6 +27,7 @@ public class SharedResources
 	public final TextureRegion		noRegion;
 	public final TextureRegion		modeRegion[]	= new TextureRegion[6];
 	public final TextureRegion		displayIndicatorRegion;
+	public final TextureRegion		pauseButtonRegion;
 	public final Font				mFont;
 	public final ITexture			fontTexture;
 
@@ -47,7 +48,7 @@ public class SharedResources
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
-		
+
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		//final BitmapTextureAtlas atlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
@@ -60,8 +61,8 @@ public class SharedResources
 		modeRegion[GameMode.FREE_PLAY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "freePlay.png");
 		modeRegion[GameMode.FRENZY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "frenzy.png");
 		modeRegion[GameMode.TIME_ATTACK] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "timeAttack.png");
-		
-		
+		pauseButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "pauseButton.png");
+
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
 		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");

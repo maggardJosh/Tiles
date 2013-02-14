@@ -2,6 +2,7 @@ package com.lionsteel.tiles.BaseClasses;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
@@ -14,6 +15,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
@@ -25,6 +27,7 @@ import com.lionsteel.tiles.Entities.WrongSelectionIndicator;
 import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 import com.lionsteel.tiles.Scenes.GameScenes.GameCountdown;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
 public abstract class GameScene extends Scene implements ReflexConstants
@@ -42,12 +45,15 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
 
-	protected boolean						playerOneReady			= false;
-	protected boolean						playerTwoReady			= false;
+	protected boolean					playerOneReady			= false;
+	protected boolean					playerTwoReady			= false;
 
 	protected GameCountdown				gameCountdown;
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	protected GameOverScreen			gameOverScreen;
+	protected PauseScene				pauseScene;
+
+	protected TilesMenuButton			pauseButton;
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
@@ -71,7 +77,19 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		gameCountdown = new GameCountdown(this);
 
 		gameOverScreen = new GameOverScreen();
-
+		pauseScene = new PauseScene();
+		
+		pauseButton = new TilesMenuButton(SharedResources.getInstance().pauseButtonRegion, new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				transitionChildScene(pauseScene);
+			}
+		});
+		
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
 		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", 0, 0);
@@ -117,15 +135,15 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		});
 	}
 
-	public void transitionChildScene(ReflexMenuScene childScene)
+	public void transitionChildScene(TilesMenuScene childScene)
 	{
-		if(childScene.hasParent())
+		if (childScene.hasParent())
 			childScene.detachSelf();
 		setChildScene(childScene, false, true, true);
 		if (childScene.hasChildScene())
 			childScene.clearChildScene();
 		childScene.setX(0);
-		
+
 		childScene.registerTouchAreas();
 
 	}
@@ -226,7 +244,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 		secondsOnCurrentState += pSecondsElapsed;
 	}
-	
+
 	public void startRematch()
 	{
 		this.clearChildScene();
@@ -253,6 +271,13 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected void startAnimateIn()
 	{
 		changeState(GameState.START_COUNTDOWN);
+		
+		pauseButton.setPosition(CAMERA_WIDTH-pauseButton.getWidth(), (CAMERA_HEIGHT-pauseButton.getHeight())/2);
+		pauseButton.setZIndex(FOREGROUND_Z);
+		this.attachChild(pauseButton);
+		pauseButton.registerOwnTouchArea(this);
+		pauseButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME*3, 0, 1.0f));
+		
 		currentTileset.animatePlayerTilesIn(new Runnable()
 		{
 			@Override
@@ -262,7 +287,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			}
 		});
 	}
-	
+
 	protected void startCountdown()
 	{
 		changeState(GameState.START_COUNTDOWN);
@@ -273,7 +298,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			public void run()
 			{
 				TilesMainActivity.startGameEvent();
-				if(SetupScene.getDifficulty()==Difficulty.INSANE)
+				if (SetupScene.getDifficulty() == Difficulty.INSANE)
 					currentTileset.startInsaneDelay();
 				changeState(GameState.PICKING_NEW_BUTTON);
 

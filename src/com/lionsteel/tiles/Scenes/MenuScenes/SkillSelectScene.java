@@ -12,20 +12,20 @@ import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuButton;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.DifficultyEntity;
 
-public class SkillSelectScene extends ReflexMenuScene
+public class SkillSelectScene extends TilesMenuScene
 {
 	TilesMainActivity			activity;
 
-	final ReflexMenuButton	easyButton;
-	final ReflexMenuButton	normalButton;
-	final ReflexMenuButton	hardButton;
-	final ReflexMenuButton	insaneButton;
+	final TilesMenuButton	easyButton;
+	final TilesMenuButton	normalButton;
+	final TilesMenuButton	hardButton;
+	final TilesMenuButton	insaneButton;
 
 	DifficultyEntity[]		diffEntities	= new DifficultyEntity[3];
 
@@ -68,7 +68,7 @@ public class SkillSelectScene extends ReflexMenuScene
 			diffEntities[x].fadeIn();
 		}
 
-		easyButton = new ReflexMenuButton(easyButtonRegion, new Runnable()
+		easyButton = new TilesMenuButton(easyButtonRegion, new Runnable()
 		{
 
 			@Override
@@ -82,7 +82,7 @@ public class SkillSelectScene extends ReflexMenuScene
 		easyButton.attachChild(diffEntities[Difficulty.EASY]);
 		addButton(easyButton);
 
-		normalButton = new ReflexMenuButton(normalButtonRegion, new Runnable()
+		normalButton = new TilesMenuButton(normalButtonRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -96,7 +96,7 @@ public class SkillSelectScene extends ReflexMenuScene
 		normalButton.attachChild(diffEntities[Difficulty.NORMAL]);
 		addButton(normalButton);
 
-		hardButton = new ReflexMenuButton(hardButtonRegion, new Runnable()
+		hardButton = new TilesMenuButton(hardButtonRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -109,7 +109,7 @@ public class SkillSelectScene extends ReflexMenuScene
 		hardButton.attachChild(diffEntities[Difficulty.HARD]);
 		addButton(hardButton);
 
-		insaneButton = new ReflexMenuButton(insaneButtonRegion, new Runnable()
+		insaneButton = new TilesMenuButton(insaneButtonRegion, new Runnable()
 		{
 			@Override
 			public void run()

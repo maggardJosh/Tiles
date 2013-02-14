@@ -13,14 +13,14 @@ import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 import com.lionsteel.tiles.Entities.TouchControls.NoTouchControl;
 import com.lionsteel.tiles.Entities.TouchControls.YesTouchControl;
 
-public class QuitPromptScene extends ReflexMenuScene implements ReflexConstants
+public class QuitPromptScene extends TilesMenuScene implements ReflexConstants
 {
 	TilesMainActivity					activity;
 

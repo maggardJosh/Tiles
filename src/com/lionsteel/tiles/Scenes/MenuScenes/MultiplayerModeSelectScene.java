@@ -14,19 +14,19 @@ import org.andengine.util.debug.Debug;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuButton;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 
-public class MultiplayerModeSelectScene extends ReflexMenuScene
+public class MultiplayerModeSelectScene extends TilesMenuScene
 {
 	TilesMainActivity				activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
 
-	final ReflexMenuButton		reflexButton;
-	final ReflexMenuButton		nonStopButton;
-	final ReflexMenuButton		raceButton;
+	final TilesMenuButton		reflexButton;
+	final TilesMenuButton		nonStopButton;
+	final TilesMenuButton		raceButton;
 
 	@Override
 	public void logFlurryEvent()
@@ -58,7 +58,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
 		final int START_Y = (int) ((CAMERA_HEIGHT + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
-		reflexButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
+		reflexButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
 		{
 			@Override
 			public void run()
@@ -71,7 +71,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		reflexButton.center(START_Y);
 		addButton(reflexButton);
 
-		nonStopButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.NON_STOP], new Runnable()
+		nonStopButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.NON_STOP], new Runnable()
 		{
 			@Override
 			public void run()
@@ -83,7 +83,7 @@ public class MultiplayerModeSelectScene extends ReflexMenuScene
 		nonStopButton.center(reflexButton.getBottom());
 		addButton(nonStopButton);
 
-		raceButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.RACE], new Runnable()
+		raceButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.RACE], new Runnable()
 		{
 			@Override
 			public void run()

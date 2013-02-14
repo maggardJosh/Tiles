@@ -13,14 +13,14 @@ import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 
-public abstract class ReflexMenuScene extends Scene implements ReflexConstants
+public abstract class TilesMenuScene extends Scene implements ReflexConstants
 {
 	final TilesMainActivity				activity;
-	final ReflexMenuButton				backButton;
+	final TilesMenuButton				backButton;
 
-	final ArrayList<ReflexMenuButton>	buttonList	= new ArrayList<ReflexMenuButton>();
+	final ArrayList<TilesMenuButton>	buttonList	= new ArrayList<TilesMenuButton>();
 
-	public ReflexMenuScene()
+	public TilesMenuScene()
 	{
 		activity = TilesMainActivity.getInstance();
 
@@ -30,7 +30,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		final TextureRegion backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "backArrow.png", 0, 0);
 		sceneAtlas.load();
 
-		backButton = new ReflexMenuButton(backArrowRegion, new Runnable()
+		backButton = new TilesMenuButton(backArrowRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -51,7 +51,7 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 
 	private void registerButtonTouchAreas()
 	{
-		for (ReflexMenuButton button : buttonList)
+		for (TilesMenuButton button : buttonList)
 			button.registerOwnTouchArea(this);
 	}
 
@@ -66,25 +66,25 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 		backButton.setVisible(true);
 	}
 
-	public void transitionChildScene(final ReflexMenuScene childScene)
+	public void transitionChildScene(final TilesMenuScene childScene)
 	{
 
 		transitionChildScene(childScene, false);
 	}
 
-	protected void addButton(ReflexMenuButton button)
+	protected void addButton(TilesMenuButton button)
 	{
 		buttonList.add(button);
 		this.attachChild(button);
 	}
 
-	protected void removeButton(ReflexMenuButton button)
+	protected void removeButton(TilesMenuButton button)
 	{
 		buttonList.remove(button);
 		this.detachChild(button);
 	}
 
-	public void transitionChildScene(final ReflexMenuScene childScene, final boolean overlay)
+	public void transitionChildScene(final TilesMenuScene childScene, final boolean overlay)
 	{
 		childScene.logFlurryEvent();
 
@@ -123,8 +123,8 @@ public abstract class ReflexMenuScene extends Scene implements ReflexConstants
 
 	public void setChildSceneNull()
 	{
-		if (this.getChildScene() instanceof ReflexMenuScene)
-			((ReflexMenuScene) this.getChildScene()).clearTouchAreas();
+		if (this.getChildScene() instanceof TilesMenuScene)
+			((TilesMenuScene) this.getChildScene()).clearTouchAreas();
 		super.clearChildScene();
 	}
 

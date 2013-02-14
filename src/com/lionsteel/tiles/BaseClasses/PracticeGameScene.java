@@ -12,6 +12,7 @@ public abstract class PracticeGameScene extends GameScene
 		this.detachChild(playerTwoIntro);
 		
 		gameCountdown.countdownSprite.setRotation(-90);
+		pauseScene.setTwoPlayerMode(false);
 		
 		currentTileset.detachPlayerTwo();
 	}

@@ -14,19 +14,19 @@ import org.andengine.util.debug.Debug;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuButton;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 
-public class PracticeModeSelectScene extends ReflexMenuScene
+public class PracticeModeSelectScene extends TilesMenuScene
 {
 	TilesMainActivity				activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
 
-	final ReflexMenuButton		freePlayButton;
-	final ReflexMenuButton		frenzyButton;
-	final ReflexMenuButton		timeAttackButton;
+	final TilesMenuButton		freePlayButton;
+	final TilesMenuButton		frenzyButton;
+	final TilesMenuButton		timeAttackButton;
 
 	@Override
 	public void logFlurryEvent()
@@ -58,7 +58,7 @@ public class PracticeModeSelectScene extends ReflexMenuScene
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
 		final int START_Y = (int) ((CAMERA_HEIGHT + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
-		freePlayButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.FREE_PLAY], new Runnable()
+		freePlayButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.FREE_PLAY], new Runnable()
 		{
 			@Override
 			public void run()
@@ -71,7 +71,7 @@ public class PracticeModeSelectScene extends ReflexMenuScene
 		freePlayButton.center(START_Y);
 		addButton(freePlayButton);
 
-		frenzyButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.FRENZY], new Runnable()
+		frenzyButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.FRENZY], new Runnable()
 		{
 			@Override
 			public void run()
@@ -83,7 +83,7 @@ public class PracticeModeSelectScene extends ReflexMenuScene
 		frenzyButton.center(freePlayButton.getBottom());
 		addButton(frenzyButton);
 
-		timeAttackButton = new ReflexMenuButton(SharedResources.getInstance().modeRegion[GameMode.TIME_ATTACK], new Runnable()
+		timeAttackButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.TIME_ATTACK], new Runnable()
 		{
 			@Override
 			public void run()

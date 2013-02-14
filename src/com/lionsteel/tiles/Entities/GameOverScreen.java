@@ -13,12 +13,12 @@ import org.andengine.util.debug.Debug;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 
-public class GameOverScreen extends ReflexMenuScene implements ReflexConstants
+public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 {
 	private final TilesMainActivity				activity;
 	private final BuildableBitmapTextureAtlas	atlas;

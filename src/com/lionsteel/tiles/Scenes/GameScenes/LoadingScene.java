@@ -7,10 +7,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.BaseClasses.ReflexMenuScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 
-public class LoadingScene extends ReflexMenuScene implements ReflexConstants
+public class LoadingScene extends TilesMenuScene implements ReflexConstants
 {
 	TilesMainActivity	activity;
 	

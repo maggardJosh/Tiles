@@ -10,13 +10,13 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.ReflexConstants;
 
-public class ReflexMenuButton extends Entity implements ReflexConstants
+public class TilesMenuButton extends Entity implements ReflexConstants
 {
 	private Sprite	buttonSprite;
 
 	private int		mPointerID	= -1;
 
-	public ReflexMenuButton(final TextureRegion buttonRegion, final Runnable action)
+	public TilesMenuButton(final TextureRegion buttonRegion, final Runnable action)
 	{
 		buttonSprite = new Sprite(0, 0, buttonRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
@@ -27,19 +27,19 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 				{
 				case TouchEvent.ACTION_DOWN:
 					mPointerID = pSceneTouchEvent.getPointerID();
-					buttonSprite.setColor(.8f,.8f,.8f);
+					buttonSprite.setColor(.8f, .8f, .8f);
 					break;
 				case TouchEvent.ACTION_MOVE:
 					if (pTouchAreaLocalX < 0 || pTouchAreaLocalY < 0 || pTouchAreaLocalX > buttonSprite.getWidth() || pTouchAreaLocalY > buttonSprite.getHeight())
 					{
 						mPointerID = -1;
-						buttonSprite.setColor(1.0f,1.0f,1.0f);
+						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
 					if (pSceneTouchEvent.getPointerID() == mPointerID)
 					{
-						buttonSprite.setColor(1.0f,1.0f,1.0f);
+						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
 						mPointerID = -1;
 						action.run();
 					}
@@ -50,19 +50,21 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 		};
 		this.attachChild(buttonSprite);
 	}
+
 	@Override
 	public void setAlpha(float pAlpha)
 	{
 		buttonSprite.setAlpha(pAlpha);
 		super.setAlpha(pAlpha);
 	}
+
 	@Override
 	public void registerEntityModifier(IEntityModifier pEntityModifier)
 	{
 		buttonSprite.registerEntityModifier(pEntityModifier);
 		super.registerEntityModifier(pEntityModifier);
 	}
-	
+
 	public void clearButtonChildren()
 	{
 		this.detachChildren();
@@ -77,6 +79,16 @@ public class ReflexMenuButton extends Entity implements ReflexConstants
 	public float getBottom()
 	{
 		return this.getY() + buttonSprite.getHeight();
+	}
+
+	public float getWidth()
+	{
+		return buttonSprite.getWidth();
+	}
+	
+	public float getHeight()
+	{
+		return buttonSprite.getHeight();
 	}
 
 	public void registerOwnTouchArea(Scene scene)
