@@ -42,5 +42,12 @@ public class LoadingScene extends TilesMenuScene implements ReflexConstants
 		//DON'T LOG LOADING SCREEN EVENTS
 		//We don't care about them
 	}
+
+	@Override
+	public void initScene()
+	{
+		// Nothing to init
+		
+	}
 	
 }

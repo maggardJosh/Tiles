@@ -87,6 +87,7 @@ public abstract class TilesMenuScene extends Scene implements ReflexConstants
 	public void transitionChildScene(final TilesMenuScene childScene, final boolean overlay)
 	{
 		childScene.logFlurryEvent();
+		childScene.initScene();
 
 		setChildScene(childScene, false, false, true);
 		if (childScene.hasChildScene())
@@ -115,6 +116,8 @@ public abstract class TilesMenuScene extends Scene implements ReflexConstants
 			});
 		}
 	}
+
+	public abstract void initScene();
 
 	protected void transitionOff()
 	{

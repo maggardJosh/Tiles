@@ -11,8 +11,10 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.ReflexConstants;
@@ -29,6 +31,8 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 
 	private boolean								playerOneRematch;
 	private boolean								playerTwoRematch;
+
+	private TilesMenuButton						quitButton;
 
 	private final TouchControl[]				playerRematchControls	= new TouchControl[2];
 
@@ -53,6 +57,16 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 			Debug.e(e);
 		}
 
+		quitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				activity.onBackPressed();
+			}
+		});
+		quitButton.setPosition(3, (CAMERA_HEIGHT-quitButton.getHeight())/2);
+
 		winnerSprite = new Sprite(0, 0, winnerRegion, activity.getVertexBufferObjectManager());
 		winnerSprite.setRotationCenter(winnerSprite.getWidth() / 2, winnerSprite.getHeight() / 2);
 		loserSprite = new Sprite(0, 0, loserRegion, activity.getVertexBufferObjectManager());
@@ -71,6 +85,7 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 		this.attachChild(loserSprite);
 		this.attachChild(tieSprite[0]);
 		this.attachChild(tieSprite[1]);
+		addButton(quitButton);
 
 		prepareTouchControls();
 
@@ -179,6 +194,13 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 		playerOneRematch = false;
 		playerTwoRematch = false;
 
+	}
+
+	@Override
+	public void initScene()
+	{
+		for (TouchControl controls : playerRematchControls)
+			controls.initButton();
 	}
 
 }

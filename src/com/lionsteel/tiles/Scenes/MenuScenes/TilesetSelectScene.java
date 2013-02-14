@@ -36,4 +36,10 @@ public class TilesetSelectScene extends TilesMenuScene implements ReflexConstant
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.TILESET_MENU);
 	}
+
+	@Override
+	public void initScene()
+	{
+		//Nothing to init
+	}
 }

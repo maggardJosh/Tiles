@@ -346,4 +346,10 @@ public class SetupScene extends TilesMenuScene
 		this.registerTouchAreas();
 	}
 
+	@Override
+	public void initScene()
+	{
+		//Nothing to init
+	}
+
 }

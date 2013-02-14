@@ -91,6 +91,8 @@ public abstract class TouchControl extends Entity implements ReflexConstants
 	
 	public void initButton()
 	{
+		touchImage.clearEntityModifiers();
+		readyImage.clearEntityModifiers();
 		touchImage.setScale(1.0f);
 		readyImage.setAlpha(READY_ALPHA);
 	}

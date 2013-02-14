@@ -12,7 +12,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
@@ -29,6 +31,8 @@ public class PauseScene extends TilesMenuScene
 
 	final Sprite				playerTwoResumeSprite;
 	private TilesMainActivity	activity;
+
+	private TilesMenuButton		exitButton;
 
 	@Override
 	public void logFlurryEvent()
@@ -64,6 +68,16 @@ public class PauseScene extends TilesMenuScene
 
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		background.setColor(0, 0, 0, .9f);
+		
+		exitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable(){
+			@Override
+			public void run()
+			{
+				activity.onBackPressed();
+			}
+		});
+		
+		exitButton.setPosition(3, (CAMERA_HEIGHT-exitButton.getHeight())/2);
 
 		this.attachChild(background);
 		this.attachChild(pausedSprite);
@@ -75,6 +89,8 @@ public class PauseScene extends TilesMenuScene
 		this.attachChild(playerOneTouch);
 		this.attachChild(playerTwoTouch);
 
+		addButton(exitButton);
+		
 	}
 
 	public void setTwoPlayerMode(final boolean isTwoPlayerMode)
@@ -87,12 +103,13 @@ public class PauseScene extends TilesMenuScene
 			this.detachChild(playerTwoTouch);
 			this.detachChild(playerTwoResumeSprite);
 			playerTwoReady = true;
-		}else{
+		} else
+		{
 			this.attachChild(playerTwoTouch);
 			this.attachChild(playerTwoResumeSprite);
 			playerTwoReady = false;
 		}
-		
+
 	}
 
 	private void prepareTouchControls()
@@ -149,5 +166,13 @@ public class PauseScene extends TilesMenuScene
 		if (isTwoPlayerMode)
 			registerTouchArea(playerTwoTouch.touchImage);
 		super.registerTouchAreas();
+	}
+
+	@Override
+	public void initScene()
+	{
+		playerOneTouch.initButton();
+		playerTwoTouch.initButton();
+		
 	}
 }

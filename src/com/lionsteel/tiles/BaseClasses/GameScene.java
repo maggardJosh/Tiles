@@ -54,7 +54,6 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected PauseScene				pauseScene;
 
 	protected TilesMenuButton			pauseButton;
-	protected TilesMenuButton			exitButton;
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
@@ -87,13 +86,6 @@ public abstract class GameScene extends Scene implements ReflexConstants
 			public void run()
 			{
 				transitionChildScene(pauseScene);
-			}
-		});
-		exitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable(){
-			@Override
-			public void run()
-			{
-				activity.onBackPressed();
 			}
 		});
 
@@ -281,19 +273,12 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		changeState(GameState.START_COUNTDOWN);
 		
 		final int BUTTON_PADDING = 3;
-		final int BUTTON_VERTICAL_PADDING = 12;
-		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT) / 2 - pauseButton.getHeight() - BUTTON_VERTICAL_PADDING/2);
+		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT-pauseButton.getHeight())/2);
 		pauseButton.setZIndex(FOREGROUND_Z);
 		this.attachChild(pauseButton);
 		pauseButton.registerOwnTouchArea(this);
 		pauseButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
-		exitButton.setPosition(BUTTON_PADDING, CAMERA_HEIGHT/2+BUTTON_VERTICAL_PADDING/2);
-		exitButton.setZIndex(FOREGROUND_Z);
-		this.attachChild(exitButton);
-		exitButton.registerOwnTouchArea(this);
-		exitButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
-		
 		barSprite.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 		
 		currentTileset.animatePlayerTilesIn(new Runnable()
@@ -398,5 +383,10 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 		public static final int	GAME_OVER			= SHOWING_WIN + 1;
+	}
+
+	public void showPauseScene()
+	{
+		transitionChildScene(pauseScene);		
 	}
 }

@@ -93,4 +93,11 @@ public class MainMenuScene extends TilesMenuScene
 		registerTouchAreas();
 	}
 
+	@Override
+	public void initScene()
+	{
+		// Nothing to init
+		
+	}
+
 }

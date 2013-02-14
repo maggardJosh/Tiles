@@ -148,4 +148,10 @@ public class SkillSelectScene extends TilesMenuScene
 		insaneButton.attachChild(diffEntities[Difficulty.INSANE]);
 	}
 
+	@Override
+	public void initScene()
+	{
+		//Nothing to init
+	}
+
 }

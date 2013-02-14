@@ -99,4 +99,10 @@ public class PracticeModeSelectScene extends TilesMenuScene
 
 	}
 
+	@Override
+	public void initScene()
+	{
+		//Nothing to init
+	}
+
 }

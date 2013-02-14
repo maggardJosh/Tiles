@@ -99,4 +99,10 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 
 	}
 
+	@Override
+	public void initScene()
+	{
+		//Nothing to init
+	}
+
 }

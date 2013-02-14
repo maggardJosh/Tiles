@@ -97,11 +97,16 @@ public class QuitPromptScene extends TilesMenuScene implements ReflexConstants
 	public void registerTouchAreas()
 	{
 		super.registerTouchAreas();
-		touchControls[0].initButton();
-		touchControls[1].initButton();
 		this.registerTouchArea(touchControls[0].touchImage);
 		this.registerTouchArea(touchControls[1].touchImage);
 
+	}
+
+	@Override
+	public void initScene()
+	{
+		for(TouchControl controls: touchControls)
+			controls.initButton();
 	}
 
 }

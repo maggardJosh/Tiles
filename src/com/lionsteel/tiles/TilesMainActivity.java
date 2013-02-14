@@ -257,7 +257,8 @@ public class TilesMainActivity extends BaseGameActivity implements ReflexConstan
 
 		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
 		{
-			((GameScene) parentScene).transitionChildScene(gameQuitPromptScene);
+			((GameScene) parentScene).showPauseScene();
+			((PauseScene)parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
 		}
 
