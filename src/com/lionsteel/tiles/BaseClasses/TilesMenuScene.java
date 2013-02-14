@@ -10,10 +10,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 
-public abstract class TilesMenuScene extends Scene implements ReflexConstants
+public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
 	final TilesMainActivity				activity;
 	final TilesMenuButton				backButton;

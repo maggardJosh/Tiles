@@ -8,9 +8,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class LoadingScene extends TilesMenuScene implements ReflexConstants
+public class LoadingScene extends TilesMenuScene implements TilesConstants
 {
 	TilesMainActivity	activity;
 	

@@ -1,6 +1,8 @@
 package com.lionsteel.tiles.Constants;
 
-public interface ReflexConstants
+import android.graphics.Point;
+
+public interface TilesConstants
 {
 	public static final int			CAMERA_WIDTH					= 480;
 	public static final int			CAMERA_HEIGHT					= 800;
@@ -27,6 +29,11 @@ public interface ReflexConstants
 
 	public static final float		RACE_SECONDS					= 30.0f;
 	public static final int			BIG_PULSE_MOD					= 25;
+
+	public static final Point		LABEL_ONE_CENTER				= new Point(CAMERA_WIDTH/4, CAMERA_HEIGHT-300);
+	public static final Point		LABEL_TWO_CENTER				= new Point(CAMERA_WIDTH*3/4, CAMERA_HEIGHT-300);
+	public static final Point		VALUE_ONE_CENTER				= new Point(CAMERA_WIDTH/4, CAMERA_HEIGHT-250);
+	public static final Point		VALUE_TWO_CENTER				= new Point(CAMERA_WIDTH*3/4, CAMERA_HEIGHT-250);
 
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;

@@ -11,9 +11,9 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class GameCountdown implements ReflexConstants
+public class GameCountdown implements TilesConstants
 {
 	TilesMainActivity		activity;
 

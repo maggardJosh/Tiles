@@ -6,10 +6,10 @@ import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 
-public class NonStopGameScene extends GameScene implements ReflexConstants
+public class NonStopGameScene extends GameScene implements TilesConstants
 {
 
 	public NonStopGameScene()
@@ -38,6 +38,7 @@ public class NonStopGameScene extends GameScene implements ReflexConstants
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
+						addTile(button.getPlayer(), false);
 						switch (button.getPlayer())
 						{
 						case PLAYER_ONE:
@@ -62,7 +63,10 @@ public class NonStopGameScene extends GameScene implements ReflexConstants
 			} else
 			{
 				if (!currentTileset.isButtonVisible(button.getButtonNumber()))
+				{
+					breakStreak(button.getPlayer());
 					disablePlayer(button);
+				}
 			}
 			break;
 		}

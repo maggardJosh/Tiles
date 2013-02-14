@@ -2,6 +2,8 @@ package com.lionsteel.tiles.Entities;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -17,10 +19,10 @@ import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 
-public class GameOverScreen extends TilesMenuScene implements ReflexConstants
+public class GameOverScreen extends TilesMenuScene implements TilesConstants
 {
 	private final TilesMainActivity				activity;
 	private final BuildableBitmapTextureAtlas	atlas;
@@ -31,6 +33,11 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 
 	private boolean								playerOneRematch;
 	private boolean								playerTwoRematch;
+
+	private final Text[]						labelOne				= new Text[2];
+	private final Text[]						valueOne				= new Text[2];
+	private final Text[]						labelTwo				= new Text[2];
+	private final Text[]						valueTwo				= new Text[2];
 
 	private TilesMenuButton						quitButton;
 
@@ -65,7 +72,7 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 				activity.onBackPressed();
 			}
 		});
-		quitButton.setPosition(3, (CAMERA_HEIGHT-quitButton.getHeight())/2);
+		quitButton.setPosition(3, (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
 
 		winnerSprite = new Sprite(0, 0, winnerRegion, activity.getVertexBufferObjectManager());
 		winnerSprite.setRotationCenter(winnerSprite.getWidth() / 2, winnerSprite.getHeight() / 2);
@@ -88,6 +95,30 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 		addButton(quitButton);
 
 		prepareTouchControls();
+
+		final Font mFont = SharedResources.getInstance().mFont;
+		for (int i = 0; i < 2; i++)
+		{			
+			labelOne[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
+			labelTwo[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
+			valueOne[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
+			valueTwo[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
+			this.attachChild(labelOne[i]);
+			this.attachChild(labelTwo[i]);
+			this.attachChild(valueOne[i]);
+			this.attachChild(valueTwo[i]);
+			if (i == 1)
+			{
+				labelOne[i].setRotation(180);
+				labelTwo[i].setRotation(180);
+				valueOne[i].setRotation(180);
+				valueTwo[i].setRotation(180);
+				labelOne[i].setRotationCenterY(mFont.getLineHeight());
+				labelTwo[i].setRotationCenterY(mFont.getLineHeight());
+				valueOne[i].setRotationCenterY(mFont.getLineHeight());
+				valueTwo[i].setRotationCenterY(mFont.getLineHeight());
+			}
+		}
 
 	}
 
@@ -194,6 +225,42 @@ public class GameOverScreen extends TilesMenuScene implements ReflexConstants
 		playerOneRematch = false;
 		playerTwoRematch = false;
 
+	}
+
+	public void setLabels(final String labelOne, final String labelTwo)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			this.labelOne[i].setText(labelOne);
+			this.labelTwo[i].setText(labelTwo);
+		}
+		this.labelOne[PLAYER_ONE].setPosition(LABEL_ONE_CENTER.x - this.labelOne[PLAYER_ONE].getWidth()/2, LABEL_ONE_CENTER.y);
+		this.labelTwo[PLAYER_ONE].setPosition(LABEL_TWO_CENTER.x - this.labelTwo[PLAYER_ONE].getWidth()/2, LABEL_TWO_CENTER.y);
+		this.labelOne[PLAYER_TWO].setPosition(LABEL_TWO_CENTER.x - this.labelOne[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - LABEL_ONE_CENTER.y - this.labelOne[PLAYER_TWO].getHeight());
+		this.labelTwo[PLAYER_TWO].setPosition(LABEL_ONE_CENTER.x - this.labelTwo[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - LABEL_TWO_CENTER.y - this.labelTwo[PLAYER_TWO].getHeight());
+
+	}
+	
+	public void setPlayerValues(final int player, final String valueOne, final String valueTwo)
+	{
+		this.valueOne[(player+1)%2].setText(valueOne);
+		this.valueTwo[(player+1)%2].setText(valueTwo);
+		centerPlayerValues((player+1)%2);
+	}
+	
+	private void centerPlayerValues(final int player)
+	{
+		switch(player)
+		{
+		case PLAYER_ONE:
+			this.valueOne[PLAYER_ONE].setPosition(VALUE_ONE_CENTER.x - this.valueOne[PLAYER_ONE].getWidth()/2, VALUE_ONE_CENTER.y);
+			this.valueTwo[PLAYER_ONE].setPosition(VALUE_TWO_CENTER.x - this.valueTwo[PLAYER_ONE].getWidth()/2, VALUE_TWO_CENTER.y);
+			break;
+		case PLAYER_TWO:
+			this.valueOne[PLAYER_TWO].setPosition(VALUE_TWO_CENTER.x - this.valueOne[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - VALUE_ONE_CENTER.y - this.labelOne[PLAYER_TWO].getHeight());
+			this.valueTwo[PLAYER_TWO].setPosition(VALUE_ONE_CENTER.x - this.valueTwo[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - VALUE_TWO_CENTER.y - this.labelTwo[PLAYER_TWO].getHeight());
+			break;
+		}
 	}
 
 	@Override

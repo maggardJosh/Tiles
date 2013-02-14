@@ -10,9 +10,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public abstract class TouchControl extends Entity implements ReflexConstants
+public abstract class TouchControl extends Entity implements TilesConstants
 {
 	public final Sprite	touchImage;
 	public final Sprite	readyImage;

@@ -38,6 +38,7 @@ public class ReflexGameScene extends GameScene
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
+						addTile(button.getPlayer(), true);
 						switch (button.getPlayer())
 						{
 						case PLAYER_ONE:

@@ -75,6 +75,7 @@ public class RaceGameScene extends GameScene
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
+						addTile(button.getPlayer(), false);
 						currentTileset.resetDisplayButton(displayButtonPressed);
 						playerTileCount[button.getPlayer()]++;
 						playerTileCountTexts[button.getPlayer()].setText("" + playerTileCount[button.getPlayer()]);
@@ -91,7 +92,7 @@ public class RaceGameScene extends GameScene
 				sortChildren();
 			} else
 			{
-
+				breakStreak(button.getPlayer());
 				disablePlayer(button);
 			}
 			break;
@@ -136,9 +137,9 @@ public class RaceGameScene extends GameScene
 
 	private void updateTimerText()
 	{
-		final String timerString = String.format(Locale.US, "%2.3f", this.mSecondsLeft);
+		final String timerString = String.format(Locale.US, "%06.3f", this.mSecondsLeft);
 		timerText.setText(timerString);
-		timerText.setPosition((BAR_WIDTH - timerText.getWidth()) / 2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
+		timerText.setPosition(barSprite.getX()- timerText.getWidth()/2 + barSprite.getWidth()/2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
 		timerTextShadow.setText(timerString);
 		timerTextShadow.setPosition(timerText.getX() - 2, timerText.getY() + 2);
 	}

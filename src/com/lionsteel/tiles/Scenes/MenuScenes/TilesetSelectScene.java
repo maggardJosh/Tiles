@@ -4,10 +4,10 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
 
-public class TilesetSelectScene extends TilesMenuScene implements ReflexConstants
+public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 {
 	final TilesMainActivity		activity;
 

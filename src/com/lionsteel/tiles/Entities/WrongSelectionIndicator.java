@@ -12,9 +12,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class WrongSelectionIndicator implements ReflexConstants
+public class WrongSelectionIndicator implements TilesConstants
 {
 	private TilesMainActivity		activity;
 	private BitmapTextureAtlas	atlas;

@@ -19,7 +19,7 @@ import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.GameOverScreen;
 import com.lionsteel.tiles.Entities.Tileset;
@@ -30,7 +30,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
-public abstract class GameScene extends Scene implements ReflexConstants
+public abstract class GameScene extends Scene implements TilesConstants
 {
 	protected TilesMainActivity			activity;
 	private boolean						playerOneDisabled		= false;
@@ -52,6 +52,10 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	protected GameOverScreen			gameOverScreen;
 	protected PauseScene				pauseScene;
+
+	private final int[]					tilesCollected			= new int[2];
+	private final int[]					maxStreak				= new int[2];
+	private final int[]					currentStreak			= new int[2];
 
 	protected TilesMenuButton			pauseButton;
 
@@ -77,6 +81,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		gameCountdown = new GameCountdown(this);
 
 		gameOverScreen = new GameOverScreen();
+		gameOverScreen.setLabels("Tiles", "Streak");
 		pauseScene = new PauseScene();
 
 		pauseButton = new TilesMenuButton(SharedResources.getInstance().pauseButtonRegion, new Runnable()
@@ -96,7 +101,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png", (int) (playerOneIntroRegion.getTextureX() + playerOneIntroRegion.getWidth()), 0);
 		sceneAtlas.load();
 
-		barSprite = new Sprite((CAMERA_WIDTH-barRegion.getWidth()*1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
+		barSprite = new Sprite((CAMERA_WIDTH - barRegion.getWidth() * 1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
 
 		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
@@ -133,6 +138,22 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 			}
 		});
+	}
+
+	protected void addTile(final int player, final boolean resetOtherPlayer)
+	{
+		tilesCollected[player]++;
+		if (resetOtherPlayer)
+			breakStreak((player + 1) % 2);
+		currentStreak[player]++;
+		if (currentStreak[player] > maxStreak[player])
+			maxStreak[player] = currentStreak[player];
+
+	}
+
+	protected void breakStreak(final int player)
+	{
+		currentStreak[player] = 0;
 	}
 
 	public void transitionChildScene(TilesMenuScene childScene)
@@ -264,6 +285,8 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	protected void showGameOver(int player)
 	{
+		for(int i=0; i<2; i++)
+			gameOverScreen.setPlayerValues(i, ""+tilesCollected[i], ""+maxStreak[i]);
 		gameOverScreen.setWinner(player);
 		transitionChildScene(gameOverScreen);
 	}
@@ -271,16 +294,16 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected void startAnimateIn()
 	{
 		changeState(GameState.START_COUNTDOWN);
-		
+
 		final int BUTTON_PADDING = 3;
-		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT-pauseButton.getHeight())/2);
+		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT - pauseButton.getHeight()) / 2);
 		pauseButton.setZIndex(FOREGROUND_Z);
 		this.attachChild(pauseButton);
 		pauseButton.registerOwnTouchArea(this);
-		pauseButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		pauseButton.registerEntityModifier(new AlphaModifier(TilesConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
-		barSprite.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
-		
+		barSprite.registerEntityModifier(new AlphaModifier(TilesConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+
 		currentTileset.animatePlayerTilesIn(new Runnable()
 		{
 			@Override
@@ -387,6 +410,6 @@ public abstract class GameScene extends Scene implements ReflexConstants
 
 	public void showPauseScene()
 	{
-		transitionChildScene(pauseScene);		
+		transitionChildScene(pauseScene);
 	}
 }

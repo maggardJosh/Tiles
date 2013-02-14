@@ -1,6 +1,7 @@
 package com.lionsteel.tiles.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -49,6 +50,12 @@ public class FreePlayGameScene extends PracticeGameScene
 		this.attachChild(timePlayedText);
 		this.attachChild(inARowLabel);
 		this.attachChild(inARowText);
+		playerTileCountText.setAlpha(0);
+		playerTileCountLabel.setAlpha(0);
+		timePlayedText.setAlpha(0);
+		inARowLabel.setAlpha(0);
+		inARowText.setAlpha(0);
+				
 
 		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, (CAMERA_HEIGHT / 4) - playerTileCountText.getHeight() / 2 - playerTileCountText.getHeight() * 2);
 		playerTileCountLabel.setPosition((CAMERA_WIDTH - playerTileCountLabel.getWidth()) / 3, (CAMERA_HEIGHT - playerTileCountLabel.getHeight()) / 2 - playerTileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
@@ -169,6 +176,18 @@ public class FreePlayGameScene extends PracticeGameScene
 
 		inARowText.setText("x" + tilesInARow);
 		inARowText.setX(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2);
+	}
+	
+	@Override
+	protected void startAnimateIn()
+	{
+		final AlphaModifier fadeInMod = new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f);
+		playerTileCountText.registerEntityModifier(fadeInMod);
+		playerTileCountLabel.registerEntityModifier(fadeInMod);
+		timePlayedText.registerEntityModifier(fadeInMod);
+		inARowLabel.registerEntityModifier(fadeInMod);
+		inARowText.registerEntityModifier(fadeInMod);
+		super.startAnimateIn();
 	}
 
 	@Override

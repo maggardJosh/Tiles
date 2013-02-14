@@ -5,9 +5,9 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class GameButton implements ReflexConstants
+public class GameButton implements TilesConstants
 {
 	final TilesMainActivity	activity;
 	

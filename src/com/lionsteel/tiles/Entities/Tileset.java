@@ -32,10 +32,10 @@ import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
-public class Tileset implements ReflexConstants
+public class Tileset implements TilesConstants
 {
 	private TilesMainActivity			activity;
 

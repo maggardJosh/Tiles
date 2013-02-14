@@ -8,9 +8,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class TilesMenuButton extends Entity implements ReflexConstants
+public class TilesMenuButton extends Entity implements TilesConstants
 {
 	private Sprite	buttonSprite;
 

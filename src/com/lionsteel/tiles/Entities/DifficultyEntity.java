@@ -15,9 +15,9 @@ import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.Constants.Difficulty;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class DifficultyEntity extends Entity implements ReflexConstants
+public class DifficultyEntity extends Entity implements TilesConstants
 {
 	private float		alphaValues[]	= new float[NUM_BUTTONS];
 	private final float	buttonScale		= .3f;

@@ -4,10 +4,10 @@ import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
-public class TilesetPreviewButton extends Entity implements ReflexConstants
+public class TilesetPreviewButton extends Entity implements TilesConstants
 {
 	final TilesetEntity		tilesetEntity;
 	final Tileset			temporaryTileset;

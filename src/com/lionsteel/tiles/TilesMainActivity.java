@@ -20,7 +20,7 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
@@ -34,7 +34,7 @@ import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SplashScene;
 
-public class TilesMainActivity extends BaseGameActivity implements ReflexConstants
+public class TilesMainActivity extends BaseGameActivity implements TilesConstants
 {
 
 	private static TilesMainActivity	instance;

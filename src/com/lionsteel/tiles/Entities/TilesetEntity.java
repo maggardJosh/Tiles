@@ -11,9 +11,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.Constants.ReflexConstants;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public class TilesetEntity extends Entity implements ReflexConstants
+public class TilesetEntity extends Entity implements TilesConstants
 {
 	private TilesMainActivity				activity;
 	private GameButton[]				displayButtons;
