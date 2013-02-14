@@ -104,7 +104,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png", (int) (playerOneIntroRegion.getTextureX() + playerOneIntroRegion.getWidth()), 0);
 		sceneAtlas.load();
 
-		barSprite = new Sprite(0, (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
+		barSprite = new Sprite((CAMERA_WIDTH-barRegion.getWidth()*1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
 
 		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
@@ -115,6 +115,7 @@ public abstract class GameScene extends Scene implements ReflexConstants
 		prepareTouchControls();
 
 		this.attachChild(barSprite);
+		barSprite.setAlpha(0);
 
 		this.attachChild(playerOneIntro);
 		this.attachChild(playerTwoIntro);
@@ -278,18 +279,22 @@ public abstract class GameScene extends Scene implements ReflexConstants
 	protected void startAnimateIn()
 	{
 		changeState(GameState.START_COUNTDOWN);
-
-		pauseButton.setPosition(CAMERA_WIDTH - pauseButton.getWidth(), CAMERA_HEIGHT/2);
+		
+		final int BUTTON_PADDING = 3;
+		final int BUTTON_VERTICAL_PADDING = 12;
+		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT) / 2 - pauseButton.getHeight() - BUTTON_VERTICAL_PADDING/2);
 		pauseButton.setZIndex(FOREGROUND_Z);
 		this.attachChild(pauseButton);
 		pauseButton.registerOwnTouchArea(this);
 		pauseButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
-		exitButton.setPosition(CAMERA_WIDTH - pauseButton.getWidth(), (CAMERA_HEIGHT) / 2 - exitButton.getHeight());
+		exitButton.setPosition(BUTTON_PADDING, CAMERA_HEIGHT/2+BUTTON_VERTICAL_PADDING/2);
 		exitButton.setZIndex(FOREGROUND_Z);
 		this.attachChild(exitButton);
 		exitButton.registerOwnTouchArea(this);
 		exitButton.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		
+		barSprite.registerEntityModifier(new AlphaModifier(ReflexConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 		
 		currentTileset.animatePlayerTilesIn(new Runnable()
 		{
