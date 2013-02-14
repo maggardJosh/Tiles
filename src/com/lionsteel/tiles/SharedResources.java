@@ -28,6 +28,7 @@ public class SharedResources
 	public final TextureRegion		modeRegion[]	= new TextureRegion[6];
 	public final TextureRegion		displayIndicatorRegion;
 	public final TextureRegion		pauseButtonRegion;
+	public final TextureRegion		exitGameButtonRegion;
 	public final Font				mFont;
 	public final ITexture			fontTexture;
 
@@ -62,7 +63,8 @@ public class SharedResources
 		modeRegion[GameMode.FRENZY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "frenzy.png");
 		modeRegion[GameMode.TIME_ATTACK] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "timeAttack.png");
 		pauseButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "pauseButton.png");
-
+		exitGameButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "exitButton.png");
+		
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
 		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
