@@ -60,7 +60,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	@Override
 	protected void onStart()
 	{
-		FlurryAgent.onStartSession(this, "test3ZV4J886JJR56QBBF9YX");
+		FlurryAgent.onStartSession(this, "3ZV4J886JJR56QBBF9YX");
 		super.onStart();
 	}
 
