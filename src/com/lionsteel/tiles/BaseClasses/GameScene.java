@@ -272,6 +272,17 @@ public abstract class GameScene extends Scene implements TilesConstants
 		FlurryAgent.logEvent(FlurryAgentEventStrings.REMATCH);
 		TilesMainActivity.startGameEvent();
 		resetGame();
+		resetValues();
+	}
+
+	private void resetValues()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			tilesCollected[i] = 0;
+			maxStreak[i] = 0;
+			currentStreak[i] = 0;
+		}
 	}
 
 	protected void checkPlayerWillWin(int player)
@@ -285,8 +296,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void showGameOver(int player)
 	{
-		for(int i=0; i<2; i++)
-			gameOverScreen.setPlayerValues(i, ""+tilesCollected[i], ""+maxStreak[i]);
+		for (int i = 0; i < 2; i++)
+			gameOverScreen.setPlayerValues(i, "" + tilesCollected[i], "" + maxStreak[i]);
 		gameOverScreen.setWinner(player);
 		transitionChildScene(gameOverScreen);
 	}
