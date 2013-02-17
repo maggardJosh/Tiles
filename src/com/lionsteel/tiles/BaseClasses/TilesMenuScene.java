@@ -25,6 +25,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		activity = TilesMainActivity.getInstance();
 
 		this.setTouchAreaBindingOnActionDownEnabled(true);
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ReflexMenuShared/");
 		final BitmapTextureAtlas sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256);
 		final TextureRegion backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "backArrow.png", 0, 0);

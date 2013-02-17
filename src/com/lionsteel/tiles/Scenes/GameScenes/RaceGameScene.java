@@ -114,39 +114,20 @@ public class RaceGameScene extends GameScene
 
 		playerTileCountTexts[PLAYER_ONE].setScale(playerOneScale);
 		playerTileCountTexts[PLAYER_TWO].setScale(playerTwoScale);
-		
-		if(diff > 0)
+
+		if (diff > 0)
 		{
 			playerTileCountTexts[PLAYER_ONE].setColor(Color.GREEN);
 			playerTileCountTexts[PLAYER_TWO].setColor(Color.RED);
-		}
-		else if(diff < 0)
+		} else if (diff < 0)
 		{
 			playerTileCountTexts[PLAYER_ONE].setColor(Color.RED);
 			playerTileCountTexts[PLAYER_TWO].setColor(Color.GREEN);
-		}else{
+		} else
+		{
 			playerTileCountTexts[PLAYER_ONE].setColor(Color.WHITE);
 			playerTileCountTexts[PLAYER_TWO].setColor(Color.WHITE);
 		}
-			
-		/*
-		
-		if (diff > 0)
-		{
-			//Player One Winning
-			bigPulseText(playerTileCountTexts[PLAYER_ONE]);
-			badPulseText(playerTileCountTexts[PLAYER_TWO]);
-		} else if (diff < 0)
-		{
-			badPulseText(playerTileCountTexts[PLAYER_ONE]);
-			bigPulseText(playerTileCountTexts[PLAYER_TWO]);
-			//Player Two Winning
-		} else
-		{
-			neutralPulseText(playerTileCountTexts[PLAYER_ONE]);
-			neutralPulseText(playerTileCountTexts[PLAYER_TWO]);
-			//Tie
-		}*/
 
 	}
 
@@ -157,13 +138,19 @@ public class RaceGameScene extends GameScene
 	}
 
 	@Override
+	protected void startAnimateIn()
+	{
+		fadeInCounter();
+		super.startAnimateIn();
+	}
+
+	@Override
 	protected void Update(float pSecondsElapsed)
 	{
 		switch (gameState)
 		{
 		case GameState.PICKING_NEW_BUTTON:
 			currentTileset.startRace();
-			fadeInCounter();
 			changeState(GameState.WAITING_FOR_INPUT);
 			startTimer();
 			break;
@@ -226,11 +213,23 @@ public class RaceGameScene extends GameScene
 		currentTileset.reset();
 		playerTileCount[0] = 0;
 		playerTileCount[1] = 0;
+		resetTexts();
 		updateTexts();
 		barSprite.setScale(1.0f);
 		mSecondsLeft = RACE_SECONDS;
 		updateTimerText();
 		startCountdown();
+
+	}
+
+	private void resetTexts()
+	{
+		for (Text texts : playerTileCountTexts)
+		{
+			texts.clearEntityModifiers();
+			texts.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			texts.setScale(1.0f);
+		}
 
 	}
 

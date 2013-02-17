@@ -57,6 +57,30 @@ public abstract class TouchControl extends Entity implements TilesConstants
 								super.onModifierFinished(pItem);
 							}
 						});
+					} else if (pSceneTouchEvent.isActionMove())
+					{
+						if (pTouchAreaLocalX > 0 && pTouchAreaLocalX < touchImage.getWidth() && pTouchAreaLocalY > 0 && pTouchAreaLocalY < touchImage.getHeight())
+						{
+							isPressed = true;
+							pointerID = pSceneTouchEvent.getPointerID();
+							touchImage.clearEntityModifiers();
+							touchImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, touchImage.getScaleX(), 1.6f)
+							{
+								@Override
+								protected void onModifierFinished(IEntity pItem)
+								{
+									readyImage.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyImage.getAlpha(), 1.0f)
+									{
+										protected void onModifierFinished(IEntity pItem)
+										{
+											if (action != null)
+												action.run();
+										};
+									});
+									super.onModifierFinished(pItem);
+								}
+							});
+						}
 					}
 				} else
 				{
@@ -88,7 +112,7 @@ public abstract class TouchControl extends Entity implements TilesConstants
 		touchImage.setPosition(pX, pY);
 		readyImage.setPosition(pX + touchImage.getWidth() / 2 - readyImage.getWidth() / 2, pY - 80);
 	}
-	
+
 	public void initButton()
 	{
 		touchImage.clearEntityModifiers();
