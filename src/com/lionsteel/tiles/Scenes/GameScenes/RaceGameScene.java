@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
@@ -155,13 +156,93 @@ public class RaceGameScene extends GameScene
 			startTimer();
 			break;
 		case GameState.WAITING_FOR_INPUT:
+			checkLastFiveSeconds(pSecondsElapsed);
 			mSecondsLeft -= pSecondsElapsed;
+			timerTextShadow.setScale(timerText.getScaleX());
+			
 			if (mSecondsLeft < 0)
 				mSecondsLeft = 0;
 			updateTimerText();
 			break;
 		}
 		super.Update(pSecondsElapsed);
+	}
+	
+	private void checkLastFiveSeconds(float pSecondsElapsed)
+	{
+		if(mSecondsLeft > 5 && mSecondsLeft-pSecondsElapsed < 5)
+		{
+			startLastFiveSeconds();
+		}
+	}
+	private void startLastFiveSeconds()
+	{
+		timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
+			@Override
+			protected void onModifierStarted(IEntity pItem)
+			{
+				pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
+				super.onModifierStarted(pItem);
+			}
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
+					@Override
+					protected void onModifierStarted(IEntity pItem)
+					{
+						pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
+						super.onModifierStarted(pItem);
+					}
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
+							@Override
+							protected void onModifierStarted(IEntity pItem)
+							{
+								pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
+								super.onModifierStarted(pItem);
+							}
+							@Override
+							protected void onModifierFinished(IEntity pItem)
+							{
+								timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
+									@Override
+									protected void onModifierStarted(IEntity pItem)
+									{
+										pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
+										super.onModifierStarted(pItem);
+									}
+									@Override
+									protected void onModifierFinished(IEntity pItem)
+									{
+										timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
+											@Override
+											protected void onModifierStarted(IEntity pItem)
+											{
+												pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
+												super.onModifierStarted(pItem);
+											}
+											@Override
+											protected void onModifierFinished(IEntity pItem)
+											{
+							
+												super.onModifierFinished(pItem);
+											}
+										});
+										super.onModifierFinished(pItem);
+									}
+								});
+								super.onModifierFinished(pItem);
+							}
+						});
+						super.onModifierFinished(pItem);
+					}
+				});
+				super.onModifierFinished(pItem);
+			}
+		});
 	}
 
 	private void updateTexts()
@@ -175,7 +256,7 @@ public class RaceGameScene extends GameScene
 
 	private void updateTimerText()
 	{
-		final String timerString = String.format(Locale.US, "%06.3f", this.mSecondsLeft);
+		final String timerString = String.format(Locale.US, "%d", (int)this.mSecondsLeft);
 		timerText.setText(timerString);
 		timerText.setPosition(barSprite.getX() - timerText.getWidth() / 2 + barSprite.getWidth() / 2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
 		timerTextShadow.setText(timerString);
