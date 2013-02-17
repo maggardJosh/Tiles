@@ -135,23 +135,7 @@ public class FreePlayGameScene extends PracticeGameScene
 		super.Update(pSecondsElapsed);
 	}
 
-	private void badPulseText(Text textToPulse)
-	{
-		textToPulse.clearEntityModifiers();
-		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.RED, Color.WHITE));
-		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
-	}
-
-	private void bigPulseText(Text textToPulse)
-	{
-		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.GREEN, Color.WHITE));
-		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
-	}
-
-	private void smallPulseText(Text textToPulse)
-	{
-		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION / 3, TEXT_PULSE_START_SCALE / 3, 1.0f));
-	}
+	
 
 	private void updateTime()
 	{

@@ -8,6 +8,7 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.text.Text;
+import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
@@ -80,6 +81,7 @@ public class RaceGameScene extends GameScene
 						playerTileCount[button.getPlayer()]++;
 						playerTileCountTexts[button.getPlayer()].setText("" + playerTileCount[button.getPlayer()]);
 						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[button.getPlayer()].getWidth()) / 2);
+						pulseTileTexts();
 					}
 
 					@Override
@@ -97,6 +99,55 @@ public class RaceGameScene extends GameScene
 			}
 			break;
 		}
+	}
+
+	private final float	NEUTRAL_TEXT_SCALE	= 2.0f;
+	private final float	MAX_TEXT_SCALE		= 3.0f;
+	private final float	MAX_DIFF			= 3;
+
+	private void pulseTileTexts()
+	{
+		final float diff = playerTileCount[PLAYER_ONE] - playerTileCount[PLAYER_TWO];
+
+		final float playerOneScale = NEUTRAL_TEXT_SCALE + (Math.max(-MAX_DIFF, Math.min(diff, MAX_DIFF)) / MAX_DIFF) * (MAX_TEXT_SCALE - NEUTRAL_TEXT_SCALE);
+		final float playerTwoScale = NEUTRAL_TEXT_SCALE - (Math.max(-MAX_DIFF, Math.min(diff, MAX_DIFF)) / MAX_DIFF) * (MAX_TEXT_SCALE - NEUTRAL_TEXT_SCALE);
+
+		playerTileCountTexts[PLAYER_ONE].setScale(playerOneScale);
+		playerTileCountTexts[PLAYER_TWO].setScale(playerTwoScale);
+		
+		if(diff > 0)
+		{
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.GREEN);
+			playerTileCountTexts[PLAYER_TWO].setColor(Color.RED);
+		}
+		else if(diff < 0)
+		{
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.RED);
+			playerTileCountTexts[PLAYER_TWO].setColor(Color.GREEN);
+		}else{
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.WHITE);
+			playerTileCountTexts[PLAYER_TWO].setColor(Color.WHITE);
+		}
+			
+		/*
+		
+		if (diff > 0)
+		{
+			//Player One Winning
+			bigPulseText(playerTileCountTexts[PLAYER_ONE]);
+			badPulseText(playerTileCountTexts[PLAYER_TWO]);
+		} else if (diff < 0)
+		{
+			badPulseText(playerTileCountTexts[PLAYER_ONE]);
+			bigPulseText(playerTileCountTexts[PLAYER_TWO]);
+			//Player Two Winning
+		} else
+		{
+			neutralPulseText(playerTileCountTexts[PLAYER_ONE]);
+			neutralPulseText(playerTileCountTexts[PLAYER_TWO]);
+			//Tie
+		}*/
+
 	}
 
 	private void fadeInCounter()
@@ -139,7 +190,7 @@ public class RaceGameScene extends GameScene
 	{
 		final String timerString = String.format(Locale.US, "%06.3f", this.mSecondsLeft);
 		timerText.setText(timerString);
-		timerText.setPosition(barSprite.getX()- timerText.getWidth()/2 + barSprite.getWidth()/2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
+		timerText.setPosition(barSprite.getX() - timerText.getWidth() / 2 + barSprite.getWidth() / 2, (CAMERA_HEIGHT - timerText.getHeight()) / 2);
 		timerTextShadow.setText(timerString);
 		timerTextShadow.setPosition(timerText.getX() - 2, timerText.getY() + 2);
 	}

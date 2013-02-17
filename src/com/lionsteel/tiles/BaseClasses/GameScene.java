@@ -3,6 +3,7 @@ package com.lionsteel.tiles.BaseClasses;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
@@ -10,9 +11,11 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.color.Color;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -196,6 +199,32 @@ public abstract class GameScene extends Scene implements TilesConstants
 				super.onModifierFinished(pItem);
 			}
 		});
+	}
+	
+	protected void badPulseText(Text textToPulse)
+	{
+		textToPulse.clearEntityModifiers();
+		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.RED, Color.WHITE));
+		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
+	}
+
+	protected void bigPulseText(Text textToPulse)
+	{
+		textToPulse.clearEntityModifiers();
+		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.GREEN, Color.WHITE));
+		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
+	}
+	
+	protected void neutralPulseText(Text textToPulse)
+	{
+		textToPulse.clearEntityModifiers();
+		textToPulse.setColor(Color.WHITE);
+		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
+	}
+
+	protected void smallPulseText(Text textToPulse)
+	{
+		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION / 3, TEXT_PULSE_START_SCALE / 3, 1.0f));
 	}
 
 	private void prepareTouchControls()
