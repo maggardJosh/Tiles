@@ -63,6 +63,7 @@ public class Tileset implements TilesConstants
 
 	private DifficultyEntity			difficultyEntity[]			= new DifficultyEntity[4];
 	private TilesetEntity				tilesetEntity;
+	private TilesetParticleSystem		particleSystem;
 
 	private Rectangle					tileBase;
 	private Rectangle					playerOneTiles;
@@ -88,6 +89,7 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < NUM_BUTTONS; i++)
 			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
 		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png");//, BUTTON_WIDTH * 3, 0);
+
 		try
 		{
 			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -96,6 +98,7 @@ public class Tileset implements TilesConstants
 		{
 			Debug.e(e);
 		}
+
 		if (!onlyLoadTextureRegions)
 		{
 
@@ -107,6 +110,9 @@ public class Tileset implements TilesConstants
 
 	public void createGameAssets()
 	{
+		if (gameAssetsCreated)
+			return;
+
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
@@ -119,6 +125,8 @@ public class Tileset implements TilesConstants
 			displayIndicators[i] = new Sprite(0, 0, SharedResources.getInstance().displayIndicatorRegion, activity.getVertexBufferObjectManager());
 		background = new Sprite(0, 0, backgroundRegion, activity.getVertexBufferObjectManager());
 		background.setZIndex(BACKGROUND_Z);
+		particleSystem = new TilesetParticleSystem(basePath);
+
 		gameAssetsCreated = true;
 	}
 
@@ -172,6 +180,7 @@ public class Tileset implements TilesConstants
 		tileBase.setColor(0, 0, 0, 0);
 
 		currentScene.attachChild(background);
+		currentScene.attachChild(particleSystem);
 		currentScene.attachChild(tileBase);
 		setupIndicators();
 
@@ -276,6 +285,9 @@ public class Tileset implements TilesConstants
 		}
 		for (int x = 0; x < NUM_BUTTONS * 3; x++)
 			displayGameButtons[x].buttonSprite.detachSelf();
+		for (int x = 0; x < 3; x++)
+			displayIndicators[x].detachSelf();
+		particleSystem.detachSelf();
 
 	}
 
@@ -296,6 +308,7 @@ public class Tileset implements TilesConstants
 						displayGameButtons[i].clear();
 					}
 					background.detachSelf();
+					particleSystem.clear();
 				}
 				tilesetEntity.clear();
 				for (DifficultyEntity d : difficultyEntity)

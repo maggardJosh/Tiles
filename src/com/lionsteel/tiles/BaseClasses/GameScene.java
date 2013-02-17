@@ -75,6 +75,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 	{
 		activity = TilesMainActivity.getInstance();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
 
 		currentTileset = SetupScene.getTileset();
 		currentTileset.setParent(this);
