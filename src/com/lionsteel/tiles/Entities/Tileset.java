@@ -154,6 +154,7 @@ public class Tileset implements TilesConstants
 	
 	public void setupScene()
 	{
+		reset();
 		checkForNoParent();
 		switch (SetupScene.getDifficulty())
 		{
@@ -432,7 +433,14 @@ public class Tileset implements TilesConstants
 		displayButton.buttonSprite.setZIndex(FOREGROUND_Z);
 		displayButton.buttonSprite.clearEntityModifiers();
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
-		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener));
+		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener){
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				playTileCrash();
+				super.onModifierFinished(pItem);
+			}
+		});
 		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
 		
 	}
@@ -463,12 +471,12 @@ public class Tileset implements TilesConstants
 			public void run()
 			{
 				pItem.buttonSprite.clearEntityModifiers();
+				pItem.buttonSprite.setRotation(90);
+				pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+				pItem.buttonSprite.setVisible(false);
+				
 			}
 		});
-		pItem.buttonSprite.setRotation(90);
-		pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-		pItem.buttonSprite.setVisible(false);
-		
 	}
 	
 	private final int	SHAKE_ANGLE	= 5;
@@ -526,6 +534,7 @@ public class Tileset implements TilesConstants
 			protected void onModifierFinished(IEntity pItem)
 			{
 				currentScene.registerTouchArea(buttonToMove.buttonSprite);
+				playTileCrash();
 				super.onModifierFinished(pItem);
 			}
 		});
@@ -614,7 +623,7 @@ public class Tileset implements TilesConstants
 			buttons[firstTile] = buttons[secondTile];
 			buttons[secondTile] = temp;
 		}
-		
+		SharedResources.getInstance().insaneSound.play();
 		for (int i = 0; i < NUM_BUTTONS - 1; i++)
 			playerOneGameButtons[i].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4));
 		playerOneGameButtons[NUM_BUTTONS - 1].buttonSprite.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(SHAKE_DURATION / 12, 0, -SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, -SHAKE_ANGLE, SHAKE_ANGLE), new RotationModifier(SHAKE_DURATION / 12, SHAKE_ANGLE, 0)), 4)
@@ -622,7 +631,8 @@ public class Tileset implements TilesConstants
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
-				
+				SharedResources.getInstance().insaneSound.stop();
+				SharedResources.getInstance().insaneJump.play();
 				for (int x = 0; x < NUM_BUTTONS; x++)
 				{
 					if (x != buttons[x])
@@ -821,7 +831,16 @@ public class Tileset implements TilesConstants
 				{
 					protected void onModifierFinished(IEntity pItem)
 					{
-						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()));
+						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()){
+							@Override
+							protected void onModifierFinished(IEntity pItem)
+							{
+								playTileCrash();
+								super.onModifierFinished(pItem);
+							}
+
+							
+						});
 						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
 						onFinishedAction.run();
 						
@@ -832,20 +851,36 @@ public class Tileset implements TilesConstants
 				{
 					protected void onModifierFinished(IEntity pItem)
 					{
-						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()));
+						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f, EaseCubicIn.getInstance()){
+							@Override
+							protected void onModifierFinished(IEntity pItem)
+							{
+								playTileCrash();
+								super.onModifierFinished(pItem);
+							}
+						});
 						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
 						
 					};
 				});
-			playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new DelayModifier(BUTTON_ANIMATE_IN_TIME * (i + 1) * BUTTON_DELAY)
-			{
-				protected void onModifierFinished(IEntity pItem)
+			
+			//If not in 2 player mode
+			if (playerTwoGameButtons[i].buttonSprite.hasParent())
+				playerTwoGameButtons[i].buttonSprite.registerEntityModifier(new DelayModifier(BUTTON_ANIMATE_IN_TIME * (i + 1) * BUTTON_DELAY)
 				{
-					pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f));
-					pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
-				};
-			});
+					protected void onModifierFinished(IEntity pItem)
+					{
+						pItem.registerEntityModifier(new ScaleModifier(BUTTON_ANIMATE_IN_TIME, BUTTON_ANIMATE_IN_START_SCALE, 1.0f));
+						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
+					};
+				});
 		}
+	}
+	
+	private void playTileCrash()
+	{
+		SharedResources.getInstance().tileCrashSound.play();
+		
 	}
 	
 	public boolean isButtonVisible(final int buttonNumber)

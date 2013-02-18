@@ -480,14 +480,15 @@ public abstract class GameScene extends Scene implements TilesConstants
 		else
 			tileCollectSound = SharedResources.getInstance().playerTwoTileCollectSounds[rand.nextInt(SharedResources.getInstance().playerTwoTileCollectSounds.length)];
 		
-		if (secondsSinceLastTileCollect[player] >= COMBO_SECONDS)
-			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
+//		if (secondsSinceLastTileCollect[player] >= COMBO_SECONDS)
+//			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
+		tileCollectSound.setRate(MIN_TILE_COLLECT_RATE + rand.nextFloat()*(MAX_TILE_COLLECT_RATE-MIN_TILE_COLLECT_RATE));
 		secondsSinceLastTileCollect[player] = 0;
 		tileCollectSound.play();
-		if (tileCollectSound.getRate() < MAX_TILE_COLLECT_RATE - TILE_COLLECT_RATE_INCREMENT)
-			tileCollectSound.setRate(tileCollectSound.getRate() + TILE_COLLECT_RATE_INCREMENT);
-		else
-			tileCollectSound.setRate(MAX_TILE_COLLECT_RATE + rand.nextFloat() * TILE_COLLECT_RATE_INCREMENT);
+//		if (tileCollectSound.getRate() < MAX_TILE_COLLECT_RATE - TILE_COLLECT_RATE_INCREMENT)
+//			tileCollectSound.setRate(tileCollectSound.getRate() + TILE_COLLECT_RATE_INCREMENT);
+//		else
+//			tileCollectSound.setRate(MAX_TILE_COLLECT_RATE + rand.nextFloat() * TILE_COLLECT_RATE_INCREMENT);
 		
 		if (player == PLAYER_ONE)
 		{

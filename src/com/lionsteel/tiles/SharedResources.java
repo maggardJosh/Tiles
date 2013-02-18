@@ -41,6 +41,9 @@ public class SharedResources implements TilesConstants
 	public Sound[]					playerTwoTileCollectSounds	= new Sound[1];
 	
 	public Sound					wrongTileSound;
+	public Sound					tileCrashSound;
+	public Sound					insaneSound;
+	public Sound					insaneJump;
 	
 	public static SharedResources getInstance()
 	{
@@ -95,15 +98,22 @@ public class SharedResources implements TilesConstants
 		{
 			for (int i = 0; i < 1; i++)
 			{
-				playerOneTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".ogg");
-				playerOneTileCollectSounds[i].setVolume(.4f);
+				playerOneTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".wav");
+				playerOneTileCollectSounds[i].setVolume(SOUND_EFFECT_VOLUME * .7f);
 				playerOneTileCollectSounds[i].setRate(MIN_TILE_COLLECT_RATE);
-				playerTwoTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".ogg");
-				playerTwoTileCollectSounds[i].setVolume(.4f);
+				playerTwoTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".wav");
+				playerTwoTileCollectSounds[i].setVolume(SOUND_EFFECT_VOLUME * .7f);
 				playerTwoTileCollectSounds[i].setRate(MIN_TILE_COLLECT_RATE);
 			}
 			wrongTileSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "wrongTile.ogg");
-			wrongTileSound.setVolume(.4f);
+			wrongTileSound.setVolume(SOUND_EFFECT_VOLUME);
+			tileCrashSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "crashTwo.wav");
+			tileCrashSound.setVolume(SOUND_EFFECT_VOLUME);
+			insaneSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "insaneSound.wav");
+			insaneSound.setVolume(SOUND_EFFECT_VOLUME);
+			insaneJump = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "insaneJump.wav");
+			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
+			
 		} catch (IOException e)
 		{
 			Debug.e(e);
