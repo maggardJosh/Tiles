@@ -98,6 +98,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 		engineOptions.getRenderOptions().setDithering(true);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
+		engineOptions.getAudioOptions().setNeedsMusic(true);
+		engineOptions.getAudioOptions().setNeedsSound(true);
 		return engineOptions;
 	}
 

@@ -31,6 +31,8 @@ public abstract class PracticeGameScene extends GameScene
 			}
 			break;
 		}
+		for (int i = 0; i < 2; i++)
+			secondsSinceLastTileCollect[i] += pSecondsElapsed;
 	}
 
 }

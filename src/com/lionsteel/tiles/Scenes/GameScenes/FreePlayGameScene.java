@@ -96,6 +96,7 @@ public class FreePlayGameScene extends PracticeGameScene
 						else
 							smallPulseText(inARowText);
 						updateTexts();
+						addTile(button.getPlayer(), false);
 					}
 
 					@Override
