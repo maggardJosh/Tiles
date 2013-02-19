@@ -154,7 +154,6 @@ public class Tileset implements TilesConstants
 	
 	public void setupScene()
 	{
-		reset();
 		checkForNoParent();
 		switch (SetupScene.getDifficulty())
 		{
@@ -172,6 +171,7 @@ public class Tileset implements TilesConstants
 				numberOfStreamTilesToSpawn = 3;
 				break;
 		}
+		reset();
 		createButtons(PLAYER_ONE);
 		createButtons(PLAYER_TWO);
 		createButtons(DISPLAY_BUTTONS);
