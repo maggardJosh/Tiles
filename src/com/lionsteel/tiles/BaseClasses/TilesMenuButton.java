@@ -16,8 +16,11 @@ public class TilesMenuButton extends Entity implements TilesConstants
 
 	private int		mPointerID	= -1;
 
+	final Runnable	action;
+
 	public TilesMenuButton(final TextureRegion buttonRegion, final Runnable action)
 	{
+		this.action = action;
 		buttonSprite = new Sprite(0, 0, buttonRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
 			@Override
@@ -41,7 +44,7 @@ public class TilesMenuButton extends Entity implements TilesConstants
 					{
 						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
 						mPointerID = -1;
-						action.run();
+						runAction();
 					}
 					break;
 				}
@@ -65,6 +68,11 @@ public class TilesMenuButton extends Entity implements TilesConstants
 		super.registerEntityModifier(pEntityModifier);
 	}
 
+	protected void runAction()
+	{
+		action.run();
+	}
+
 	public void clearButtonChildren()
 	{
 		this.detachChildren();
@@ -85,7 +93,7 @@ public class TilesMenuButton extends Entity implements TilesConstants
 	{
 		return buttonSprite.getWidth();
 	}
-	
+
 	public float getHeight()
 	{
 		return buttonSprite.getHeight();

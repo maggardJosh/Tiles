@@ -1,5 +1,6 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
+import org.andengine.audio.music.exception.MusicException;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
@@ -22,6 +23,8 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
+import com.lionsteel.tiles.Entities.MusicMuteControl;
+import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetEntity;
 
@@ -30,10 +33,13 @@ public class SetupScene extends TilesMenuScene
 	final TilesMainActivity				activity;
 	final BuildableBitmapTextureAtlas	sceneAtlas;
 
-	TilesMenuButton					tilesButton;
-	final TilesMenuButton[]			difficultyButtons	= new TilesMenuButton[4];
-	final TilesMenuButton[]			gameModeSprite		= new TilesMenuButton[6];
+	TilesMenuButton						tilesButton;
+	final TilesMenuButton[]				difficultyButtons	= new TilesMenuButton[4];
+	final TilesMenuButton[]				gameModeSprite		= new TilesMenuButton[6];
 	final TilesMenuButton				playButton;
+
+	final SoundEffectMuteControl		soundEffectMute;
+	final MusicMuteControl				musicMute;
 
 	final MultiplayerModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
@@ -199,6 +205,15 @@ public class SetupScene extends TilesMenuScene
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = new TilesetSelectScene();
 		practiceModeSelectScene = new PracticeModeSelectScene();
+
+		musicMute = new MusicMuteControl();
+		soundEffectMute = new SoundEffectMuteControl();
+
+		musicMute.setPosition(CAMERA_WIDTH - musicMute.getWidth()- BACK_ARROW_PADDING, BACK_ARROW_PADDING);
+		soundEffectMute.setPosition(CAMERA_WIDTH - soundEffectMute.getWidth() - BACK_ARROW_PADDING, musicMute.getBottom());
+
+		addButton(musicMute);
+		addButton(soundEffectMute);
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 

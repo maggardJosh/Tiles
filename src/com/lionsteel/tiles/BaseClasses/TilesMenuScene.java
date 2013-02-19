@@ -45,6 +45,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		backButton.setZIndex(FOREGROUND_Z);
 		backButton.setVisible(false);
 		backButton.registerOwnTouchArea(this);
+		backButton.setPosition(BACK_ARROW_PADDING, BACK_ARROW_PADDING);
 		this.sortChildren(false);
 	}
 	

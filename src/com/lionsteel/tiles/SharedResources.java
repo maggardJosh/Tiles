@@ -22,9 +22,9 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 public class SharedResources implements TilesConstants
 {
 	private TilesMainActivity		activity;
-	
+
 	private static SharedResources	instance;
-	
+
 	public final TextureRegion		backgroundRegion;
 	public final TextureRegion		touchImageRegion;
 	public final TextureRegion		readyRegion;
@@ -34,39 +34,39 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		displayIndicatorRegion;
 	public final TextureRegion		pauseButtonRegion;
 	public final TextureRegion		exitGameButtonRegion;
+	public final TextureRegion		cancelImageRegion;
 	public final Font				mFont;
 	public final ITexture			fontTexture;
-	
+	public final TextureRegion		musicNoteRegion;
+	public final TextureRegion		soundEffectImageRegion;
+
 	public Sound[]					playerOneTileCollectSounds	= new Sound[1];
 	public Sound[]					playerTwoTileCollectSounds	= new Sound[1];
-	
+
 	public Sound					wrongTileSound;
 	public Sound					tileCrashSound;
 	public Sound					insaneSound;
 	public Sound					insaneJump;
-	
+
 	public static SharedResources getInstance()
 	{
 		if (instance == null)
 			instance = new SharedResources();
 		return instance;
 	}
-	
+
 	public SharedResources()
 	{
 		instance = this;
 		activity = TilesMainActivity.getInstance();
-		
+
 		FontFactory.setAssetBasePath("fonts/");
 		fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
-		
+
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-		// final BitmapTextureAtlas atlas = new
-		// BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
-		// TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
 		touchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "touchImage.png");
 		readyRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "ready.png");
@@ -78,11 +78,14 @@ public class SharedResources implements TilesConstants
 		modeRegion[GameMode.TIME_ATTACK] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "timeAttack.png");
 		pauseButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "pauseButton.png");
 		exitGameButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "exitButton.png");
-		
+		cancelImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "cancelImage.png");
+		soundEffectImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "soundEffectImage.png");
+		musicNoteRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "musicNote.png");
+
 		yesRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "yes.png");
 		noRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "no.png");
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
-		
+
 		try
 		{
 			buildableAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -91,7 +94,7 @@ public class SharedResources implements TilesConstants
 		{
 			Debug.e(e);
 		}
-		
+
 		final BuildableBitmapTextureAtlas secondAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		backgroundRegion = (TextureRegion) BitmapTextureAtlasTextureRegionFactory.createFromAsset(secondAtlas, activity, "background.png");
 		try
@@ -122,14 +125,14 @@ public class SharedResources implements TilesConstants
 			insaneSound.setVolume(SOUND_EFFECT_VOLUME);
 			insaneJump = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "insaneJump.wav");
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
-			
+
 		} catch (IOException e)
 		{
 			Debug.e(e);
 		}
-		
+
 	}
-	
+
 	public static void clear()
 	{
 		instance = null;
