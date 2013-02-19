@@ -109,6 +109,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
+	public void moveBackground(final boolean moveToLeft)
+	{
+		backgroundScene.moveBackground(moveToLeft);
+	}
+	
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{

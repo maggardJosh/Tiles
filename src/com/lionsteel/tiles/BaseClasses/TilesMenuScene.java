@@ -123,6 +123,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	protected void transitionOff()
 	{
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), -CAMERA_WIDTH));
+		activity.moveBackground(false);
 	}
 
 	public void setChildSceneNull()
@@ -155,6 +156,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 				super.onModifierFinished(pItem);
 			}
 		});
+		activity.moveBackground(true);
 	}
 
 }

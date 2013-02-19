@@ -40,6 +40,7 @@ public interface TilesConstants
 	public static final float		TILE_COLLECT_RATE_INCREMENT		= .05f;
 	
 	public static final float		SOUND_EFFECT_VOLUME				= 1.0f;
+	public static final float		MAX_NUM_MENU_SCENES				= 3;
 	
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;

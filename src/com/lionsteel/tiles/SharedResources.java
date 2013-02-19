@@ -68,7 +68,6 @@ public class SharedResources implements TilesConstants
 		// BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 		// TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
-		backgroundRegion = (TextureRegion) BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "background.png");
 		touchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "touchImage.png");
 		readyRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "ready.png");
 		modeRegion[GameMode.REFLEX] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "reflex.png");
@@ -93,6 +92,16 @@ public class SharedResources implements TilesConstants
 			Debug.e(e);
 		}
 		
+		final BuildableBitmapTextureAtlas secondAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		backgroundRegion = (TextureRegion) BitmapTextureAtlasTextureRegionFactory.createFromAsset(secondAtlas, activity, "background.png");
+		try
+		{
+			secondAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			secondAtlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
 		SoundFactory.setAssetBasePath("sfx/");
 		try
 		{
