@@ -311,7 +311,9 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			parentScene.setChildSceneNull();
 			parentScene = childScene;
 		}
-
+		backgroundScene.moveBackground(true);
+		backgroundScene.moveBackground(true);
+		
 		mainMenuScene.setX(0);
 		mainMenuScene.logFlurryEvent();
 		mEngine.setScene(backgroundScene);

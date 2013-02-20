@@ -37,4 +37,11 @@ public abstract class MuteControl<T extends BaseAudioManager<? extends IAudioEnt
 		cancelSprite.setVisible(isMuted);
 	}
 
+	public void refreshButton()
+	{
+		isMuted = audioManager.getMasterVolume() < 1;
+		cancelSprite.setVisible(isMuted);
+
+	}
+
 }

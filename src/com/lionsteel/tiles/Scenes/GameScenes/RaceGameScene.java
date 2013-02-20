@@ -175,12 +175,18 @@ public class RaceGameScene extends GameScene
 			startLastFiveSeconds();
 		}
 	}
+	
+	private void playCountdownSound()
+	{
+		SharedResources.getInstance().countdownSound.play();
+	}
 	private void startLastFiveSeconds()
 	{
 		timerText.registerEntityModifier(new ScaleModifier(1.0f, MAX_TEXT_SCALE, 1.0f){
 			@Override
 			protected void onModifierStarted(IEntity pItem)
 			{
+				playCountdownSound();
 				pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
 				super.onModifierStarted(pItem);
 			}
@@ -191,6 +197,7 @@ public class RaceGameScene extends GameScene
 					@Override
 					protected void onModifierStarted(IEntity pItem)
 					{
+						playCountdownSound();
 						pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
 						super.onModifierStarted(pItem);
 					}
@@ -201,6 +208,7 @@ public class RaceGameScene extends GameScene
 							@Override
 							protected void onModifierStarted(IEntity pItem)
 							{
+								playCountdownSound();
 								pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
 								super.onModifierStarted(pItem);
 							}
@@ -211,6 +219,7 @@ public class RaceGameScene extends GameScene
 									@Override
 									protected void onModifierStarted(IEntity pItem)
 									{
+										playCountdownSound();
 										pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
 										super.onModifierStarted(pItem);
 									}
@@ -221,6 +230,7 @@ public class RaceGameScene extends GameScene
 											@Override
 											protected void onModifierStarted(IEntity pItem)
 											{
+												playCountdownSound();
 												pItem.registerEntityModifier(new ColorModifier(.5f, Color.RED, Color.WHITE));
 												super.onModifierStarted(pItem);
 											}

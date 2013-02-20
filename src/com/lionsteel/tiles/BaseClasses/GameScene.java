@@ -176,6 +176,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 	
 	public void transitionChildScene(TilesMenuScene childScene)
 	{
+		childScene.logFlurryEvent();
+		childScene.initScene();
 		if (childScene.hasParent())
 			childScene.detachSelf();
 		setChildScene(childScene, false, true, true);

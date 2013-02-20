@@ -138,6 +138,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	public void clearChildScene()
 	{
 		logFlurryEvent();
+		initScene();
 		if (this.mChildScene instanceof LoadingScene)
 		{
 

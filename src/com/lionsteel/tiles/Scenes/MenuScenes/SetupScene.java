@@ -64,7 +64,7 @@ public class SetupScene extends TilesMenuScene
 		else
 			FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_SETUP);
 
-	};
+	};	
 
 	public static SetupScene getInstance()
 	{
@@ -364,7 +364,8 @@ public class SetupScene extends TilesMenuScene
 	@Override
 	public void initScene()
 	{
-		//Nothing to init
+		musicMute.refreshButton();
+		soundEffectMute.refreshButton();
 	}
 
 }

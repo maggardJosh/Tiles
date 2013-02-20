@@ -17,22 +17,27 @@ import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
+import com.lionsteel.tiles.Entities.MusicMuteControl;
+import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 
 public class PauseScene extends TilesMenuScene
 {
-	private boolean				playerOneReady	= false;
-	private boolean				playerTwoReady	= false;
+	private boolean					playerOneReady	= false;
+	private boolean					playerTwoReady	= false;
 
-	private ReadyTouchControl	playerOneTouch;
-	private ReadyTouchControl	playerTwoTouch;
+	private ReadyTouchControl		playerOneTouch;
+	private ReadyTouchControl		playerTwoTouch;
 
-	private boolean				isTwoPlayerMode	= true;
+	private boolean					isTwoPlayerMode	= true;
 
-	final Sprite				playerTwoResumeSprite;
-	private TilesMainActivity	activity;
+	final Sprite					playerTwoResumeSprite;
+	private TilesMainActivity		activity;
 
-	private TilesMenuButton		exitButton;
+	private TilesMenuButton			exitButton;
+
+	private SoundEffectMuteControl	soundEffectMute;
+	private MusicMuteControl		musicMute;
 
 	@Override
 	public void logFlurryEvent()
@@ -68,16 +73,23 @@ public class PauseScene extends TilesMenuScene
 
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		background.setColor(0, 0, 0, .9f);
-		
-		exitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable(){
+
+		exitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable()
+		{
 			@Override
 			public void run()
 			{
 				activity.onBackPressed();
 			}
 		});
+
+		exitButton.setPosition(3, (CAMERA_HEIGHT - exitButton.getHeight()) / 2 - exitButton.getHeight());
+
+		musicMute = new MusicMuteControl();
+		musicMute.setPosition(0, exitButton.getBottom());
+		soundEffectMute = new SoundEffectMuteControl();
+		soundEffectMute.setPosition(0, musicMute.getBottom());
 		
-		exitButton.setPosition(3, (CAMERA_HEIGHT-exitButton.getHeight())/2);
 
 		this.attachChild(background);
 		this.attachChild(pausedSprite);
@@ -90,7 +102,9 @@ public class PauseScene extends TilesMenuScene
 		this.attachChild(playerTwoTouch);
 
 		addButton(exitButton);
-		
+		addButton(musicMute);
+		addButton(soundEffectMute);
+
 	}
 
 	public void setTwoPlayerMode(final boolean isTwoPlayerMode)
@@ -173,6 +187,9 @@ public class PauseScene extends TilesMenuScene
 	{
 		playerOneTouch.initButton();
 		playerTwoTouch.initButton();
-		
+
+		musicMute.refreshButton();
+		soundEffectMute.refreshButton();
+
 	}
 }
