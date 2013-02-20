@@ -2,6 +2,8 @@ package com.lionsteel.tiles;
 
 import java.util.HashMap;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicManager;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -39,16 +41,18 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	private static TilesMainActivity	instance;
 
-	private GameScene				gameScene;
-	private MainMenuScene			mainMenuScene;
-	private SplashScene				splashScene;
-	private BackgroundMenuScene		backgroundScene;
-	private QuitPromptScene			menuQuitPromptScene;
-	private QuitPromptScene			gameQuitPromptScene;
+	private GameScene					gameScene;
+	private MainMenuScene				mainMenuScene;
+	private SplashScene					splashScene;
+	private BackgroundMenuScene			backgroundScene;
+	private QuitPromptScene				menuQuitPromptScene;
+	private QuitPromptScene				gameQuitPromptScene;
 
-	private LoadingScene			loadingScene;
+	private LoadingScene				loadingScene;
 
-	public boolean					backEnabled	= true;
+	public boolean						backEnabled	= true;
+
+	private Music						currentMusic;
 
 	public static TilesMainActivity getInstance()
 	{
@@ -91,6 +95,22 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	}
 
 	@Override
+	protected synchronized void onResume()
+	{
+		if (currentMusic != null)
+			currentMusic.resume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause()
+	{
+		if (currentMusic != null)
+			currentMusic.pause();
+		super.onPause();
+	}
+
+	@Override
 	public EngineOptions onCreateEngineOptions()
 	{
 		instance = this;
@@ -113,7 +133,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	{
 		backgroundScene.moveBackground(moveToLeft);
 	}
-	
+
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
@@ -170,6 +190,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
 								mainMenuScene.logFlurryEvent();
+								playSong(SharedResources.getInstance().menuMusic);
 								mEngine.setScene(backgroundScene);
 							}
 						});
@@ -181,6 +202,52 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 
+	}
+
+	private void playSong(final Music newSong)
+	{
+		if (currentMusic != null)
+		{
+			mEngine.registerUpdateHandler(new TimerHandler(.1f, true, new ITimerCallback()
+			{
+
+				@Override
+				public void onTimePassed(TimerHandler pTimerHandler)
+				{
+					if (currentMusic.getVolume() > .01f)
+						currentMusic.setVolume(currentMusic.getVolume() - .01f);
+					else
+					{
+						currentMusic.setVolume(0);
+						currentMusic = null;
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						playSong(newSong);
+					}
+				}
+			}));
+			return;
+		}
+		if (newSong == null)
+			return;
+		currentMusic = newSong;
+		newSong.play();
+		newSong.setVolume(0);
+		newSong.setLooping(true);
+		mEngine.registerUpdateHandler(new TimerHandler(.1f, true, new ITimerCallback()
+		{
+
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler)
+			{
+				if (newSong.getVolume() < .99f)
+					newSong.setVolume(newSong.getVolume() + .01f);
+				else
+				{
+					newSong.setVolume(1.0f);
+					mEngine.unregisterUpdateHandler(pTimerHandler);
+				}
+			}
+		}));
 	}
 
 	@Override
@@ -265,7 +332,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
 		{
 			((GameScene) parentScene).showPauseScene();
-			((PauseScene)parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
+			((PauseScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
 		}
 
@@ -282,12 +349,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		{
 			((QuitPromptScene) parentScene.getChildScene()).callQuitAction();
 			return;
-		}
-		else if(parentScene.getChildScene() instanceof GameOverScreen)
+		} else if (parentScene.getChildScene() instanceof GameOverScreen)
 		{
-			((GameOverScreen)parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
+			((GameOverScreen) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
-		}else if(parentScene.getChildScene() instanceof PauseScene)
+		} else if (parentScene.getChildScene() instanceof PauseScene)
 		{
 			((PauseScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
@@ -313,7 +379,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		}
 		backgroundScene.moveBackground(true);
 		backgroundScene.moveBackground(true);
-		
+
 		mainMenuScene.setX(0);
 		mainMenuScene.logFlurryEvent();
 		mEngine.setScene(backgroundScene);

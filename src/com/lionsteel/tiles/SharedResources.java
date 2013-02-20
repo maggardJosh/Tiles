@@ -2,6 +2,8 @@ package com.lionsteel.tiles;
 
 import java.io.IOException;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.opengl.font.Font;
@@ -48,6 +50,8 @@ public class SharedResources implements TilesConstants
 	public Sound					insaneSound;
 	public Sound					insaneJump;
 	public Sound					countdownSound;
+
+	public Music					menuMusic;
 
 	public static SharedResources getInstance()
 	{
@@ -107,6 +111,7 @@ public class SharedResources implements TilesConstants
 			Debug.e(e);
 		}
 		SoundFactory.setAssetBasePath("sfx/");
+		MusicFactory.setAssetBasePath("sfx/");
 		try
 		{
 			for (int i = 0; i < 1; i++)
@@ -128,6 +133,8 @@ public class SharedResources implements TilesConstants
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
 			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdown.wav");
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
+			
+			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 		} catch (IOException e)
 		{
 			Debug.e(e);
