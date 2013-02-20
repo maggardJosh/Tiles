@@ -135,7 +135,7 @@ public class PauseScene extends TilesMenuScene
 			{
 				playerOneReady = true;
 				if (playerTwoReady)
-					mParentScene.clearChildScene();
+					unpauseGame();
 			}
 		}, new Runnable()
 		{
@@ -154,7 +154,7 @@ public class PauseScene extends TilesMenuScene
 			{
 				playerTwoReady = true;
 				if (playerOneReady)
-					mParentScene.clearChildScene();
+					unpauseGame();
 			}
 		}, new Runnable()
 		{
@@ -181,6 +181,14 @@ public class PauseScene extends TilesMenuScene
 			registerTouchArea(playerTwoTouch.touchImage);
 		super.registerTouchAreas();
 	}
+	
+	private void unpauseGame()
+	{
+		mParentScene.clearChildScene();
+		if(!musicMute.isMuted())
+			activity.getMusicManager().setMasterVolume(1.0f);
+	}
+	
 
 	@Override
 	public void initScene()
@@ -190,6 +198,9 @@ public class PauseScene extends TilesMenuScene
 
 		musicMute.refreshButton();
 		soundEffectMute.refreshButton();
+		
+		if(!musicMute.isMuted())
+			activity.getMusicManager().setMasterVolume(MUFFLED_VOLUME);
 
 	}
 }

@@ -204,7 +204,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	}
 
-	private void playSong(final Music newSong)
+	public void playSong(final Music newSong)
 	{
 		if (currentMusic != null)
 		{
@@ -214,8 +214,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler)
 				{
-					if (currentMusic.getVolume() > .01f)
-						currentMusic.setVolume(currentMusic.getVolume() - .01f);
+					if (currentMusic.getVolume() > SONG_TRANSITION_SPEED)
+						currentMusic.setVolume(currentMusic.getVolume() - SONG_TRANSITION_SPEED);
 					else
 					{
 						currentMusic.setVolume(0);
@@ -239,8 +239,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
-				if (newSong.getVolume() < .99f)
-					newSong.setVolume(newSong.getVolume() + .01f);
+				if (newSong.getVolume() < 1 - SONG_TRANSITION_SPEED)
+					newSong.setVolume(newSong.getVolume() + SONG_TRANSITION_SPEED);
 				else
 				{
 					newSong.setVolume(1.0f);
@@ -369,6 +369,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public void backToMainMenu()
 	{
+		playSong(SharedResources.getInstance().menuMusic);
 		//Clear all child scenes
 		TilesMenuScene parentScene = mainMenuScene;
 		while (parentScene.hasChildScene())

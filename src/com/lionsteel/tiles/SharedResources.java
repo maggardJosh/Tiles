@@ -52,6 +52,7 @@ public class SharedResources implements TilesConstants
 	public Sound					countdownSound;
 
 	public Music					menuMusic;
+	public Music					versusMusic;
 
 	public static SharedResources getInstance()
 	{
@@ -133,8 +134,9 @@ public class SharedResources implements TilesConstants
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
 			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdown.wav");
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
-			
+
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
+			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
 		} catch (IOException e)
 		{
 			Debug.e(e);

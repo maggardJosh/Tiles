@@ -305,6 +305,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 					playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 					playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 					startAnimateIn();
+					activity.playSong(SharedResources.getInstance().versusMusic);
 				}
 				break;
 		}

@@ -7,8 +7,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
+import com.lionsteel.tiles.Constants.TilesConstants;
 
-public abstract class MuteControl<T extends BaseAudioManager<? extends IAudioEntity>> extends TilesMenuButton
+public abstract class MuteControl<T extends BaseAudioManager<? extends IAudioEntity>> extends TilesMenuButton implements TilesConstants
 {
 	private Sprite	cancelSprite;
 	private boolean	isMuted;
@@ -20,6 +21,11 @@ public abstract class MuteControl<T extends BaseAudioManager<? extends IAudioEnt
 		cancelSprite = new Sprite(0, 0, SharedResources.getInstance().cancelImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 		this.attachChild(cancelSprite);
 		cancelSprite.setVisible(isMuted);
+	}
+
+	public boolean isMuted()
+	{
+		return isMuted;
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public abstract class MuteControl<T extends BaseAudioManager<? extends IAudioEnt
 
 	public void refreshButton()
 	{
-		isMuted = audioManager.getMasterVolume() < 1;
+		isMuted = audioManager.getMasterVolume() < MUFFLED_VOLUME;
 		cancelSprite.setVisible(isMuted);
 
 	}
