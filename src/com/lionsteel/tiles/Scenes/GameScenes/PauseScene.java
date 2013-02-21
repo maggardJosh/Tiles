@@ -16,18 +16,18 @@ import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
+import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.MusicMuteControl;
 import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
-import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 
 public class PauseScene extends TilesMenuScene
 {
 	private boolean					playerOneReady	= false;
 	private boolean					playerTwoReady	= false;
 
-	private ReadyTouchControl		playerOneTouch;
-	private ReadyTouchControl		playerTwoTouch;
+	private TouchControl		playerOneTouch;
+	private TouchControl		playerTwoTouch;
 
 	private boolean					isTwoPlayerMode	= true;
 
@@ -128,7 +128,7 @@ public class PauseScene extends TilesMenuScene
 
 	private void prepareTouchControls()
 	{
-		playerOneTouch = new ReadyTouchControl(new Runnable()
+		playerOneTouch = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()
@@ -147,7 +147,7 @@ public class PauseScene extends TilesMenuScene
 			}
 		});
 
-		playerTwoTouch = new ReadyTouchControl(new Runnable()
+		playerTwoTouch = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()

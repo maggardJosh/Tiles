@@ -17,8 +17,6 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
-import com.lionsteel.tiles.Entities.TouchControls.NoTouchControl;
-import com.lionsteel.tiles.Entities.TouchControls.YesTouchControl;
 
 public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 {
@@ -54,7 +52,7 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 			Debug.e(e);
 		}
 
-		touchControls[0] = new YesTouchControl(new Runnable()
+		touchControls[0] = new TouchControl("Yes",new Runnable()
 		{
 
 			@Override
@@ -64,7 +62,7 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 			}
 		}, null);
 
-		touchControls[1] = new NoTouchControl(new Runnable()
+		touchControls[1] = new TouchControl("No", new Runnable()
 		{
 			@Override
 			public void run()

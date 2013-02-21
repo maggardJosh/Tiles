@@ -29,7 +29,6 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.WrongSelectionIndicator;
-import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 import com.lionsteel.tiles.Scenes.GameScenes.GameCountdown;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
@@ -250,7 +249,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	private void prepareTouchControls()
 	{
-		introTouchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
+		introTouchControls[PLAYER_TWO] = new TouchControl("Ready", new Runnable()
 		{
 
 			@Override
@@ -274,7 +273,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		playerOneIntro.attachChild(introTouchControls[PLAYER_TWO]);
 		this.registerTouchArea(touchImage);
 
-		introTouchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
+		introTouchControls[PLAYER_ONE] = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()

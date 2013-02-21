@@ -10,8 +10,6 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.TilesConstants;
-import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
-import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 
 public class PracticeGameOverScene extends TilesMenuScene implements TilesConstants
 {
@@ -31,7 +29,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		titleText.setPosition((CAMERA_WIDTH - titleText.getWidth()) / 2, 100);
 		this.attachChild(titleText);
 
-		restartTouchControl = new ReadyTouchControl(new Runnable()
+		restartTouchControl = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()

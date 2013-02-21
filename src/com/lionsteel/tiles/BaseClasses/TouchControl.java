@@ -5,17 +5,17 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.TextureRegion;
 
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
 
-public abstract class TouchControl extends Entity implements TilesConstants
+public class TouchControl extends Entity implements TilesConstants
 {
 	public final Sprite	touchImage;
-	public final Sprite	readyImage;
+	public final Text	readyText;
 
 	boolean				isPressed	= false;
 	final Runnable		action;
@@ -23,12 +23,12 @@ public abstract class TouchControl extends Entity implements TilesConstants
 	int					pointerID	= -1;
 	final float			READY_ALPHA	= .3f;
 
-	public TouchControl(final Runnable action, final Runnable resetAction, final TextureRegion readyRegion)
+	public TouchControl(final String readyTextValue, final Runnable action, final Runnable resetAction)
 	{
 		this.action = action;
 		this.resetAction = resetAction;
-		readyImage = new Sprite(0, 0, readyRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager());
-		readyImage.setAlpha(READY_ALPHA);
+		readyText = new Text(0,0,SharedResources.getInstance().mFont,readyTextValue, TilesMainActivity.getInstance().getVertexBufferObjectManager());
+		readyText.setAlpha(READY_ALPHA);
 		touchImage = new Sprite(0, 0, SharedResources.getInstance().touchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
 			@Override
@@ -46,7 +46,7 @@ public abstract class TouchControl extends Entity implements TilesConstants
 							@Override
 							protected void onModifierFinished(IEntity pItem)
 							{
-								readyImage.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyImage.getAlpha(), 1.0f)
+								readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyText.getAlpha(), 1.0f)
 								{
 									protected void onModifierFinished(IEntity pItem)
 									{
@@ -69,7 +69,7 @@ public abstract class TouchControl extends Entity implements TilesConstants
 								@Override
 								protected void onModifierFinished(IEntity pItem)
 								{
-									readyImage.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyImage.getAlpha(), 1.0f)
+									readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyText.getAlpha(), 1.0f)
 									{
 										protected void onModifierFinished(IEntity pItem)
 										{
@@ -103,32 +103,32 @@ public abstract class TouchControl extends Entity implements TilesConstants
 		touchImage.setScaleCenter(touchImage.getWidth() / 2, touchImage.getHeight() / 2);
 		this.setRotationCenter(touchImage.getWidth() / 2, touchImage.getHeight() / 2);
 		this.attachChild(touchImage);
-		this.attachChild(readyImage);
+		this.attachChild(readyText);
 	}
 
 	public void setPosition(float pX, float pY)
 	{
 		this.setRotationCenter(pX + touchImage.getWidth() / 2, pY + touchImage.getHeight() / 2);
 		touchImage.setPosition(pX, pY);
-		readyImage.setPosition(pX + touchImage.getWidth() / 2 - readyImage.getWidth() / 2, pY - 80);
+		readyText.setPosition(pX + touchImage.getWidth() / 2 - readyText.getWidth() / 2, pY - 80);
 	}
 
 	public void initButton()
 	{
 		touchImage.clearEntityModifiers();
-		readyImage.clearEntityModifiers();
+		readyText.clearEntityModifiers();
 		touchImage.setScale(1.0f);
-		readyImage.setAlpha(READY_ALPHA);
+		readyText.setAlpha(READY_ALPHA);
 	}
 
 	public void resetButton()
 	{
 		touchImage.clearEntityModifiers();
-		readyImage.clearEntityModifiers();
+		readyText.clearEntityModifiers();
 		isPressed = false;
 		if (resetAction != null)
 			resetAction.run();
 		touchImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_RESET, touchImage.getScaleX(), 1.0f));
-		readyImage.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_RESET, readyImage.getAlpha(), READY_ALPHA));
+		readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_RESET, readyText.getAlpha(), READY_ALPHA));
 	}
 }

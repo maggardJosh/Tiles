@@ -20,7 +20,6 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
 import com.lionsteel.tiles.Constants.TilesConstants;
-import com.lionsteel.tiles.Entities.TouchControls.ReadyTouchControl;
 
 public class GameOverScreen extends TilesMenuScene implements TilesConstants
 {
@@ -124,7 +123,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 	private void prepareTouchControls()
 	{
-		playerRematchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
+		playerRematchControls[PLAYER_TWO] = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()
@@ -141,7 +140,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 				playerOneRematch = false;
 			}
 		});
-		playerRematchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
+		playerRematchControls[PLAYER_ONE] = new TouchControl("Ready", new Runnable()
 		{
 			@Override
 			public void run()
