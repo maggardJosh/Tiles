@@ -115,12 +115,12 @@ public class SharedResources implements TilesConstants
 		try
 		{
 
-			tileCollectSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile1.ogg");
+			tileCollectSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile1.wav");
 			tileCollectSound.setVolume(SOUND_EFFECT_VOLUME * .7f);
 			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
 			wrongTileSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "wrongTile.ogg");
 			wrongTileSound.setVolume(SOUND_EFFECT_VOLUME);
-			tileCrashSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "crashTwo.wav");
+			tileCrashSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "crashTwo.ogg");
 			tileCrashSound.setVolume(SOUND_EFFECT_VOLUME);
 			insaneSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "insaneSound.wav");
 			insaneSound.setVolume(SOUND_EFFECT_VOLUME);

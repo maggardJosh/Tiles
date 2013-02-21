@@ -95,6 +95,8 @@ public class TimeAttackGameScene extends PracticeGameScene
 	{
 		if(getTilesCollected(PLAYER_ONE) >= TIME_ATTACK_NUM_TILES)
 		{
+			practiceGameOverScene.setLabels("Best Time", "Round Time");
+			practiceGameOverScene.setValues(String.format("%02d:%02d:%06.3f", hoursPlayed, minutesPlayed, secondsPlayed), String.format("%02d:%02d:%06.3f", hoursPlayed, minutesPlayed, secondsPlayed));
 			showPracticeGameOver();
 		}
 	}

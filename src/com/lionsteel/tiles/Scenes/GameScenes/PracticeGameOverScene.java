@@ -14,6 +14,12 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 public class PracticeGameOverScene extends TilesMenuScene implements TilesConstants
 {
 	final Text			titleText;
+	final Text			holdToRestartText;
+
+	final Text			labelOne;
+	final Text			labelTwo;
+	final Text			valueOne;
+	final Text			valueTwo;
 
 	final TouchControl	restartTouchControl;
 
@@ -29,6 +35,24 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		titleText.setPosition((CAMERA_WIDTH - titleText.getWidth()) / 2, 100);
 		this.attachChild(titleText);
 
+		holdToRestartText = new Text(0, 0, SharedResources.getInstance().mFont, "Hold to restart", activity.getVertexBufferObjectManager());
+		holdToRestartText.setPosition((CAMERA_WIDTH - holdToRestartText.getWidth()) / 2, CAMERA_HEIGHT - holdToRestartText.getHeight() - 50);
+		this.attachChild(holdToRestartText);
+
+		labelOne = new Text(0, 0, SharedResources.getInstance().mFont, "Label One",20, activity.getVertexBufferObjectManager());
+		labelTwo = new Text(0, 0, SharedResources.getInstance().mFont, "Label Two",20, activity.getVertexBufferObjectManager());
+		valueOne = new Text(0, 0, SharedResources.getInstance().mFont, "0",20, activity.getVertexBufferObjectManager());
+		valueTwo = new Text(0, 0, SharedResources.getInstance().mFont, "0",20, activity.getVertexBufferObjectManager());
+
+
+		updateLabelPositions();
+		updateValuePositions();
+		
+		this.attachChild(labelOne);
+		this.attachChild(labelTwo);
+		this.attachChild(valueOne);
+		this.attachChild(valueTwo);
+
 		restartTouchControl = new TouchControl("Ready", new Runnable()
 		{
 			@Override
@@ -40,9 +64,9 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 					Debug.e(mParentScene + " not PracticeGameScene");
 			}
 		}, null);
-		restartTouchControl.setPosition((CAMERA_WIDTH - restartTouchControl.touchImage.getWidth()) / 2, CAMERA_HEIGHT - restartTouchControl.touchImage.getHeight() - REMATCH_TOUCH_PADDING);
+		restartTouchControl.setPosition((CAMERA_WIDTH - restartTouchControl.touchImage.getWidth()) / 2, CAMERA_HEIGHT - restartTouchControl.touchImage.getHeight() - 100);
 		this.attachChild(restartTouchControl);
-		
+
 		final TilesMenuButton quitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable()
 		{
 			@Override
@@ -54,7 +78,36 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		quitButton.setPosition(3, (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
 		addButton(quitButton);
 	}
+	
+	public void setLabels(final String labelOne, final String labelTwo)
+	{
+		this.labelOne.setText(labelOne);
+		this.labelTwo.setText(labelTwo);
+		
+		updateLabelPositions();
+		
+	}
+	
+	public void setValues(final String valueOne, final String valueTwo)
+	{
+		this.valueOne.setText(valueOne);
+		this.valueTwo.setText(valueTwo);
+		
+		updateValuePositions();
+	}
+	
+	private void updateLabelPositions()
+	{
+		this.labelOne.setPosition((CAMERA_WIDTH - this.labelOne.getWidth()) / 2, CAMERA_HEIGHT * 2 / 7);
+		this.labelTwo.setPosition((CAMERA_WIDTH - this.labelTwo.getWidth()) / 2, CAMERA_HEIGHT * 3 / 7);
+	}
 
+	private void updateValuePositions()
+	{
+		this.valueOne.setPosition(labelOne.getX() + (labelOne.getWidth() - valueOne.getWidth()) / 2, labelOne.getY() + labelOne.getHeight() + 16);
+		this.valueTwo.setPosition(labelTwo.getX() + (labelTwo.getWidth() - valueTwo.getWidth()) / 2, labelTwo.getY() + labelTwo.getHeight() + 16);
+	}
+	
 	@Override
 	public void logFlurryEvent()
 	{
