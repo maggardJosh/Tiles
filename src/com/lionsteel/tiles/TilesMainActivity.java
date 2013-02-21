@@ -28,6 +28,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.NonStopGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
 import com.lionsteel.tiles.Scenes.GameScenes.RaceGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.ReflexGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.TimeAttackGameScene;
@@ -357,7 +358,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		{
 			((GameOverScreen) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
-		} else if (parentScene.getChildScene() instanceof PauseScene)
+		}  else if (parentScene.getChildScene() instanceof PracticeGameOverScene)
+		{
+			((PracticeGameOverScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
+			return;
+		}else if (parentScene.getChildScene() instanceof PauseScene)
 		{
 			((PauseScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;

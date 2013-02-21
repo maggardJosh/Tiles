@@ -95,7 +95,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 	{
 		if(getTilesCollected(PLAYER_ONE) >= TIME_ATTACK_NUM_TILES)
 		{
-			showGameOver(PLAYER_ONE);
+			showPracticeGameOver();
 		}
 	}
 
@@ -152,6 +152,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 	@Override
 	protected void resetGame()
 	{
+		resetValues();
 		currentTileset.reset();
 		hoursPlayed = 0;
 		minutesPlayed = 0;

@@ -47,6 +47,8 @@ public interface TilesConstants
 
 	public static final int			TIME_ATTACK_NUM_TILES			= 50;
 
+	public static final float		OVERLAY_BACKGROUND_ALPHA		= .9f;
+
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;
 	public static final float		DISABLE_TIME					= .4f;

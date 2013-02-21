@@ -21,5 +21,6 @@ public class FlurryAgentEventStrings
 	public static final String	MUTE_SOUND					= "Mute_Sound";
 	public static final String	UNMUTE_MUSIC				= "Unmute_Music";
 	public static final String	UNMUTE_SOUND				= "Mute_Sound";
+	public static final String	RESTART_PRACTICE			= "Restart_Practice";
 
 }

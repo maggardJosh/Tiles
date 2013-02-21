@@ -330,7 +330,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		resetValues();
 	}
 
-	private void resetValues()
+	protected void resetValues()
 	{
 		for (int i = 0; i < 2; i++)
 		{
@@ -366,9 +366,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 		pauseButton.setZIndex(FOREGROUND_Z);
 		this.attachChild(pauseButton);
 		pauseButton.registerOwnTouchArea(this);
-		pauseButton.registerEntityModifier(new AlphaModifier(TilesConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		pauseButton.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
-		barSprite.registerEntityModifier(new AlphaModifier(TilesConstants.BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		barSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
 		currentTileset.animatePlayerTilesIn(new Runnable()
 		{

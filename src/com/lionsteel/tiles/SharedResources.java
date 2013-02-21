@@ -70,9 +70,13 @@ public class SharedResources implements TilesConstants
 		FontFactory.setAssetBasePath("fonts/");
 		fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
-		headingFont= FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 40f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
+		
+		final BitmapTextureAtlas headingFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		headingFont= FontFactory.createFromAsset(activity.getFontManager(), headingFontTexture, activity.getAssets(), "gameFont.ttf", 45f, true, android.graphics.Color.WHITE);
+		headingFontTexture.load();
+		headingFont.load();
 
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");

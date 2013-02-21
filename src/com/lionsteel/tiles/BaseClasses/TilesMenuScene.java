@@ -15,7 +15,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
-	final TilesMainActivity				activity;
+	protected final TilesMainActivity				activity;
 	final TilesMenuButton				backButton;
 
 	final ArrayList<TilesMenuButton>	buttonList	= new ArrayList<TilesMenuButton>();
