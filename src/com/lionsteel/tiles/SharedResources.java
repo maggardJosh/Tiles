@@ -29,7 +29,7 @@ public class SharedResources implements TilesConstants
 
 	public final TextureRegion		backgroundRegion;
 	public final TextureRegion		touchImageRegion;
-	public final TextureRegion		modeRegion[]				= new TextureRegion[6];
+	public final TextureRegion		modeRegion[]	= new TextureRegion[6];
 	public final TextureRegion		displayIndicatorRegion;
 	public final TextureRegion		pauseButtonRegion;
 	public final TextureRegion		exitGameButtonRegion;
@@ -40,14 +40,14 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		musicNoteRegion;
 	public final TextureRegion		soundEffectImageRegion;
 
-	public Sound[]					playerOneTileCollectSounds	= new Sound[1];
-	public Sound[]					playerTwoTileCollectSounds	= new Sound[1];
+	public Sound					tileCollectSound;
 
 	public Sound					wrongTileSound;
 	public Sound					tileCrashSound;
 	public Sound					insaneSound;
 	public Sound					insaneJump;
 	public Sound					countdownSound;
+	public Sound					menuBlip;
 
 	public Music					menuMusic;
 	public Music					versusMusic;
@@ -69,9 +69,9 @@ public class SharedResources implements TilesConstants
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
-		
+
 		final BitmapTextureAtlas headingFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-		headingFont= FontFactory.createFromAsset(activity.getFontManager(), headingFontTexture, activity.getAssets(), "gameFont.ttf", 45f, true, android.graphics.Color.WHITE);
+		headingFont = FontFactory.createFromAsset(activity.getFontManager(), headingFontTexture, activity.getAssets(), "gameFont.ttf", 45f, true, android.graphics.Color.WHITE);
 		headingFontTexture.load();
 		headingFont.load();
 
@@ -114,15 +114,10 @@ public class SharedResources implements TilesConstants
 		MusicFactory.setAssetBasePath("sfx/");
 		try
 		{
-			for (int i = 0; i < 1; i++)
-			{
-				playerOneTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".wav");
-				playerOneTileCollectSounds[i].setVolume(SOUND_EFFECT_VOLUME * .7f);
-				playerOneTileCollectSounds[i].setRate(MIN_TILE_COLLECT_RATE);
-				playerTwoTileCollectSounds[i] = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile" + (i + 1) + ".wav");
-				playerTwoTileCollectSounds[i].setVolume(SOUND_EFFECT_VOLUME * .7f);
-				playerTwoTileCollectSounds[i].setRate(MIN_TILE_COLLECT_RATE);
-			}
+
+			tileCollectSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile1.ogg");
+			tileCollectSound.setVolume(SOUND_EFFECT_VOLUME * .7f);
+			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
 			wrongTileSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "wrongTile.ogg");
 			wrongTileSound.setVolume(SOUND_EFFECT_VOLUME);
 			tileCrashSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "crashTwo.wav");
@@ -133,6 +128,8 @@ public class SharedResources implements TilesConstants
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
 			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdown.wav");
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
+			menuBlip= SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
+			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
 
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");

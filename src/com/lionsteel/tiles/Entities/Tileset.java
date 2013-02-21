@@ -407,7 +407,7 @@ public class Tileset implements TilesConstants
 			GameButton playerButton, IEntityModifierListener listener)
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
-		currentScene.playTileCollectSound(playerButton.getPlayer());
+		currentScene.playTileCollectSound();
 		if (SetupScene.getGameMode() == GameMode.REFLEX)
 		{
 			int i = 0;

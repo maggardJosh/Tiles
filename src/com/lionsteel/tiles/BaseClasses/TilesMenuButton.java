@@ -7,6 +7,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
 
@@ -44,6 +45,7 @@ public class TilesMenuButton extends Entity implements TilesConstants
 					{
 						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
 						mPointerID = -1;
+						SharedResources.getInstance().menuBlip.play();
 						runAction();
 					}
 					break;

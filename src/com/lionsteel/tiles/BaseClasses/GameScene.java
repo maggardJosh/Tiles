@@ -38,8 +38,8 @@ import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 public abstract class GameScene extends Scene implements TilesConstants
 {
 	protected TilesMainActivity			activity;
-	private boolean						playerOneDisabled			= false;
-	private boolean						playerTwoDisabled			= false;
+	private boolean						playerOneDisabled		= false;
+	private boolean						playerTwoDisabled		= false;
 
 	protected Tileset					currentTileset;
 
@@ -48,30 +48,28 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected final Sprite				playerTwoIntro;
 	protected final Sprite				barSprite;
 
-	private final TouchControl[]		introTouchControls			= new TouchControl[2];
+	private final TouchControl[]		introTouchControls		= new TouchControl[2];
 
-	protected boolean					playerOneReady				= false;
-	protected boolean					playerTwoReady				= false;
-
-	protected final float[]				secondsSinceLastTileCollect	= new float[2];
+	protected boolean					playerOneReady			= false;
+	protected boolean					playerTwoReady			= false;
 
 	protected GameCountdown				gameCountdown;
-	private WrongSelectionIndicator[]	errorIndicators				= new WrongSelectionIndicator[2];
+	private WrongSelectionIndicator[]	errorIndicators			= new WrongSelectionIndicator[2];
 	protected GameOverScreen			gameOverScreen;
 	protected PauseScene				pauseScene;
 
-	private final int[]					tilesCollected				= new int[2];
-	private final int[]					maxStreak					= new int[2];
-	private final int[]					currentStreak				= new int[2];
+	private final int[]					tilesCollected			= new int[2];
+	private final int[]					maxStreak				= new int[2];
+	private final int[]					currentStreak			= new int[2];
 
 	protected TilesMenuButton			pauseButton;
 
-	protected int						gameState					= GameState.INTRO;
-	protected float						secondsOnCurrentState		= 0;
+	protected int						gameState				= GameState.INTRO;
+	protected float						secondsOnCurrentState	= 0;
 
-	public static boolean				isGameEventStarted			= false;
+	public static boolean				isGameEventStarted		= false;
 
-	protected Random					rand						= new Random();
+	protected Random					rand					= new Random();
 
 	public abstract void buttonPressed(GameButton button);
 
@@ -109,9 +107,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 				transitionChildScene(pauseScene);
 			}
 		});
-
-		for (int i = 0; i < 2; i++)
-			secondsSinceLastTileCollect[i] = 0;
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
@@ -174,7 +169,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected void breakStreak(final int player)
 	{
 		currentStreak[player] = 0;
-		secondsSinceLastTileCollect[player] = COMBO_SECONDS;
 	}
 
 	public void transitionChildScene(TilesMenuScene childScene)
@@ -313,8 +307,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 			break;
 		}
 
-		for (int i = 0; i < 2; i++)
-			secondsSinceLastTileCollect[i] += pSecondsElapsed;
 		secondsOnCurrentState += pSecondsElapsed;
 
 	}
@@ -478,32 +470,13 @@ public abstract class GameScene extends Scene implements TilesConstants
 		transitionChildScene(pauseScene);
 	}
 
-	public void playTileCollectSound(int player)
+	public void playTileCollectSound()
 	{
 		final Sound tileCollectSound;
-		if (player == PLAYER_TWO)
-			tileCollectSound = SharedResources.getInstance().playerOneTileCollectSounds[rand.nextInt(SharedResources.getInstance().playerOneTileCollectSounds.length)];
-		else
-			tileCollectSound = SharedResources.getInstance().playerTwoTileCollectSounds[rand.nextInt(SharedResources.getInstance().playerTwoTileCollectSounds.length)];
+		tileCollectSound = SharedResources.getInstance().tileCollectSound;
 
-		//		if (secondsSinceLastTileCollect[player] >= COMBO_SECONDS)
-		//			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
 		tileCollectSound.setRate(MIN_TILE_COLLECT_RATE + rand.nextFloat() * (MAX_TILE_COLLECT_RATE - MIN_TILE_COLLECT_RATE));
-		secondsSinceLastTileCollect[player] = 0;
-		tileCollectSound.play();
-		//		if (tileCollectSound.getRate() < MAX_TILE_COLLECT_RATE - TILE_COLLECT_RATE_INCREMENT)
-		//			tileCollectSound.setRate(tileCollectSound.getRate() + TILE_COLLECT_RATE_INCREMENT);
-		//		else
-		//			tileCollectSound.setRate(MAX_TILE_COLLECT_RATE + rand.nextFloat() * TILE_COLLECT_RATE_INCREMENT);
 
-		if (player == PLAYER_TWO)
-		{
-			for (Sound s : SharedResources.getInstance().playerOneTileCollectSounds)
-				s.setRate(tileCollectSound.getRate());
-		} else
-		{
-			for (Sound s : SharedResources.getInstance().playerTwoTileCollectSounds)
-				s.setRate(tileCollectSound.getRate());
-		}
+		tileCollectSound.play();
 	}
 }
