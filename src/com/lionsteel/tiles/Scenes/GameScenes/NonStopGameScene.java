@@ -41,12 +41,12 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 						addTile(button.getPlayer(), false);
 						switch (button.getPlayer())
 						{
-						case PLAYER_ONE:
-							checkPlayerWillWin(PLAYER_ONE);
-							moveBar(-BAR_SPEED);
-							break;
 						case PLAYER_TWO:
 							checkPlayerWillWin(PLAYER_TWO);
+							moveBar(-BAR_SPEED);
+							break;
+						case PLAYER_ONE:
+							checkPlayerWillWin(PLAYER_ONE);
 							moveBar(BAR_SPEED);
 							break;
 						}

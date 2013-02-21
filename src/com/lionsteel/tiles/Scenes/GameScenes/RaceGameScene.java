@@ -40,9 +40,9 @@ public class RaceGameScene extends GameScene
 			playerTileCountTexts[i].setAlpha(0);
 			this.attachChild(playerTileCountTexts[i]);
 		}
-		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_ONE].getWidth()) / 2, (CAMERA_HEIGHT) / 2 + playerTileCountTexts[PLAYER_ONE].getHeight());
-		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_TWO].getWidth()) / 2, (CAMERA_HEIGHT) / 2 - playerTileCountTexts[PLAYER_ONE].getHeight() * 2);
-		playerTileCountTexts[PLAYER_ONE].setRotation(180);
+		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_TWO].getWidth()) / 2, (CAMERA_HEIGHT) / 2 + playerTileCountTexts[PLAYER_TWO].getHeight());
+		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_ONE].getWidth()) / 2, (CAMERA_HEIGHT) / 2 - playerTileCountTexts[PLAYER_TWO].getHeight() * 2);
+		playerTileCountTexts[PLAYER_TWO].setRotation(180);
 
 		timerText = new Text(0, 0, SharedResources.getInstance().mFont, (int) Math.floor(mSecondsLeft) + ".000", activity.getVertexBufferObjectManager());
 		timerText.setZIndex(FOREGROUND_Z);
@@ -108,26 +108,26 @@ public class RaceGameScene extends GameScene
 
 	private void pulseTileTexts()
 	{
-		final float diff = playerTileCount[PLAYER_ONE] - playerTileCount[PLAYER_TWO];
+		final float diff = playerTileCount[PLAYER_TWO] - playerTileCount[PLAYER_ONE];
 
 		final float playerOneScale = NEUTRAL_TEXT_SCALE + (Math.max(-MAX_DIFF, Math.min(diff, MAX_DIFF)) / MAX_DIFF) * (MAX_TEXT_SCALE - NEUTRAL_TEXT_SCALE);
 		final float playerTwoScale = NEUTRAL_TEXT_SCALE - (Math.max(-MAX_DIFF, Math.min(diff, MAX_DIFF)) / MAX_DIFF) * (MAX_TEXT_SCALE - NEUTRAL_TEXT_SCALE);
 
-		playerTileCountTexts[PLAYER_ONE].setScale(playerOneScale);
-		playerTileCountTexts[PLAYER_TWO].setScale(playerTwoScale);
+		playerTileCountTexts[PLAYER_TWO].setScale(playerOneScale);
+		playerTileCountTexts[PLAYER_ONE].setScale(playerTwoScale);
 
 		if (diff > 0)
 		{
-			playerTileCountTexts[PLAYER_ONE].setColor(Color.GREEN);
-			playerTileCountTexts[PLAYER_TWO].setColor(Color.RED);
+			playerTileCountTexts[PLAYER_TWO].setColor(Color.GREEN);
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.RED);
 		} else if (diff < 0)
 		{
-			playerTileCountTexts[PLAYER_ONE].setColor(Color.RED);
-			playerTileCountTexts[PLAYER_TWO].setColor(Color.GREEN);
+			playerTileCountTexts[PLAYER_TWO].setColor(Color.RED);
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.GREEN);
 		} else
 		{
-			playerTileCountTexts[PLAYER_ONE].setColor(Color.WHITE);
 			playerTileCountTexts[PLAYER_TWO].setColor(Color.WHITE);
+			playerTileCountTexts[PLAYER_ONE].setColor(Color.WHITE);
 		}
 
 	}
@@ -278,10 +278,10 @@ public class RaceGameScene extends GameScene
 		final float currentScale = barSprite.getScaleY();
 		if (currentScale < .01f)
 		{
-			if (playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
-				showGameOver(PLAYER_ONE);
-			else if (playerTileCount[PLAYER_TWO] > playerTileCount[PLAYER_ONE])
+			if (playerTileCount[PLAYER_TWO] > playerTileCount[PLAYER_ONE])
 				showGameOver(PLAYER_TWO);
+			else if (playerTileCount[PLAYER_ONE] > playerTileCount[PLAYER_TWO])
+				showGameOver(PLAYER_ONE);
 			else
 				showGameOver(TIE);
 			return;

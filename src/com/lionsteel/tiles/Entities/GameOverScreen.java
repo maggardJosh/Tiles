@@ -80,9 +80,9 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		for (int i = 0; i < 2; i++)
 			tieSprite[i] = new Sprite(0, 0, tieRegion, activity.getVertexBufferObjectManager());
 
-		tieSprite[PLAYER_ONE].setPosition(0, (CAMERA_HEIGHT - tieRegion.getHeight()));
-		tieSprite[PLAYER_TWO].setRotationCenter(tieSprite[PLAYER_TWO].getWidth() / 2, tieSprite[PLAYER_TWO].getHeight() / 2);
-		tieSprite[PLAYER_TWO].setRotation(180);
+		tieSprite[PLAYER_TWO].setPosition(0, (CAMERA_HEIGHT - tieRegion.getHeight()));
+		tieSprite[PLAYER_ONE].setRotationCenter(tieSprite[PLAYER_ONE].getWidth() / 2, tieSprite[PLAYER_ONE].getHeight() / 2);
+		tieSprite[PLAYER_ONE].setRotation(180);
 
 		Rectangle backgroundRect = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		backgroundRect.setColor(0, 0, 0, .8f);
@@ -124,7 +124,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 	private void prepareTouchControls()
 	{
-		playerRematchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
+		playerRematchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
 		{
 			@Override
 			public void run()
@@ -141,7 +141,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 				playerOneRematch = false;
 			}
 		});
-		playerRematchControls[PLAYER_TWO] = new ReadyTouchControl(new Runnable()
+		playerRematchControls[PLAYER_ONE] = new ReadyTouchControl(new Runnable()
 		{
 			@Override
 			public void run()
@@ -161,12 +161,12 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			}
 		});
 		final float TOUCH_WIDTH = playerRematchControls[0].touchImage.getWidth();
-		playerRematchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, CAMERA_HEIGHT - TOUCH_WIDTH - REMATCH_TOUCH_PADDING);
-		playerRematchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, REMATCH_TOUCH_PADDING);
-		playerRematchControls[PLAYER_TWO].setRotation(180);
+		playerRematchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, CAMERA_HEIGHT - TOUCH_WIDTH - REMATCH_TOUCH_PADDING);
+		playerRematchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, REMATCH_TOUCH_PADDING);
+		playerRematchControls[PLAYER_ONE].setRotation(180);
 
-		this.attachChild(playerRematchControls[PLAYER_ONE]);
 		this.attachChild(playerRematchControls[PLAYER_TWO]);
+		this.attachChild(playerRematchControls[PLAYER_ONE]);
 	}
 
 	public boolean isRematchTrue()
@@ -177,8 +177,8 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	@Override
 	public void registerTouchAreas()
 	{
-		registerTouchArea(playerRematchControls[PLAYER_ONE].touchImage);
 		registerTouchArea(playerRematchControls[PLAYER_TWO].touchImage);
+		registerTouchArea(playerRematchControls[PLAYER_ONE].touchImage);
 
 		super.registerTouchAreas();
 	}
@@ -193,7 +193,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	{
 		switch (winningPlayer)
 		{
-		case PLAYER_ONE:
+		case PLAYER_TWO:
 			tieSprite[0].setVisible(false);
 			tieSprite[1].setVisible(false);
 			winnerSprite.setVisible(true);
@@ -203,7 +203,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			loserSprite.setPosition(0, 620);
 			loserSprite.setRotation(0);
 			break;
-		case PLAYER_TWO:
+		case PLAYER_ONE:
 			tieSprite[0].setVisible(false);
 			tieSprite[1].setVisible(false);
 			winnerSprite.setVisible(true);
@@ -234,10 +234,10 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			this.labelOne[i].setText(labelOne);
 			this.labelTwo[i].setText(labelTwo);
 		}
-		this.labelOne[PLAYER_ONE].setPosition(LABEL_ONE_CENTER.x - this.labelOne[PLAYER_ONE].getWidth()/2, LABEL_ONE_CENTER.y);
-		this.labelTwo[PLAYER_ONE].setPosition(LABEL_TWO_CENTER.x - this.labelTwo[PLAYER_ONE].getWidth()/2, LABEL_TWO_CENTER.y);
-		this.labelOne[PLAYER_TWO].setPosition(LABEL_TWO_CENTER.x - this.labelOne[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - LABEL_ONE_CENTER.y - this.labelOne[PLAYER_TWO].getHeight());
-		this.labelTwo[PLAYER_TWO].setPosition(LABEL_ONE_CENTER.x - this.labelTwo[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - LABEL_TWO_CENTER.y - this.labelTwo[PLAYER_TWO].getHeight());
+		this.labelOne[PLAYER_TWO].setPosition(LABEL_ONE_CENTER.x - this.labelOne[PLAYER_TWO].getWidth()/2, LABEL_ONE_CENTER.y);
+		this.labelTwo[PLAYER_TWO].setPosition(LABEL_TWO_CENTER.x - this.labelTwo[PLAYER_TWO].getWidth()/2, LABEL_TWO_CENTER.y);
+		this.labelOne[PLAYER_ONE].setPosition(LABEL_TWO_CENTER.x - this.labelOne[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - LABEL_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
+		this.labelTwo[PLAYER_ONE].setPosition(LABEL_ONE_CENTER.x - this.labelTwo[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - LABEL_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
 
 	}
 	
@@ -252,13 +252,13 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	{
 		switch(player)
 		{
-		case PLAYER_ONE:
-			this.valueOne[PLAYER_ONE].setPosition(VALUE_ONE_CENTER.x - this.valueOne[PLAYER_ONE].getWidth()/2, VALUE_ONE_CENTER.y);
-			this.valueTwo[PLAYER_ONE].setPosition(VALUE_TWO_CENTER.x - this.valueTwo[PLAYER_ONE].getWidth()/2, VALUE_TWO_CENTER.y);
-			break;
 		case PLAYER_TWO:
-			this.valueOne[PLAYER_TWO].setPosition(VALUE_TWO_CENTER.x - this.valueOne[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - VALUE_ONE_CENTER.y - this.labelOne[PLAYER_TWO].getHeight());
-			this.valueTwo[PLAYER_TWO].setPosition(VALUE_ONE_CENTER.x - this.valueTwo[PLAYER_TWO].getWidth()/2, CAMERA_HEIGHT - VALUE_TWO_CENTER.y - this.labelTwo[PLAYER_TWO].getHeight());
+			this.valueOne[PLAYER_TWO].setPosition(VALUE_ONE_CENTER.x - this.valueOne[PLAYER_TWO].getWidth()/2, VALUE_ONE_CENTER.y);
+			this.valueTwo[PLAYER_TWO].setPosition(VALUE_TWO_CENTER.x - this.valueTwo[PLAYER_TWO].getWidth()/2, VALUE_TWO_CENTER.y);
+			break;
+		case PLAYER_ONE:
+			this.valueOne[PLAYER_ONE].setPosition(VALUE_TWO_CENTER.x - this.valueOne[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - VALUE_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
+			this.valueTwo[PLAYER_ONE].setPosition(VALUE_ONE_CENTER.x - this.valueTwo[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - VALUE_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
 			break;
 		}
 	}

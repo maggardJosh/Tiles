@@ -2,71 +2,55 @@ package com.lionsteel.tiles.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.text.Text;
-import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Entities.GameButton;
 
-public class FreePlayGameScene extends PracticeGameScene
+public class TimeAttackGameScene extends PracticeGameScene
 {
-	private int			playerTileCount	= 0;
 	private final Text	playerTileCountLabel;
 	private final Text	playerTileCountText;
 	private final Text	timePlayedText;
-	private final Text	inARowLabel;
-	private final Text	inARowText;
+
 	private int			hoursPlayed;
 	private int			minutesPlayed;
 	private float		secondsPlayed;
-	private int			tilesInARow		= 0;
 
-	public FreePlayGameScene()
+	public TimeAttackGameScene()
 	{
 		super();
 		this.setBackgroundEnabled(false);
 
-		playerTileCountLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tiles", 7, activity.getVertexBufferObjectManager());
-		playerTileCountText = new Text(0, 0, SharedResources.getInstance().mFont, "0", 6, activity.getVertexBufferObjectManager());
+		playerTileCountLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tiles Left", activity.getVertexBufferObjectManager());
+		playerTileCountText = new Text(0, 0, SharedResources.getInstance().mFont, "" + TIME_ATTACK_NUM_TILES, 6, activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
-		inARowLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Combo", 15, activity.getVertexBufferObjectManager());
-		inARowText = new Text(0, 0, SharedResources.getInstance().mFont, "x0", 6, activity.getVertexBufferObjectManager());
 
-		playerTileCount = 0;
 		hoursPlayed = 0;
 		minutesPlayed = 0;
 		secondsPlayed = 0;
-		tilesInARow = 0;
 
 		this.attachChild(playerTileCountText);
 		this.attachChild(playerTileCountLabel);
 		this.attachChild(timePlayedText);
-		this.attachChild(inARowLabel);
-		this.attachChild(inARowText);
+
 		playerTileCountText.setAlpha(0);
 		playerTileCountLabel.setAlpha(0);
 		timePlayedText.setAlpha(0);
-		inARowLabel.setAlpha(0);
-		inARowText.setAlpha(0);
-				
 
 		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, (CAMERA_HEIGHT / 4) - playerTileCountText.getHeight() / 2 - playerTileCountText.getHeight() * 2);
-		playerTileCountLabel.setPosition((CAMERA_WIDTH - playerTileCountLabel.getWidth()) / 3, (CAMERA_HEIGHT - playerTileCountLabel.getHeight()) / 2 - playerTileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
+		playerTileCountLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountLabel.getWidth()) / 2, (CAMERA_HEIGHT - playerTileCountLabel.getHeight()) / 2 - playerTileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
 		playerTileCountText.setPosition(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2, playerTileCountLabel.getY() + playerTileCountLabel.getHeight() * 2);
-		inARowLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - inARowLabel.getWidth()) * 2 / 3, (CAMERA_HEIGHT - inARowLabel.getHeight()) / 2 - inARowLabel.getHeight() * 2 - BUTTON_WIDTH);
-		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() * 2);
 
 		barSprite.setVisible(false);
 		this.sortChildren();
-
 	}
 
+	@Override
 	public void buttonPressed(final GameButton button)
 	{
 		switch (gameState)
@@ -84,18 +68,11 @@ public class FreePlayGameScene extends PracticeGameScene
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
-						playerTileCount++;
-						tilesInARow++;
-						if (playerTileCount % BIG_PULSE_MOD == 0)
-							bigPulseText(playerTileCountText);
-						else
-							smallPulseText(playerTileCountText);
-						if (tilesInARow % BIG_PULSE_MOD == 0)
-							bigPulseText(inARowText);
-						else
-							smallPulseText(inARowText);
-						updateTexts();
+
+						smallPulseText(playerTileCountText);
 						addTile(button.getPlayer(), false);
+						updateTexts();
+						checkWin();
 					}
 
 					@Override
@@ -108,13 +85,17 @@ public class FreePlayGameScene extends PracticeGameScene
 				sortChildren();
 			} else
 			{
-				if (tilesInARow > 0)
-					badPulseText(inARowText);
-				tilesInARow = 0;
-				updateTexts();
 				disablePlayer(button);
 			}
 			break;
+		}
+	}
+	
+	private void checkWin()
+	{
+		if(getTilesCollected(PLAYER_ONE) >= TIME_ATTACK_NUM_TILES)
+		{
+			showGameOver(PLAYER_ONE);
 		}
 	}
 
@@ -135,8 +116,6 @@ public class FreePlayGameScene extends PracticeGameScene
 		super.Update(pSecondsElapsed);
 	}
 
-	
-
 	private void updateTime()
 	{
 		if (secondsPlayed >= 60)
@@ -152,16 +131,6 @@ public class FreePlayGameScene extends PracticeGameScene
 		timePlayedText.setText(String.format("%02d:%02d:%06.3f", hoursPlayed, minutesPlayed, secondsPlayed));
 	}
 
-	private void updateTexts()
-	{
-
-		playerTileCountText.setText("" + playerTileCount);
-		playerTileCountText.setX(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2);
-
-		inARowText.setText("x" + tilesInARow);
-		inARowText.setX(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2);
-	}
-	
 	@Override
 	protected void startAnimateIn()
 	{
@@ -169,23 +138,27 @@ public class FreePlayGameScene extends PracticeGameScene
 		playerTileCountText.registerEntityModifier(fadeInMod);
 		playerTileCountLabel.registerEntityModifier(fadeInMod);
 		timePlayedText.registerEntityModifier(fadeInMod);
-		inARowLabel.registerEntityModifier(fadeInMod);
-		inARowText.registerEntityModifier(fadeInMod);
 		super.startAnimateIn();
+	}
+
+	private void updateTexts()
+	{
+
+		playerTileCountText.setText("" + (TIME_ATTACK_NUM_TILES -getTilesCollected(PLAYER_ONE)));
+		playerTileCountText.setX(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2);
+
 	}
 
 	@Override
 	protected void resetGame()
 	{
-		playerTileCount = 0;
+		currentTileset.reset();
 		hoursPlayed = 0;
 		minutesPlayed = 0;
 		secondsPlayed = 0;
-		tilesInARow = 0;
-		currentTileset.reset();
+		updateTime();
 		updateTexts();
 		startCountdown();
-
 	}
 
 }

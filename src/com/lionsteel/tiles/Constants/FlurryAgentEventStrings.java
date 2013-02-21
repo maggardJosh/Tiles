@@ -17,5 +17,9 @@ public class FlurryAgentEventStrings
 	public static final String	WRONG_TILE					= "Wrong_Tile";
 	public static final String	WON_TILE					= "Correct_Tile";
 	public static final String	PAUSE						= "Pause";
+	public static final String	MUTE_MUSIC					= "Mute_Music";
+	public static final String	MUTE_SOUND					= "Mute_Sound";
+	public static final String	UNMUTE_MUSIC				= "Unmute_Music";
+	public static final String	UNMUTE_SOUND				= "Mute_Sound";
 
 }

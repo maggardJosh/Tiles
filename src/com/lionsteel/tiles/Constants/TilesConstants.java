@@ -14,9 +14,9 @@ public interface TilesConstants
 	public static final int			BAR_SPEED						= 20;
 
 	public static final int			DISPLAY_BUTTONS					= -1;
-	public static final int			PLAYER_ONE						= 0;
-	public static final int			PLAYER_TWO						= PLAYER_ONE + 1;
-	public static final int			TIE								= PLAYER_TWO + 1;
+	public static final int			PLAYER_TWO						= 0;
+	public static final int			PLAYER_ONE						= PLAYER_TWO + 1;
+	public static final int			TIE								= PLAYER_ONE + 1;
 
 	public static final int			BACK_ARROW_PADDING				= 10;
 	public static final int			REMATCH_TOUCH_PADDING			= 200;
@@ -44,6 +44,8 @@ public interface TilesConstants
 
 	public static final float		SONG_TRANSITION_SPEED			= .03f;
 	public static final float		MUFFLED_VOLUME					= .2f;
+
+	public static final int			TIME_ATTACK_NUM_TILES			= 50;
 
 	//------ Entity Modifier Timing
 	public static final float		WIN_MOVE_MOD_TIME				= .4f;

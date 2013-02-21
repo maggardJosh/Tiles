@@ -41,12 +41,12 @@ public class ReflexGameScene extends GameScene
 						addTile(button.getPlayer(), true);
 						switch (button.getPlayer())
 						{
-						case PLAYER_ONE:
-							checkPlayerWillWin(PLAYER_ONE);
-							moveBar(-BAR_SPEED);
-							break;
 						case PLAYER_TWO:
 							checkPlayerWillWin(PLAYER_TWO);
+							moveBar(-BAR_SPEED);
+							break;
+						case PLAYER_ONE:
+							checkPlayerWillWin(PLAYER_ONE);
 							moveBar(BAR_SPEED);
 							break;
 						}
@@ -80,8 +80,8 @@ public class ReflexGameScene extends GameScene
 			if (secondsOnCurrentState >= 1.0f)
 			{
 				currentTileset.startNonStop();
-				enablePlayer(PLAYER_ONE);
 				enablePlayer(PLAYER_TWO);
+				enablePlayer(PLAYER_ONE);
 				changeState(GameState.WAITING_FOR_INPUT);
 			}
 			break;

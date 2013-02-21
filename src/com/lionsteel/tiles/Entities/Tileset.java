@@ -115,8 +115,8 @@ public class Tileset implements TilesConstants
 		
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
-			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
+			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
+			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
 			
 		}
 		for (int i = 0; i < NUM_BUTTONS * 3; i++)
@@ -172,8 +172,8 @@ public class Tileset implements TilesConstants
 				break;
 		}
 		reset();
-		createButtons(PLAYER_ONE);
 		createButtons(PLAYER_TWO);
+		createButtons(PLAYER_ONE);
 		createButtons(DISPLAY_BUTTONS);
 		
 		final float TILE_BASE_PADDING = 10;
@@ -245,6 +245,7 @@ public class Tileset implements TilesConstants
 				
 				for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 				{
+					displayIndicators[i].clearEntityModifiers();
 					currentScene.attachChild(displayIndicators[i]);
 					displayIndicators[i].setAlpha(0);
 				}
@@ -325,7 +326,7 @@ public class Tileset implements TilesConstants
 	{
 		switch (player)
 		{
-			case PLAYER_ONE:
+			case PLAYER_TWO:
 				
 				//Easy Buttons
 				for (int x = 0; x < 3; x++)
@@ -359,7 +360,7 @@ public class Tileset implements TilesConstants
 				}
 				
 				break;
-			case PLAYER_TWO:
+			case PLAYER_ONE:
 				
 				//Easy Buttons
 				for (int x = 0; x < 3; x++)
@@ -487,7 +488,7 @@ public class Tileset implements TilesConstants
 		FlurryAgent.logEvent(FlurryAgentEventStrings.WRONG_TILE);
 		switch (player)
 		{
-			case PLAYER_ONE:
+			case PLAYER_TWO:
 				for (int i = 0; i < NUM_BUTTONS; i++)
 				{
 					playerTwoGameButtons[i].buttonSprite.setColor(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE, 1.0f);
@@ -503,7 +504,7 @@ public class Tileset implements TilesConstants
 				}
 				
 				break;
-			case PLAYER_TWO:
+			case PLAYER_ONE:
 				for (int i = 0; i < NUM_BUTTONS; i++)
 				{
 					

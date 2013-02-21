@@ -30,6 +30,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.NonStopGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.GameScenes.RaceGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.ReflexGameScene;
+import com.lionsteel.tiles.Scenes.GameScenes.TimeAttackGameScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.BackgroundMenuScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.MainMenuScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
@@ -304,6 +305,9 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 					break;
 				case GameMode.FREE_PLAY:
 					gameScene = new FreePlayGameScene();
+					break;
+				case GameMode.TIME_ATTACK:
+					gameScene = new TimeAttackGameScene();
 					break;
 				}
 				mEngine.setScene(gameScene);
