@@ -38,6 +38,7 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		exitGameButtonRegion;
 	public final TextureRegion		cancelImageRegion;
 	public final Font				mFont;
+	public final Font				headingFont;
 	public final ITexture			fontTexture;
 	public final TextureRegion		musicNoteRegion;
 	public final TextureRegion		soundEffectImageRegion;
@@ -69,6 +70,7 @@ public class SharedResources implements TilesConstants
 		FontFactory.setAssetBasePath("fonts/");
 		fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
+		headingFont= FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 40f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
 

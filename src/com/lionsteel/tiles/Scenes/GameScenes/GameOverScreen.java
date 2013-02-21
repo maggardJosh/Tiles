@@ -1,4 +1,4 @@
-package com.lionsteel.tiles.Entities;
+package com.lionsteel.tiles.Scenes.GameScenes;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
