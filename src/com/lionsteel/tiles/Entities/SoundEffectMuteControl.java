@@ -14,7 +14,9 @@ public class SoundEffectMuteControl extends MuteControl<SoundManager>
 	public SoundEffectMuteControl()
 	{
 		super(SharedResources.getInstance().soundEffectImageRegion);
+		preferenceString = "soundMuted";
 		this.audioManager = TilesMainActivity.getInstance().getSoundManager();
+		refreshButton();
 	}
 
 	@Override

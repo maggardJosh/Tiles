@@ -13,7 +13,9 @@ public class MusicMuteControl extends MuteControl<MusicManager>
 	public MusicMuteControl()
 	{
 		super(SharedResources.getInstance().musicNoteRegion);
+		preferenceString = "musicMuted";
 		audioManager = TilesMainActivity.getInstance().getMusicManager();
+		refreshButton();
 	}
 
 	@Override
