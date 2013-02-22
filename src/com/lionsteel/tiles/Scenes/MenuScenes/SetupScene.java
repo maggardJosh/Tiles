@@ -15,9 +15,12 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import android.app.Activity;
+
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
@@ -54,7 +57,7 @@ public class SetupScene extends TilesMenuScene
 	private static SetupScene			instance;
 
 	private static int					gameMode			= GameMode.REFLEX;
-	private static int					difficulty			= Difficulty.NORMAL;
+	private static int					difficulty;
 
 	@Override
 	public void logFlurryEvent()
@@ -64,7 +67,7 @@ public class SetupScene extends TilesMenuScene
 		else
 			FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_SETUP);
 
-	};	
+	};
 
 	public static SetupScene getInstance()
 	{
@@ -105,7 +108,7 @@ public class SetupScene extends TilesMenuScene
 				SetupScene.getInstance().resetGraphics();
 
 				TilesMainActivity.getInstance().backToSetupScene();
-
+				TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
 			}
 		});
 	}
@@ -189,6 +192,7 @@ public class SetupScene extends TilesMenuScene
 			}
 		});
 		SetupScene.difficulty = difficulty;
+		TilesMainActivity.getInstance().saveInt(TilesSharedPreferenceStrings.lastDifficulty, difficulty);
 	}
 
 	public SetupScene()
@@ -199,7 +203,7 @@ public class SetupScene extends TilesMenuScene
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
-		currentTileset = new Tileset(tileset[0], false);
+		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, tileset[0]), false);
 
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
@@ -209,7 +213,7 @@ public class SetupScene extends TilesMenuScene
 		musicMute = new MusicMuteControl();
 		soundEffectMute = new SoundEffectMuteControl();
 
-		musicMute.setPosition(CAMERA_WIDTH - musicMute.getWidth()- BACK_ARROW_PADDING, BACK_ARROW_PADDING);
+		musicMute.setPosition(CAMERA_WIDTH - musicMute.getWidth() - BACK_ARROW_PADDING, BACK_ARROW_PADDING);
 		soundEffectMute.setPosition(CAMERA_WIDTH - soundEffectMute.getWidth() - BACK_ARROW_PADDING, musicMute.getBottom());
 
 		addButton(musicMute);
@@ -314,6 +318,7 @@ public class SetupScene extends TilesMenuScene
 		{
 			difficultyButtons[x].setAlpha(0);
 		}
+		difficulty = activity.sharedPrefs.getInt(TilesSharedPreferenceStrings.lastDifficulty, Difficulty.EASY);
 		difficultyButtons[getDifficulty()].setAlpha(1.0f);
 		addButton(difficultyButtons[getDifficulty()]);
 

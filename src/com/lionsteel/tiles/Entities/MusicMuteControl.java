@@ -5,6 +5,7 @@ import org.andengine.audio.music.MusicManager;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
+import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.MuteControl;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 
@@ -13,7 +14,7 @@ public class MusicMuteControl extends MuteControl<MusicManager>
 	public MusicMuteControl()
 	{
 		super(SharedResources.getInstance().musicNoteRegion);
-		preferenceString = "musicMuted";
+		preferenceString = TilesSharedPreferenceStrings.isMusicMuted;
 		audioManager = TilesMainActivity.getInstance().getMusicManager();
 		refreshButton();
 	}

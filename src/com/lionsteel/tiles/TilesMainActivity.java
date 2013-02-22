@@ -17,6 +17,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
@@ -56,6 +57,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public boolean						backEnabled	= true;
 
+	public SharedPreferences			sharedPrefs;
+
 	private Music						currentMusic;
 
 	public static TilesMainActivity getInstance()
@@ -63,6 +66,27 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		if (instance == null)
 			instance = new TilesMainActivity();
 		return instance;
+	}
+
+	public void savePreference(String key, String value)
+	{
+		final Editor editor = sharedPrefs.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+
+	public void saveBooleanPref(String key, boolean value)
+	{
+		final Editor editor = sharedPrefs.edit();
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+
+	public void saveInt(String key, int value)
+	{
+		final Editor editor = sharedPrefs.edit();
+		editor.putInt(key, value);
+		editor.commit();
 	}
 
 	@Override
@@ -118,6 +142,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public EngineOptions onCreateEngineOptions()
 	{
 		instance = this;
+
+		sharedPrefs = getPreferences(MODE_PRIVATE);
 		Camera mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 		engineOptions.getRenderOptions().setDithering(true);
@@ -360,11 +386,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		{
 			((GameOverScreen) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
-		}  else if (parentScene.getChildScene() instanceof PracticeGameOverScene)
+		} else if (parentScene.getChildScene() instanceof PracticeGameOverScene)
 		{
 			((PracticeGameOverScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
-		}else if (parentScene.getChildScene() instanceof PauseScene)
+		} else if (parentScene.getChildScene() instanceof PauseScene)
 		{
 			((PauseScene) parentScene.getChildScene()).transitionChildScene(gameQuitPromptScene);
 			return;
