@@ -124,10 +124,12 @@ public class SetupScene extends TilesMenuScene
 		{
 			instance.titleSprite.setVisible(true);
 			instance.practiceTitleSprite.setVisible(false);
+			TilesMainActivity.getInstance().saveInt(TilesSharedPreferenceStrings.lastVersusMode, gameMode);
 		} else
 		{
 			instance.titleSprite.setVisible(false);
 			instance.practiceTitleSprite.setVisible(true);
+			TilesMainActivity.getInstance().saveInt(TilesSharedPreferenceStrings.lastPracticeMode, gameMode);
 		}
 		if (SetupScene.getGameMode() == gameMode)
 			return;

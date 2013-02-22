@@ -7,6 +7,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
+import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
@@ -14,7 +15,7 @@ import com.lionsteel.tiles.Constants.GameMode;
 
 public class MainMenuScene extends TilesMenuScene
 {
-	TilesMainActivity		activity;
+	TilesMainActivity	activity;
 	BitmapTextureAtlas	sceneAtlas;
 
 	private SetupScene	setupScene;
@@ -54,7 +55,7 @@ public class MainMenuScene extends TilesMenuScene
 			@Override
 			public void run()
 			{
-				SetupScene.setGameMode(GameMode.REFLEX, true);
+				SetupScene.setGameMode(activity.sharedPrefs.getInt(TilesSharedPreferenceStrings.lastVersusMode, GameMode.REFLEX), true);
 				transitionChildScene(setupScene);
 
 			}
@@ -67,7 +68,7 @@ public class MainMenuScene extends TilesMenuScene
 			@Override
 			public void run()
 			{
-				SetupScene.setGameMode(GameMode.FREE_PLAY, true);
+				SetupScene.setGameMode(activity.sharedPrefs.getInt(TilesSharedPreferenceStrings.lastPracticeMode, GameMode.FREE_PLAY), true);
 				transitionChildScene(setupScene);
 			}
 		});
@@ -97,7 +98,7 @@ public class MainMenuScene extends TilesMenuScene
 	public void initScene()
 	{
 		// Nothing to init
-		
+
 	}
 
 }
