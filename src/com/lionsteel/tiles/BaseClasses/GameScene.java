@@ -17,8 +17,13 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
+import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -43,7 +48,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected Tileset					currentTileset;
 
-	final BitmapTextureAtlas			sceneAtlas;
+	final BuildableBitmapTextureAtlas	sceneAtlas;
 	protected final Sprite				playerOneIntro;
 	protected final Sprite				playerTwoIntro;
 	protected final Sprite				barSprite;
@@ -109,11 +114,18 @@ public abstract class GameScene extends Scene implements TilesConstants
 		});
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
-		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png", 0, 0);
-		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png", (int) (barRegion.getTextureX() + barRegion.getWidth()), 0);
-		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png", (int) (playerOneIntroRegion.getTextureX() + playerOneIntroRegion.getWidth()), 0);
-		sceneAtlas.load();
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
+		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png");
+		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
+		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
+		try
+		{
+			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			sceneAtlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
 
 		barSprite = new Sprite((CAMERA_WIDTH - barRegion.getWidth() * 1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
