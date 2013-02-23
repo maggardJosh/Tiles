@@ -372,6 +372,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		if (!backEnabled)
 			return;
 		Scene parentScene = this.mEngine.getScene();
+		
+		SharedResources.getInstance().menuBlip.play();
 
 		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
 		{
