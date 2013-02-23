@@ -39,6 +39,8 @@ public class Tileset implements TilesConstants
 {
 	private TilesMainActivity			activity;
 
+	public static String[] tilesetList;
+	
 	private BuildableBitmapTextureAtlas	atlas;
 
 	private final TextureRegion[]		buttonRegions				= new TextureRegion[NUM_BUTTONS];

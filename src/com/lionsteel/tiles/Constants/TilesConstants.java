@@ -45,7 +45,7 @@ public interface TilesConstants
 	public static final float		SONG_TRANSITION_SPEED			= .03f;
 	public static final float		MUFFLED_VOLUME					= .2f;
 
-	public static final int			TIME_ATTACK_NUM_TILES			= 5;
+	public static final int			TIME_ATTACK_NUM_TILES			= 50;
 
 	public static final float		OVERLAY_BACKGROUND_ALPHA		= .9f;
 
@@ -91,5 +91,5 @@ public interface TilesConstants
 	public static final int			GAME_OVER_Z						= FOREGROUND_Z + 1;
 
 	//----- Tileset list
-	public static final String[]	tileset							= { "three", "Rune" };
+	//public static  String[]	tileset 							= { "three", "Rune" };
 }

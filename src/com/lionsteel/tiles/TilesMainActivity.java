@@ -3,7 +3,6 @@ package com.lionsteel.tiles;
 import java.util.HashMap;
 
 import org.andengine.audio.music.Music;
-import org.andengine.audio.music.MusicManager;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -26,6 +25,7 @@ import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
@@ -86,6 +86,13 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	{
 		final Editor editor = sharedPrefs.edit();
 		editor.putInt(key, value);
+		editor.commit();
+	}
+
+	public void saveFloat(String key, float value)
+	{
+		final Editor editor = sharedPrefs.edit();
+		editor.putFloat(key, value);
 		editor.commit();
 	}
 
@@ -168,6 +175,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
 		splashScene = new SplashScene();
+
+		Tileset.tilesetList = getAssets().list("gfx/tilesets");
 
 		mEngine.registerUpdateHandler(new TimerHandler(.1f, new ITimerCallback()
 		{
