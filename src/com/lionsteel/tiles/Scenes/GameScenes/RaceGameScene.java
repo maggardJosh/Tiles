@@ -51,6 +51,9 @@ public class RaceGameScene extends GameScene
 		timerTextShadow.setRotation(90);
 		timerTextShadow.setColor(0, 0, 0);
 		timerTextShadow.setZIndex(FOREGROUND_Z);
+		
+		timerText.setAlpha(0);
+		timerTextShadow.setAlpha(0);
 
 		this.attachChild(timerTextShadow);
 		this.attachChild(timerText);

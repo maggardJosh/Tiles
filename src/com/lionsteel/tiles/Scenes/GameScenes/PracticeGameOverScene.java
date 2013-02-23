@@ -51,6 +51,9 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		valueOne = new Text(0, 0, SharedResources.getInstance().mFont, "0", 20, activity.getVertexBufferObjectManager());
 		valueTwo = new Text(0, 0, SharedResources.getInstance().mFont, "0", 20, activity.getVertexBufferObjectManager());
 
+		valueOne.setColor(VALUE_TEXT_COLOR);
+		valueTwo.setColor(VALUE_TEXT_COLOR);
+		
 		updateLabelPositions();
 		updateValuePositions();
 

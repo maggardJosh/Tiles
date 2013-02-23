@@ -31,8 +31,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 	private float		secondsPlayed;
 	private float		totalSecondsPlayed;
 
-	private final float	START_Y			= 40;
-	private final float	LABEL_SPACING	= 10;
+	private final float	START_Y	= 40;
 
 	public TimeAttackGameScene()
 	{
@@ -60,14 +59,11 @@ public class TimeAttackGameScene extends PracticeGameScene
 		this.attachChild(tileCountLabel);
 		this.attachChild(timePlayedLabel);
 		this.attachChild(timePlayedText);
-		
-		final Color valueColor = new Color(.7f, .7f, .7f);
-		difficultyText.setColor(valueColor);
-		bestTimeValue.setColor(valueColor);
-		tileCountText.setColor(valueColor);
-		timePlayedText.setColor(valueColor);
-		
-		
+
+		difficultyText.setColor(VALUE_TEXT_COLOR);
+		bestTimeValue.setColor(VALUE_TEXT_COLOR);
+		tileCountText.setColor(VALUE_TEXT_COLOR);
+		timePlayedText.setColor(VALUE_TEXT_COLOR);
 
 		difficultyLabel.setAlpha(0);
 		difficultyText.setAlpha(0);
@@ -84,8 +80,8 @@ public class TimeAttackGameScene extends PracticeGameScene
 		bestTimeValue.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeValue.getWidth()) / 2, bestTimeLabel.getY() + bestTimeLabel.getHeight() + LABEL_SPACING);
 		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, bestTimeValue.getY() + bestTimeValue.getHeight() + LABEL_SPACING * 2);
 		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
-		tileCountLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - tileCountLabel.getWidth()) / 2, (CAMERA_HEIGHT - tileCountLabel.getHeight()) / 2 - tileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
-		tileCountText.setPosition(tileCountLabel.getX() + (tileCountLabel.getWidth() - tileCountText.getWidth()) / 2, tileCountLabel.getY() + tileCountLabel.getHeight() * 2);
+		tileCountLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - tileCountLabel.getWidth()) / 2, timePlayedText.getY() + timePlayedText.getHeight() + LABEL_SPACING * 2);
+		tileCountText.setPosition(tileCountLabel.getX() + (tileCountLabel.getWidth() - tileCountText.getWidth()) / 2, tileCountLabel.getY() + tileCountLabel.getHeight() + LABEL_SPACING);
 
 		barSprite.setVisible(false);
 		this.sortChildren();

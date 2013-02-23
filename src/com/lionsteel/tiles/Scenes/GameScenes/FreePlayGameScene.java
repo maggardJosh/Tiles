@@ -19,6 +19,7 @@ public class FreePlayGameScene extends PracticeGameScene
 	private int			playerTileCount	= 0;
 	private final Text	playerTileCountLabel;
 	private final Text	playerTileCountText;
+	private final Text	timePlayedLabel;
 	private final Text	timePlayedText;
 	private final Text	inARowLabel;
 	private final Text	inARowText;
@@ -35,6 +36,7 @@ public class FreePlayGameScene extends PracticeGameScene
 		playerTileCountLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tiles", 7, activity.getVertexBufferObjectManager());
 		playerTileCountText = new Text(0, 0, SharedResources.getInstance().mFont, "0", 6, activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
+		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Time Played", activity.getVertexBufferObjectManager());
 		inARowLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Combo", 15, activity.getVertexBufferObjectManager());
 		inARowText = new Text(0, 0, SharedResources.getInstance().mFont, "x0", 6, activity.getVertexBufferObjectManager());
 
@@ -46,21 +48,30 @@ public class FreePlayGameScene extends PracticeGameScene
 
 		this.attachChild(playerTileCountText);
 		this.attachChild(playerTileCountLabel);
+		this.attachChild(timePlayedLabel);
 		this.attachChild(timePlayedText);
 		this.attachChild(inARowLabel);
 		this.attachChild(inARowText);
+
+		playerTileCountText.setColor(VALUE_TEXT_COLOR);
+		timePlayedText.setColor(VALUE_TEXT_COLOR);
+		inARowText.setColor(VALUE_TEXT_COLOR);
+
 		playerTileCountText.setAlpha(0);
 		playerTileCountLabel.setAlpha(0);
+		timePlayedLabel.setAlpha(0);
 		timePlayedText.setAlpha(0);
 		inARowLabel.setAlpha(0);
 		inARowText.setAlpha(0);
-				
 
-		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, (CAMERA_HEIGHT / 4) - playerTileCountText.getHeight() / 2 - playerTileCountText.getHeight() * 2);
+		final int TIMER_LABEL_Y = 150;
+
+		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, TIMER_LABEL_Y);
+		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
 		playerTileCountLabel.setPosition((CAMERA_WIDTH - playerTileCountLabel.getWidth()) / 3, (CAMERA_HEIGHT - playerTileCountLabel.getHeight()) / 2 - playerTileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
-		playerTileCountText.setPosition(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2, playerTileCountLabel.getY() + playerTileCountLabel.getHeight() * 2);
+		playerTileCountText.setPosition(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2, playerTileCountLabel.getY() + playerTileCountLabel.getHeight() +LABEL_SPACING);
 		inARowLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - inARowLabel.getWidth()) * 2 / 3, (CAMERA_HEIGHT - inARowLabel.getHeight()) / 2 - inARowLabel.getHeight() * 2 - BUTTON_WIDTH);
-		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() * 2);
+		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() +LABEL_SPACING);
 
 		barSprite.setVisible(false);
 		this.sortChildren();
@@ -135,8 +146,6 @@ public class FreePlayGameScene extends PracticeGameScene
 		super.Update(pSecondsElapsed);
 	}
 
-	
-
 	private void updateTime()
 	{
 		if (secondsPlayed >= 60)
@@ -161,13 +170,14 @@ public class FreePlayGameScene extends PracticeGameScene
 		inARowText.setText("x" + tilesInARow);
 		inARowText.setX(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2);
 	}
-	
+
 	@Override
 	protected void startAnimateIn()
 	{
 		final AlphaModifier fadeInMod = new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f);
 		playerTileCountText.registerEntityModifier(fadeInMod);
 		playerTileCountLabel.registerEntityModifier(fadeInMod);
+		timePlayedLabel.registerEntityModifier(fadeInMod);
 		timePlayedText.registerEntityModifier(fadeInMod);
 		inARowLabel.registerEntityModifier(fadeInMod);
 		inARowText.registerEntityModifier(fadeInMod);
