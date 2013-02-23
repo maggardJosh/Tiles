@@ -31,18 +31,19 @@ public class TilesetParticleSystem extends Entity implements TilesConstants
 	BuildableBitmapTextureAtlas	atlas;
 	private TextureRegion[]		particleRegion	= new TextureRegion[2];
 	private Sprite[]			particleSprite	= new Sprite[2];
+	private boolean hasParticles = false;
 
 	public TilesetParticleSystem(String basePath)
 	{
 		activity = TilesMainActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
-		boolean hasParticles = false;
+		
 		try
 		{
 			//check for particle image file
 			final String[] files = activity.getAssets().list("gfx/tilesets/"+basePath); 
 			for(String s : files)
-				if(s=="particles1.png")
+				if(s.compareTo("particles1.png")==0)
 				{
 					hasParticles= true;
 					break;
@@ -135,6 +136,8 @@ public class TilesetParticleSystem extends Entity implements TilesConstants
 
 	public void clear()
 	{
+		if(!hasParticles)
+			return;
 		atlas.unload();
 		for (int i = 0; i < 2; i++)
 			particleSprite[i].detachSelf();
