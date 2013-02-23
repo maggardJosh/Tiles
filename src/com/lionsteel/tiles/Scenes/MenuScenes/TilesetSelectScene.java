@@ -5,6 +5,7 @@ import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
 
 public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
@@ -12,7 +13,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	final TilesMainActivity		activity;
 
 	final int					START_Y		= 160;
-	final TilesetPreviewButton	buttons[]	= new TilesetPreviewButton[tileset.length];
+	final TilesetPreviewButton	buttons[]	= new TilesetPreviewButton[Tileset.tilesetList.length];
 
 	public TilesetSelectScene()
 	{
@@ -22,7 +23,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
-			buttons[x] = new TilesetPreviewButton(tileset[x]);
+			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 			addButton(buttons[x].getButton());
 			buttons[x].getButton().center(nextYPos);
 			nextYPos = buttons[x].getButton().getBottom();

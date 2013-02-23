@@ -1,8 +1,14 @@
 package com.lionsteel.tiles.Scenes.GameScenes;
 
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
 import org.andengine.util.debug.Debug;
+import org.andengine.util.modifier.ease.EaseCubicIn;
+import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
@@ -30,6 +36,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		background.setColor(0, 0, 0, OVERLAY_BACKGROUND_ALPHA);
 		this.attachChild(background);
+		background.setZIndex(BACKGROUND_Z);
 
 		titleText = new Text(0, 0, SharedResources.getInstance().headingFont, "Results", activity.getVertexBufferObjectManager());
 		titleText.setPosition((CAMERA_WIDTH - titleText.getWidth()) / 2, 100);
@@ -39,19 +46,23 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		holdToRestartText.setPosition((CAMERA_WIDTH - holdToRestartText.getWidth()) / 2, CAMERA_HEIGHT - holdToRestartText.getHeight() - 50);
 		this.attachChild(holdToRestartText);
 
-		labelOne = new Text(0, 0, SharedResources.getInstance().mFont, "Label One",20, activity.getVertexBufferObjectManager());
-		labelTwo = new Text(0, 0, SharedResources.getInstance().mFont, "Label Two",20, activity.getVertexBufferObjectManager());
-		valueOne = new Text(0, 0, SharedResources.getInstance().mFont, "0",20, activity.getVertexBufferObjectManager());
-		valueTwo = new Text(0, 0, SharedResources.getInstance().mFont, "0",20, activity.getVertexBufferObjectManager());
+		labelOne = new Text(0, 0, SharedResources.getInstance().mFont, "Label One", 20, activity.getVertexBufferObjectManager());
+		labelTwo = new Text(0, 0, SharedResources.getInstance().mFont, "Label Two", 20, activity.getVertexBufferObjectManager());
+		valueOne = new Text(0, 0, SharedResources.getInstance().mFont, "0", 20, activity.getVertexBufferObjectManager());
+		valueTwo = new Text(0, 0, SharedResources.getInstance().mFont, "0", 20, activity.getVertexBufferObjectManager());
 
-
+		valueOne.setColor(VALUE_TEXT_COLOR);
+		valueTwo.setColor(VALUE_TEXT_COLOR);
+		
 		updateLabelPositions();
 		updateValuePositions();
-		
+
 		this.attachChild(labelOne);
 		this.attachChild(labelTwo);
 		this.attachChild(valueOne);
 		this.attachChild(valueTwo);
+
+		valueTwo.setZIndex(FOREGROUND_Z);
 
 		restartTouchControl = new TouchControl("Ready", new Runnable()
 		{
@@ -77,25 +88,31 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		});
 		quitButton.setPosition(3, (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
 		addButton(quitButton);
+
+		this.sortChildren();
 	}
-	
+
 	public void setLabels(final String labelOne, final String labelTwo)
 	{
 		this.labelOne.setText(labelOne);
 		this.labelTwo.setText(labelTwo);
-		
+
 		updateLabelPositions();
-		
+
 	}
-	
+
 	public void setValues(final String valueOne, final String valueTwo)
 	{
 		this.valueOne.setText(valueOne);
 		this.valueTwo.setText(valueTwo);
-		
+
+		this.valueTwo.clearEntityModifiers();
+		this.valueTwo.setScale(1.0f);
+		this.valueTwo.setRotation(0);
+
 		updateValuePositions();
 	}
-	
+
 	private void updateLabelPositions()
 	{
 		this.labelOne.setPosition((CAMERA_WIDTH - this.labelOne.getWidth()) / 2, CAMERA_HEIGHT * 2 / 7);
@@ -107,7 +124,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		this.valueOne.setPosition(labelOne.getX() + (labelOne.getWidth() - valueOne.getWidth()) / 2, labelOne.getY() + labelOne.getHeight() + 16);
 		this.valueTwo.setPosition(labelTwo.getX() + (labelTwo.getWidth() - valueTwo.getWidth()) / 2, labelTwo.getY() + labelTwo.getHeight() + 16);
 	}
-	
+
 	@Override
 	public void logFlurryEvent()
 	{
@@ -127,4 +144,12 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		restartTouchControl.initButton();
 	}
 
+	public void pulseNewRecord()
+	{
+		final float pulseSeconds = 1.0f;
+		final float PULSE_SCALE = 1.4f;
+		final float PULSE_ROTATION = 6;
+		this.valueTwo.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new ScaleModifier(pulseSeconds / 2, 1.0f, PULSE_SCALE, EaseCubicOut.getInstance()), new ScaleModifier(pulseSeconds / 2, PULSE_SCALE, 1.0f, EaseCubicIn.getInstance()))));
+		this.valueTwo.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(pulseSeconds, -PULSE_ROTATION, PULSE_ROTATION), new RotationModifier(pulseSeconds, PULSE_ROTATION, -PULSE_ROTATION))));
+	}
 }

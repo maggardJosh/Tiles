@@ -1,5 +1,9 @@
 package com.lionsteel.tiles.Entities;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
@@ -16,22 +20,42 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicInOut;
 
+import android.os.FileObserver;
+
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
 
 public class TilesetParticleSystem extends Entity implements TilesConstants
 {
-	private TilesMainActivity			activity;
-	final BuildableBitmapTextureAtlas	atlas;
-	private final TextureRegion[]		particleRegion	= new TextureRegion[2];
-	private final Sprite[]				particleSprite	= new Sprite[2];
+	private TilesMainActivity	activity;
+	BuildableBitmapTextureAtlas	atlas;
+	private TextureRegion[]		particleRegion	= new TextureRegion[2];
+	private Sprite[]			particleSprite	= new Sprite[2];
 
 	public TilesetParticleSystem(String basePath)
 	{
 		activity = TilesMainActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
-
+		boolean hasParticles = false;
+		try
+		{
+			//check for particle image file
+			final String[] files = activity.getAssets().list("gfx/tilesets/"+basePath); 
+			for(String s : files)
+				if(s=="particles1.png")
+				{
+					hasParticles= true;
+					break;
+				}
+		} catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		//If there are no particles... Just abort making a particle system.
+		if(!hasParticles)
+			return;
 		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+
 		for (int i = 0; i < 2; i++)
 			particleRegion[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "particles" + (i + 1) + ".png");
 
@@ -93,7 +117,7 @@ public class TilesetParticleSystem extends Entity implements TilesConstants
 			newY = entityToMove.getY() + MAX_DIFF;
 		else if (yDiff < MAX_DIFF)
 			newY = entityToMove.getY() - MAX_DIFF;
-		final float movementTime = MIN_SECONDS + (float)(Math.random() * (MAX_SECONDS - MIN_SECONDS));
+		final float movementTime = MIN_SECONDS + (float) (Math.random() * (MAX_SECONDS - MIN_SECONDS));
 
 		entityToMove.registerEntityModifier(new MoveModifier(movementTime, entityToMove.getX(), newX, entityToMove.getY(), newY, EaseCubicInOut.getInstance()));
 

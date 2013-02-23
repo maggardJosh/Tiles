@@ -83,12 +83,12 @@ public class PauseScene extends TilesMenuScene
 			}
 		});
 
-		exitButton.setPosition(3, (CAMERA_HEIGHT - exitButton.getHeight()) / 2 - exitButton.getHeight());
+		exitButton.setPosition(BACK_ARROW_PADDING, (CAMERA_HEIGHT - exitButton.getHeight()) / 2);
 
 		musicMute = new MusicMuteControl();
-		musicMute.setPosition(0, exitButton.getBottom());
+		musicMute.setPosition(CAMERA_WIDTH-musicMute.getWidth()-BACK_ARROW_PADDING, (CAMERA_HEIGHT)/2 - musicMute.getHeight());
 		soundEffectMute = new SoundEffectMuteControl();
-		soundEffectMute.setPosition(0, musicMute.getBottom());
+		soundEffectMute.setPosition(CAMERA_WIDTH-soundEffectMute.getWidth()-BACK_ARROW_PADDING, musicMute.getBottom());
 		
 
 		this.attachChild(background);
