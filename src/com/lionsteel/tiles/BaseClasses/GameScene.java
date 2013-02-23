@@ -230,7 +230,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected void badPulseText(Text textToPulse)
 	{
 		textToPulse.clearEntityModifiers();
-		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.RED, Color.WHITE));
+		textToPulse.registerEntityModifier(new ColorModifier(TEXT_PULSE_DURATION, Color.RED, VALUE_TEXT_COLOR));
 		textToPulse.registerEntityModifier(new ScaleModifier(TEXT_PULSE_DURATION, TEXT_PULSE_START_SCALE, 1.0f));
 	}
 
