@@ -3,6 +3,7 @@ package com.lionsteel.tiles;
 import java.util.HashMap;
 
 import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicLibrary;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -245,6 +246,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public void playSong(final Music newSong)
 	{
+		
 		if (currentMusic != null)
 		{
 			mEngine.registerUpdateHandler(new TimerHandler(.1f, true, new ITimerCallback()
