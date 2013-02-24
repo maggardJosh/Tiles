@@ -133,16 +133,14 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	@Override
 	protected synchronized void onResume()
 	{
-		if (currentMusic != null)
-			currentMusic.resume();
+		SongManager.getInstance().unpause();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause()
 	{
-		if (currentMusic != null)
-			currentMusic.pause();
+		SongManager.getInstance().pause();
 		super.onPause();
 	}
 
@@ -273,6 +271,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public void onDestroyResources() throws Exception
 	{
 		SharedResources.clear();
+		SongManager.clear();
 		super.onDestroyResources();
 	}
 
