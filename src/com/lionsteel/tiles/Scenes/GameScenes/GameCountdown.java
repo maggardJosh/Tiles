@@ -9,6 +9,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.Constants.TilesConstants;
@@ -49,12 +50,14 @@ public class GameCountdown implements TilesConstants
 		final float startScale = 1.0f;
 		countdownSprite.setScale(startScale);
 		final float finalScale = 3.0f;
+		SharedResources.getInstance().countdownHit.play();
 		countdownSprite.registerEntityModifier(new ScaleModifier(COUNTDOWN_TIME, startScale, finalScale));
 		countdownSprite.registerEntityModifier(new AlphaModifier(COUNTDOWN_TIME, 1.0f, 0.0f)
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
+				SharedResources.getInstance().countdownHit.play();
 				countdownSprite.setCurrentTileIndex(1);
 				countdownSprite.registerEntityModifier(new ScaleModifier(COUNTDOWN_TIME, startScale, finalScale));
 				countdownSprite.registerEntityModifier(new AlphaModifier(COUNTDOWN_TIME, 1.0f, 0.0f)
@@ -62,6 +65,7 @@ public class GameCountdown implements TilesConstants
 					@Override
 					protected void onModifierFinished(IEntity pItem)
 					{
+						SharedResources.getInstance().countdownHit.play();
 						countdownSprite.setCurrentTileIndex(0);
 						countdownSprite.registerEntityModifier(new ScaleModifier(COUNTDOWN_TIME, startScale, finalScale));
 						countdownSprite.registerEntityModifier(new AlphaModifier(COUNTDOWN_TIME, 1.0f, 0.0f)
@@ -69,6 +73,7 @@ public class GameCountdown implements TilesConstants
 							@Override
 							protected void onModifierFinished(IEntity pItem)
 							{
+								SharedResources.getInstance().countdownFinalHit.play();
 								onFinishedAction.run();
 								super.onModifierFinished(pItem);
 							}

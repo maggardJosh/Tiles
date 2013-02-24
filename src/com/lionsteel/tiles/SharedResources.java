@@ -49,6 +49,8 @@ public class SharedResources implements TilesConstants
 	public Sound					countdownSound;
 	public Sound					menuBlip;
 	public Sound					pauseSound;
+	public Sound					countdownHit;
+	public Sound					countdownFinalHit;
 
 	public Music					menuMusic;
 	public Music					versusMusic;
@@ -131,9 +133,13 @@ public class SharedResources implements TilesConstants
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
 			menuBlip = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
 			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
-			pauseSound= SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "pause.ogg");
+			pauseSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "pause.ogg");
 			pauseSound.setVolume(SOUND_EFFECT_VOLUME);
-			
+			countdownHit = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdownHit.ogg");
+			countdownHit.setVolume(SOUND_EFFECT_VOLUME);
+			countdownFinalHit = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdownFinalHit.ogg");
+			countdownFinalHit.setVolume(SOUND_EFFECT_VOLUME);
+
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
 		} catch (IOException e)
