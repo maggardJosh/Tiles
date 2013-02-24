@@ -110,6 +110,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 			@Override
 			public void run()
 			{
+				SharedResources.getInstance().pauseSound.setRate(1.0f);
+				SharedResources.getInstance().pauseSound.play();
 				transitionChildScene(pauseScene);
 			}
 		});

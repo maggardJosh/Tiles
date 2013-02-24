@@ -184,6 +184,8 @@ public class PauseScene extends TilesMenuScene
 
 	private void unpauseGame()
 	{
+		SharedResources.getInstance().pauseSound.setRate(.5f);
+		SharedResources.getInstance().pauseSound.play();
 		mParentScene.clearChildScene();
 		SongManager.getInstance().setVolumeMultiplier(1.0f);
 	}
