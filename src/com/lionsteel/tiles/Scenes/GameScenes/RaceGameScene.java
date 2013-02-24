@@ -43,8 +43,8 @@ public class RaceGameScene extends GameScene
 			playerTileCountTexts[i].setAlpha(0);
 			this.attachChild(playerTileCountTexts[i]);
 		}
-		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_TWO].getWidth()) / 2, (CAMERA_HEIGHT) / 2 + playerTileCountTexts[PLAYER_TWO].getHeight());
-		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[PLAYER_ONE].getWidth()) / 2, (CAMERA_HEIGHT) / 2 - playerTileCountTexts[PLAYER_TWO].getHeight() * 2);
+		playerTileCountTexts[PLAYER_ONE].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - playerTileCountTexts[PLAYER_TWO].getWidth()) / 2, (CAMERA_HEIGHT) / 2 + playerTileCountTexts[PLAYER_TWO].getHeight());
+		playerTileCountTexts[PLAYER_TWO].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - playerTileCountTexts[PLAYER_ONE].getWidth()) / 2, (CAMERA_HEIGHT) / 2 - playerTileCountTexts[PLAYER_TWO].getHeight() * 2);
 		playerTileCountTexts[PLAYER_TWO].setRotation(180);
 
 		this.sortChildren();
@@ -71,7 +71,7 @@ public class RaceGameScene extends GameScene
 						currentTileset.resetDisplayButton(displayButtonPressed);
 						playerTileCount[button.getPlayer()]++;
 						playerTileCountTexts[button.getPlayer()].setText("" + playerTileCount[button.getPlayer()]);
-						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[button.getPlayer()].getWidth()) / 2);
+						playerTileCountTexts[button.getPlayer()].setX((CAMERA_WIDTH + PAUSE_BAR_WIDTH - playerTileCountTexts[button.getPlayer()].getWidth()) / 2);
 						pulseTileTexts();
 					}
 
@@ -158,7 +158,7 @@ public class RaceGameScene extends GameScene
 		for (int i = 0; i < 2; i++)
 		{
 			playerTileCountTexts[i].setText("" + playerTileCount[i]);
-			playerTileCountTexts[i].setX((CAMERA_WIDTH + BAR_WIDTH - playerTileCountTexts[i].getWidth()) / 2);
+			playerTileCountTexts[i].setX((CAMERA_WIDTH + PAUSE_BAR_WIDTH - playerTileCountTexts[i].getWidth()) / 2);
 		}
 	}
 	

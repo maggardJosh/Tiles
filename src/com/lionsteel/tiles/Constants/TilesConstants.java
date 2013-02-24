@@ -12,7 +12,7 @@ public interface TilesConstants
 	public static final int		NUM_BUTTONS						= 9;
 
 	public static final int		BUTTON_WIDTH					= 110;
-	public static final int		BAR_WIDTH						= 30;
+	public static final int		PAUSE_BAR_WIDTH					= 30;
 	public static final int		BAR_SPEED						= 20;
 
 	public static final int		DISPLAY_BUTTONS					= -1;

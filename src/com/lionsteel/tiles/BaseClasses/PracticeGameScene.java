@@ -29,7 +29,7 @@ public abstract class PracticeGameScene extends GameScene
 		gameModeText = new Text(0, 0, SharedResources.getInstance().mFont, "Game Mode", 20, activity.getVertexBufferObjectManager());
 		gameModeText.setScale(GAME_MODE_SCALE);
 		this.attachChild(gameModeText);
-		gameModeText.setPosition((CAMERA_WIDTH + BAR_WIDTH - gameModeText.getWidth()) / 2, START_Y);
+		gameModeText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - gameModeText.getWidth()) / 2, START_Y);
 
 		gameCountdown.countdownSprite.setRotation(-90);
 		pauseScene.setTwoPlayerMode(false);
@@ -40,7 +40,7 @@ public abstract class PracticeGameScene extends GameScene
 	protected void setGameModeText(final String gameModeString)
 	{
 		gameModeText.setText(gameModeString);
-		gameModeText.setX((CAMERA_WIDTH + BAR_WIDTH - gameModeText.getWidth()) / 2);
+		gameModeText.setX((CAMERA_WIDTH + PAUSE_BAR_WIDTH - gameModeText.getWidth()) / 2);
 	}
 
 	@Override

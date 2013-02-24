@@ -83,12 +83,12 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedText.setAlpha(0);
 
 		
-		difficultyLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - difficultyLabel.getWidth()) / 2, gameModeText.getY() + gameModeText.getHeight() + LABEL_SPACING * 3);
-		difficultyText.setPosition((CAMERA_WIDTH + BAR_WIDTH - difficultyText.getWidth()) / 2, difficultyLabel.getY() + difficultyLabel.getHeight() + LABEL_SPACING);
-		bestTimeLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeLabel.getWidth()) / 2, difficultyText.getY() + difficultyText.getHeight() + LABEL_SPACING * 2);
-		bestTimeValue.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeValue.getWidth()) / 2, bestTimeLabel.getY() + bestTimeLabel.getHeight() + LABEL_SPACING);
-		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, bestTimeValue.getY() + bestTimeValue.getHeight() + LABEL_SPACING * 2);
-		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
+		difficultyLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - difficultyLabel.getWidth()) / 2, gameModeText.getY() + gameModeText.getHeight() + LABEL_SPACING * 3);
+		difficultyText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - difficultyText.getWidth()) / 2, difficultyLabel.getY() + difficultyLabel.getHeight() + LABEL_SPACING);
+		bestTimeLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - bestTimeLabel.getWidth()) / 2, difficultyText.getY() + difficultyText.getHeight() + LABEL_SPACING * 2);
+		bestTimeValue.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - bestTimeValue.getWidth()) / 2, bestTimeLabel.getY() + bestTimeLabel.getHeight() + LABEL_SPACING);
+		timePlayedLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - timePlayedLabel.getWidth()) / 2, bestTimeValue.getY() + bestTimeValue.getHeight() + LABEL_SPACING * 2);
+		timePlayedText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
 
 		barSprite.setVisible(false);
 		this.sortChildren();
@@ -227,7 +227,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 	private void updateBestTimeText()
 	{
 		bestTimeValue.setText(getBestTimeString());
-		bestTimeValue.setX((CAMERA_WIDTH + BAR_WIDTH - bestTimeValue.getWidth()) / 2);
+		bestTimeValue.setX((CAMERA_WIDTH + PAUSE_BAR_WIDTH - bestTimeValue.getWidth()) / 2);
 	}
 
 	@Override

@@ -230,17 +230,17 @@ public class Tileset implements TilesConstants
 			switch (SetupScene.getDifficulty())
 			{
 			case Difficulty.EASY:
-				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[0].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			case Difficulty.NORMAL:
-				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
-				displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth() / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			case Difficulty.HARD:
 			case Difficulty.INSANE:
-				displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
-				displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
-				displayIndicators[2].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[2].getWidth()) / 2 + displayIndicators[2].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[0].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[1].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[1].getWidth()) / 2, (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+				displayIndicators[2].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[2].getWidth()) / 2 + displayIndicators[2].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 				break;
 			}
 
@@ -252,8 +252,8 @@ public class Tileset implements TilesConstants
 			}
 			break;
 		case GameMode.RACE:
-			displayIndicators[0].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
-			displayIndicators[1].setPosition((CAMERA_WIDTH + BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+			displayIndicators[0].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[0].getWidth()) / 2 - displayIndicators[0].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
+			displayIndicators[1].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 			for (int i = 0; i < 2; i++)
 			{
 				currentScene.attachChild(displayIndicators[i]);
@@ -474,7 +474,7 @@ public class Tileset implements TilesConstants
 			{
 				pItem.buttonSprite.clearEntityModifiers();
 				pItem.buttonSprite.setRotation(90);
-				pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+				pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + PAUSE_BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 				pItem.buttonSprite.setVisible(false);
 
 			}
@@ -745,17 +745,17 @@ public class Tileset implements TilesConstants
 		switch (SetupScene.getDifficulty())
 		{
 		case Difficulty.EASY:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 			break;
 		case Difficulty.NORMAL:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 			break;
 		case Difficulty.HARD:
 		case Difficulty.INSANE:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[2].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[2].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 			break;
 		}
 	}
@@ -769,8 +769,8 @@ public class Tileset implements TilesConstants
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 		}
-		currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-		currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
 	}
 
 	public GameButton isButtonCurrentlyActive(int buttonNumber)
