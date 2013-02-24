@@ -186,7 +186,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
 				mEngine.unregisterUpdateHandler(pTimerHandler);
-
+				mEngine.registerUpdateHandler(SongManager.getInstance());
 				SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
 				loadingScene = new LoadingScene();
 				menuQuitPromptScene = new QuitPromptScene(new Runnable()
@@ -230,7 +230,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
 								mainMenuScene.logFlurryEvent();
-								playSong(SharedResources.getInstance().menuMusic);
+								SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 								mEngine.setScene(backgroundScene);
 							}
 						});
@@ -242,53 +242,6 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 
-	}
-
-	public void playSong(final Music newSong)
-	{
-		
-		if (currentMusic != null)
-		{
-			mEngine.registerUpdateHandler(new TimerHandler(.1f, true, new ITimerCallback()
-			{
-
-				@Override
-				public void onTimePassed(TimerHandler pTimerHandler)
-				{
-					if (currentMusic.getVolume() > SONG_TRANSITION_SPEED)
-						currentMusic.setVolume(currentMusic.getVolume() - SONG_TRANSITION_SPEED);
-					else
-					{
-						currentMusic.setVolume(0);
-						currentMusic = null;
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						playSong(newSong);
-					}
-				}
-			}));
-			return;
-		}
-		if (newSong == null)
-			return;
-		currentMusic = newSong;
-		newSong.play();
-		newSong.setVolume(0);
-		newSong.setLooping(true);
-		mEngine.registerUpdateHandler(new TimerHandler(.1f, true, new ITimerCallback()
-		{
-
-			@Override
-			public void onTimePassed(TimerHandler pTimerHandler)
-			{
-				if (newSong.getVolume() < 1 - SONG_TRANSITION_SPEED)
-					newSong.setVolume(newSong.getVolume() + SONG_TRANSITION_SPEED);
-				else
-				{
-					newSong.setVolume(1.0f);
-					mEngine.unregisterUpdateHandler(pTimerHandler);
-				}
-			}
-		}));
 	}
 
 	@Override
@@ -419,7 +372,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public void backToMainMenu()
 	{
-		playSong(SharedResources.getInstance().menuMusic);
+		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 		//Clear all child scenes
 		TilesMenuScene parentScene = mainMenuScene;
 		while (parentScene.hasChildScene())

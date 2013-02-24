@@ -44,7 +44,7 @@ public interface TilesConstants
 	public static final float	SOUND_EFFECT_VOLUME				= 1.0f;
 	public static final float	MAX_NUM_MENU_SCENES				= 3;
 
-	public static final float	SONG_TRANSITION_SPEED			= .03f;
+	public static final float	SONG_TRANSITION_SPEED			= .5f;
 	public static final float	MUFFLED_VOLUME					= .2f;
 
 	public static final int		TIME_ATTACK_NUM_TILES			= 50;

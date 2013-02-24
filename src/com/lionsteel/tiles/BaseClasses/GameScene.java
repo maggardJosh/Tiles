@@ -27,6 +27,7 @@ import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
@@ -314,7 +315,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 				playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 				startAnimateIn();
-				activity.playSong(SharedResources.getInstance().versusMusic);
+				SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 			}
 			break;
 		}

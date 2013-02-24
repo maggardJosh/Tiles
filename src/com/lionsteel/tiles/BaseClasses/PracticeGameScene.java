@@ -4,6 +4,7 @@ import org.andengine.entity.modifier.MoveYModifier;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
@@ -37,7 +38,7 @@ public abstract class PracticeGameScene extends GameScene
 			{
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 				startAnimateIn();
-				activity.playSong(SharedResources.getInstance().versusMusic);
+				SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 			}
 			break;
 		}
