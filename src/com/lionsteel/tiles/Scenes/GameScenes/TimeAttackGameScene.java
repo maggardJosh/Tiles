@@ -32,7 +32,6 @@ public class TimeAttackGameScene extends PracticeGameScene
 
 	private TimerRect	tileRect;
 
-
 	public TimeAttackGameScene()
 	{
 		super();
@@ -49,7 +48,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		this.attachChild(tileRect);
 
 		this.setGameModeText("Time-Attack");
-		
+
 		difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Difficulty", activity.getVertexBufferObjectManager());
 		difficultyText = new Text(0, 0, SharedResources.getInstance().mFont, Difficulty.getName(SetupScene.getDifficulty()), activity.getVertexBufferObjectManager());
 		bestTimeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Best Time", activity.getVertexBufferObjectManager());
@@ -57,12 +56,9 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Round Time", activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
 
-		
-		
 		hoursPlayed = 0;
 		minutesPlayed = 0;
 		secondsPlayed = 0;
-
 
 		this.attachChild(difficultyLabel);
 		this.attachChild(difficultyText);
@@ -82,7 +78,6 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedLabel.setAlpha(0);
 		timePlayedText.setAlpha(0);
 
-		
 		difficultyLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - difficultyLabel.getWidth()) / 2, gameModeText.getY() + gameModeText.getHeight() + LABEL_SPACING * 3);
 		difficultyText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - difficultyText.getWidth()) / 2, difficultyLabel.getY() + difficultyLabel.getHeight() + LABEL_SPACING);
 		bestTimeLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - bestTimeLabel.getWidth()) / 2, difficultyText.getY() + difficultyText.getHeight() + LABEL_SPACING * 2);
@@ -94,9 +89,19 @@ public class TimeAttackGameScene extends PracticeGameScene
 		this.sortChildren();
 	}
 
+	private String getSaveString()
+	{
+		return TilesSharedPreferenceStrings.bestTimeAttack + Difficulty.getName(SetupScene.getDifficulty()) + currentTileset.getBasePath();
+	}
+
+	private float getBestTime()
+	{
+		return activity.sharedPrefs.getFloat(getSaveString(), 0);
+	}
+
 	private String getBestTimeString()
 	{
-		float bestTimeAttackSeconds = activity.sharedPrefs.getFloat(TilesSharedPreferenceStrings.bestTimeAttack[SetupScene.getDifficulty()], 0);
+		float bestTimeAttackSeconds = getBestTime();
 
 		int bestTimeMinutes = (int) (bestTimeAttackSeconds / 60);
 		final int bestTimeHours = (int) (bestTimeMinutes / 60);
@@ -153,7 +158,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		if (getTilesCollected(PLAYER_ONE) >= TIME_ATTACK_NUM_TILES)
 		{
 			practiceGameOverScene.setLabels("Best Time", "Round Time");
-			float bestTimeAttackSeconds = activity.sharedPrefs.getFloat(TilesSharedPreferenceStrings.bestTimeAttack[SetupScene.getDifficulty()], 0);
+			float bestTimeAttackSeconds = getBestTime();
 
 			int bestTimeMinutes = (int) (bestTimeAttackSeconds / 60);
 			final int bestTimeHours = (int) (bestTimeMinutes / 60);
@@ -171,7 +176,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 
 			if (bestTimeAttackSeconds > totalSecondsPlayed || bestTimeAttackSeconds == 0)
 			{
-				activity.saveFloat(TilesSharedPreferenceStrings.bestTimeAttack[SetupScene.getDifficulty()], totalSecondsPlayed);
+				activity.saveFloat(getSaveString(), totalSecondsPlayed);
 				practiceGameOverScene.pulseNewRecord();
 			}
 		}

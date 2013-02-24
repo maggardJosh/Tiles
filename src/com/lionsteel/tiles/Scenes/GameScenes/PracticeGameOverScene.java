@@ -128,7 +128,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		updateTextPositions();
 	}
 
-	public void setValues(final String valueOne, final String valueTwo)
+	public void setValues(final CharSequence valueOne, final CharSequence valueTwo)
 	{
 		this.gameModeLabel.setText(GameMode.getName(SetupScene.getGameMode()));
 		this.difficultyValue.setText(Difficulty.getName(SetupScene.getDifficulty()));
@@ -174,6 +174,8 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 	public void initScene()
 	{
 		restartTouchControl.initButton();
+		SharedResources.getInstance().countdownFinalHit.setRate(GAME_OVER_HIT_RATE);
+		SharedResources.getInstance().countdownFinalHit.play();
 		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 

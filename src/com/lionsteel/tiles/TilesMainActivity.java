@@ -28,6 +28,7 @@ import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
+import com.lionsteel.tiles.Scenes.GameScenes.FrenzyGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.NonStopGameScene;
@@ -298,6 +299,9 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 					break;
 				case GameMode.TIME_ATTACK:
 					gameScene = new TimeAttackGameScene();
+					break;
+				case GameMode.FRENZY:
+					gameScene = new FrenzyGameScene();
 					break;
 				}
 				mEngine.setScene(gameScene);

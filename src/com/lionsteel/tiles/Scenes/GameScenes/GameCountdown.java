@@ -73,6 +73,7 @@ public class GameCountdown implements TilesConstants
 							@Override
 							protected void onModifierFinished(IEntity pItem)
 							{
+								SharedResources.getInstance().countdownFinalHit.setRate(1.0f);
 								SharedResources.getInstance().countdownFinalHit.play();
 								onFinishedAction.run();
 								super.onModifierFinished(pItem);
