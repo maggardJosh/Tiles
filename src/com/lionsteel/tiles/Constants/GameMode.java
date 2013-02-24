@@ -20,11 +20,11 @@ public class GameMode
 		case RACE:
 			return "Race";
 		case FREE_PLAY:
-			return "Free_Play";
+			return "Free Play";
 		case FRENZY:
 			return "Frenzy";
 		case TIME_ATTACK:
-			return "Time_Attack";
+			return "Time-Attack";
 		default:
 			return "...None?";
 		}
