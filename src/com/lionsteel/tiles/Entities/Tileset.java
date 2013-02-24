@@ -178,7 +178,6 @@ public class Tileset implements TilesConstants
 		createButtons(PLAYER_ONE);
 		createButtons(DISPLAY_BUTTONS);
 
-		final float TILE_BASE_PADDING = 10;
 		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		tileBase.setColor(0, 0, 0, 0);
 
@@ -191,8 +190,8 @@ public class Tileset implements TilesConstants
 		{
 			numberOfStreamTilesToSpawn = 2;
 			{//Player One Tiles
-				playerOneTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_TILE_PADDING, playerOneGameButtons[3].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
-				playerOneDisplay = new Rectangle(displayIndicators[1].getX() - tileBase.getX() - PLAYER_TILE_PADDING, displayIndicators[1].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, 1, activity.getVertexBufferObjectManager());
+				playerOneTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerOneGameButtons[3].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerOneDisplay = new Rectangle(displayIndicators[1].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[1].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, 1, activity.getVertexBufferObjectManager());
 				playerOneDisplay.setHeight(playerOneTiles.getY() - playerOneDisplay.getY());
 				playerOneTiles.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
 				playerOneDisplay.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
@@ -202,8 +201,8 @@ public class Tileset implements TilesConstants
 				tileBase.attachChild(playerOneDisplay);
 			}
 			{//Player Two Tiles
-				playerTwoTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_TILE_PADDING, playerTwoGameButtons[4].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
-				playerTwoDisplay = new Rectangle(displayIndicators[0].getX() - tileBase.getX() - PLAYER_TILE_PADDING, displayIndicators[0].getY() - PLAYER_TILE_PADDING, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, BUTTON_WIDTH + PLAYER_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerTwoGameButtons[4].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoDisplay = new Rectangle(displayIndicators[0].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[0].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
 				playerTwoDisplay.setHeight((playerTwoDisplay.getY() + playerTwoDisplay.getHeight()) - (playerTwoTiles.getY() + playerTwoTiles.getHeight()));
 				playerTwoDisplay.setY(playerTwoTiles.getY() + playerTwoTiles.getHeight());
 				playerTwoTiles.setColor(0, 0, 1.0f, PLAYER_TILES_ALPHA);
@@ -333,22 +332,22 @@ public class Tileset implements TilesConstants
 			//Easy Buttons
 			for (int x = 0; x < 3; x++)
 			{
-				playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+				playerTwoGameButtons[x].buttonSprite.setPosition(PLAYER_TILE_START_X + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
 			}
 
 			//Medium Buttons
 			{
-				playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
+				playerTwoGameButtons[3].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[4].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH, 0);
 			}
 
 			//Hard Buttons
 			{
 
-				playerTwoGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[6].buttonSprite.setPosition(90, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
-				playerTwoGameButtons[8].buttonSprite.setPosition(90, 0);
+				playerTwoGameButtons[5].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[6].buttonSprite.setPosition(PLAYER_TILE_START_X, BUTTON_WIDTH * 2);
+				playerTwoGameButtons[7].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH * 2, 0);
+				playerTwoGameButtons[8].buttonSprite.setPosition(PLAYER_TILE_START_X, 0);
 
 			}
 

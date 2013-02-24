@@ -26,8 +26,13 @@ public interface TilesConstants
 	public static final float	REFLEX_MIN_TIME					= 1.0f;
 	public static final float	REFLEX_MAX_TIME					= 2.5f;
 
+	public static final float	PLAYER_TILE_START_X				= 90;
+
+	public static final float	TILE_BASE_PADDING				= 10;
+	public static final float	TILE_BASE_RIGHT_SIDE			= PLAYER_TILE_START_X + BUTTON_WIDTH * 3 + TILE_BASE_PADDING;
+
 	public static final float	PLAYER_TILES_ALPHA				= .3f;
-	public static final int		PLAYER_TILE_PADDING				= 5;
+	public static final int		PLAYER_RACE_TILE_PADDING		= 5;
 
 	public static final float	RACE_SECONDS					= 30.0f;
 	public static final int		BIG_PULSE_MOD					= 25;
