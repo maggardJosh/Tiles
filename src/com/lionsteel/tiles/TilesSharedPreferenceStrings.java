@@ -8,6 +8,6 @@ public class TilesSharedPreferenceStrings
 	public static final String		lastDifficulty		= "lastDifficulty";
 	public static final String		lastVersusMode		= "lastVersusMode";
 	public static final String		lastPracticeMode	= "lastPracticeMode";
-	public static final String[]	bestTimeAttack		= { "bestTimeAttackEasy", "bestTimeAttackNormal", "bestTimeAttackHard", "bestTimeAttackInsane" };
+	public static final String	bestTimeAttack		= "bestTimeAttackEasy";
 	public static final String		FRENZY_BEST_TILES	= "bestFrenzy";
 }
