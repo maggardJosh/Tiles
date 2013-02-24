@@ -36,19 +36,21 @@ public class TimerRect extends Entity implements TilesConstants
 		this.seconds = seconds;
 
 		timerRect = new Rectangle(TILE_BASE_RIGHT_SIDE, 0, CAMERA_WIDTH - TILE_BASE_RIGHT_SIDE, CAMERA_HEIGHT, TilesMainActivity.getInstance().getVertexBufferObjectManager());
-		timerRect.setAlpha(0);
 		this.attachChild(timerRect);
 		countText = new Text(0, 0, SharedResources.getInstance().mFont, String.format("%02d", (int) seconds), 3, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 
 		initCountText();
 
 		reset();
+		timerRect.setAlpha(0);
+		countText.setAlpha(0);
 	}
 
 	public void fadeIn()
 	{
 		timerRect.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 		countText.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
+		countText.registerEntityModifier(new ScaleModifier(TILE_BASE_ANIMATE_IN/2, 10.0f, 1.0f));
 	}
 
 	private void initCountText()
