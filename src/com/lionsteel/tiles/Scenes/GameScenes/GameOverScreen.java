@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
@@ -267,6 +268,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	{
 		for (TouchControl controls : playerRematchControls)
 			controls.initButton();
+		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 
 }

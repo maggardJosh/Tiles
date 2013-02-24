@@ -332,6 +332,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		resetGame();
 		currentTileset.resetPlayerTiles();
 		resetValues();
+		SongManager.getInstance().setVolumeMultiplier(1.0f);
 	}
 
 	protected void resetValues()

@@ -11,6 +11,7 @@ import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
@@ -142,6 +143,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 	public void initScene()
 	{
 		restartTouchControl.initButton();
+		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 
 	public void pulseNewRecord()

@@ -3,6 +3,8 @@ package com.lionsteel.tiles;
 import org.andengine.audio.music.Music;
 import org.andengine.engine.handler.IUpdateHandler;
 
+import android.media.MediaRouter.VolumeCallback;
+
 import com.lionsteel.tiles.Constants.TilesConstants;
 
 public class SongManager implements IUpdateHandler
@@ -11,7 +13,9 @@ public class SongManager implements IUpdateHandler
 
 	private Music				currentSong;
 	private Music				nextSong;
-	private boolean				isPlaying	= false;
+	private boolean				isPlaying				= false;
+	private float				currentSongVolume		= 0;
+	private float				songVolumeMultiplier	= 1.0f;
 
 	public static SongManager getInstance()
 	{
@@ -60,6 +64,8 @@ public class SongManager implements IUpdateHandler
 			fadeOutCurrentSong(pSecondsElapsed);
 		else
 			fadeInCurrentSong(pSecondsElapsed);
+		
+		currentSong.setVolume(currentSongVolume * songVolumeMultiplier);
 	}
 
 	private void goNextSong()
@@ -69,17 +75,23 @@ public class SongManager implements IUpdateHandler
 			currentSong.setVolume(0);
 			currentSong.pause();
 		}
-		nextSong.setVolume(0);	
+		this.currentSongVolume = 0;
+		nextSong.setVolume(currentSongVolume);
 		nextSong.play();
 		nextSong.setLooping(true);
 		currentSong = nextSong;
 		nextSong = null;
 	}
+	
+	public void setVolumeMultiplier(final float newMultiplier)
+	{
+		this.songVolumeMultiplier = newMultiplier;
+	}
 
 	private void fadeOutCurrentSong(final float pSecondsElapsed)
 	{
-		if (currentSong.getVolume() > TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed)
-			currentSong.setVolume(currentSong.getVolume() - TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed);
+		if (currentSongVolume > TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed)
+			currentSongVolume -=  TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed;
 		else
 			goNextSong();
 
@@ -87,10 +99,10 @@ public class SongManager implements IUpdateHandler
 
 	private void fadeInCurrentSong(final float pSecondsElapsed)
 	{
-		if (currentSong.getVolume() < 1.0f - TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed)
-			currentSong.setVolume(currentSong.getVolume() + TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed);
+		if (currentSongVolume < 1.0f - TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed)
+			currentSongVolume += TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed;
 		else
-			currentSong.setVolume(1.0f);
+			currentSongVolume = 1.0f;
 	}
 
 	@Override
@@ -103,6 +115,12 @@ public class SongManager implements IUpdateHandler
 	{
 		instance = null;
 
+	}
+
+	public void setCurrentVolume(float currentVolume)
+	{
+		this.currentSongVolume = currentVolume;
+		
 	}
 
 }

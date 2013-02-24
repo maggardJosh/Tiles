@@ -60,8 +60,6 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public SharedPreferences			sharedPrefs;
 
-	private Music						currentMusic;
-
 	public static TilesMainActivity getInstance()
 	{
 		if (instance == null)
@@ -371,6 +369,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public void backToMainMenu()
 	{
+		SongManager.getInstance().setVolumeMultiplier(1.0f);
+		SongManager.getInstance().setCurrentVolume(MUFFLED_VOLUME);
 		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 		//Clear all child scenes
 		TilesMenuScene parentScene = mainMenuScene;

@@ -13,6 +13,7 @@ import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
@@ -26,8 +27,8 @@ public class PauseScene extends TilesMenuScene
 	private boolean					playerOneReady	= false;
 	private boolean					playerTwoReady	= false;
 
-	private TouchControl		playerOneTouch;
-	private TouchControl		playerTwoTouch;
+	private TouchControl			playerOneTouch;
+	private TouchControl			playerTwoTouch;
 
 	private boolean					isTwoPlayerMode	= true;
 
@@ -86,10 +87,9 @@ public class PauseScene extends TilesMenuScene
 		exitButton.setPosition(BACK_ARROW_PADDING, (CAMERA_HEIGHT - exitButton.getHeight()) / 2);
 
 		musicMute = new MusicMuteControl();
-		musicMute.setPosition(CAMERA_WIDTH-musicMute.getWidth()-BACK_ARROW_PADDING, (CAMERA_HEIGHT)/2 - musicMute.getHeight());
+		musicMute.setPosition(CAMERA_WIDTH - musicMute.getWidth() - BACK_ARROW_PADDING, (CAMERA_HEIGHT) / 2 - musicMute.getHeight());
 		soundEffectMute = new SoundEffectMuteControl();
-		soundEffectMute.setPosition(CAMERA_WIDTH-soundEffectMute.getWidth()-BACK_ARROW_PADDING, musicMute.getBottom());
-		
+		soundEffectMute.setPosition(CAMERA_WIDTH - soundEffectMute.getWidth() - BACK_ARROW_PADDING, musicMute.getBottom());
 
 		this.attachChild(background);
 		this.attachChild(pausedSprite);
@@ -181,14 +181,12 @@ public class PauseScene extends TilesMenuScene
 			registerTouchArea(playerTwoTouch.touchImage);
 		super.registerTouchAreas();
 	}
-	
+
 	private void unpauseGame()
 	{
 		mParentScene.clearChildScene();
-		if(!musicMute.isMuted())
-			activity.getMusicManager().setMasterVolume(1.0f);
+		SongManager.getInstance().setVolumeMultiplier(1.0f);
 	}
-	
 
 	@Override
 	public void initScene()
@@ -198,9 +196,7 @@ public class PauseScene extends TilesMenuScene
 
 		musicMute.refreshButton();
 		soundEffectMute.refreshButton();
-		
-		if(!musicMute.isMuted())
-			activity.getMusicManager().setMasterVolume(MUFFLED_VOLUME);
 
+		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 }

@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.BaseClasses.TouchControl;
