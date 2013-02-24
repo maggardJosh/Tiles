@@ -42,6 +42,8 @@ public interface TilesConstants
 	public static final Point	VALUE_ONE_CENTER				= new Point(CAMERA_WIDTH / 4, CAMERA_HEIGHT - 250);
 	public static final Point	VALUE_TWO_CENTER				= new Point(CAMERA_WIDTH * 3 / 4, CAMERA_HEIGHT - 250);
 
+	public static final float	GAME_OVER_HIT_RATE				= .5f;
+
 	public static final float	MIN_TILE_COLLECT_RATE			= .7f;
 	public static final float	MAX_TILE_COLLECT_RATE			= .9f;
 	public static final float	TILE_COLLECT_RATE_INCREMENT		= .05f;
