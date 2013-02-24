@@ -53,6 +53,7 @@ public interface TilesConstants
 	public static final float	MUFFLED_VOLUME					= .2f;
 
 	public static final int		TIME_ATTACK_NUM_TILES			= 50;
+	public static final float	FRENZY_SECONDS					= 30.0f;
 
 	public static final float	OVERLAY_BACKGROUND_ALPHA		= .9f;
 	public static final Color	VALUE_TEXT_COLOR				= new Color(.7f, .7f, .7f);
