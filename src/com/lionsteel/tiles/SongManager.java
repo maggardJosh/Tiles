@@ -11,6 +11,7 @@ public class SongManager implements IUpdateHandler
 
 	private Music				currentSong;
 	private Music				nextSong;
+	private boolean				isPlaying	= false;
 
 	public static SongManager getInstance()
 	{
@@ -29,9 +30,25 @@ public class SongManager implements IUpdateHandler
 		this.nextSong = nextSong;
 	}
 
+	public void pause()
+	{
+		isPlaying = false;
+		if (currentSong != null)
+			currentSong.pause();
+	}
+
+	public void unpause()
+	{
+		isPlaying = true;
+		if (currentSong != null)
+			currentSong.play();
+	}
+
 	@Override
 	public void onUpdate(float pSecondsElapsed)
 	{
+		if (!isPlaying)
+			return;
 		if (currentSong == null)
 		{
 			if (nextSong != null)
@@ -52,8 +69,9 @@ public class SongManager implements IUpdateHandler
 			currentSong.setVolume(0);
 			currentSong.pause();
 		}
-		nextSong.setVolume(0);
+		nextSong.setVolume(0);	
 		nextSong.play();
+		nextSong.setLooping(true);
 		currentSong = nextSong;
 		nextSong = null;
 	}
@@ -78,6 +96,12 @@ public class SongManager implements IUpdateHandler
 	@Override
 	public void reset()
 	{
+
+	}
+
+	public static void clear()
+	{
+		instance = null;
 
 	}
 
