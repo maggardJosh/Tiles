@@ -4,7 +4,6 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ColorModifier;
-import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
@@ -25,19 +24,20 @@ public class TimerRect extends Entity implements TilesConstants
 
 	private final Rectangle	timerRect;
 
-	private float			elapsedSeconds;
-
 	private final Text		countText;
 
-	private final float		seconds;
+	private float			value;
+	private final float		maxValue;
+	private final Runnable	endAction;
 
-	public TimerRect(final float seconds)
+	public TimerRect(final float maxValue, final Runnable endAction)
 	{
-		this.seconds = seconds;
+		this.maxValue = maxValue;
+		this.endAction = endAction;
 
 		timerRect = new Rectangle(TILE_BASE_RIGHT_SIDE, 0, CAMERA_WIDTH - TILE_BASE_RIGHT_SIDE, CAMERA_HEIGHT, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 		this.attachChild(timerRect);
-		countText = new Text(0, 0, SharedResources.getInstance().mFont, String.format("%02d", (int) seconds), 3, TilesMainActivity.getInstance().getVertexBufferObjectManager());
+		countText = new Text(0, 0, SharedResources.getInstance().mFont, String.format("%02d", (int) maxValue), 3, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 
 		initCountText();
 
@@ -50,7 +50,7 @@ public class TimerRect extends Entity implements TilesConstants
 	{
 		timerRect.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 		countText.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
-		countText.registerEntityModifier(new ScaleModifier(TILE_BASE_ANIMATE_IN/2, 10.0f, 1.0f));
+		countText.registerEntityModifier(new ScaleModifier(TILE_BASE_ANIMATE_IN / 2, 10.0f, 1.0f));
 	}
 
 	private void initCountText()
@@ -63,22 +63,44 @@ public class TimerRect extends Entity implements TilesConstants
 		this.attachChild(countText);
 	}
 
+	public void decrement()
+	{
+		value += 1.0f;
+		timerRect.clearEntityModifiers();
+		timerRect.registerEntityModifier(new ScaleModifier(1.0f, 1.0f, 1.0f, timerRect.getScaleY(), 1.0f-(value / maxValue), EaseCubicInOut.getInstance()));
+		if (maxValue - value > 5)
+			timerRect.registerEntityModifier(new ColorModifier(1.0f, highlightColor, baseColor, EaseCubicInOut.getInstance()));
+		else
+		{
+			SharedResources.getInstance().countdownSound.play();
+			timerRect.registerEntityModifier(new ColorModifier(1.0f, hurryHighlightColor, hurryBaseColor, EaseCubicInOut.getInstance()));
+		}
+		countText.setText(String.format("%02d", (int)(maxValue-value)));
+		if (maxValue - value <= 0)
+			endAction.run();
+	}
+
 	public void startTimer()
 	{
 		final float currentScale = timerRect.getScaleY();
 
-		timerRect.registerEntityModifier(new ScaleModifier(1.0f, 1.0f, 1.0f, currentScale, currentScale - (1.0f / seconds), EaseCubicInOut.getInstance())
+		timerRect.registerEntityModifier(new ScaleModifier(1.0f, 1.0f, 1.0f, currentScale, currentScale - (1.0f / maxValue), EaseCubicInOut.getInstance())
 		{
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
-				elapsedSeconds += 1.0f;
-				countText.setText(String.format("%02d", (int) (seconds - elapsedSeconds)));
-				startTimer();
+				value += 1.0f;
+				countText.setText(String.format("%02d", (int) (maxValue - value)));
+
+				if (maxValue - value <= 0)
+					endAction.run();
+				else
+					startTimer();
+
 				super.onModifierFinished(pItem);
 			}
 		});
-		if (seconds - elapsedSeconds > 5)
+		if (maxValue - value > 5)
 			timerRect.registerEntityModifier(new ColorModifier(1.0f, highlightColor, baseColor, EaseCubicInOut.getInstance()));
 		else
 		{
@@ -92,8 +114,8 @@ public class TimerRect extends Entity implements TilesConstants
 		timerRect.clearEntityModifiers();
 		timerRect.setScale(1.0f, 1.0f);
 		timerRect.setColor(new Color(0, .5f, 0));
-		countText.setText(String.format("%02d", (int)seconds));
-		elapsedSeconds = 0;
+		countText.setText(String.format("%02d", (int) maxValue));
+		value = 0;
 	}
 
 }

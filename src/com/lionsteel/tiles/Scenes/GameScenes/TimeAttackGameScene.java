@@ -13,6 +13,7 @@ import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
 import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Entities.GameButton;
+import com.lionsteel.tiles.Entities.TimerRect;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
 public class TimeAttackGameScene extends PracticeGameScene
@@ -21,8 +22,6 @@ public class TimeAttackGameScene extends PracticeGameScene
 	private final Text	difficultyText;
 	private final Text	bestTimeLabel;
 	private final Text	bestTimeValue;
-	private final Text	tileCountLabel;
-	private final Text	tileCountText;
 	private final Text	timePlayedLabel;
 	private final Text	timePlayedText;
 
@@ -31,19 +30,28 @@ public class TimeAttackGameScene extends PracticeGameScene
 	private float		secondsPlayed;
 	private float		totalSecondsPlayed;
 
+	private TimerRect	tileRect;
+
 	private final float	START_Y	= 40;
 
 	public TimeAttackGameScene()
 	{
 		super();
 		this.setBackgroundEnabled(false);
-
+		tileRect = new TimerRect(TIME_ATTACK_NUM_TILES, new Runnable(){
+			@Override
+			public void run()
+			{
+				checkWin();
+			}
+		});
+		
+		this.attachChild(tileRect);
+		
 		difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Difficulty", activity.getVertexBufferObjectManager());
 		difficultyText = new Text(0, 0, SharedResources.getInstance().mFont, Difficulty.getName(SetupScene.getDifficulty()), activity.getVertexBufferObjectManager());
 		bestTimeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Best Time", activity.getVertexBufferObjectManager());
 		bestTimeValue = new Text(0, 0, SharedResources.getInstance().mFont, getBestTimeString(), activity.getVertexBufferObjectManager());
-		tileCountLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tiles Left", activity.getVertexBufferObjectManager());
-		tileCountText = new Text(0, 0, SharedResources.getInstance().mFont, "" + TIME_ATTACK_NUM_TILES, 6, activity.getVertexBufferObjectManager());
 		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Round Time", activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
 
@@ -55,22 +63,17 @@ public class TimeAttackGameScene extends PracticeGameScene
 		this.attachChild(difficultyText);
 		this.attachChild(bestTimeLabel);
 		this.attachChild(bestTimeValue);
-		this.attachChild(tileCountText);
-		this.attachChild(tileCountLabel);
 		this.attachChild(timePlayedLabel);
 		this.attachChild(timePlayedText);
 
 		difficultyText.setColor(VALUE_TEXT_COLOR);
 		bestTimeValue.setColor(VALUE_TEXT_COLOR);
-		tileCountText.setColor(VALUE_TEXT_COLOR);
 		timePlayedText.setColor(VALUE_TEXT_COLOR);
 
 		difficultyLabel.setAlpha(0);
 		difficultyText.setAlpha(0);
 		bestTimeLabel.setAlpha(0);
 		bestTimeValue.setAlpha(0);
-		tileCountText.setAlpha(0);
-		tileCountLabel.setAlpha(0);
 		timePlayedLabel.setAlpha(0);
 		timePlayedText.setAlpha(0);
 
@@ -80,8 +83,6 @@ public class TimeAttackGameScene extends PracticeGameScene
 		bestTimeValue.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeValue.getWidth()) / 2, bestTimeLabel.getY() + bestTimeLabel.getHeight() + LABEL_SPACING);
 		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, bestTimeValue.getY() + bestTimeValue.getHeight() + LABEL_SPACING * 2);
 		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
-		tileCountLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - tileCountLabel.getWidth()) / 2, timePlayedText.getY() + timePlayedText.getHeight() + LABEL_SPACING * 2);
-		tileCountText.setPosition(tileCountLabel.getX() + (tileCountLabel.getWidth() - tileCountText.getWidth()) / 2, tileCountLabel.getY() + tileCountLabel.getHeight() + LABEL_SPACING);
 
 		barSprite.setVisible(false);
 		this.sortChildren();
@@ -121,11 +122,8 @@ public class TimeAttackGameScene extends PracticeGameScene
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
-
-						smallPulseText(tileCountText);
 						addTile(button.getPlayer(), false);
-						updateTexts();
-						checkWin();
+						tileRect.decrement();
 					}
 
 					@Override
@@ -214,19 +212,10 @@ public class TimeAttackGameScene extends PracticeGameScene
 		difficultyText.registerEntityModifier(fadeInMod);
 		bestTimeLabel.registerEntityModifier(fadeInMod);
 		bestTimeValue.registerEntityModifier(fadeInMod);
-		tileCountText.registerEntityModifier(fadeInMod);
-		tileCountLabel.registerEntityModifier(fadeInMod);
 		timePlayedLabel.registerEntityModifier(fadeInMod);
 		timePlayedText.registerEntityModifier(fadeInMod);
+		tileRect.fadeIn();
 		super.startAnimateIn();
-	}
-
-	private void updateTexts()
-	{
-
-		tileCountText.setText("" + (TIME_ATTACK_NUM_TILES - getTilesCollected(PLAYER_ONE)));
-		tileCountText.setX(tileCountLabel.getX() + (tileCountLabel.getWidth() - tileCountText.getWidth()) / 2);
-
 	}
 
 	private void updateBestTimeText()
@@ -238,6 +227,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 	@Override
 	protected void resetGame()
 	{
+		tileRect.reset();
 		resetValues();
 		currentTileset.reset();
 		hoursPlayed = 0;
@@ -245,7 +235,6 @@ public class TimeAttackGameScene extends PracticeGameScene
 		secondsPlayed = 0;
 		totalSecondsPlayed = 0;
 		updateTime();
-		updateTexts();
 		updateBestTimeText();
 		startCountdown();
 	}

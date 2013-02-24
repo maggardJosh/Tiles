@@ -17,7 +17,6 @@ public class RaceGameScene extends GameScene
 {
 	private int[]			playerTileCount			= new int[2];
 	private final Text[]	playerTileCountTexts	= new Text[2];
-	private float			mSecondsLeft			= RACE_SECONDS;
 	private TimerRect		timerRect;
 
 	public RaceGameScene()
@@ -26,7 +25,13 @@ public class RaceGameScene extends GameScene
 		this.setBackgroundEnabled(false);
 		activity = TilesMainActivity.getInstance();
 
-		timerRect = new TimerRect(RACE_SECONDS);
+		timerRect = new TimerRect(RACE_SECONDS, new Runnable(){
+			@Override
+			public void run()
+			{
+				showGameOver();
+			}
+		});
 		timerRect.setZIndex(BUTTON_Z-1);
 		attachChild(timerRect);
 		this.barSprite.setVisible(false);
@@ -126,7 +131,6 @@ public class RaceGameScene extends GameScene
 	@Override
 	protected void startAnimateIn()
 	{
-		final AlphaModifier fadeMod = new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f);
 		fadeInCounter();
 		timerRect.fadeIn();
 		super.startAnimateIn();
@@ -143,13 +147,7 @@ public class RaceGameScene extends GameScene
 			timerRect.startTimer();
 			break;
 		case GameState.WAITING_FOR_INPUT:
-			mSecondsLeft -= pSecondsElapsed;
-
-			if (mSecondsLeft < 0)
-			{
-				showGameOver();
-				mSecondsLeft = 0;
-			}
+			
 			break;
 		}
 		super.Update(pSecondsElapsed);
@@ -184,7 +182,6 @@ public class RaceGameScene extends GameScene
 		resetTexts();
 		updateTexts();
 		timerRect.reset();
-		mSecondsLeft = RACE_SECONDS;
 		startCountdown();
 
 	}
