@@ -1,6 +1,7 @@
 package com.lionsteel.tiles.BaseClasses;
 
 import org.andengine.entity.modifier.MoveYModifier;
+import org.andengine.entity.text.Text;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -11,8 +12,12 @@ import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
 
 public abstract class PracticeGameScene extends GameScene
 {
-	
-	protected PracticeGameOverScene practiceGameOverScene;
+
+	protected PracticeGameOverScene	practiceGameOverScene;
+
+	protected final Text			gameModeText;
+
+	private final float				START_Y	= 40;
 
 	public PracticeGameScene()
 	{
@@ -20,11 +25,22 @@ public abstract class PracticeGameScene extends GameScene
 		practiceGameOverScene = new PracticeGameOverScene();
 		this.detachChild(barSprite);
 		this.detachChild(playerTwoIntro);
-		
+
+		gameModeText = new Text(0, 0, SharedResources.getInstance().mFont, "Game Mode", 20, activity.getVertexBufferObjectManager());
+		gameModeText.setScale(GAME_MODE_SCALE);
+		this.attachChild(gameModeText);
+		gameModeText.setPosition((CAMERA_WIDTH + BAR_WIDTH - gameModeText.getWidth()) / 2, START_Y);
+
 		gameCountdown.countdownSprite.setRotation(-90);
 		pauseScene.setTwoPlayerMode(false);
-		
+
 		currentTileset.detachPlayerTwo();
+	}
+
+	protected void setGameModeText(final String gameModeString)
+	{
+		gameModeText.setText(gameModeString);
+		gameModeText.setX((CAMERA_WIDTH + BAR_WIDTH - gameModeText.getWidth()) / 2);
 	}
 
 	@Override
@@ -34,7 +50,7 @@ public abstract class PracticeGameScene extends GameScene
 		switch (gameState)
 		{
 		case GameState.INTRO:
-			if(playerOneReady)
+			if (playerOneReady)
 			{
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 				startAnimateIn();
@@ -43,12 +59,12 @@ public abstract class PracticeGameScene extends GameScene
 			break;
 		}
 	}
-	
+
 	protected void showPracticeGameOver()
 	{
 		transitionChildScene(practiceGameOverScene);
 	}
-	
+
 	public void restartGame()
 	{
 		this.clearChildScene();
@@ -57,7 +73,7 @@ public abstract class PracticeGameScene extends GameScene
 		TilesMainActivity.startGameEvent();
 		resetGame();
 		currentTileset.resetPlayerTiles();
-		
+
 	}
 
 }

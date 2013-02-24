@@ -32,21 +32,23 @@ public class TimeAttackGameScene extends PracticeGameScene
 
 	private TimerRect	tileRect;
 
-	private final float	START_Y	= 40;
 
 	public TimeAttackGameScene()
 	{
 		super();
 		this.setBackgroundEnabled(false);
-		tileRect = new TimerRect(TIME_ATTACK_NUM_TILES, new Runnable(){
+		tileRect = new TimerRect(TIME_ATTACK_NUM_TILES, new Runnable()
+		{
 			@Override
 			public void run()
 			{
 				checkWin();
 			}
 		});
-		
+
 		this.attachChild(tileRect);
+
+		this.setGameModeText("Time-Attack");
 		
 		difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Difficulty", activity.getVertexBufferObjectManager());
 		difficultyText = new Text(0, 0, SharedResources.getInstance().mFont, Difficulty.getName(SetupScene.getDifficulty()), activity.getVertexBufferObjectManager());
@@ -55,9 +57,12 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Round Time", activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
 
+		
+		
 		hoursPlayed = 0;
 		minutesPlayed = 0;
 		secondsPlayed = 0;
+
 
 		this.attachChild(difficultyLabel);
 		this.attachChild(difficultyText);
@@ -77,7 +82,8 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedLabel.setAlpha(0);
 		timePlayedText.setAlpha(0);
 
-		difficultyLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - difficultyLabel.getWidth()) / 2, START_Y);
+		
+		difficultyLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - difficultyLabel.getWidth()) / 2, gameModeText.getY() + gameModeText.getHeight() + LABEL_SPACING * 3);
 		difficultyText.setPosition((CAMERA_WIDTH + BAR_WIDTH - difficultyText.getWidth()) / 2, difficultyLabel.getY() + difficultyLabel.getHeight() + LABEL_SPACING);
 		bestTimeLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeLabel.getWidth()) / 2, difficultyText.getY() + difficultyText.getHeight() + LABEL_SPACING * 2);
 		bestTimeValue.setPosition((CAMERA_WIDTH + BAR_WIDTH - bestTimeValue.getWidth()) / 2, bestTimeLabel.getY() + bestTimeLabel.getHeight() + LABEL_SPACING);

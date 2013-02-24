@@ -64,14 +64,14 @@ public class FreePlayGameScene extends PracticeGameScene
 		inARowLabel.setAlpha(0);
 		inARowText.setAlpha(0);
 
-		final int TIMER_LABEL_Y = 150;
+		this.setGameModeText("Free Play");
 
-		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, TIMER_LABEL_Y);
+		timePlayedLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedLabel.getWidth()) / 2, gameModeText.getY() + gameModeText.getHeight() + LABEL_SPACING * 3);
 		timePlayedText.setPosition((CAMERA_WIDTH + BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
 		playerTileCountLabel.setPosition((CAMERA_WIDTH - playerTileCountLabel.getWidth()) / 3, (CAMERA_HEIGHT - playerTileCountLabel.getHeight()) / 2 - playerTileCountLabel.getHeight() * 2 - BUTTON_WIDTH);
-		playerTileCountText.setPosition(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2, playerTileCountLabel.getY() + playerTileCountLabel.getHeight() +LABEL_SPACING);
+		playerTileCountText.setPosition(playerTileCountLabel.getX() + (playerTileCountLabel.getWidth() - playerTileCountText.getWidth()) / 2, playerTileCountLabel.getY() + playerTileCountLabel.getHeight() + LABEL_SPACING);
 		inARowLabel.setPosition((CAMERA_WIDTH + BAR_WIDTH - inARowLabel.getWidth()) * 2 / 3, (CAMERA_HEIGHT - inARowLabel.getHeight()) / 2 - inARowLabel.getHeight() * 2 - BUTTON_WIDTH);
-		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() +LABEL_SPACING);
+		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() + LABEL_SPACING);
 
 		barSprite.setVisible(false);
 		this.sortChildren();

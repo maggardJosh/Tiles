@@ -58,6 +58,7 @@ public interface TilesConstants
 	public static final Color	VALUE_TEXT_COLOR				= new Color(.7f, .7f, .7f);
 
 	public static final float	LABEL_SPACING					= 13;
+	public static final float	GAME_MODE_SCALE					= 1.6f;
 
 	//------ Entity Modifier Timing
 	public static final float	WIN_MOVE_MOD_TIME				= .4f;
