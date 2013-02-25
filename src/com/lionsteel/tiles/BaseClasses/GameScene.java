@@ -405,15 +405,14 @@ public abstract class GameScene extends Scene implements TilesConstants
 					currentTileset.startInsaneDelay();
 				changeState(GameState.PICKING_NEW_BUTTON);
 				playGameSong();
-				
 
 			}
 		});
 	}
-	
+
 	private void playGameSong()
 	{
-		if(this instanceof FreePlayGameScene)
+		if (this instanceof FreePlayGameScene)
 			SongManager.getInstance().playSong(SharedResources.getInstance().freePlayMusic);
 		else
 			SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);

@@ -1,11 +1,11 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
-import org.andengine.audio.music.exception.MusicException;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -13,13 +13,12 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import android.app.Activity;
-
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
@@ -93,7 +92,7 @@ public class SetupScene extends TilesMenuScene
 
 	public static void loadTileset(final String tileset)
 	{
-		if (currentTileset.getBasePath() == tileset)
+		if (currentTileset.getBasePath().compareTo(tileset) == 0)
 		{
 			TilesMainActivity.getInstance().backToSetupScene();
 			return;
@@ -334,6 +333,49 @@ public class SetupScene extends TilesMenuScene
 		for (int x = 0; x < 4; x++)
 			difficultyButtons[x].attachChild(currentTileset.getDifficultySprite(x));
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
+
+		setupLabels();
+
+	}
+
+	private void setupLabels()
+	{
+
+		final Text tilesetLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
+		final Text tilesetLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
+		tilesetLabelShadow.setColor(Color.BLACK);
+		tilesetLabelShadow.setRotationCenter(0, 0);
+		tilesetLabelShadow.setRotation(-90);
+		tilesetLabel.setRotationCenter(0, 0);
+		tilesetLabel.setRotation(-90);
+		tilesetLabel.setPosition(tilesButton.getX() - tilesetLabel.getHeight() - 2, tilesButton.getY() + (tilesButton.getHeight() + tilesetLabel.getWidth()) / 2);
+		tilesetLabelShadow.setPosition(tilesetLabel.getX() + 2, tilesetLabel.getY() - 2);
+		attachChild(tilesetLabelShadow);
+		attachChild(tilesetLabel);
+
+		final Text difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
+		final Text difficultyLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
+		difficultyLabelShadow.setColor(Color.BLACK);
+		difficultyLabelShadow.setRotationCenter(0, 0);
+		difficultyLabelShadow.setRotation(-90);
+		difficultyLabel.setRotationCenter(0, 0);
+		difficultyLabel.setRotation(-90);
+		difficultyLabel.setPosition(difficultyButtons[0].getX() - difficultyLabel.getHeight() - 2, difficultyButtons[0].getY() + (difficultyButtons[0].getHeight() + difficultyLabel.getWidth()) / 2);
+		difficultyLabelShadow.setPosition(difficultyLabel.getX() + 2, difficultyLabel.getY() - 2);
+		attachChild(difficultyLabelShadow);
+		attachChild(difficultyLabel);
+
+		final Text modeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
+		final Text modeLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
+		modeLabelShadow.setColor(Color.BLACK);
+		modeLabelShadow.setRotationCenter(0, 0);
+		modeLabelShadow.setRotation(-90);
+		modeLabel.setRotationCenter(0, 0);
+		modeLabel.setRotation(-90);
+		modeLabel.setPosition(gameModeSprite[0].getX() - modeLabel.getHeight() - 2, gameModeSprite[0].getY() + (gameModeSprite[0].getHeight() + modeLabel.getWidth()) / 2);
+		modeLabelShadow.setPosition(modeLabel.getX() + 2, modeLabel.getY() - 2);
+		attachChild(modeLabelShadow);
+		attachChild(modeLabel);
 
 	}
 
