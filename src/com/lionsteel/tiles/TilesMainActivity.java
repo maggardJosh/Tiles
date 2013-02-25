@@ -376,18 +376,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public void backToMainMenu()
 	{
 		SongManager.getInstance().setVolumeMultiplier(1.0f);
-		SongManager.getInstance().setCurrentVolume(MUFFLED_VOLUME);
+		SongManager.getInstance().setCurrentVolume(0);
 		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
-		//Clear all child scenes
-		//		TilesMenuScene parentScene = SetupScene.getInstance();
-		//		while (parentScene.hasChildScene())
-		//		{
-		//			final TilesMenuScene childScene = (TilesMenuScene) parentScene.getChildScene();
-		//			parentScene.setChildSceneNull();
-		//			parentScene = childScene;
-		//		}
-		//
-//		SetupScene.getInstance().setChildSceneNull();
 		SetupScene.getInstance().logFlurryEvent();
 		mEngine.setScene(backgroundScene);
 
