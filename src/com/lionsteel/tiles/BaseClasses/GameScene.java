@@ -314,10 +314,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 		case GameState.INTRO:
 			if (playerOneReady && playerTwoReady)
 			{
+				SongManager.getInstance().fadeOut();
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 				playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 				startAnimateIn();
-				SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 			}
 			break;
 		}
@@ -400,6 +400,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 				if (SetupScene.getDifficulty() == Difficulty.INSANE)
 					currentTileset.startInsaneDelay();
 				changeState(GameState.PICKING_NEW_BUTTON);
+				SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 
 			}
 		});
