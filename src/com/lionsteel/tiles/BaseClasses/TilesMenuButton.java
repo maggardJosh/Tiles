@@ -32,28 +32,32 @@ public class TilesMenuButton extends Entity implements TilesConstants
 				case TouchEvent.ACTION_DOWN:
 					mPointerID = pSceneTouchEvent.getPointerID();
 					buttonSprite.setColor(.8f, .8f, .8f);
-					break;
+					return true;
 				case TouchEvent.ACTION_MOVE:
 					if (pTouchAreaLocalX < 0 || pTouchAreaLocalY < 0 || pTouchAreaLocalX > buttonSprite.getWidth() || pTouchAreaLocalY > buttonSprite.getHeight())
 					{
-						mPointerID = -1;
-						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
+						unsetButton();
 					}
 					break;
 				case TouchEvent.ACTION_UP:
 					if (pSceneTouchEvent.getPointerID() == mPointerID)
 					{
-						buttonSprite.setColor(1.0f, 1.0f, 1.0f);
-						mPointerID = -1;
+						unsetButton();
 						SharedResources.getInstance().menuBlip.play();
 						runAction();
 					}
 					break;
 				}
-				return true;
+				return false;
 			}
 		};
 		this.attachChild(buttonSprite);
+	}
+	
+	public void unsetButton()
+	{
+		mPointerID = -1;
+		buttonSprite.setColor(1.0f, 1.0f, 1.0f);
 	}
 
 	@Override

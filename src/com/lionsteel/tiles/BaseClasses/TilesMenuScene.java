@@ -15,7 +15,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
-	protected final TilesMainActivity				activity;
+	protected final TilesMainActivity	activity;
 	final TilesMenuButton				backButton;
 
 	final ArrayList<TilesMenuButton>	buttonList	= new ArrayList<TilesMenuButton>();
@@ -48,8 +48,14 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		backButton.setPosition(BACK_ARROW_PADDING, BACK_ARROW_PADDING);
 		this.sortChildren(false);
 	}
-	
+
 	public abstract void logFlurryEvent();
+
+	public void unsetAllButtons()
+	{
+		for (TilesMenuButton button : buttonList)
+			button.unsetButton();
+	}
 
 	private void registerButtonTouchAreas()
 	{

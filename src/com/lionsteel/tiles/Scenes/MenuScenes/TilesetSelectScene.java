@@ -1,5 +1,12 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.ScrollDetector;
+import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
+import org.andengine.input.touch.detector.SurfaceScrollDetector;
+
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
@@ -8,16 +15,26 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
 
-public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
+public class TilesetSelectScene extends TilesMenuScene implements TilesConstants, IScrollDetectorListener, IOnSceneTouchListener
 {
 	final TilesMainActivity		activity;
 
-	final int					START_Y		= 160;
-	final TilesetPreviewButton	buttons[]	= new TilesetPreviewButton[Tileset.tilesetList.length];
+	final SurfaceScrollDetector	scrollDetector;
+
+	final float					SCROLL_SPEED	= .8f;
+	final int					START_Y			= 160;
+	final float					MAX_Y;
+
+	final TilesetPreviewButton	buttons[]		= new TilesetPreviewButton[Tileset.tilesetList.length];
 
 	public TilesetSelectScene()
 	{
 		super();
+
+		scrollDetector = new SurfaceScrollDetector(this);
+		setOnSceneTouchListener(this);
+		setOnAreaTouchTraversalBackToFront();
+
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 		float nextYPos = 160;
@@ -29,6 +46,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			nextYPos = buttons[x].getButton().getBottom();
 
 		}
+		MAX_Y = nextYPos + 70;
 
 	}
 
@@ -41,6 +59,44 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	@Override
 	public void initScene()
 	{
-		//Nothing to init
+		setY(0);
 	}
+
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
+	{
+		scrollDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
+		return true;
+	}
+
+	private void boundScene()
+	{
+		if (getY() > 0)
+			setY(0);
+		if (getY() - CAMERA_HEIGHT < -MAX_Y)
+			setY(-MAX_Y + CAMERA_HEIGHT);
+	}
+
+	@Override
+	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
+	{
+		unsetAllButtons();
+		this.setY(getY() + pDistanceY * SCROLL_SPEED);
+		boundScene();
+	}
+
+	@Override
+	public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
+	{
+		this.setY(getY() + pDistanceY * SCROLL_SPEED);
+		boundScene();
+	}
+
+	@Override
+	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
+	{
+		this.setY(getY() + pDistanceY * SCROLL_SPEED);
+		boundScene();
+	}
+
 }
