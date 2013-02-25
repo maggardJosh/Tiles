@@ -14,15 +14,15 @@ public class BackgroundMenuScene extends Scene implements TilesConstants
 {
 	final Sprite	backgroundSprite;
 	final float		moveByAmount;
-	
+
 	public BackgroundMenuScene(TilesMenuScene childScene)
 	{
 		backgroundSprite = new Sprite(0, 0, SharedResources.getInstance().backgroundRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager());
-		moveByAmount = (backgroundSprite.getWidth() - CAMERA_WIDTH) / (MAX_NUM_MENU_SCENES-1);
+		moveByAmount = (backgroundSprite.getWidth() - CAMERA_WIDTH) / (MAX_NUM_MENU_SCENES - 1);
 		this.attachChild(backgroundSprite);
 		this.setChildScene(childScene, false, false, true);
 	}
-	
+
 	public void moveBackground(boolean moveToRight)
 	{
 		if (moveToRight)

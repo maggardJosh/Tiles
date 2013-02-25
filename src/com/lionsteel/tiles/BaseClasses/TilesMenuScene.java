@@ -12,6 +12,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
@@ -130,7 +132,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	protected void transitionOff()
 	{
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), -CAMERA_WIDTH));
-		activity.moveBackground(false);
+		if (!(this instanceof PauseScene || this instanceof QuitPromptScene))
+			activity.moveBackground(false);
 	}
 
 	public void setChildSceneNull()
@@ -164,7 +167,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 				super.onModifierFinished(pItem);
 			}
 		});
-		activity.moveBackground(true);
+		if (!(this instanceof PauseScene || this instanceof QuitPromptScene))
+			activity.moveBackground(true);
 	}
 
 }

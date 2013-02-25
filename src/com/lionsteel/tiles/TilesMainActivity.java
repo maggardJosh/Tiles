@@ -252,6 +252,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		Scene currentScene = mEngine.getScene();
 		while (currentScene.hasChildScene())
 			currentScene = currentScene.getChildScene();
+		final TilesMenuScene lastScene = (TilesMenuScene) currentScene;
 		loadingScene.setPosition(0, 0);
 		currentScene.setChildScene(loadingScene, false, false, true);
 
@@ -262,6 +263,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
 				loadAction.run();
+				lastScene.setChildSceneNull();
 			}
 		}));
 	}
@@ -326,7 +328,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		if (!backEnabled)
 			return;
 		Scene parentScene = this.mEngine.getScene();
-		
+
 		SharedResources.getInstance().menuBlip.play();
 
 		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
@@ -377,18 +379,16 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		SongManager.getInstance().setCurrentVolume(MUFFLED_VOLUME);
 		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 		//Clear all child scenes
-		TilesMenuScene parentScene = mainMenuScene;
-		while (parentScene.hasChildScene())
-		{
-			final TilesMenuScene childScene = (TilesMenuScene) parentScene.getChildScene();
-			parentScene.setChildSceneNull();
-			parentScene = childScene;
-		}
-		backgroundScene.moveBackground(true);
-		backgroundScene.moveBackground(true);
-
-		mainMenuScene.setX(0);
-		mainMenuScene.logFlurryEvent();
+		//		TilesMenuScene parentScene = SetupScene.getInstance();
+		//		while (parentScene.hasChildScene())
+		//		{
+		//			final TilesMenuScene childScene = (TilesMenuScene) parentScene.getChildScene();
+		//			parentScene.setChildSceneNull();
+		//			parentScene = childScene;
+		//		}
+		//
+//		SetupScene.getInstance().setChildSceneNull();
+		SetupScene.getInstance().logFlurryEvent();
 		mEngine.setScene(backgroundScene);
 
 	}
