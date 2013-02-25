@@ -358,6 +358,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void showGameOver(int player)
 	{
+		SongManager.getInstance().fadeOut();
+		SharedResources.getInstance().countdownFinalHit.setRate(GAME_OVER_HIT_RATE);
+		SharedResources.getInstance().countdownFinalHit.play();
 		for (int i = 0; i < 2; i++)
 			gameOverScreen.setPlayerValues(i, "" + tilesCollected[i], "" + maxStreak[i]);
 		gameOverScreen.setWinner(player);

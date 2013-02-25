@@ -174,8 +174,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 	public void initScene()
 	{
 		restartTouchControl.initButton();
-		SharedResources.getInstance().countdownFinalHit.setRate(GAME_OVER_HIT_RATE);
-		SharedResources.getInstance().countdownFinalHit.play();
+		
 		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 

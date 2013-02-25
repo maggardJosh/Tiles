@@ -63,6 +63,9 @@ public abstract class PracticeGameScene extends GameScene
 
 	protected void showPracticeGameOver()
 	{
+		SongManager.getInstance().fadeOut();
+		SharedResources.getInstance().countdownFinalHit.setRate(GAME_OVER_HIT_RATE);
+		SharedResources.getInstance().countdownFinalHit.play();
 		transitionChildScene(practiceGameOverScene);
 	}
 
