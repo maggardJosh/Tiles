@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no" ?>
 <!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
-<project xmlns="http://audacity.sourceforge.net/xml/" projname="TilesSFXAudacity_data" version="1.3.0" audacityversion="1.3.12-beta" sel0="0.0000000000" sel1="0.5918367347" vpos="624" h="0.0000000000" zoom="324.4190196701" rate="44100">
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="TilesSFXAudacity_data" version="1.3.0" audacityversion="1.3.12-beta" sel0="0.0000000000" sel1="54.9340136054" vpos="448" h="0.0000000000" zoom="15.3070009491" rate="44100">
 	<tags>
 		<tag name="id3v2" value="1"/>
 	</tags>
@@ -51,7 +51,7 @@
 			</envelope>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name=" 1" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.158489" pan="0">
+	<wavetrack name=" 1" channel="0" linked="1" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.158489" pan="0">
 		<waveclip offset="0.00000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="26100">
 				<waveblock start="0">
@@ -61,7 +61,7 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.158489" pan="0">
+	<wavetrack name="" channel="1" linked="0" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.158489" pan="0">
 		<waveclip offset="0.00000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="26100">
 				<waveblock start="0">
@@ -71,21 +71,75 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name=" 1" channel="0" linked="1" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.199526" pan="0">
+	<wavetrack name="TilesFreePlaySong 1" channel="0" linked="1" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="1" pan="0">
 		<waveclip offset="0.00000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="26100">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2422590">
 				<waveblock start="0">
-					<simpleblockfile filename="e000021e.au" len="26100" min="-0.999969" max="0.999969" rms="0.082549"/>
+					<simpleblockfile filename="e0000ce9.au" len="262144" min="-0.575165" max="0.51828" rms="0.043951"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e00008cc.au" len="262144" min="-0.5336" max="0.517761" rms="0.043367"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0000737.au" len="262144" min="-0.637848" max="0.652252" rms="0.056654"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e0000481.au" len="262144" min="-0.74411" max="0.717499" rms="0.072926"/>
+				</waveblock>
+				<waveblock start="1048576">
+					<simpleblockfile filename="e00009aa.au" len="262144" min="-0.742004" max="0.787506" rms="0.078631"/>
+				</waveblock>
+				<waveblock start="1310720">
+					<simpleblockfile filename="e0000e4a.au" len="262144" min="-0.744934" max="0.853424" rms="0.091835"/>
+				</waveblock>
+				<waveblock start="1572864">
+					<simpleblockfile filename="e00005b5.au" len="262144" min="-0.765991" max="0.844879" rms="0.086213"/>
+				</waveblock>
+				<waveblock start="1835008">
+					<simpleblockfile filename="e0000c26.au" len="262144" min="-0.743774" max="0.850739" rms="0.077749"/>
+				</waveblock>
+				<waveblock start="2097152">
+					<simpleblockfile filename="e0000d28.au" len="162899" min="-0.549591" max="0.512909" rms="0.040741"/>
+				</waveblock>
+				<waveblock start="2260051">
+					<simpleblockfile filename="e0000b4b.au" len="162539" min="-0.528259" max="0.507446" rms="0.040921"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="" channel="1" linked="0" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.199526" pan="0">
+	<wavetrack name="TilesFreePlaySong" channel="1" linked="0" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="1" pan="0">
 		<waveclip offset="0.00000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="26100">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2422590">
 				<waveblock start="0">
-					<simpleblockfile filename="e000049f.au" len="26100" min="-0.999969" max="0.999969" rms="0.082549"/>
+					<simpleblockfile filename="e00004fe.au" len="262144" min="-0.559235" max="0.494202" rms="0.038401"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000e85.au" len="262144" min="-0.542297" max="0.51236" rms="0.043526"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0000910.au" len="262144" min="-0.644958" max="0.657684" rms="0.055206"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e0000c74.au" len="262144" min="-0.633881" max="0.718964" rms="0.073147"/>
+				</waveblock>
+				<waveblock start="1048576">
+					<simpleblockfile filename="e0000db0.au" len="262144" min="-0.988586" max="0.923218" rms="0.079824"/>
+				</waveblock>
+				<waveblock start="1310720">
+					<simpleblockfile filename="e0000f16.au" len="262144" min="-0.731903" max="0.847076" rms="0.090886"/>
+				</waveblock>
+				<waveblock start="1572864">
+					<simpleblockfile filename="e0000f13.au" len="262144" min="-0.999969" max="0.999969" rms="0.093435"/>
+				</waveblock>
+				<waveblock start="1835008">
+					<simpleblockfile filename="e000094a.au" len="262144" min="-0.747314" max="0.850006" rms="0.077931"/>
+				</waveblock>
+				<waveblock start="2097152">
+					<simpleblockfile filename="e0000d23.au" len="162899" min="-0.546143" max="0.500519" rms="0.045005"/>
+				</waveblock>
+				<waveblock start="2260051">
+					<simpleblockfile filename="e0000b0c.au" len="162539" min="-0.530823" max="0.529175" rms="0.037387"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>
