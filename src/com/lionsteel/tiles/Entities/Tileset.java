@@ -41,6 +41,8 @@ public class Tileset implements TilesConstants
 
 	public static String[] tilesetList;
 	
+	public static final String SKU_DICE_TILES = "dice_tileset";
+	
 	private BuildableBitmapTextureAtlas	atlas;
 
 	private final TextureRegion[]		buttonRegions				= new TextureRegion[NUM_BUTTONS];

@@ -1,9 +1,8 @@
 package com.lionsteel.tiles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.andengine.audio.music.Music;
-import org.andengine.audio.music.MusicLibrary;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -18,6 +17,9 @@ import org.andengine.util.modifier.IModifier;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
@@ -42,6 +44,10 @@ import com.lionsteel.tiles.Scenes.MenuScenes.MainMenuScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SplashScene;
+import com.lionsteel.tiles.util.IabHelper;
+import com.lionsteel.tiles.util.IabHelper.QueryInventoryFinishedListener;
+import com.lionsteel.tiles.util.IabResult;
+import com.lionsteel.tiles.util.Inventory;
 
 public class TilesMainActivity extends BaseGameActivity implements TilesConstants
 {
@@ -60,6 +66,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public boolean						backEnabled	= true;
 
 	public SharedPreferences			sharedPrefs;
+
+	private IabHelper					mHelper;
 
 	public static TilesMainActivity getInstance()
 	{
@@ -119,6 +127,70 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		FlurryAgent.logEvent(FlurryAgentEventStrings.GAME_PLAYED, gameParams, true);
 		GameScene.isGameEventStarted = true;
 	}
+
+	@Override
+	protected void onCreate(Bundle pSavedInstanceState)
+	{
+		super.onCreate(pSavedInstanceState);
+		int[] valueOne = { 35, 58, 60, 51, 113, 15, 59, 125, 42, 87, 41, 72, 6, 88, 24, 12, 90, 1, 117, 109, 114, 39, 22, 35, 12, 47, 7, 27, 38, 28, 84, 24, 59, 39, 0, 112, 113, 51, 17, 36, 27, 32, 42, 47, 38, 6, 35, 63, 20, 50, 15, 27, 67, 15, 34, 37, 29, 27, 86, 22, 15, 66, 80, 85, 56, 10, 6, 3, 51, 114, 13, 69, 52, 100, 80, 0, 22, 74, 126, 24, 27, 61, 42, 35, 36, 1, 17, 35, 37, 107, 68, 58, 19, 85, 104, 37, 53, 9, 27, 33, 45, 36, 5, 8, 55, 28, 48, 25, 57, 0, 28, 43, 46, 34, 7, 24, 8, 26, 54, 34, 110, 11, 32, 11, 9, 116, 10, 91, 10, 127, 37, 114, 15, 56, 10, 124, 24, 69, 56, 92, 32, 15, 61, 33, 15, 21, 71, 12, 30, 88, 39, 10, 115, 55, 22, 41, 19, 19, 92, 88, 14, 53, 105, 36, 30, 28, 24, 59, 59, 46, 8, 50, 5, 1, 69, 42, 62, 19, 12, 31, 20, 86, 3, 74, 26, 117, 95, 85, 25, 35, 44, 6, 35, 66, 120, 1, 103, 93, 116, 52, 43, 57, 52, 102, 11, 32, 79, 69, 2, 123, 99, 16, 55, 5, 110, 63, 58, 37, 3, 2, 49, 30, 18, 9, 60, 46, 25, 25, 120, 15, 88, 27, 55, 32, 60, 7, 79, 47, 57, 120, 56, 93, 10, 112, 28, 92, 2, 30, 6, 0, 18, 121, 114, 1, 4, 52, 122, 57, 48, 111, 2, 28, 95, 96, 79, 10, 126, 101, 118, 38, 43, 41, 22, 0, 25, 36, 49, 5, 115, 115, 29, 33, 33, 27, 61, 14, 41, 17, 3, 12, 26, 43, 71, 64, 119, 61, 9, 66, 33, 121, 117, 109, 55, 66, 57, 30, 8, 32, 29, 22, 113, 3, 107, 21, 2, 9, 103, 50, 10, 47, 41, 52, 18, 42, 33, 74, 113, 103, 17, 8, 51, 31, 95, 3, 14, 5, 117, 27, 33, 40, 32, 24, 48, 117, 29, 39, 18, 9, 22, 69, 4, 57, 95, 31, 13, 107, 42, 118, 50, 99, 0, 75, 63, 13, 85, 56, 51, 120, 66, 1, 27, 39, 121, 92, 123, 18, 13, 23, 42, 9, 26, 0, 6, 72, 127, 35, 19, 35, 27, 32, 46, 44 };
+		String key = "nsuq8ez3h0B9n3qKcvE/3vSeMnHXgMlYvnI22TZgZqonAPBJDXuVtALVhj";
+		StringBuilder sb = new StringBuilder();
+		for (int x = 0; x < valueOne.length; x++)
+			sb.append((char) (valueOne[x] ^ key.charAt(x % key.length())));
+
+		mHelper = new IabHelper(this, sb.toString());
+
+		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+		{
+			public void onIabSetupFinished(IabResult result)
+			{
+				if (!result.isSuccess())
+				{
+					// Oh noes, there was a problem.
+					Log.d("IAB", "Problem setting up In-app Billing: " + result);
+				}
+				Log.d("IAB", "SUCCESS");
+
+				ArrayList<String> additionalSkuList = new ArrayList<String>();
+				additionalSkuList.add(Tileset.SKU_DICE_TILES);
+				mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
+
+			}
+		});
+
+	}
+
+	private QueryInventoryFinishedListener	queryInvAsync	= new QueryInventoryFinishedListener()
+	{
+
+		@Override
+		public void onQueryInventoryFinished(IabResult result, Inventory inv)
+		{
+			// TODO Auto-generated method stub
+			if (result.isFailure())
+			{
+				Log.d("IAB", "Query Failure");
+				Log.d("IAB", result.getMessage());
+				return;
+			}
+
+			String dicePrice = "FFF";// inv.getSkuDetails(Tileset.SKU_DICE_TILES).getPrice();
+
+			Log.d("DICE", dicePrice);
+
+			return;
+
+			// update the UI 
+		}
+	};
+
+	protected void onDestroy()
+	{
+		if (mHelper != null)
+			mHelper.dispose();
+		mHelper = null;
+		super.onDestroy();
+	};
 
 	public static void endGameEvent()
 	{
