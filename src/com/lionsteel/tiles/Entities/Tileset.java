@@ -468,6 +468,7 @@ public class Tileset implements TilesConstants
 
 	public void resetDisplayButton(final GameButton pItem)
 	{
+		pItem.buttonSprite.setScale(0.01f);
 		activity.runOnUpdateThread(new Runnable()
 		{
 			@Override
