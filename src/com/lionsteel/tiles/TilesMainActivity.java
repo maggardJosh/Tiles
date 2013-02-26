@@ -18,7 +18,6 @@ import org.andengine.util.modifier.IModifier;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
@@ -48,6 +47,7 @@ import com.lionsteel.tiles.util.IabHelper;
 import com.lionsteel.tiles.util.IabHelper.QueryInventoryFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
 import com.lionsteel.tiles.util.Inventory;
+import com.lionsteel.tiles.util.Purchase;
 
 public class TilesMainActivity extends BaseGameActivity implements TilesConstants
 {
@@ -68,6 +68,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	public SharedPreferences			sharedPrefs;
 
 	private IabHelper					mHelper;
+	
+	private boolean arePurchasesLoaded = false;
 
 	public static TilesMainActivity getInstance()
 	{
@@ -174,13 +176,17 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 				return;
 			}
 
-			String dicePrice = "FFF";// inv.getSkuDetails(Tileset.SKU_DICE_TILES).getPrice();
-
+			String dicePrice = inv.getSkuDetails(Tileset.SKU_DICE_TILES).getTitle();// getPrice();
+			final Purchase dicePurchase = inv.getPurchase(Tileset.SKU_DICE_TILES);
+			if (dicePurchase == null)
+				Log.d("DICE_PURCHASED", "NO PURCHASE");
+			else
+				Log.d("DICE_PURCHASE", "PURCHASED!?");
 			Log.d("DICE", dicePrice);
 
+			arePurchasesLoaded = true;
+			
 			return;
-
-			// update the UI 
 		}
 	};
 
@@ -298,6 +304,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 							@Override
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
+								while(!arePurchasesLoaded);
+								
 								mainMenuScene.logFlurryEvent();
 								SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 								mEngine.setScene(backgroundScene);

@@ -23,7 +23,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 	final float					SCROLL_SPEED	= .8f;
 	final int					START_Y			= 160;
-	final float					MAX_Y;
+	float					MAX_Y;
 
 	final TilesetPreviewButton	buttons[]		= new TilesetPreviewButton[Tileset.tilesetList.length];
 
@@ -48,6 +48,30 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		}
 		MAX_Y = nextYPos + 70;
 
+	}
+	
+	public void clearButtons()
+	{
+		for(TilesetPreviewButton button : buttons)
+		{
+			removeButton(button.getButton());
+			button.clear();
+		}
+	}
+	
+	public void redoButtons()
+	{
+		clearButtons();
+		float nextYPos = 160;
+		for (int x = 0; x < buttons.length; x++)
+		{
+			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
+			addButton(buttons[x].getButton());
+			buttons[x].getButton().center(nextYPos);
+			nextYPos = buttons[x].getButton().getBottom();
+
+		}
+		MAX_Y = nextYPos + 70;
 	}
 
 	@Override
