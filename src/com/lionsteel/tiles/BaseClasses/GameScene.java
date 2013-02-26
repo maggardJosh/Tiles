@@ -412,7 +412,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	private void playGameSong()
 	{
-		if (this instanceof FreePlayGameScene)
+		if (this instanceof PracticeGameScene)
 			SongManager.getInstance().playSong(SharedResources.getInstance().freePlayMusic);
 		else
 			SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
