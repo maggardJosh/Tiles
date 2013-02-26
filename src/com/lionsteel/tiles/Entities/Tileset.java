@@ -256,6 +256,7 @@ public class Tileset implements TilesConstants
 			displayIndicators[1].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 			for (int i = 0; i < 2; i++)
 			{
+				displayIndicators[i].clearEntityModifiers();
 				currentScene.attachChild(displayIndicators[i]);
 				displayIndicators[i].setAlpha(0);
 			}
