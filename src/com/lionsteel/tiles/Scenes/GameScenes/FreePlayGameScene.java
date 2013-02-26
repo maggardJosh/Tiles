@@ -37,7 +37,7 @@ public class FreePlayGameScene extends PracticeGameScene
 		playerTileCountText = new Text(0, 0, SharedResources.getInstance().mFont, "0", 6, activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
 		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Time Played", activity.getVertexBufferObjectManager());
-		inARowLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Combo", 15, activity.getVertexBufferObjectManager());
+		inARowLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Streak", 15, activity.getVertexBufferObjectManager());
 		inARowText = new Text(0, 0, SharedResources.getInstance().mFont, "x0", 6, activity.getVertexBufferObjectManager());
 
 		playerTileCount = 0;
