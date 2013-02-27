@@ -18,6 +18,7 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 
@@ -29,7 +30,8 @@ public class SharedResources implements TilesConstants
 
 	public final TextureRegion		backgroundRegion;
 	public final TextureRegion		touchImageRegion;
-	public final TextureRegion		modeRegion[]	= new TextureRegion[6];
+	public final TextureRegion		modeRegion[]		= new TextureRegion[6];
+	public final TextureRegion		difficultyRegion[]	= new TextureRegion[4];
 	public final TextureRegion		displayIndicatorRegion;
 	public final TextureRegion		pauseButtonRegion;
 	public final TextureRegion		exitGameButtonRegion;
@@ -106,6 +108,7 @@ public class SharedResources implements TilesConstants
 
 		final BuildableBitmapTextureAtlas secondAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		backgroundRegion = (TextureRegion) BitmapTextureAtlasTextureRegionFactory.createFromAsset(secondAtlas, activity, "background.png");
+
 		try
 		{
 			secondAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -114,6 +117,20 @@ public class SharedResources implements TilesConstants
 		{
 			Debug.e(e);
 		}
+		final  BuildableBitmapTextureAtlas difficultyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 1024);
+		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "easy.png");
+		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "normal.png");
+		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "hard.png");
+		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "insane.png");
+		try
+		{
+			difficultyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			difficultyAtlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
+		
 		SoundFactory.setAssetBasePath("sfx/");
 		MusicFactory.setAssetBasePath("sfx/");
 		try

@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
@@ -46,10 +47,6 @@ public class SkillSelectScene extends TilesMenuScene
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SkillSelectScene/");
 
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png");//, 0, 0);
-		final TextureRegion easyButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "easy.png");//, (int) titleRegion.getWidth(), 0);
-		final TextureRegion normalButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "normal.png");//, (int) easyButtonRegion.getTextureX(), (int) easyButtonRegion.getHeight());
-		final TextureRegion hardButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "hard.png");//, (int) easyButtonRegion.getTextureX(), (int) (normalButtonRegion.getTextureY() + normalButtonRegion.getHeight()));
-		final TextureRegion insaneButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "insane.png");//, (int) easyButtonRegion.getTextureX(), (int) (hardButtonRegion.getTextureY() + hardButtonRegion.getHeight()));
 
 		try
 		{
@@ -68,7 +65,7 @@ public class SkillSelectScene extends TilesMenuScene
 			diffEntities[x].fadeIn();
 		}
 
-		easyButton = new TilesMenuButton(easyButtonRegion, new Runnable()
+		easyButton = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[Difficulty.EASY], new Runnable()
 		{
 
 			@Override
@@ -82,7 +79,7 @@ public class SkillSelectScene extends TilesMenuScene
 		easyButton.attachChild(diffEntities[Difficulty.EASY]);
 		addButton(easyButton);
 
-		normalButton = new TilesMenuButton(normalButtonRegion, new Runnable()
+		normalButton = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[Difficulty.NORMAL], new Runnable()
 		{
 			@Override
 			public void run()
@@ -96,7 +93,7 @@ public class SkillSelectScene extends TilesMenuScene
 		normalButton.attachChild(diffEntities[Difficulty.NORMAL]);
 		addButton(normalButton);
 
-		hardButton = new TilesMenuButton(hardButtonRegion, new Runnable()
+		hardButton = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[Difficulty.HARD], new Runnable()
 		{
 			@Override
 			public void run()
@@ -109,7 +106,7 @@ public class SkillSelectScene extends TilesMenuScene
 		hardButton.attachChild(diffEntities[Difficulty.HARD]);
 		addButton(hardButton);
 
-		insaneButton = new TilesMenuButton(insaneButtonRegion, new Runnable()
+		insaneButton = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[Difficulty.INSANE], new Runnable()
 		{
 			@Override
 			public void run()

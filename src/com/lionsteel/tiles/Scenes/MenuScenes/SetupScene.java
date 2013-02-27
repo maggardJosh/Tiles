@@ -29,7 +29,6 @@ import com.lionsteel.tiles.Entities.MusicMuteControl;
 import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetEntity;
-import com.lionsteel.tiles.util.Inventory;
 
 public class SetupScene extends TilesMenuScene
 {
@@ -227,13 +226,7 @@ public class SetupScene extends TilesMenuScene
 
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
 		final TextureRegion practiceTitleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceTitle.png");
-		final TextureRegion[] difficultyRegion = new TextureRegion[4];
-
-		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "easy.png");
-		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "normal.png");
-		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "hard.png");
-		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "insane.png");
-
+		
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
 
 		try
@@ -263,7 +256,7 @@ public class SetupScene extends TilesMenuScene
 
 		for (int x = 0; x < 4; x++)
 		{
-			difficultyButtons[x] = new TilesMenuButton(difficultyRegion[x], new Runnable()
+			difficultyButtons[x] = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[x], new Runnable()
 			{
 				@Override
 				public void run()
