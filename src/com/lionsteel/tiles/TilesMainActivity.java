@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
@@ -43,6 +44,7 @@ import com.lionsteel.tiles.Scenes.MenuScenes.MainMenuScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SplashScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 import com.lionsteel.tiles.util.IabHelper;
 import com.lionsteel.tiles.util.IabHelper.QueryInventoryFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
@@ -63,13 +65,14 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	private LoadingScene				loadingScene;
 
-	public boolean						backEnabled	= true;
+	public boolean						backEnabled			= true;
 
 	public SharedPreferences			sharedPrefs;
 
 	private IabHelper					mHelper;
-	
-	private boolean arePurchasesLoaded = false;
+
+	private boolean						arePurchasesLoaded	= false;
+	private boolean						scenesLoaded		= false;
 
 	public static TilesMainActivity getInstance()
 	{
@@ -144,17 +147,30 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
 		{
+
 			public void onIabSetupFinished(IabResult result)
 			{
 				if (!result.isSuccess())
 				{
 					// Oh noes, there was a problem.
 					Log.d("IAB", "Problem setting up In-app Billing: " + result);
+					runOnUiThread(new Runnable()
+					{
+
+						@Override
+						public void run()
+						{
+							Toast.makeText(instance, "Problem setting up In-App Billing", Toast.LENGTH_SHORT).show();
+						}
+					});
+					arePurchasesLoaded = true;
+					return;
 				}
 				Log.d("IAB", "SUCCESS");
 
 				ArrayList<String> additionalSkuList = new ArrayList<String>();
-				additionalSkuList.add(Tileset.SKU_DICE_TILES);
+				for (String s : Tileset.purchaseableTilesets)
+					additionalSkuList.add(s);
 				mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
 
 			}
@@ -168,27 +184,38 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		@Override
 		public void onQueryInventoryFinished(IabResult result, Inventory inv)
 		{
-			// TODO Auto-generated method stub
 			if (result.isFailure())
 			{
 				Log.d("IAB", "Query Failure");
 				Log.d("IAB", result.getMessage());
+				runOnUiThread(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						Toast.makeText(instance, "Unable to connect to Google Play", Toast.LENGTH_SHORT).show();
+					}
+				});
+				arePurchasesLoaded = true;
 				return;
 			}
 
-			String dicePrice = inv.getSkuDetails(Tileset.SKU_DICE_TILES).getTitle();// getPrice();
-			final Purchase dicePurchase = inv.getPurchase(Tileset.SKU_DICE_TILES);
-			if (dicePurchase == null)
-				Log.d("DICE_PURCHASED", "NO PURCHASE");
-			else
-				Log.d("DICE_PURCHASE", "PURCHASED!?");
-			Log.d("DICE", dicePrice);
+			reloadTilesets(inv);
 
 			arePurchasesLoaded = true;
-			
+
 			return;
 		}
 	};
+
+	private void reloadTilesets(Inventory inv)
+	{
+		while (!scenesLoaded)
+			;
+
+		TilesetSelectScene.getInstance().redoButtons(inv);
+	}
 
 	protected void onDestroy()
 	{
@@ -286,6 +313,9 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 				mainMenuScene = new MainMenuScene();
 				backgroundScene = new BackgroundMenuScene(mainMenuScene);
 
+				scenesLoaded = true;
+				while (!arePurchasesLoaded)
+					;
 				mEngine.registerUpdateHandler(new TimerHandler(2.0f, new ITimerCallback()
 				{
 
@@ -304,8 +334,8 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 							@Override
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
-								while(!arePurchasesLoaded);
 								
+
 								mainMenuScene.logFlurryEvent();
 								SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 								mEngine.setScene(backgroundScene);
@@ -353,6 +383,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	{
 		SharedResources.clear();
 		SongManager.clear();
+		TilesetSelectScene.clear();
 		super.onDestroyResources();
 	}
 

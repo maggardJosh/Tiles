@@ -29,6 +29,7 @@ import com.lionsteel.tiles.Entities.MusicMuteControl;
 import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetEntity;
+import com.lionsteel.tiles.util.Inventory;
 
 public class SetupScene extends TilesMenuScene
 {
@@ -208,7 +209,7 @@ public class SetupScene extends TilesMenuScene
 
 		modeSelectScreen = new MultiplayerModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
-		tilesetSelectScene = new TilesetSelectScene();
+		tilesetSelectScene = TilesetSelectScene.getInstance();
 		practiceModeSelectScene = new PracticeModeSelectScene();
 
 		musicMute = new MusicMuteControl();

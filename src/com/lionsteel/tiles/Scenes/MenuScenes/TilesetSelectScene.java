@@ -14,6 +14,7 @@ import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
+import com.lionsteel.tiles.util.Inventory;
 
 public class TilesetSelectScene extends TilesMenuScene implements TilesConstants, IScrollDetectorListener, IOnSceneTouchListener
 {
@@ -23,13 +24,24 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 	final float					SCROLL_SPEED	= .8f;
 	final int					START_Y			= 160;
-	float					MAX_Y;
+	float						MAX_Y;
 
 	final TilesetPreviewButton	buttons[]		= new TilesetPreviewButton[Tileset.tilesetList.length];
 
+	private static TilesetSelectScene instance;
+	
+	public static TilesetSelectScene getInstance()
+	{
+		if(instance == null)
+			instance = new TilesetSelectScene();
+		return instance;
+	}
+	
 	public TilesetSelectScene()
 	{
 		super();
+		
+		instance = this;
 
 		scrollDetector = new SurfaceScrollDetector(this);
 		setOnSceneTouchListener(this);
@@ -40,6 +52,8 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
+			if(Tileset.isPurchasable(Tileset.tilesetList[x]))
+				continue;
 			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 			addButton(buttons[x].getButton());
 			buttons[x].getButton().center(nextYPos);
@@ -49,26 +63,41 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		MAX_Y = nextYPos + 70;
 
 	}
-	
+
 	public void clearButtons()
 	{
-		for(TilesetPreviewButton button : buttons)
+		for (TilesetPreviewButton button : buttons)
 		{
+			if (button == null)
+				continue;
 			removeButton(button.getButton());
 			button.clear();
 		}
 	}
-	
-	public void redoButtons()
+
+	public void redoButtons(Inventory inv)
 	{
 		clearButtons();
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
-			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
-			addButton(buttons[x].getButton());
-			buttons[x].getButton().center(nextYPos);
-			nextYPos = buttons[x].getButton().getBottom();
+
+			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+			{
+				if(inv.getPurchase(Tileset.tilesetList[x]) != null)
+				{
+					buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
+					addButton(buttons[x].getButton());
+					buttons[x].getButton().center(nextYPos);
+					nextYPos = buttons[x].getButton().getBottom();
+				}
+			} else
+			{
+				buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
+				addButton(buttons[x].getButton());
+				buttons[x].getButton().center(nextYPos);
+				nextYPos = buttons[x].getButton().getBottom();
+			}
 
 		}
 		MAX_Y = nextYPos + 70;
@@ -121,6 +150,12 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	{
 		this.setY(getY() + pDistanceY * SCROLL_SPEED);
 		boundScene();
+	}
+
+	public static void clear()
+	{
+		instance = null;
+		
 	}
 
 }

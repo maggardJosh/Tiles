@@ -41,7 +41,7 @@ public class Tileset implements TilesConstants
 
 	public static String[] tilesetList;
 	
-	public static final String SKU_DICE_TILES = "dice_tileset";
+	public static final String[] purchaseableTilesets = { "dice" };
 	
 	private BuildableBitmapTextureAtlas	atlas;
 
@@ -912,6 +912,14 @@ public class Tileset implements TilesConstants
 			currentScene.unregisterTouchArea(playerTwoGameButtons[i].buttonSprite);
 			playerTwoGameButtons[i].buttonSprite.detachSelf();
 		}
+	}
+
+	public static boolean isPurchasable(String string)
+	{
+		for(int ind=0; ind < purchaseableTilesets.length; ind++)
+			if(purchaseableTilesets[ind].compareTo(string) == 0)
+				return true;
+		return false;
 	}
 
 }
