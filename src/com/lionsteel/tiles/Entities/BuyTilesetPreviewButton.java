@@ -26,7 +26,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 			public void run()
 			{
 				//TODO: Buy tileset here 
-				//SetupScene.loadTileset(basePath);
+				SetupScene.loadTileset(basePath);
 			}
 		});
 		button.attachChild(tilesetEntity.getButtonEntity());

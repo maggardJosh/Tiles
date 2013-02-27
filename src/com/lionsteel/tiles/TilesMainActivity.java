@@ -40,6 +40,7 @@ import com.lionsteel.tiles.Scenes.GameScenes.RaceGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.ReflexGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.TimeAttackGameScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.BackgroundMenuScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.BuyTilesetSelectScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.MainMenuScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
@@ -384,6 +385,7 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		SharedResources.clear();
 		SongManager.clear();
 		TilesetSelectScene.clear();
+		BuyTilesetSelectScene.clear();
 		super.onDestroyResources();
 	}
 

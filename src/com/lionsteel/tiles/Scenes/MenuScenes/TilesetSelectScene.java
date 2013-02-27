@@ -52,7 +52,6 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		
 		scrollDetector = new SurfaceScrollDetector(this);
 		setOnSceneTouchListener(this);
-		setOnAreaTouchTraversalBackToFront();
 
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
@@ -138,12 +137,14 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	@Override
 	public void initScene()
 	{
+		scrollDetector.reset();
 		setY(0);
 	}
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
 	{
+		
 		scrollDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
 		return true;
 	}
