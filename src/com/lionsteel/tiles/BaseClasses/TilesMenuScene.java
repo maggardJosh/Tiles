@@ -11,11 +11,15 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
+import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
-	protected final TilesMainActivity				activity;
+	protected final TilesMainActivity	activity;
 	final TilesMenuButton				backButton;
 
 	final ArrayList<TilesMenuButton>	buttonList	= new ArrayList<TilesMenuButton>();
@@ -48,8 +52,14 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		backButton.setPosition(BACK_ARROW_PADDING, BACK_ARROW_PADDING);
 		this.sortChildren(false);
 	}
-	
+
 	public abstract void logFlurryEvent();
+
+	public void unsetAllButtons()
+	{
+		for (TilesMenuButton button : buttonList)
+			button.unsetButton();
+	}
 
 	private void registerButtonTouchAreas()
 	{
@@ -124,7 +134,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	protected void transitionOff()
 	{
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), -CAMERA_WIDTH));
-		activity.moveBackground(false);
+		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
+			activity.moveBackground(false);
 	}
 
 	public void setChildSceneNull()
@@ -158,7 +169,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 				super.onModifierFinished(pItem);
 			}
 		});
-		activity.moveBackground(true);
+		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
+			activity.moveBackground(true);
 	}
 
 }

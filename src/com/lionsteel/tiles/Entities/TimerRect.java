@@ -30,6 +30,8 @@ public class TimerRect extends Entity implements TilesConstants
 	private final float		maxValue;
 	private final Runnable	endAction;
 
+	private final float		RECT_ALPHA			= .7f;
+
 	public TimerRect(final float maxValue, final Runnable endAction)
 	{
 		this.maxValue = maxValue;
@@ -48,7 +50,7 @@ public class TimerRect extends Entity implements TilesConstants
 
 	public void fadeIn()
 	{
-		timerRect.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
+		timerRect.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, RECT_ALPHA));
 		countText.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1));
 		countText.registerEntityModifier(new ScaleModifier(TILE_BASE_ANIMATE_IN / 2, 10.0f, 1.0f));
 	}
@@ -67,7 +69,7 @@ public class TimerRect extends Entity implements TilesConstants
 	{
 		value += 1.0f;
 		timerRect.clearEntityModifiers();
-		timerRect.registerEntityModifier(new ScaleModifier(1.0f, 1.0f, 1.0f, timerRect.getScaleY(), 1.0f-(value / maxValue), EaseCubicInOut.getInstance()));
+		timerRect.registerEntityModifier(new ScaleModifier(1.0f, 1.0f, 1.0f, timerRect.getScaleY(), 1.0f - (value / maxValue), EaseCubicInOut.getInstance()));
 		if (maxValue - value > 5)
 			timerRect.registerEntityModifier(new ColorModifier(1.0f, highlightColor, baseColor, EaseCubicInOut.getInstance()));
 		else
@@ -75,7 +77,7 @@ public class TimerRect extends Entity implements TilesConstants
 			SharedResources.getInstance().countdownSound.play();
 			timerRect.registerEntityModifier(new ColorModifier(1.0f, hurryHighlightColor, hurryBaseColor, EaseCubicInOut.getInstance()));
 		}
-		countText.setText(String.format("%02d", (int)(maxValue-value)));
+		countText.setText(String.format("%02d", (int) (maxValue - value)));
 		if (maxValue - value <= 0)
 			endAction.run();
 	}
@@ -113,7 +115,7 @@ public class TimerRect extends Entity implements TilesConstants
 	{
 		timerRect.clearEntityModifiers();
 		timerRect.setScale(1.0f, 1.0f);
-		timerRect.setColor(new Color(0, .5f, 0));
+		timerRect.setColor(new Color(0, .5f, 0, RECT_ALPHA));
 		countText.setText(String.format("%02d", (int) maxValue));
 		value = 0;
 	}

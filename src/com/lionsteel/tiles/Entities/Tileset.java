@@ -41,6 +41,8 @@ public class Tileset implements TilesConstants
 
 	public static String[] tilesetList;
 	
+	public static final String SKU_DICE_TILES = "dice_tileset";
+	
 	private BuildableBitmapTextureAtlas	atlas;
 
 	private final TextureRegion[]		buttonRegions				= new TextureRegion[NUM_BUTTONS];
@@ -256,6 +258,7 @@ public class Tileset implements TilesConstants
 			displayIndicators[1].setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - displayIndicators[1].getWidth()) / 2 + displayIndicators[1].getWidth(), (CAMERA_HEIGHT - displayIndicators[0].getHeight()) / 2);
 			for (int i = 0; i < 2; i++)
 			{
+				displayIndicators[i].clearEntityModifiers();
 				currentScene.attachChild(displayIndicators[i]);
 				displayIndicators[i].setAlpha(0);
 			}
@@ -467,6 +470,7 @@ public class Tileset implements TilesConstants
 
 	public void resetDisplayButton(final GameButton pItem)
 	{
+		pItem.buttonSprite.setScale(0.01f);
 		activity.runOnUpdateThread(new Runnable()
 		{
 			@Override

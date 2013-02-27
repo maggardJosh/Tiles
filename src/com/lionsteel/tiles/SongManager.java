@@ -13,6 +13,7 @@ public class SongManager implements IUpdateHandler
 
 	private Music				currentSong;
 	private Music				nextSong;
+	private boolean				isFadingOut				= false;
 	private boolean				isPlaying				= false;
 	private float				currentSongVolume		= 0;
 	private float				songVolumeMultiplier	= 1.0f;
@@ -29,8 +30,14 @@ public class SongManager implements IUpdateHandler
 		instance = this;
 	}
 
+	public void fadeOut()
+	{
+		isFadingOut = true;
+	}
+
 	public void playSong(final Music nextSong)
 	{
+		isFadingOut = false;
 		this.nextSong = nextSong;
 	}
 
@@ -60,16 +67,24 @@ public class SongManager implements IUpdateHandler
 			else
 				return;
 		}
+		if (isFadingOut)
+		{
+			fadeOutCurrentSong(pSecondsElapsed);
+			currentSong.setVolume(currentSongVolume * songVolumeMultiplier);
+			return;
+		}
 		if (nextSong != null)
 			fadeOutCurrentSong(pSecondsElapsed);
 		else
 			fadeInCurrentSong(pSecondsElapsed);
-		
+
 		currentSong.setVolume(currentSongVolume * songVolumeMultiplier);
 	}
 
 	private void goNextSong()
 	{
+		if (isFadingOut)
+			return;
 		if (currentSong != null)
 		{
 			currentSong.setVolume(0);
@@ -82,7 +97,7 @@ public class SongManager implements IUpdateHandler
 		currentSong = nextSong;
 		nextSong = null;
 	}
-	
+
 	public void setVolumeMultiplier(final float newMultiplier)
 	{
 		this.songVolumeMultiplier = newMultiplier;
@@ -91,7 +106,7 @@ public class SongManager implements IUpdateHandler
 	private void fadeOutCurrentSong(final float pSecondsElapsed)
 	{
 		if (currentSongVolume > TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed)
-			currentSongVolume -=  TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed;
+			currentSongVolume -= TilesConstants.SONG_TRANSITION_SPEED * pSecondsElapsed;
 		else
 			goNextSong();
 
@@ -120,7 +135,7 @@ public class SongManager implements IUpdateHandler
 	public void setCurrentVolume(float currentVolume)
 	{
 		this.currentSongVolume = currentVolume;
-		
+
 	}
 
 }

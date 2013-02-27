@@ -35,6 +35,7 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.WrongSelectionIndicator;
+import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.GameCountdown;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
@@ -314,10 +315,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 		case GameState.INTRO:
 			if (playerOneReady && playerTwoReady)
 			{
+				SongManager.getInstance().fadeOut();
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
 				playerTwoIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTwoIntro.getY(), -playerTwoIntro.getHeight()));
 				startAnimateIn();
-				SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 			}
 			break;
 		}
@@ -358,6 +359,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void showGameOver(int player)
 	{
+		SongManager.getInstance().fadeOut();
+		SharedResources.getInstance().countdownFinalHit.setRate(GAME_OVER_HIT_RATE);
+		SharedResources.getInstance().countdownFinalHit.play();
 		for (int i = 0; i < 2; i++)
 			gameOverScreen.setPlayerValues(i, "" + tilesCollected[i], "" + maxStreak[i]);
 		gameOverScreen.setWinner(player);
@@ -400,9 +404,18 @@ public abstract class GameScene extends Scene implements TilesConstants
 				if (SetupScene.getDifficulty() == Difficulty.INSANE)
 					currentTileset.startInsaneDelay();
 				changeState(GameState.PICKING_NEW_BUTTON);
+				playGameSong();
 
 			}
 		});
+	}
+
+	private void playGameSong()
+	{
+		if (this instanceof PracticeGameScene)
+			SongManager.getInstance().playSong(SharedResources.getInstance().freePlayMusic);
+		else
+			SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
 	}
 
 	protected void moveBar(final float distance)

@@ -54,6 +54,7 @@ public class SharedResources implements TilesConstants
 
 	public Music					menuMusic;
 	public Music					versusMusic;
+	public Music					freePlayMusic;
 
 	public static SharedResources getInstance()
 	{
@@ -142,6 +143,7 @@ public class SharedResources implements TilesConstants
 
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
+			freePlayMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesFreePlaySong.ogg");
 		} catch (IOException e)
 		{
 			Debug.e(e);
