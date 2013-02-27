@@ -3,7 +3,12 @@ package com.lionsteel.tiles.Scenes.MenuScenes;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
@@ -16,13 +21,15 @@ import com.lionsteel.tiles.Constants.GameMode;
 public class MainMenuScene extends TilesMenuScene
 {
 	TilesMainActivity	activity;
-	BitmapTextureAtlas	sceneAtlas;
+	BuildableBitmapTextureAtlas	sceneAtlas;
 
 	private SetupScene	setupScene;
 
 	final int			BUTTON_SPACING	= 150;
 
 	final Sprite		titleSprite;
+	
+	final int TITLE_PADDING = 40;
 
 	@Override
 	public void logFlurryEvent()
@@ -37,19 +44,26 @@ public class MainMenuScene extends TilesMenuScene
 
 		setupScene = new SetupScene();
 
-		sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
 
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png", 0, 0);
-		final TextureRegion versusRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "versusButton.png", (int) titleRegion.getWidth(), 0);
-		final TextureRegion practiceRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceButton.png", (int) versusRegion.getTextureX(), (int) versusRegion.getHeight());
-		final TextureRegion exitRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "exitButton.png", (int) 0, (int) (titleRegion.getHeight()));
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
+		final TextureRegion versusRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "versusButton.png");
+		final TextureRegion practiceRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceButton.png");
+		final TextureRegion exitRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "exitButton.png");
 
-		sceneAtlas.load();
+		try
+		{
+			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			sceneAtlas.load();
+		} catch (TextureAtlasBuilderException e)
+		{
+			Debug.e(e);
+		}
 
 		this.setBackgroundEnabled(false);
 
-		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth())/2, TITLE_PADDING, titleRegion, activity.getVertexBufferObjectManager());
 		final TilesMenuButton versusButton = new TilesMenuButton(versusRegion, new Runnable()
 		{
 			@Override
