@@ -41,6 +41,7 @@ public class SharedResources implements TilesConstants
 	public final ITexture			fontTexture;
 	public final TextureRegion		musicNoteRegion;
 	public final TextureRegion		soundEffectImageRegion;
+	public final TextureRegion		buyTilesetButtonRegion;
 
 	public Sound					tileCollectSound;
 
@@ -117,11 +118,12 @@ public class SharedResources implements TilesConstants
 		{
 			Debug.e(e);
 		}
-		final  BuildableBitmapTextureAtlas difficultyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 1024);
+		final BuildableBitmapTextureAtlas difficultyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 1024);
 		difficultyRegion[Difficulty.EASY] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "easy.png");
 		difficultyRegion[Difficulty.NORMAL] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "normal.png");
 		difficultyRegion[Difficulty.HARD] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "hard.png");
 		difficultyRegion[Difficulty.INSANE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "insane.png");
+		buyTilesetButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(difficultyAtlas, activity, "buyTilesets.png");
 		try
 		{
 			difficultyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -130,7 +132,7 @@ public class SharedResources implements TilesConstants
 		{
 			Debug.e(e);
 		}
-		
+
 		SoundFactory.setAssetBasePath("sfx/");
 		MusicFactory.setAssetBasePath("sfx/");
 		try

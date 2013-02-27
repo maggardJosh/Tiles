@@ -49,7 +49,7 @@ public interface TilesConstants
 	public static final float	TILE_COLLECT_RATE_INCREMENT		= .05f;
 
 	public static final float	SOUND_EFFECT_VOLUME				= 1.0f;
-	public static final float	MAX_NUM_MENU_SCENES				= 3;
+	public static final float	MAX_NUM_MENU_SCENES				= 4;
 
 	public static final float	SONG_TRANSITION_SPEED			= .5f;
 	public static final float	MUFFLED_VOLUME					= .2f;

@@ -8,7 +8,9 @@ import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
+import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
@@ -18,31 +20,36 @@ import com.lionsteel.tiles.util.Inventory;
 
 public class TilesetSelectScene extends TilesMenuScene implements TilesConstants, IScrollDetectorListener, IOnSceneTouchListener
 {
-	final TilesMainActivity		activity;
+	final TilesMainActivity				activity;
 
-	final SurfaceScrollDetector	scrollDetector;
+	final BuyTilesetSelectScene			buyTilesetSelectScene;
 
-	final float					SCROLL_SPEED	= .8f;
-	final int					START_Y			= 160;
-	float						MAX_Y;
+	final SurfaceScrollDetector			scrollDetector;
 
-	final TilesetPreviewButton	buttons[]		= new TilesetPreviewButton[Tileset.tilesetList.length];
+	final float							SCROLL_SPEED	= .8f;
+	final int							START_Y			= 160;
+	float								MAX_Y;
 
-	private static TilesetSelectScene instance;
-	
+	final TilesetPreviewButton			buttons[]		= new TilesetPreviewButton[Tileset.tilesetList.length];
+	final TilesMenuButton				buyTilesetsButton;
+
+	private static TilesetSelectScene	instance;
+
 	public static TilesetSelectScene getInstance()
 	{
-		if(instance == null)
+		if (instance == null)
 			instance = new TilesetSelectScene();
 		return instance;
 	}
-	
+
 	public TilesetSelectScene()
 	{
 		super();
-		
+
 		instance = this;
 
+		buyTilesetSelectScene = BuyTilesetSelectScene.getInstance();
+		
 		scrollDetector = new SurfaceScrollDetector(this);
 		setOnSceneTouchListener(this);
 		setOnAreaTouchTraversalBackToFront();
@@ -52,7 +59,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
-			if(Tileset.isPurchasable(Tileset.tilesetList[x]))
+			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
 				continue;
 			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 			addButton(buttons[x].getButton());
@@ -60,6 +67,20 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			nextYPos = buttons[x].getButton().getBottom();
 
 		}
+		
+		buyTilesetsButton = new TilesMenuButton(SharedResources.getInstance().buyTilesetButtonRegion, new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				transitionChildScene(BuyTilesetSelectScene.getInstance());
+			}
+		});
+		buyTilesetsButton.center(nextYPos);
+		nextYPos = buyTilesetsButton.getBottom();
+		addButton(buyTilesetsButton);
+		
 		MAX_Y = nextYPos + 70;
 
 	}
@@ -73,6 +94,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			removeButton(button.getButton());
 			button.clear();
 		}
+		removeButton(buyTilesetsButton);
 	}
 
 	public void redoButtons(Inventory inv)
@@ -84,7 +106,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
 			{
-				if(inv.getPurchase(Tileset.tilesetList[x]) != null)
+				if (inv.getPurchase(Tileset.tilesetList[x]) != null)
 				{
 					buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 					addButton(buttons[x].getButton());
@@ -100,6 +122,10 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			}
 
 		}
+		buyTilesetsButton.center(nextYPos);
+		nextYPos = buyTilesetsButton.getBottom();
+		addButton(buyTilesetsButton);
+		
 		MAX_Y = nextYPos + 70;
 	}
 
@@ -155,7 +181,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	public static void clear()
 	{
 		instance = null;
-		
+
 	}
 
 }
