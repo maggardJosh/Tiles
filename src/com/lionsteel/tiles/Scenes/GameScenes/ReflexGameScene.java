@@ -10,6 +10,7 @@ import com.lionsteel.tiles.Entities.GameButton;
 
 public class ReflexGameScene extends GameScene
 {
+	protected float barSpeedIncrease = .1f;
 
 	public ReflexGameScene()
 	{
@@ -43,11 +44,13 @@ public class ReflexGameScene extends GameScene
 						{
 						case PLAYER_TWO:
 							checkPlayerWillWin(PLAYER_TWO);
-							moveBar(-BAR_SPEED);
+							moveBar(-BAR_SPEED*barSpeedMulti);
+							barSpeedMulti += barSpeedIncrease;
 							break;
 						case PLAYER_ONE:
 							checkPlayerWillWin(PLAYER_ONE);
-							moveBar(BAR_SPEED);
+							moveBar(BAR_SPEED*barSpeedMulti);
+							barSpeedMulti += barSpeedIncrease;
 							break;
 						}
 					}
@@ -93,6 +96,7 @@ public class ReflexGameScene extends GameScene
 	@Override
 	protected void resetGame()
 	{
+		barSpeedMulti = 1.0f;
 		currentTileset.reset();
 		resetBar();
 		startCountdown();

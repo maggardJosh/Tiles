@@ -81,6 +81,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected Random					rand					= new Random();
 
+	protected float						barSpeedMulti			= 1.0f;
+
 	public abstract void buttonPressed(GameButton button);
 
 	protected abstract void resetGame();
@@ -118,7 +120,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 				SharedResources.getInstance().pauseSound.play();
 				transitionChildScene(pauseScene);
 			}
-		});this.setOnAreaTouchTraversalFrontToBack();
+		});
+		this.setOnAreaTouchTraversalFrontToBack();
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
@@ -177,7 +180,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		for (int x = 0; x < 2; x++)
 		{
-			playerTutorials[x] = new Sprite((CAMERA_WIDTH-tutorialRegion.getWidth())/2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
+			playerTutorials[x] = new Sprite((CAMERA_WIDTH - tutorialRegion.getWidth()) / 2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
 			final int playerIndex = x;
 			final TilesMenuButton tutorialExitButton = new TilesMenuButton(tutorialExitButtonRegion, new Runnable()
 			{
@@ -409,9 +412,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		switch (gameState)
 		{
 		case GameState.INTRO:
-			if (playerOneReady && playerTwoReady&&
-					!playerInTutorial[PLAYER_ONE] &&
-					!playerInTutorial[PLAYER_TWO])
+			if (playerOneReady && playerTwoReady && !playerInTutorial[PLAYER_ONE] && !playerInTutorial[PLAYER_TWO])
 			{
 				SongManager.getInstance().fadeOut();
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
@@ -448,7 +449,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void checkPlayerWillWin(int player)
 	{
-		if ((player == PLAYER_ONE && barSprite.getY() + barSprite.getHeight() + BAR_SPEED > CAMERA_HEIGHT) || (player == PLAYER_TWO && barSprite.getY() - BAR_SPEED < 0))
+		if ((player == PLAYER_ONE && barSprite.getY() + barSprite.getHeight() + BAR_SPEED * barSpeedMulti > CAMERA_HEIGHT) || (player == PLAYER_TWO && barSprite.getY() - BAR_SPEED * barSpeedMulti < 0))
 		{
 			showGameOver(player);
 			changeState(GameState.GAME_OVER);
