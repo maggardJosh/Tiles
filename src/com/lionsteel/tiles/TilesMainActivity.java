@@ -572,6 +572,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		SongManager.getInstance().setCurrentVolume(0);
 		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 		SetupScene.getInstance().logFlurryEvent();
+		SetupScene.getInstance().initScene();
 		mEngine.setScene(backgroundScene);
 
 	}
