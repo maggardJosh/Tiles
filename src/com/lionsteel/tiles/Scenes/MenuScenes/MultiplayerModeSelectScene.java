@@ -28,6 +28,8 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 	final TilesMenuButton		nonStopButton;
 	final TilesMenuButton		raceButton;
 
+	final int TITLE_Y = 60;
+	
 	@Override
 	public void logFlurryEvent()
 	{	
@@ -39,8 +41,8 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 		super();
 		activity = TilesMainActivity.getInstance();
 
-		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MultiplayerModeSelectScene/");
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ModeSelectScene/");
 
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
 
@@ -54,10 +56,10 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 		}
 		this.setBackgroundEnabled(false);
 
-		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		final Sprite titleSprite = new Sprite((CAMERA_WIDTH-titleRegion.getWidth())/2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
-		final int START_Y = (int) ((CAMERA_HEIGHT + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
+		final int START_Y = (int) ((CAMERA_HEIGHT + TITLE_Y+ titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
 		reflexButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
 		{
 			@Override
