@@ -1,5 +1,6 @@
 package com.lionsteel.tiles.Entities;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.entity.IEntity;
@@ -26,14 +27,15 @@ import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
+import com.lionsteel.tiles.util.Inventory;
 
 public class Tileset implements TilesConstants
 {
@@ -41,7 +43,8 @@ public class Tileset implements TilesConstants
 
 	public static String[] tilesetList;
 	
-	public static final String[] purchaseableTilesets = { "dice" };
+	public static final String[] purchaseableTilesets = { "dice", "blocks" };
+	public static final ArrayList<String> purchasedTilesets = new ArrayList<String>();
 	
 	private BuildableBitmapTextureAtlas	atlas;
 
@@ -918,6 +921,22 @@ public class Tileset implements TilesConstants
 	{
 		for(int ind=0; ind < purchaseableTilesets.length; ind++)
 			if(purchaseableTilesets[ind].compareTo(string) == 0)
+				return true;
+		return false;
+	}
+
+	public static void getPurchasedTilesets(Inventory inv)
+	{
+		purchasedTilesets.clear();
+		for(int x=0; x<purchaseableTilesets.length; x++)
+			if(inv.getPurchase(purchaseableTilesets[x])!=null)
+				purchasedTilesets.add(purchaseableTilesets[x]);
+	}
+
+	public static boolean isPurchased(String tileset)
+	{
+		for(String purchasedTileset : purchasedTilesets)
+			if(purchasedTileset.compareTo(tileset) == 0)
 				return true;
 		return false;
 	}

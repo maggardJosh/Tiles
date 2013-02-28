@@ -3,9 +3,16 @@ package com.lionsteel.tiles.Entities;
 import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.TilesConstants;
-import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
+import com.lionsteel.tiles.util.IabHelper.OnIabPurchaseFinishedListener;
+import com.lionsteel.tiles.util.IabResult;
+import com.lionsteel.tiles.util.Purchase;
 
 public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 {
@@ -25,8 +32,44 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 			@Override
 			public void run()
 			{
-				//TODO: Buy tileset here 
-				SetupScene.loadTileset(basePath);
+				TilesMainActivity.getInstance().load(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						// TODO Auto-generated method stub
+						TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
+						{
+
+							@Override
+							public void onIabPurchaseFinished(final IabResult result, final Purchase info)
+							{
+								if (result.isFailure())
+								{
+									TilesMainActivity.getInstance().runOnUiThread(new Runnable()
+									{
+										public void run()
+										{
+											Toast.makeText(TilesMainActivity.getInstance(), "Purchase Failure: " + result.getMessage(), Toast.LENGTH_LONG).show();
+										};
+									});
+									Log.d("IAB", "Purchase Failure " + result.getMessage());
+									TilesMainActivity.getInstance().clearLoadingScreen();
+									return;
+								}
+
+								if (info != null)
+									TilesMainActivity.getInstance().getIABHelper().consumeAsync(info, null);
+								Tileset.purchasedTilesets.add(basePath);
+								TilesetSelectScene.getInstance().redoButtons();
+								TilesMainActivity.getInstance().clearLoadingScreen();
+
+							}
+						}, "");
+					}
+				}, false);
+
 			}
 		});
 		button.attachChild(tilesetEntity.getButtonEntity());

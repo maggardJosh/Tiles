@@ -12,7 +12,6 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.modifier.IModifier;
 
 import android.content.SharedPreferences;
@@ -47,12 +46,13 @@ import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SplashScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 import com.lionsteel.tiles.util.IabHelper;
+import com.lionsteel.tiles.util.IabHelper.OnConsumeFinishedListener;
 import com.lionsteel.tiles.util.IabHelper.QueryInventoryFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
 import com.lionsteel.tiles.util.Inventory;
 import com.lionsteel.tiles.util.Purchase;
 
-public class TilesMainActivity extends BaseGameActivity implements TilesConstants
+public class TilesMainActivity extends JifBaseGameActivity implements TilesConstants
 {
 
 	private static TilesMainActivity	instance;
@@ -180,42 +180,75 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 	}
 
 	private QueryInventoryFinishedListener	queryInvAsync	= new QueryInventoryFinishedListener()
+															{
+
+																@Override
+																public void onQueryInventoryFinished(IabResult result, Inventory inv)
+																{
+																	if (result.isFailure())
+																	{
+																		Log.d("IAB", "Query Failure");
+																		Log.d("IAB", result.getMessage());
+																		runOnUiThread(new Runnable()
+																		{
+
+																			@Override
+																			public void run()
+																			{
+																				Toast.makeText(instance, "Unable to connect to Google Play", Toast.LENGTH_SHORT).show();
+																			}
+																		});
+																		arePurchasesLoaded = true;
+																		return;
+
+																	}
+
+																	reloadTilesets(inv);
+
+																	arePurchasesLoaded = true;
+
+																	return;
+																}
+															};
+
+	protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data)
 	{
+		Log.d("Tiles", "onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
-		@Override
-		public void onQueryInventoryFinished(IabResult result, Inventory inv)
+		// Pass on the activity result to the helper for handling
+		if (!mHelper.handleActivityResult(requestCode, resultCode, data))
 		{
-			if (result.isFailure())
-			{
-				Log.d("IAB", "Query Failure");
-				Log.d("IAB", result.getMessage());
-				runOnUiThread(new Runnable()
-				{
-
-					@Override
-					public void run()
-					{
-						Toast.makeText(instance, "Unable to connect to Google Play", Toast.LENGTH_SHORT).show();
-					}
-				});
-				arePurchasesLoaded = true;
-				return;
-			}
-
-			reloadTilesets(inv);
-
-			arePurchasesLoaded = true;
-
-			return;
+			// not handled, so handle it ourselves (here's where you'd
+			// perform any handling of activity results not related to in-app
+			// billing...
+			super.onActivityResult(requestCode, resultCode, data);
+		} else
+		{
+			Log.d("Tiles", "onActivityResult handled by IABUtil.");
 		}
-	};
+	}
 
-	private void reloadTilesets(Inventory inv)
+	private void reloadTilesets(final Inventory inv)
 	{
 		while (!scenesLoaded)
 			;
+		Purchase testPurch = inv.getPurchase("android.test.purchased");
+		if (testPurch != null)
+			mHelper.consumeAsync(testPurch, new OnConsumeFinishedListener()
+			{
 
-		TilesetSelectScene.getInstance().redoButtons(inv);
+				@Override
+				public void onConsumeFinished(Purchase purchase, IabResult result)
+				{
+					Tileset.getPurchasedTilesets(inv);
+					TilesetSelectScene.getInstance().redoButtons();
+				}
+			});
+		else
+		{
+			Tileset.getPurchasedTilesets(inv);
+			TilesetSelectScene.getInstance().redoButtons();
+		}
 	}
 
 	protected void onDestroy()
@@ -262,6 +295,12 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		engineOptions.getAudioOptions().setNeedsMusic(true);
 		engineOptions.getAudioOptions().setNeedsSound(true);
 		return engineOptions;
+	}
+
+	@Override
+	public void onReloadResources()
+	{
+		super.onReloadResources();
 	}
 
 	@Override
@@ -335,7 +374,6 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 							@Override
 							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 							{
-								
 
 								mainMenuScene.logFlurryEvent();
 								SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
@@ -360,12 +398,18 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 
 	public void load(final Runnable loadAction)
 	{
+		load(loadAction, true);
+	}
+
+	public void load(final Runnable loadAction, final boolean autoRemoveSelf)
+	{
 		Scene currentScene = mEngine.getScene();
 		while (currentScene.hasChildScene())
 			currentScene = currentScene.getChildScene();
 		final TilesMenuScene lastScene = (TilesMenuScene) currentScene;
 		loadingScene.setPosition(0, 0);
 		currentScene.setChildScene(loadingScene, false, false, true);
+		backEnabled = false;
 
 		mEngine.registerUpdateHandler(new TimerHandler(.2f, new ITimerCallback()
 		{
@@ -374,7 +418,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
 				loadAction.run();
-				lastScene.setChildSceneNull();
+				if (autoRemoveSelf)
+				{
+					lastScene.setChildSceneNull();
+					backEnabled = true;
+				}
 			}
 		}));
 	}
@@ -423,6 +471,11 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 			}
 		});
 
+	}
+
+	public void backToTilesetSelect()
+	{
+		TilesetSelectScene.getInstance().clearChildScene();
 	}
 
 	public void backToSetupScene()
@@ -494,6 +547,21 @@ public class TilesMainActivity extends BaseGameActivity implements TilesConstant
 		SetupScene.getInstance().logFlurryEvent();
 		mEngine.setScene(backgroundScene);
 
+	}
+
+	public IabHelper getIABHelper()
+	{
+		return mHelper;
+	}
+
+	public void clearLoadingScreen()
+	{
+		Scene currentScene = mEngine.getScene();
+		while (currentScene.getChildScene().hasChildScene())
+			currentScene = currentScene.getChildScene();
+		if (currentScene.getChildScene() instanceof LoadingScene)
+			((TilesMenuScene) currentScene).setChildSceneNull();
+		backEnabled = true;
 	}
 
 }

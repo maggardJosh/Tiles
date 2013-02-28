@@ -45,7 +45,6 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 
 		scrollDetector = new SurfaceScrollDetector(this);
 		setOnSceneTouchListener(this);
-		setOnAreaTouchTraversalBackToFront();
 
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
@@ -69,25 +68,25 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 			if (button == null)
 				continue;
 			removeButton(button.getButton());
-			button.clear();
 		}
 	}
 
-	public void redoButtons(Inventory inv)
+	public void redoButtons()
 	{
 		clearButtons();
+		clearTouchAreas();
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
-			//TODO: Remove Buttons when they are bought
-
-			buttons[x] = new BuyTilesetPreviewButton(Tileset.purchaseableTilesets[x]);
-			addButton(buttons[x].getButton());
-			buttons[x].getButton().center(nextYPos);
-			nextYPos = buttons[x].getButton().getBottom();
-
+			if (!Tileset.isPurchased(Tileset.purchaseableTilesets[x]))
+			{
+				addButton(buttons[x].getButton());
+				buttons[x].getButton().center(nextYPos);
+				nextYPos = buttons[x].getButton().getBottom();
+			}
 		}
 		MAX_Y = nextYPos + 70;
+		registerTouchAreas();
 	}
 
 	@Override
@@ -99,6 +98,7 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 	@Override
 	public void initScene()
 	{
+		scrollDetector.reset();
 		setY(0);
 	}
 
@@ -111,10 +111,10 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 
 	private void boundScene()
 	{
-		if (getY() > 0)
-			setY(0);
 		if (getY() - CAMERA_HEIGHT < -MAX_Y)
 			setY(-MAX_Y + CAMERA_HEIGHT);
+		if (getY() > 0)
+			setY(0);
 	}
 
 	@Override

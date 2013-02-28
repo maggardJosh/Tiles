@@ -49,7 +49,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		instance = this;
 
 		buyTilesetSelectScene = BuyTilesetSelectScene.getInstance();
-		
+
 		scrollDetector = new SurfaceScrollDetector(this);
 		setOnSceneTouchListener(this);
 
@@ -58,18 +58,20 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
-			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
-				continue;
+
 			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
-			addButton(buttons[x].getButton());
-			buttons[x].getButton().center(nextYPos);
-			nextYPos = buttons[x].getButton().getBottom();
+			if (!Tileset.isPurchasable(Tileset.tilesetList[x]))
+			{
+				addButton(buttons[x].getButton());
+				buttons[x].getButton().center(nextYPos);
+				nextYPos = buttons[x].getButton().getBottom();
+			}
 
 		}
-		
+
 		buyTilesetsButton = new TilesMenuButton(SharedResources.getInstance().buyTilesetButtonRegion, new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -79,7 +81,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		buyTilesetsButton.center(nextYPos);
 		nextYPos = buyTilesetsButton.getBottom();
 		addButton(buyTilesetsButton);
-		
+
 		MAX_Y = nextYPos + 70;
 
 	}
@@ -91,30 +93,31 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			if (button == null)
 				continue;
 			removeButton(button.getButton());
-			button.clear();
+			clearTouchAreas();
 		}
 		removeButton(buyTilesetsButton);
 	}
 
-	public void redoButtons(Inventory inv)
+	public void redoButtons()
 	{
 		clearButtons();
+
+		BuyTilesetSelectScene.getInstance().redoButtons();
+
 		float nextYPos = 160;
 		for (int x = 0; x < buttons.length; x++)
 		{
 
 			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
 			{
-				if (inv.getPurchase(Tileset.tilesetList[x]) != null)
+				if (Tileset.isPurchased(Tileset.tilesetList[x]))
 				{
-					buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 					addButton(buttons[x].getButton());
 					buttons[x].getButton().center(nextYPos);
 					nextYPos = buttons[x].getButton().getBottom();
 				}
 			} else
 			{
-				buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
 				addButton(buttons[x].getButton());
 				buttons[x].getButton().center(nextYPos);
 				nextYPos = buttons[x].getButton().getBottom();
@@ -124,7 +127,9 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		buyTilesetsButton.center(nextYPos);
 		nextYPos = buyTilesetsButton.getBottom();
 		addButton(buyTilesetsButton);
-		
+
+		registerTouchAreas();
+
 		MAX_Y = nextYPos + 70;
 	}
 
@@ -144,17 +149,17 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
 	{
-		
+
 		scrollDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
 		return true;
 	}
 
 	private void boundScene()
 	{
-		if (getY() > 0)
-			setY(0);
 		if (getY() - CAMERA_HEIGHT < -MAX_Y)
 			setY(-MAX_Y + CAMERA_HEIGHT);
+		if (getY() > 0)
+			setY(0);
 	}
 
 	@Override
