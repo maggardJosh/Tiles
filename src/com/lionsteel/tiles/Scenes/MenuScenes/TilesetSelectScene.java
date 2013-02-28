@@ -75,7 +75,19 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			@Override
 			public void run()
 			{
-				transitionChildScene(BuyTilesetSelectScene.getInstance());
+				if (TilesMainActivity.getInstance().getIABHelper() != null && 
+						TilesMainActivity.getInstance().canQuery() && 
+						TilesMainActivity.getInstance().getArePurchasesLoaded())
+					transitionChildScene(BuyTilesetSelectScene.getInstance());
+				else
+				{
+					if (TilesMainActivity.getInstance().getIABHelper() == null)
+						TilesMainActivity.getInstance().setupIABHelper();
+					else
+					{
+						TilesMainActivity.getInstance().queryPurchases();
+					}
+				}
 			}
 		});
 		buyTilesetsButton.center(nextYPos);

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Scenes.MenuScenes.BuyTilesetSelectScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 import com.lionsteel.tiles.util.IabHelper.OnIabPurchaseFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
@@ -32,13 +33,14 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 			@Override
 			public void run()
 			{
+				BuyTilesetSelectScene.getInstance().resetScrollDetector();
 				TilesMainActivity.getInstance().load(new Runnable()
 				{
 
 					@Override
 					public void run()
 					{
-						// TODO Auto-generated method stub
+						// TODO Real In-App Purchases here.
 						TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
 						{
 
@@ -47,13 +49,6 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 							{
 								if (result.isFailure())
 								{
-									TilesMainActivity.getInstance().runOnUiThread(new Runnable()
-									{
-										public void run()
-										{
-											Toast.makeText(TilesMainActivity.getInstance(), "Purchase Failure: " + result.getMessage(), Toast.LENGTH_LONG).show();
-										};
-									});
 									Log.d("IAB", "Purchase Failure " + result.getMessage());
 									TilesMainActivity.getInstance().clearLoadingScreen();
 									return;

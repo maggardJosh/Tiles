@@ -70,6 +70,11 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 			removeButton(button.getButton());
 		}
 	}
+	
+	public void resetScrollDetector()
+	{
+		this.scrollDetector.reset();
+	}
 
 	public void redoButtons()
 	{
@@ -98,7 +103,7 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 	@Override
 	public void initScene()
 	{
-		scrollDetector.reset();
+		resetScrollDetector();
 		setY(0);
 	}
 

@@ -17,6 +17,7 @@ import org.andengine.util.modifier.IModifier;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -72,8 +73,21 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	private IabHelper					mHelper;
 
+	private boolean						isIABConnected		= false;
+	private boolean						isQuerying			= false;
+	private boolean						canQuery			= false;
+	private boolean						tryingToConnectIAB	= false;
 	private boolean						arePurchasesLoaded	= false;
 	private boolean						scenesLoaded		= false;
+
+	public boolean canQuery()
+	{
+		return canQuery;
+	}
+	public boolean getArePurchasesLoaded()
+	{
+		return arePurchasesLoaded;
+	}
 
 	public static TilesMainActivity getInstance()
 	{
@@ -134,6 +148,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		GameScene.isGameEventStarted = true;
 	}
 
+	private ArrayList<String>	additionalSkuList	= new ArrayList<String>();
+
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState)
 	{
@@ -151,7 +167,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 			public void onIabSetupFinished(IabResult result)
 			{
-				if (!result.isSuccess())
+				if (result.isFailure())
 				{
 					// Oh noes, there was a problem.
 					Log.d("IAB", "Problem setting up In-app Billing: " + result);
@@ -169,10 +185,11 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				}
 				Log.d("IAB", "SUCCESS");
 
-				ArrayList<String> additionalSkuList = new ArrayList<String>();
+				additionalSkuList.clear();
 				for (String s : Tileset.purchaseableTilesets)
 					additionalSkuList.add(s);
-				mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
+				queryPurchases();
+				isIABConnected = true;
 
 			}
 		});
@@ -180,36 +197,49 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	}
 
 	private QueryInventoryFinishedListener	queryInvAsync	= new QueryInventoryFinishedListener()
-															{
+	{
 
-																@Override
-																public void onQueryInventoryFinished(IabResult result, Inventory inv)
-																{
-																	if (result.isFailure())
-																	{
-																		Log.d("IAB", "Query Failure");
-																		Log.d("IAB", result.getMessage());
-																		runOnUiThread(new Runnable()
-																		{
+		@Override
+		public void onQueryInventoryFinished(final IabResult result, Inventory inv)
+		{
+			if (result.isFailure())
+			{
+				Log.d("IAB", "Query Failure");
+				Log.d("IAB", result.getMessage());
+				runOnUiThread(new Runnable()
+				{
 
-																			@Override
-																			public void run()
-																			{
-																				Toast.makeText(instance, "Unable to connect to Google Play", Toast.LENGTH_SHORT).show();
-																			}
-																		});
-																		arePurchasesLoaded = true;
-																		return;
+					@Override
+					public void run()
+					{
+						Toast.makeText(instance, "Unable to connect to market", Toast.LENGTH_SHORT).show();
+					}
+				});
+				arePurchasesLoaded = true;
+				isQuerying = false;
+				return;
 
-																	}
+			}
 
-																	reloadTilesets(inv);
+			canQuery = true;
+			reloadTilesets(inv);
 
-																	arePurchasesLoaded = true;
+			arePurchasesLoaded = true;
+			isQuerying = false;
+			
+			runOnUiThread(new Runnable()
+			{
 
-																	return;
-																}
-															};
+				@Override
+				public void run()
+				{
+					Toast.makeText(instance, "Now connected to market", Toast.LENGTH_LONG).show();
+				}
+			});
+
+			return;
+		}
+	};
 
 	protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data)
 	{
@@ -218,9 +248,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		// Pass on the activity result to the helper for handling
 		if (!mHelper.handleActivityResult(requestCode, resultCode, data))
 		{
-			// not handled, so handle it ourselves (here's where you'd
-			// perform any handling of activity results not related to in-app
-			// billing...
 			super.onActivityResult(requestCode, resultCode, data);
 		} else
 		{
@@ -551,7 +578,57 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	public IabHelper getIABHelper()
 	{
-		return mHelper;
+		if (isIABConnected)
+			return mHelper;
+		else
+			return null;
+	}
+
+	public void setupIABHelper()
+	{
+		if (tryingToConnectIAB)
+			return;
+		tryingToConnectIAB = true;
+		runOnUiThread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				Toast.makeText(instance, "Trying to connect...", Toast.LENGTH_SHORT).show();
+			}
+		});
+		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+		{
+
+			public void onIabSetupFinished(IabResult result)
+			{
+				if (result.isFailure())
+				{
+					// Oh noes, there was a problem.
+					Log.d("IAB", "Problem setting up In-app Billing: " + result);
+					runOnUiThread(new Runnable()
+					{
+
+						@Override
+						public void run()
+						{
+							Toast.makeText(instance, "Cannot connect", Toast.LENGTH_SHORT).show();
+						}
+					});
+					tryingToConnectIAB = false;
+					return;
+				}
+				Log.d("IAB", "SUCCESS");
+
+				ArrayList<String> additionalSkuList = new ArrayList<String>();
+				for (String s : Tileset.purchaseableTilesets)
+					additionalSkuList.add(s);
+				mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
+				arePurchasesLoaded = false;
+				tryingToConnectIAB = false;
+			}
+		});
 	}
 
 	public void clearLoadingScreen()
@@ -562,6 +639,25 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		if (currentScene.getChildScene() instanceof LoadingScene)
 			((TilesMenuScene) currentScene).setChildSceneNull();
 		backEnabled = true;
+	}
+
+	public void queryPurchases()
+	{
+		
+		if (!isQuerying)
+		{
+			isQuerying = true;
+			runOnUiThread(new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
+					
+				}
+			});
+		}
 	}
 
 }
