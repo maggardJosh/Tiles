@@ -27,6 +27,8 @@ public class PracticeModeSelectScene extends TilesMenuScene
 	final TilesMenuButton		freePlayButton;
 	final TilesMenuButton		frenzyButton;
 	final TilesMenuButton		timeAttackButton;
+	
+	final int TITLE_Y = 60;
 
 	@Override
 	public void logFlurryEvent()
@@ -54,10 +56,10 @@ public class PracticeModeSelectScene extends TilesMenuScene
 		}
 		this.setBackgroundEnabled(false);
 
-		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		final Sprite titleSprite = new Sprite((CAMERA_WIDTH-titleRegion.getWidth())/2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
-		final int START_Y = (int) ((CAMERA_HEIGHT + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
+		final int START_Y = (int) ((CAMERA_HEIGHT + TITLE_Y + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
 		freePlayButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.FREE_PLAY], new Runnable()
 		{
 			@Override
