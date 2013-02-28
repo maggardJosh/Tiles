@@ -31,6 +31,7 @@ import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
+import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.Tileset;
@@ -53,6 +54,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 	final BuildableBitmapTextureAtlas	sceneAtlas;
 	protected final Sprite				playerOneIntro;
 	protected final Sprite				playerTwoIntro;
+	protected final Sprite[]			playerTutorials			= new Sprite[2];
+	private boolean[]					playerInTutorial		= new boolean[2];
 	protected final Sprite				barSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
@@ -115,13 +118,16 @@ public abstract class GameScene extends Scene implements TilesConstants
 				SharedResources.getInstance().pauseSound.play();
 				transitionChildScene(pauseScene);
 			}
-		});
+		});this.setOnAreaTouchTraversalFrontToBack();
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
-		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 1024);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png");
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
+		final TextureRegion tutorialRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, GameMode.getName(SetupScene.getGameMode()) + "Tutorial.png");
+		final TextureRegion tutorialButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tutorialButton.png");
+		final TextureRegion tutorialExitButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tutorialExitButton.png");
 		try
 		{
 			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -134,10 +140,62 @@ public abstract class GameScene extends Scene implements TilesConstants
 		barSprite = new Sprite((CAMERA_WIDTH - barRegion.getWidth() * 1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
 		barSprite.setZIndex(FOREGROUND_Z);
 
-		playerOneIntro = new Sprite(0, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
+		playerOneIntro = new Sprite((CAMERA_WIDTH - playerOneIntroRegion.getWidth()) / 2, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);
-		playerTwoIntro = new Sprite(0, 0, playerTwoIntroRegion, activity.getVertexBufferObjectManager());
+
+		playerTwoIntro = new Sprite((CAMERA_WIDTH - playerTwoIntroRegion.getWidth()) / 2, 0, playerTwoIntroRegion, activity.getVertexBufferObjectManager());
+		playerTwoIntro.setRotation(180);
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
+
+		final int TUTORIAL_BUTTON_PADDING = 10;
+
+		final TilesMenuButton playerOneTutorialButton = new TilesMenuButton(tutorialButtonRegion, new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				moveTutorialIn(PLAYER_ONE);
+			}
+		});
+		playerOneTutorialButton.registerOwnTouchArea(this);
+		playerOneIntro.attachChild(playerOneTutorialButton);
+		playerOneTutorialButton.setPosition(playerOneIntro.getWidth() - playerOneTutorialButton.getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - playerOneTutorialButton.getHeight()) / 2);
+
+		final TilesMenuButton playerTwoTutorialButton = new TilesMenuButton(tutorialButtonRegion, new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				moveTutorialIn(PLAYER_TWO);
+			}
+		});
+		playerTwoTutorialButton.registerOwnTouchArea(this);
+		playerTwoIntro.attachChild(playerTwoTutorialButton);
+		playerTwoTutorialButton.setPosition(playerTwoIntro.getWidth() - playerTwoTutorialButton.getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - playerTwoTutorialButton.getHeight()) / 2);
+
+		for (int x = 0; x < 2; x++)
+		{
+			playerTutorials[x] = new Sprite((CAMERA_WIDTH-tutorialRegion.getWidth())/2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
+			final int playerIndex = x;
+			final TilesMenuButton tutorialExitButton = new TilesMenuButton(tutorialExitButtonRegion, new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					moveTutorialOut(playerIndex);
+				}
+			});
+			playerTutorials[x].attachChild(tutorialExitButton);
+			tutorialExitButton.setPosition(playerTutorials[x].getWidth() - tutorialExitButton.getWidth() - TUTORIAL_BUTTON_PADDING, TUTORIAL_BUTTON_PADDING);
+			tutorialExitButton.registerOwnTouchArea(this);
+			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
+		}
+		playerTutorials[PLAYER_TWO].setRotation(180);
+		playerTutorials[PLAYER_TWO].setPosition(0, -playerTutorials[PLAYER_TWO].getHeight());
+		playerTutorials[PLAYER_ONE].setPosition(0, CAMERA_HEIGHT);
 
 		prepareTouchControls();
 
@@ -146,6 +204,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		this.attachChild(playerOneIntro);
 		this.attachChild(playerTwoIntro);
+
+		this.attachChild(playerTutorials[PLAYER_ONE]);
+		this.attachChild(playerTutorials[PLAYER_TWO]);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -168,6 +229,41 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
+	}
+
+	protected void moveTutorialIn(int playerIndex)
+	{
+		playerTutorials[playerIndex].clearEntityModifiers();
+		float targetY = 0;
+		switch (playerIndex)
+		{
+		case PLAYER_ONE:
+			targetY = CAMERA_HEIGHT - playerTutorials[playerIndex].getHeight();
+			break;
+		case PLAYER_TWO:
+			targetY = 0;
+			break;
+		}
+		playerInTutorial[playerIndex] = true;
+		playerTutorials[playerIndex].registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTutorials[playerIndex].getY(), targetY));
+	}
+
+	private void moveTutorialOut(final int playerIndex)
+	{
+		playerTutorials[playerIndex].clearEntityModifiers();
+		float targetY = 0;
+		switch (playerIndex)
+		{
+		case PLAYER_ONE:
+			targetY = CAMERA_HEIGHT;
+			break;
+		case PLAYER_TWO:
+			targetY = -playerTutorials[playerIndex].getHeight();
+			break;
+		}
+		playerInTutorial[playerIndex] = false;
+		playerTutorials[playerIndex].registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTutorials[playerIndex].getY(), targetY));
+
 	}
 
 	protected void addTile(final int player, final boolean resetOtherPlayer)
@@ -301,9 +397,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 			}
 		});
 		final Sprite secondTouchImage = introTouchControls[PLAYER_ONE].touchImage;
-		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - secondTouchImage.getWidth()) / 2, 50);
+		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - secondTouchImage.getWidth()) / 2, 150);
 		playerTwoIntro.attachChild(introTouchControls[PLAYER_ONE]);
-		introTouchControls[PLAYER_ONE].setRotation(180);
+		//		introTouchControls[PLAYER_ONE].setRotation(180);
 		this.registerTouchArea(secondTouchImage);
 
 	}
@@ -313,7 +409,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 		switch (gameState)
 		{
 		case GameState.INTRO:
-			if (playerOneReady && playerTwoReady)
+			if (playerOneReady && playerTwoReady&&
+					!playerInTutorial[PLAYER_ONE] &&
+					!playerInTutorial[PLAYER_TWO])
 			{
 				SongManager.getInstance().fadeOut();
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
