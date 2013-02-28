@@ -21,14 +21,17 @@ import com.lionsteel.tiles.Entities.DifficultyEntity;
 
 public class SkillSelectScene extends TilesMenuScene
 {
-	TilesMainActivity			activity;
+	TilesMainActivity		activity;
 
 	final TilesMenuButton	easyButton;
 	final TilesMenuButton	normalButton;
 	final TilesMenuButton	hardButton;
 	final TilesMenuButton	insaneButton;
 
-	DifficultyEntity[]		diffEntities	= new DifficultyEntity[3];
+	DifficultyEntity[]		diffEntities			= new DifficultyEntity[3];
+
+	final int				TITLE_Y					= 50;
+	final int				TITLE_BOTTOM_PADDING	= 20;
 
 	@Override
 	public void logFlurryEvent()
@@ -57,7 +60,7 @@ public class SkillSelectScene extends TilesMenuScene
 			Debug.e(e);
 		}
 
-		final Sprite titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
+		final Sprite titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		diffEntities = new DifficultyEntity[4];
 		for (int x = 0; x < 4; x++)
 		{
@@ -75,7 +78,7 @@ public class SkillSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		easyButton.center(titleSprite.getHeight());
+		easyButton.center(titleSprite.getHeight() + TITLE_Y + TITLE_BOTTOM_PADDING);
 		easyButton.attachChild(diffEntities[Difficulty.EASY]);
 		addButton(easyButton);
 
