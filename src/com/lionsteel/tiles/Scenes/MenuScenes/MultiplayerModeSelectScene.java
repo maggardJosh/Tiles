@@ -41,7 +41,7 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 		super();
 		activity = TilesMainActivity.getInstance();
 
-		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ModeSelectScene/");
 
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");

@@ -51,6 +51,9 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						titleSprite;
 	final Sprite						practiceTitleSprite;
 
+	final int							TITLE_Y				= 50;
+	final int							BUTTON_PADDING		= 20;
+
 	private static Tileset				currentTileset;
 
 	private static SetupScene			instance;
@@ -108,6 +111,8 @@ public class SetupScene extends TilesMenuScene
 
 				TilesMainActivity.getInstance().backToSetupScene();
 				TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
+				
+				instance.sortChildren();
 			}
 		});
 	}
@@ -140,6 +145,7 @@ public class SetupScene extends TilesMenuScene
 			instance.registerTouchAreas();
 			instance.gameModeSprite[SetupScene.gameMode].setAlpha(0);
 			instance.gameModeSprite[gameMode].setAlpha(1.0f);
+			instance.sortChildren();
 		} else
 		{
 			final int currentGameMode = SetupScene.gameMode;
@@ -154,6 +160,7 @@ public class SetupScene extends TilesMenuScene
 					instance.registerTouchAreas();
 
 					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+					instance.sortChildren();
 					super.onModifierFinished(pItem);
 				}
 			});
@@ -189,6 +196,7 @@ public class SetupScene extends TilesMenuScene
 
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
 				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+				instance.sortChildren();
 				super.onModifierFinished(pItem);
 			}
 		});
@@ -226,7 +234,7 @@ public class SetupScene extends TilesMenuScene
 
 		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "title.png");
 		final TextureRegion practiceTitleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceTitle.png");
-		
+
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
 
 		try
@@ -237,8 +245,8 @@ public class SetupScene extends TilesMenuScene
 		{
 			Debug.e(e);
 		}
-		titleSprite = new Sprite(0, 0, titleRegion, activity.getVertexBufferObjectManager());
-		practiceTitleSprite = new Sprite(0, 0, practiceTitleRegion, activity.getVertexBufferObjectManager());
+		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
+		practiceTitleSprite = new Sprite((CAMERA_WIDTH - practiceTitleRegion.getWidth()) / 2, TITLE_Y, practiceTitleRegion, activity.getVertexBufferObjectManager());
 
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
 
@@ -250,7 +258,7 @@ public class SetupScene extends TilesMenuScene
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
-		tilesButton.center(titleSprite.getY() + titleSprite.getHeight());
+		tilesButton.center(titleSprite.getY() + titleSprite.getHeight() + BUTTON_PADDING);
 		tilesButton.attachChild(tilesetEntity.getButtonEntity());
 		addButton(tilesButton);
 
@@ -264,7 +272,7 @@ public class SetupScene extends TilesMenuScene
 					transitionChildScene(skillSelectScene);
 				}
 			});
-			difficultyButtons[x].center(tilesButton.getBottom());
+			difficultyButtons[x].center(tilesButton.getBottom() + BUTTON_PADDING);
 		}
 
 		for (int x = 0; x < 6; x++)
@@ -287,7 +295,7 @@ public class SetupScene extends TilesMenuScene
 						transitionChildScene(practiceModeSelectScene);
 					}
 				});
-			gameModeSprite[x].center(difficultyButtons[0].getBottom());
+			gameModeSprite[x].center(difficultyButtons[0].getBottom() + BUTTON_PADDING);
 		}
 
 		playButton = new TilesMenuButton(playRegion, new Runnable()
@@ -298,7 +306,7 @@ public class SetupScene extends TilesMenuScene
 				activity.startGame();
 			}
 		});
-		playButton.center(CAMERA_HEIGHT - playRegion.getHeight());
+		playButton.center(gameModeSprite[0].getBottom() + BUTTON_PADDING);
 		addButton(playButton);
 
 		attachChild(titleSprite);
@@ -334,40 +342,36 @@ public class SetupScene extends TilesMenuScene
 
 	private void setupLabels()
 	{
+		final int LABEL_X_PADDING = 12;
+		final int LABEL_PADDING = 8;
 
 		final Text tilesetLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
 		final Text tilesetLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
 		tilesetLabelShadow.setColor(Color.BLACK);
-		tilesetLabelShadow.setRotationCenter(0, 0);
-		tilesetLabelShadow.setRotation(-90);
-		tilesetLabel.setRotationCenter(0, 0);
-		tilesetLabel.setRotation(-90);
-		tilesetLabel.setPosition(tilesButton.getX() - tilesetLabel.getHeight() - 2, tilesButton.getY() + (tilesButton.getHeight() + tilesetLabel.getWidth()) / 2);
+		tilesetLabel.setPosition(tilesButton.getX()+LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
 		tilesetLabelShadow.setPosition(tilesetLabel.getX() + 2, tilesetLabel.getY() - 2);
+		tilesetLabel.setZIndex(FOREGROUND_Z);
+		tilesetLabelShadow.setZIndex(FOREGROUND_Z);
 		attachChild(tilesetLabelShadow);
 		attachChild(tilesetLabel);
 
 		final Text difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
 		final Text difficultyLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
 		difficultyLabelShadow.setColor(Color.BLACK);
-		difficultyLabelShadow.setRotationCenter(0, 0);
-		difficultyLabelShadow.setRotation(-90);
-		difficultyLabel.setRotationCenter(0, 0);
-		difficultyLabel.setRotation(-90);
-		difficultyLabel.setPosition(difficultyButtons[0].getX() - difficultyLabel.getHeight() - 2, difficultyButtons[0].getY() + (difficultyButtons[0].getHeight() + difficultyLabel.getWidth()) / 2);
+		difficultyLabel.setPosition(difficultyButtons[0].getX() + LABEL_X_PADDING, difficultyButtons[0].getY() - LABEL_PADDING);
 		difficultyLabelShadow.setPosition(difficultyLabel.getX() + 2, difficultyLabel.getY() - 2);
+		difficultyLabel.setZIndex(FOREGROUND_Z);
+		difficultyLabelShadow.setZIndex(FOREGROUND_Z);
 		attachChild(difficultyLabelShadow);
 		attachChild(difficultyLabel);
 
 		final Text modeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
 		final Text modeLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
 		modeLabelShadow.setColor(Color.BLACK);
-		modeLabelShadow.setRotationCenter(0, 0);
-		modeLabelShadow.setRotation(-90);
-		modeLabel.setRotationCenter(0, 0);
-		modeLabel.setRotation(-90);
-		modeLabel.setPosition(gameModeSprite[0].getX() - modeLabel.getHeight() - 2, gameModeSprite[0].getY() + (gameModeSprite[0].getHeight() + modeLabel.getWidth()) / 2);
+		modeLabel.setPosition(gameModeSprite[0].getX() + LABEL_X_PADDING, gameModeSprite[0].getY() - LABEL_PADDING);
 		modeLabelShadow.setPosition(modeLabel.getX() + 2, modeLabel.getY() - 2);
+		modeLabel.setZIndex(FOREGROUND_Z);
+		modeLabelShadow.setZIndex(FOREGROUND_Z);
 		attachChild(modeLabelShadow);
 		attachChild(modeLabel);
 
@@ -387,7 +391,7 @@ public class SetupScene extends TilesMenuScene
 			}
 		});
 		tilesButton.attachChild(currentTileset.getTilesetEntity().getButtonEntity());
-		tilesButton.setZIndex(FOREGROUND_Z);
+		tilesButton.setZIndex(FOREGROUND_Z-1);
 		tilesButton.center(oldY);
 		addButton(tilesButton);
 

@@ -44,12 +44,12 @@ public class SkillSelectScene extends TilesMenuScene
 		super();
 
 		activity = TilesMainActivity.getInstance();
-		final BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		final BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256);
 
 		this.setBackgroundEnabled(false);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SkillSelectScene/");
 
-		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png");//, 0, 0);
+		final TextureRegion titleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "title.png");
 
 		try
 		{
