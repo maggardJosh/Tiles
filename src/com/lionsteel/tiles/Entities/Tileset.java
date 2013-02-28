@@ -450,6 +450,8 @@ public class Tileset implements TilesConstants
 			}
 		});
 		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
+		displayButton.buttonSprite.setZIndex(BUTTON_Z+1);
+		currentScene.sortChildren();
 
 	}
 
