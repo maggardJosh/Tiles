@@ -263,7 +263,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	private void reloadTilesets()
 	{
-		while (!scenesLoaded)
+		while (!TilesetSelectScene.isCreated())
 			;
 
 		Tileset.getPurchasedTilesets(currentInventory);

@@ -42,12 +42,17 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	float								MAX_Y;
 	final int							TITLE_Y					= 40;
 	final int							TITLE_BOTTOM_PADDING	= 10;
-
+	
 	final TilesetPreviewButton			buttons[]				= new TilesetPreviewButton[Tileset.tilesetList.length];
 	final TilesMenuButton				buyTilesetsButton;
 
 	private static TilesetSelectScene	instance;
+	private static boolean isCreated = false;
 
+	public static boolean isCreated()
+	{
+		return isCreated;
+	}
 	public static TilesetSelectScene getInstance()
 	{
 		if (instance == null)
@@ -123,6 +128,8 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + 70;
+		
+		isCreated = true;
 
 	}
 
