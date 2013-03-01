@@ -265,7 +265,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		while (!TilesetSelectScene.isCreated())
 			;
-
 		Tileset.getPurchasedTilesets(currentInventory);
 		TilesetSelectScene.getInstance().redoButtons();
 

@@ -26,7 +26,6 @@ import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
-import com.lionsteel.tiles.util.Inventory;
 
 public class TilesetSelectScene extends TilesMenuScene implements TilesConstants, IScrollDetectorListener, IOnSceneTouchListener
 {
@@ -36,28 +35,34 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 	final SurfaceScrollDetector			scrollDetector;
 
-	final Sprite titleSprite;
-	
+	final Sprite						titleSprite;
+
 	final float							SCROLL_SPEED			= .8f;
 	float								MAX_Y;
 	final int							TITLE_Y					= 40;
 	final int							TITLE_BOTTOM_PADDING	= 10;
-	
+
 	final TilesetPreviewButton			buttons[]				= new TilesetPreviewButton[Tileset.tilesetList.length];
 	final TilesMenuButton				buyTilesetsButton;
 
 	private static TilesetSelectScene	instance;
-	private static boolean isCreated = false;
+	private static boolean				isCreated				= false;
+
+	private static Object				instanceLock			= new Object();
 
 	public static boolean isCreated()
 	{
 		return isCreated;
 	}
+
 	public static TilesetSelectScene getInstance()
 	{
-		if (instance == null)
-			instance = new TilesetSelectScene();
-		return instance;
+		synchronized (instanceLock)
+		{
+			if (instance == null)
+				instance = new TilesetSelectScene();
+			return instance;
+		}
 	}
 
 	public TilesetSelectScene()
@@ -128,7 +133,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + 70;
-		
+
 		isCreated = true;
 
 	}
@@ -145,14 +150,15 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		removeButton(buyTilesetsButton);
 	}
 
-	private boolean reloadIsDone = true;
+	private boolean	reloadIsDone	= true;
+
 	public void redoButtons()
 	{
-		while(!reloadIsDone)
+		while (!reloadIsDone)
 			;
 		activity.runOnUpdateThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -161,7 +167,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 				BuyTilesetSelectScene.getInstance().redoButtons();
 
-				float nextYPos = titleSprite.getY()+titleSprite.getHeight()+TITLE_BOTTOM_PADDING;
+				float nextYPos = titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING;
 				for (int x = 0; x < buttons.length; x++)
 				{
 
@@ -188,11 +194,11 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 				registerTouchAreas();
 
 				MAX_Y = nextYPos + 70;
-				
+
 				reloadIsDone = true;
 			}
 		});
-		
+
 	}
 
 	@Override
