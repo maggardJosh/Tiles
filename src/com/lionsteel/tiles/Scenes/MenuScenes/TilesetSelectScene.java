@@ -138,39 +138,54 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		removeButton(buyTilesetsButton);
 	}
 
+	private boolean reloadIsDone = true;
 	public void redoButtons()
 	{
-		clearButtons();
-
-		BuyTilesetSelectScene.getInstance().redoButtons();
-
-		float nextYPos = titleSprite.getY()+titleSprite.getHeight()+TITLE_BOTTOM_PADDING;
-		for (int x = 0; x < buttons.length; x++)
+		while(!reloadIsDone)
+			;
+		activity.runOnUpdateThread(new Runnable()
 		{
-
-			if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+			
+			@Override
+			public void run()
 			{
-				if (Tileset.isPurchased(Tileset.tilesetList[x]))
+				reloadIsDone = false;
+				clearButtons();
+
+				BuyTilesetSelectScene.getInstance().redoButtons();
+
+				float nextYPos = titleSprite.getY()+titleSprite.getHeight()+TITLE_BOTTOM_PADDING;
+				for (int x = 0; x < buttons.length; x++)
 				{
-					addButton(buttons[x].getButton());
-					buttons[x].getButton().center(nextYPos);
-					nextYPos = buttons[x].getButton().getBottom();
+
+					if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+					{
+						if (Tileset.isPurchased(Tileset.tilesetList[x]))
+						{
+							addButton(buttons[x].getButton());
+							buttons[x].getButton().center(nextYPos);
+							nextYPos = buttons[x].getButton().getBottom();
+						}
+					} else
+					{
+						addButton(buttons[x].getButton());
+						buttons[x].getButton().center(nextYPos);
+						nextYPos = buttons[x].getButton().getBottom();
+					}
+
 				}
-			} else
-			{
-				addButton(buttons[x].getButton());
-				buttons[x].getButton().center(nextYPos);
-				nextYPos = buttons[x].getButton().getBottom();
+				buyTilesetsButton.center(nextYPos);
+				nextYPos = buyTilesetsButton.getBottom();
+				addButton(buyTilesetsButton);
+
+				registerTouchAreas();
+
+				MAX_Y = nextYPos + 70;
+				
+				reloadIsDone = true;
 			}
-
-		}
-		buyTilesetsButton.center(nextYPos);
-		nextYPos = buyTilesetsButton.getBottom();
-		addButton(buyTilesetsButton);
-
-		registerTouchAreas();
-
-		MAX_Y = nextYPos + 70;
+		});
+		
 	}
 
 	@Override

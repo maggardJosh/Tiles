@@ -73,6 +73,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	private IabHelper					mHelper;
 
+	private Inventory					currentInventory;
+
 	private boolean						isIABConnected		= false;
 	private boolean						isQuerying			= false;
 	private boolean						canQuery			= false;
@@ -84,6 +86,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		return canQuery;
 	}
+
 	public boolean getArePurchasesLoaded()
 	{
 		return arePurchasesLoaded;
@@ -197,49 +200,52 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	}
 
 	private QueryInventoryFinishedListener	queryInvAsync	= new QueryInventoryFinishedListener()
-	{
+															{
 
-		@Override
-		public void onQueryInventoryFinished(final IabResult result, Inventory inv)
-		{
-			if (result.isFailure())
-			{
-				Log.d("IAB", "Query Failure");
-				Log.d("IAB", result.getMessage());
-				runOnUiThread(new Runnable()
-				{
+																@Override
+																public void onQueryInventoryFinished(final IabResult result, Inventory inv)
+																{
+																	if (result.isFailure())
+																	{
+																		Log.d("IAB", "Query Failure");
+																		Log.d("IAB", result.getMessage());
+																		runOnUiThread(new Runnable()
+																		{
+																			@Override
+																			public void run()
+																			{
+																				Toast.makeText(instance, "Unable to connect to market", Toast.LENGTH_SHORT).show();
+																			}
+																		});
+																		arePurchasesLoaded = true;
+																		isQuerying = false;
+																		return;
 
-					@Override
-					public void run()
-					{
-						Toast.makeText(instance, "Unable to connect to market", Toast.LENGTH_SHORT).show();
-					}
-				});
-				arePurchasesLoaded = true;
-				isQuerying = false;
-				return;
+																	}
 
-			}
+																	Log.d("IAB", "Query Success");
 
-			canQuery = true;
-			reloadTilesets(inv);
+																	currentInventory = inv;
 
-			arePurchasesLoaded = true;
-			isQuerying = false;
-			
-			runOnUiThread(new Runnable()
-			{
+																	canQuery = true;
+																	reloadTilesets();
 
-				@Override
-				public void run()
-				{
-					Toast.makeText(instance, "Now connected to market", Toast.LENGTH_LONG).show();
-				}
-			});
+																	arePurchasesLoaded = true;
+																	isQuerying = false;
 
-			return;
-		}
-	};
+																	runOnUiThread(new Runnable()
+																	{
+
+																		@Override
+																		public void run()
+																		{
+																			Toast.makeText(instance, "Now connected to market", Toast.LENGTH_LONG).show();
+																		}
+																	});
+
+																	return;
+																}
+															};
 
 	protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data)
 	{
@@ -255,27 +261,14 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		}
 	}
 
-	private void reloadTilesets(final Inventory inv)
+	private void reloadTilesets()
 	{
 		while (!scenesLoaded)
 			;
-		Purchase testPurch = inv.getPurchase("android.test.purchased");
-		if (testPurch != null)
-			mHelper.consumeAsync(testPurch, new OnConsumeFinishedListener()
-			{
 
-				@Override
-				public void onConsumeFinished(Purchase purchase, IabResult result)
-				{
-					Tileset.getPurchasedTilesets(inv);
-					TilesetSelectScene.getInstance().redoButtons();
-				}
-			});
-		else
-		{
-			Tileset.getPurchasedTilesets(inv);
-			TilesetSelectScene.getInstance().redoButtons();
-		}
+		Tileset.getPurchasedTilesets(currentInventory);
+		TilesetSelectScene.getInstance().redoButtons();
+
 	}
 
 	protected void onDestroy()
@@ -381,8 +374,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				backgroundScene = new BackgroundMenuScene(mainMenuScene);
 
 				scenesLoaded = true;
-				while (!arePurchasesLoaded)
-					;
+
 				mEngine.registerUpdateHandler(new TimerHandler(2.0f, new ITimerCallback()
 				{
 
@@ -644,18 +636,18 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	public void queryPurchases()
 	{
-		
+
 		if (!isQuerying)
 		{
 			isQuerying = true;
 			runOnUiThread(new Runnable()
 			{
-				
+
 				@Override
 				public void run()
 				{
 					mHelper.queryInventoryAsync(true, additionalSkuList, queryInvAsync);
-					
+
 				}
 			});
 		}
