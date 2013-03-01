@@ -200,52 +200,52 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	}
 
 	private QueryInventoryFinishedListener	queryInvAsync	= new QueryInventoryFinishedListener()
-															{
+	{
 
-																@Override
-																public void onQueryInventoryFinished(final IabResult result, Inventory inv)
-																{
-																	if (result.isFailure())
-																	{
-																		Log.d("IAB", "Query Failure");
-																		Log.d("IAB", result.getMessage());
-																		runOnUiThread(new Runnable()
-																		{
-																			@Override
-																			public void run()
-																			{
-																				Toast.makeText(instance, "Unable to connect to market", Toast.LENGTH_SHORT).show();
-																			}
-																		});
-																		arePurchasesLoaded = true;
-																		isQuerying = false;
-																		return;
+		@Override
+		public void onQueryInventoryFinished(final IabResult result, Inventory inv)
+		{
+			if (result.isFailure())
+			{
+				Log.d("IAB", "Query Failure");
+				Log.d("IAB", result.getMessage());
+				runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Toast.makeText(instance, "Unable to connect to market", Toast.LENGTH_SHORT).show();
+					}
+				});
+				arePurchasesLoaded = true;
+				isQuerying = false;
+				return;
 
-																	}
+			}
 
-																	Log.d("IAB", "Query Success");
+			Log.d("IAB", "Query Success");
 
-																	currentInventory = inv;
+			currentInventory = inv;
 
-																	canQuery = true;
-																	reloadTilesets();
+			canQuery = true;
+			reloadTilesets();
 
-																	arePurchasesLoaded = true;
-																	isQuerying = false;
+			arePurchasesLoaded = true;
+			isQuerying = false;
 
-																	runOnUiThread(new Runnable()
-																	{
+			runOnUiThread(new Runnable()
+			{
 
-																		@Override
-																		public void run()
-																		{
-																			Toast.makeText(instance, "Now connected to market", Toast.LENGTH_LONG).show();
-																		}
-																	});
+				@Override
+				public void run()
+				{
+					Toast.makeText(instance, "Now connected to market", Toast.LENGTH_LONG).show();
+				}
+			});
 
-																	return;
-																}
-															};
+			return;
+		}
+	};
 
 	protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data)
 	{

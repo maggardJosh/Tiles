@@ -59,6 +59,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected final Sprite				barSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
+	final TilesMenuButton[]				tutorialButton			= new TilesMenuButton[2];
 
 	protected boolean					playerOneReady			= false;
 	protected boolean					playerTwoReady			= false;
@@ -73,6 +74,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 	private final int[]					currentStreak			= new int[2];
 
 	protected TilesMenuButton			pauseButton;
+	final TilesMenuButton[]				tutorialExitButton		= new TilesMenuButton[2];
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
@@ -152,37 +154,35 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		final int TUTORIAL_BUTTON_PADDING = 10;
 
-		final TilesMenuButton playerOneTutorialButton = new TilesMenuButton(tutorialButtonRegion, new Runnable()
+		for (int x = 0; x < 2; x++)
 		{
-
-			@Override
-			public void run()
+			final int playerIndex = x;
+			tutorialButton[x] = new TilesMenuButton(tutorialButtonRegion, new Runnable()
 			{
-				moveTutorialIn(PLAYER_ONE);
-			}
-		});
-		playerOneTutorialButton.registerOwnTouchArea(this);
-		playerOneIntro.attachChild(playerOneTutorialButton);
-		playerOneTutorialButton.setPosition(playerOneIntro.getWidth() - playerOneTutorialButton.getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - playerOneTutorialButton.getHeight()) / 2);
 
-		final TilesMenuButton playerTwoTutorialButton = new TilesMenuButton(tutorialButtonRegion, new Runnable()
-		{
-
-			@Override
-			public void run()
+				@Override
+				public void run()
+				{
+					moveTutorialIn(playerIndex);
+				}
+			});
+			tutorialButton[x].registerOwnTouchArea(this);
+			if (x == PLAYER_ONE)
 			{
-				moveTutorialIn(PLAYER_TWO);
+				playerOneIntro.attachChild(tutorialButton[x]);
+				tutorialButton[x].setPosition(playerOneIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
+			} else
+			{
+				playerTwoIntro.attachChild(tutorialButton[x]);
+				tutorialButton[x].setPosition(playerTwoIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
 			}
-		});
-		playerTwoTutorialButton.registerOwnTouchArea(this);
-		playerTwoIntro.attachChild(playerTwoTutorialButton);
-		playerTwoTutorialButton.setPosition(playerTwoIntro.getWidth() - playerTwoTutorialButton.getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - playerTwoTutorialButton.getHeight()) / 2);
+		}
 
 		for (int x = 0; x < 2; x++)
 		{
 			playerTutorials[x] = new Sprite((CAMERA_WIDTH - tutorialRegion.getWidth()) / 2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
 			final int playerIndex = x;
-			final TilesMenuButton tutorialExitButton = new TilesMenuButton(tutorialExitButtonRegion, new Runnable()
+			tutorialExitButton[x] = new TilesMenuButton(tutorialExitButtonRegion, new Runnable()
 			{
 
 				@Override
@@ -191,14 +191,13 @@ public abstract class GameScene extends Scene implements TilesConstants
 					moveTutorialOut(playerIndex);
 				}
 			});
-			playerTutorials[x].attachChild(tutorialExitButton);
-			tutorialExitButton.setPosition(playerTutorials[x].getWidth() - tutorialExitButton.getWidth() - TUTORIAL_BUTTON_PADDING, TUTORIAL_BUTTON_PADDING);
-			tutorialExitButton.registerOwnTouchArea(this);
+			playerTutorials[x].attachChild(tutorialExitButton[x]);
+			tutorialExitButton[x].setPosition(playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, TUTORIAL_BUTTON_PADDING);
 			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
 		}
 		playerTutorials[PLAYER_TWO].setRotation(180);
-		playerTutorials[PLAYER_TWO].setPosition(0, -playerTutorials[PLAYER_TWO].getHeight());
-		playerTutorials[PLAYER_ONE].setPosition(0, CAMERA_HEIGHT);
+		playerTutorials[PLAYER_TWO].setY(-playerTutorials[PLAYER_TWO].getHeight());
+		playerTutorials[PLAYER_ONE].setY(CAMERA_HEIGHT);
 
 		prepareTouchControls();
 
@@ -236,6 +235,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void moveTutorialIn(int playerIndex)
 	{
+		this.unregisterTouchArea(introTouchControls[(playerIndex + 1) % 2].touchImage);
+		tutorialButton[playerIndex].unregisterOwnTouchArea(this);
+		tutorialExitButton[playerIndex].registerOwnTouchArea(this);
+		introTouchControls[(playerIndex + 1) % 2].resetButton();
 		playerTutorials[playerIndex].clearEntityModifiers();
 		float targetY = 0;
 		switch (playerIndex)
@@ -254,6 +257,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 	private void moveTutorialOut(final int playerIndex)
 	{
 		playerTutorials[playerIndex].clearEntityModifiers();
+		tutorialExitButton[playerIndex].unregisterOwnTouchArea(this);
+		tutorialButton[playerIndex].registerOwnTouchArea(this);
+		this.registerTouchArea(introTouchControls[(playerIndex + 1) % 2].touchImage);
 		float targetY = 0;
 		switch (playerIndex)
 		{

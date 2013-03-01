@@ -109,5 +109,10 @@ public class TilesMenuButton extends Entity implements TilesConstants
 	{
 		scene.registerTouchArea(buttonSprite);
 	}
+	
+	public void unregisterOwnTouchArea(Scene scene)
+	{
+		scene.unregisterTouchArea(buttonSprite);
+	}
 
 }
