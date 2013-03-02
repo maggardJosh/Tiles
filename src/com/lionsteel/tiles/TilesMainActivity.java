@@ -205,6 +205,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		public void onQueryInventoryFinished(final IabResult result, Inventory inv)
 		{
+
 			if (result.isFailure())
 			{
 				Log.d("IAB", "Query Failure");
@@ -220,10 +221,13 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				arePurchasesLoaded = true;
 				isQuerying = false;
 				return;
-
 			}
 
 			Log.d("IAB", "Query Success");
+
+			Purchase fakePurchase = inv.getPurchase("android.test.purchased");
+			if (fakePurchase != null)
+				mHelper.consumeAsync(fakePurchase, null);
 
 			currentInventory = inv;
 

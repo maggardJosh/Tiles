@@ -451,6 +451,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 			maxStreak[i] = 0;
 			currentStreak[i] = 0;
 		}
+		barSpeedMulti = 1.0f;
 	}
 
 	protected void checkPlayerWillWin(int player)
@@ -462,6 +463,19 @@ public abstract class GameScene extends Scene implements TilesConstants
 		}
 	}
 
+	protected void checkBar()
+	{
+		if(barSprite.getY() +barSprite.getHeight() > CAMERA_HEIGHT)
+		{
+			showGameOver(PLAYER_ONE);
+			changeState(GameState.GAME_OVER);
+		}else if(barSprite.getY() < 0 )
+		{
+			showGameOver(PLAYER_TWO);
+			changeState(GameState.GAME_OVER);
+		}
+	}
+	
 	protected void showGameOver(int player)
 	{
 		SongManager.getInstance().fadeOut();

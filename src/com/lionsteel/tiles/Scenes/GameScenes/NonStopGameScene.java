@@ -6,16 +6,33 @@ import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
+import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
+import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
 public class NonStopGameScene extends GameScene implements TilesConstants
 {
+	protected float	barSpeedIncrease;
 
 	public NonStopGameScene()
 	{
 		super();
 		activity = TilesMainActivity.getInstance();
+
+		switch (SetupScene.getDifficulty())
+		{
+		case Difficulty.EASY:
+			barSpeedIncrease = .3f;
+			break;
+		case Difficulty.NORMAL:
+			barSpeedIncrease = .2f;
+			break;
+		case Difficulty.HARD:
+		case Difficulty.INSANE:
+			barSpeedIncrease = .1f;
+			break;
+		}
 
 		this.sortChildren();
 
@@ -42,12 +59,12 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 						switch (button.getPlayer())
 						{
 						case PLAYER_TWO:
-							checkPlayerWillWin(PLAYER_TWO);
 							moveBar(-BAR_SPEED);
+							barSpeedMulti += barSpeedIncrease;
 							break;
 						case PLAYER_ONE:
-							checkPlayerWillWin(PLAYER_ONE);
 							moveBar(BAR_SPEED);
+							barSpeedMulti += barSpeedIncrease;
 							break;
 						}
 					}
@@ -80,6 +97,10 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 		case GameState.PICKING_NEW_BUTTON:
 			currentTileset.startNonStop();
 			changeState(GameState.WAITING_FOR_INPUT);
+			checkBar();
+			break;
+		case GameState.WAITING_FOR_INPUT:
+			checkBar();
 			break;
 		}
 		super.Update(pSecondsElapsed);
