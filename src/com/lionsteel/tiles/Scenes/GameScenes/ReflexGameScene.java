@@ -49,7 +49,7 @@ public class ReflexGameScene extends GameScene
 			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
-				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
+				currentTileset.animateReflexDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
 				{
 
 					@Override

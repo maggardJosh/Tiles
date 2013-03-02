@@ -39,44 +39,44 @@ import com.lionsteel.tiles.util.Inventory;
 
 public class Tileset implements TilesConstants
 {
-	private TilesMainActivity			activity;
+	private TilesMainActivity				activity;
 
-	public static String[] tilesetList;
-	
-	public static final String[] purchaseableTilesets = { "dice", "blocks" };
-	public static final ArrayList<String> purchasedTilesets = new ArrayList<String>();
-	
-	private BuildableBitmapTextureAtlas	atlas;
+	public static String[]					tilesetList;
 
-	private final TextureRegion[]		buttonRegions				= new TextureRegion[NUM_BUTTONS];
-	private final TextureRegion			backgroundRegion;
+	public static final String[]			purchaseableTilesets		= { "dice", "blocks" };
+	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
-	private GameButton[]				playerOneGameButtons		= new GameButton[NUM_BUTTONS];
-	private GameButton[]				playerTwoGameButtons		= new GameButton[NUM_BUTTONS];
-	private GameButton[]				displayGameButtons			= new GameButton[NUM_BUTTONS * 3];
+	private BuildableBitmapTextureAtlas		atlas;
 
-	private Sprite						background;
+	private final TextureRegion[]			buttonRegions				= new TextureRegion[NUM_BUTTONS];
+	private final TextureRegion				backgroundRegion;
 
-	private boolean						gameAssetsCreated			= false;
+	private GameButton[]					playerOneGameButtons		= new GameButton[NUM_BUTTONS];
+	private GameButton[]					playerTwoGameButtons		= new GameButton[NUM_BUTTONS];
+	private GameButton[]					displayGameButtons			= new GameButton[NUM_BUTTONS * 3];
 
-	private Sprite[]					displayIndicators			= new Sprite[3];
-	private GameButton[]				currentStreamButtons		= new GameButton[3];
-	private GameScene					currentScene;
+	private Sprite							background;
 
-	private int							numberOfButtonsToUse		= 3;
-	private int							numberOfStreamTilesToSpawn	= 1;
-	private final Random				rand;
-	private final String				basePath;
+	private boolean							gameAssetsCreated			= false;
 
-	private DifficultyEntity			difficultyEntity[]			= new DifficultyEntity[4];
-	private TilesetEntity				tilesetEntity;
-	private TilesetParticleSystem		particleSystem;
+	private Sprite[]						displayIndicators			= new Sprite[3];
+	private GameButton[]					currentStreamButtons		= new GameButton[3];
+	private GameScene						currentScene;
 
-	private Rectangle					tileBase;
-	private Rectangle					playerOneTiles;
-	private Rectangle					playerOneDisplay;
-	private Rectangle					playerTwoTiles;
-	private Rectangle					playerTwoDisplay;
+	private int								numberOfButtonsToUse		= 3;
+	private int								numberOfStreamTilesToSpawn	= 1;
+	private final Random					rand;
+	private final String					basePath;
+
+	private DifficultyEntity				difficultyEntity[]			= new DifficultyEntity[4];
+	private TilesetEntity					tilesetEntity;
+	private TilesetParticleSystem			particleSystem;
+
+	private Rectangle						tileBase;
+	private Rectangle						playerOneTiles;
+	private Rectangle						playerOneDisplay;
+	private Rectangle						playerTwoTiles;
+	private Rectangle						playerTwoDisplay;
 
 	/**
 	 * 
@@ -410,33 +410,58 @@ public class Tileset implements TilesConstants
 		}
 	}
 
-	public void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
+	public void animateReflexDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
 	{
-		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
-		currentScene.playTileCollectSound();
-		if (SetupScene.getGameMode() == GameMode.REFLEX)
-		{
-			int i = 0;
-			for (; i < numberOfStreamTilesToSpawn; i++)
-			{
-				if (displayButton == currentStreamButtons[i])
-					break;
-			}
-			currentStreamButtons[i] = null;
-			checkAllButtonsGone();
-		} else
-		{
-			int i = 0;
-			for (; i < numberOfStreamTilesToSpawn; i++)
-				if (displayButton == currentStreamButtons[i])
-					break;
+		int i = 0;
+		for (; i < numberOfStreamTilesToSpawn; i++)
+			if (displayButton == currentStreamButtons[i])
+				break;
 
+		currentStreamButtons[i] = null;
+		checkAllButtonsGone();
+		animateDisplayButton(displayButton, playerButton, listener);
+	}
+
+	public void animateNonStopDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
+	{
+		int i = 0;
+		for (; i < numberOfStreamTilesToSpawn; i++)
+			if (displayButton == currentStreamButtons[i])
+				break;
+
+		currentStreamButtons[i] = newStreamButton();
+		currentStreamButtons[i].buttonSprite.setPosition(displayButton.buttonSprite);
+		currentStreamButtons[i].buttonSprite.setVisible(true);
+		currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
+		currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
+		animateDisplayButton(displayButton, playerButton, listener);
+	}
+
+	public void animateTimeAttackDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener, final int tilesLeft)
+	{
+		int i = 0;
+		for (; i < numberOfStreamTilesToSpawn; i++)
+			if (displayButton == currentStreamButtons[i])
+				break;
+
+		if (tilesLeft-this.numberOfStreamTilesToSpawn >= 0)
+		{
 			currentStreamButtons[i] = newStreamButton();
 			currentStreamButtons[i].buttonSprite.setPosition(displayButton.buttonSprite);
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
+		}else
+		{
+			currentStreamButtons[i] = null;
 		}
+		animateDisplayButton(displayButton, playerButton, listener);
+	}
+
+	private void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
+	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
+		currentScene.playTileCollectSound();
 		displayButton.buttonSprite.setZIndex(FOREGROUND_Z);
 		displayButton.buttonSprite.clearEntityModifiers();
 		displayButton.buttonSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.0f, 2.0f, EaseCubicOut.getInstance()), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 2.0f, 1.0f, EaseCubicIn.getInstance())));
@@ -450,7 +475,7 @@ public class Tileset implements TilesConstants
 			}
 		});
 		displayButton.buttonSprite.registerEntityModifier(new RotationModifier(WIN_MOVE_MOD_TIME * 2 / 3, displayButton.buttonSprite.getRotation(), playerButton.buttonSprite.getRotation()));
-		displayButton.buttonSprite.setZIndex(BUTTON_Z+1);
+		displayButton.buttonSprite.setZIndex(BUTTON_Z + 1);
 		currentScene.sortChildren();
 
 	}
@@ -921,8 +946,8 @@ public class Tileset implements TilesConstants
 
 	public static boolean isPurchasable(String string)
 	{
-		for(int ind=0; ind < purchaseableTilesets.length; ind++)
-			if(purchaseableTilesets[ind].compareTo(string) == 0)
+		for (int ind = 0; ind < purchaseableTilesets.length; ind++)
+			if (purchaseableTilesets[ind].compareTo(string) == 0)
 				return true;
 		return false;
 	}
@@ -930,15 +955,15 @@ public class Tileset implements TilesConstants
 	public static void getPurchasedTilesets(Inventory inv)
 	{
 		purchasedTilesets.clear();
-		for(int x=0; x<purchaseableTilesets.length; x++)
-			if(inv.getPurchase(purchaseableTilesets[x])!=null)
+		for (int x = 0; x < purchaseableTilesets.length; x++)
+			if (inv.getPurchase(purchaseableTilesets[x]) != null)
 				purchasedTilesets.add(purchaseableTilesets[x]);
 	}
 
 	public static boolean isPurchased(String tileset)
 	{
-		for(String purchasedTileset : purchasedTilesets)
-			if(purchasedTileset.compareTo(tileset) == 0)
+		for (String purchasedTileset : purchasedTilesets)
+			if (purchasedTileset.compareTo(tileset) == 0)
 				return true;
 		return false;
 	}

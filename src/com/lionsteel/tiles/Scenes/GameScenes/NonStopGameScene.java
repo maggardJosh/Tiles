@@ -48,7 +48,7 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
-				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
+				currentTileset.animateNonStopDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
 				{
 
 					@Override

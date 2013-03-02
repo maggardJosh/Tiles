@@ -61,7 +61,7 @@ public class RaceGameScene extends GameScene
 			final GameButton displayButtonPressed = currentTileset.isRaceButtonCurrentlyActive(button);
 			if (displayButtonPressed != null)
 			{
-				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
+				currentTileset.animateNonStopDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
 				{
 
 					@Override

@@ -126,15 +126,16 @@ public class TimeAttackGameScene extends PracticeGameScene
 			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
-				currentTileset.animateDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
+				addTile(button.getPlayer(), false);
+				tileRect.decrement();
+				currentTileset.animateTimeAttackDisplayButton(displayButtonPressed, button, new IEntityModifier.IEntityModifierListener()
 				{
 
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
 					{
 						currentTileset.resetDisplayButton(displayButtonPressed);
-						addTile(button.getPlayer(), false);
-						tileRect.decrement();
+						
 					}
 
 					@Override
@@ -142,7 +143,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 					{
 
 					}
-				});
+				}, (int)tileRect.getValue());
 
 				sortChildren();
 			} else

@@ -81,6 +81,11 @@ public class TimerRect extends Entity implements TilesConstants
 		if (maxValue - value <= 0)
 			endAction.run();
 	}
+	
+	public float getValue()
+	{
+		return maxValue - value;
+	}
 
 	public void startTimer()
 	{
