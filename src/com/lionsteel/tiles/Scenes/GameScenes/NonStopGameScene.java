@@ -23,14 +23,14 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 		switch (SetupScene.getDifficulty())
 		{
 		case Difficulty.EASY:
-			barSpeedIncrease = .3f;
+			barSpeedIncrease = .15f;
 			break;
 		case Difficulty.NORMAL:
-			barSpeedIncrease = .2f;
+			barSpeedIncrease = .1f;
 			break;
 		case Difficulty.HARD:
 		case Difficulty.INSANE:
-			barSpeedIncrease = .1f;
+			barSpeedIncrease = .05f;
 			break;
 		}
 
@@ -59,11 +59,11 @@ public class NonStopGameScene extends GameScene implements TilesConstants
 						switch (button.getPlayer())
 						{
 						case PLAYER_TWO:
-							moveBar(-BAR_SPEED);
+							moveBar(-BAR_SPEED*barSpeedMulti);
 							barSpeedMulti += barSpeedIncrease;
 							break;
 						case PLAYER_ONE:
-							moveBar(BAR_SPEED);
+							moveBar(BAR_SPEED*barSpeedMulti);
 							barSpeedMulti += barSpeedIncrease;
 							break;
 						}
