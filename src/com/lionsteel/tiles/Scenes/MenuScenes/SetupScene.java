@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
@@ -111,7 +112,7 @@ public class SetupScene extends TilesMenuScene
 
 				TilesMainActivity.getInstance().backToSetupScene();
 				TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
-				
+
 				instance.sortChildren();
 			}
 		});
@@ -236,6 +237,7 @@ public class SetupScene extends TilesMenuScene
 		final TextureRegion practiceTitleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceTitle.png");
 
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
+		final TextureRegion changeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "changeButton.png");
 
 		try
 		{
@@ -247,34 +249,7 @@ public class SetupScene extends TilesMenuScene
 		}
 		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		practiceTitleSprite = new Sprite((CAMERA_WIDTH - practiceTitleRegion.getWidth()) / 2, TITLE_Y, practiceTitleRegion, activity.getVertexBufferObjectManager());
-
-		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
-
-		tilesButton = new TilesMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				transitionChildScene(tilesetSelectScene);
-			}
-		});
-		tilesButton.center(titleSprite.getY() + titleSprite.getHeight() + BUTTON_PADDING);
-		tilesButton.attachChild(tilesetEntity.getButtonEntity());
-		addButton(tilesButton);
-
-		for (int x = 0; x < 4; x++)
-		{
-			difficultyButtons[x] = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[x], new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					transitionChildScene(skillSelectScene);
-				}
-			});
-			difficultyButtons[x].center(tilesButton.getBottom() + BUTTON_PADDING);
-		}
-
+		
 		for (int x = 0; x < 6; x++)
 		{
 			if (x < 3)
@@ -295,7 +270,35 @@ public class SetupScene extends TilesMenuScene
 						transitionChildScene(practiceModeSelectScene);
 					}
 				});
-			gameModeSprite[x].center(difficultyButtons[0].getBottom() + BUTTON_PADDING);
+			gameModeSprite[x].center(titleSprite.getY() + titleSprite.getHeight()+ BUTTON_PADDING);
+		}
+
+
+		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
+		
+		tilesButton = new TilesMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				transitionChildScene(tilesetSelectScene);
+			}
+		});
+		tilesButton.center(gameModeSprite[0].getBottom()+BUTTON_PADDING);
+		tilesButton.attachChild(tilesetEntity.getButtonEntity());
+		addButton(tilesButton);
+		
+		for (int x = 0; x < 4; x++)
+		{
+			difficultyButtons[x] = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[x], new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					transitionChildScene(skillSelectScene);
+				}
+			});
+			difficultyButtons[x].center(tilesButton.getBottom() + BUTTON_PADDING);
 		}
 
 		playButton = new TilesMenuButton(playRegion, new Runnable()
@@ -306,7 +309,7 @@ public class SetupScene extends TilesMenuScene
 				activity.startGame();
 			}
 		});
-		playButton.center(gameModeSprite[0].getBottom() + BUTTON_PADDING);
+		playButton.center(difficultyButtons[0].getBottom() + BUTTON_PADDING);
 		addButton(playButton);
 
 		attachChild(titleSprite);
@@ -337,6 +340,34 @@ public class SetupScene extends TilesMenuScene
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 
 		setupLabels();
+		setupChangeSprites(changeRegion);
+
+	}
+
+	private void setupChangeSprites(final ITextureRegion changeRegion)
+	{
+		final Sprite[] changeSprites = new Sprite[3];
+		for (int x = 0; x < 3; x++)
+		{
+			changeSprites[x] = new Sprite(0, 0, changeRegion, activity.getVertexBufferObjectManager());
+			final TilesMenuButton button;
+			switch (x)
+			{
+			case 0:
+				button = difficultyButtons[0];
+				break;
+			case 1:
+				button = tilesButton;
+				break;
+			case 2:
+			default:
+				button = gameModeSprite[0];
+				break;
+			}
+			changeSprites[x].setPosition(button.getX() + button.getWidth() - changeSprites[0].getWidth(), button.getY());// + (button.getHeight() - changeSprites[0].getHeight()) / 2);
+			changeSprites[x].setZIndex(FOREGROUND_Z);
+			this.attachChild(changeSprites[x]);
+		}
 
 	}
 
@@ -348,7 +379,7 @@ public class SetupScene extends TilesMenuScene
 		final Text tilesetLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
 		final Text tilesetLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
 		tilesetLabelShadow.setColor(Color.BLACK);
-		tilesetLabel.setPosition(tilesButton.getX()+LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
+		tilesetLabel.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
 		tilesetLabelShadow.setPosition(tilesetLabel.getX() + 2, tilesetLabel.getY() - 2);
 		tilesetLabel.setZIndex(FOREGROUND_Z);
 		tilesetLabelShadow.setZIndex(FOREGROUND_Z);
@@ -391,7 +422,7 @@ public class SetupScene extends TilesMenuScene
 			}
 		});
 		tilesButton.attachChild(currentTileset.getTilesetEntity().getButtonEntity());
-		tilesButton.setZIndex(FOREGROUND_Z-1);
+		tilesButton.setZIndex(FOREGROUND_Z - 1);
 		tilesButton.center(oldY);
 		addButton(tilesButton);
 
