@@ -618,7 +618,15 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 						return;
 					}
 					Log.d("IAB", "SUCCESS");
-
+					if (mHelper.isSetup())
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								new QueryIABInventory().execute();
+							}
+						});
 				}
 			});
 			return null;
@@ -628,15 +636,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		protected void onPostExecute(Void result)
 		{
 			IABSetupProgressDialog.dismiss();
-			if (mHelper.isSetup())
-				runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						new QueryIABInventory().execute();
-					}
-				});
+			
 			super.onPostExecute(result);
 		}
 	}
