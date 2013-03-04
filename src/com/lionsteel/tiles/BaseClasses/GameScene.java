@@ -36,10 +36,8 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.WrongSelectionIndicator;
-import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.GameCountdown;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
-import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 
@@ -315,12 +313,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 	@Override
 	public void clearChildScene()
 	{
-		if (this.mChildScene instanceof LoadingScene)
-		{
-
-			this.mChildScene = null;
-			return;
-		}
 		TilesMainActivity.getInstance().backEnabled = false;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
 

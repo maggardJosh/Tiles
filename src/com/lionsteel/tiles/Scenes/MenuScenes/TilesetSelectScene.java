@@ -46,26 +46,15 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 	final TilesMenuButton				buyTilesetsButton;
 
 	private static TilesetSelectScene	instance;
-	private static boolean				isCreated				= false;
-
-	private static Object				instanceLock			= new Object();
-
-	public static boolean isCreated()
-	{
-		return isCreated;
-	}
 
 	public static TilesetSelectScene getInstance()
 	{
-		synchronized (instanceLock)
-		{
-			if (instance == null)
-				instance = new TilesetSelectScene();
-			return instance;
-		}
+		if (instance == null)
+			instance = new TilesetSelectScene();
+		return instance;
 	}
 
-	public TilesetSelectScene()
+	private TilesetSelectScene()
 	{
 		super();
 
@@ -133,8 +122,8 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + 70;
-
-		isCreated = true;
+		
+		activity.setupIAB();
 
 	}
 
@@ -150,52 +139,51 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 		removeButton(buyTilesetsButton);
 	}
 
-	private boolean	reloadIsDone	= true;
-
+	private Object reloadLock = new Object();
 	public void redoButtons()
 	{
-		while (!reloadIsDone)
-			;
+
 		activity.runOnUpdateThread(new Runnable()
 		{
 
 			@Override
 			public void run()
 			{
-				reloadIsDone = false;
-				clearButtons();
-
-				BuyTilesetSelectScene.getInstance().redoButtons();
-
-				float nextYPos = titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING;
-				for (int x = 0; x < buttons.length; x++)
+				synchronized (reloadLock)
 				{
+					clearButtons();
 
-					if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+					BuyTilesetSelectScene.getInstance().redoButtons();
+
+					float nextYPos = titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING;
+					for (int x = 0; x < buttons.length; x++)
 					{
-						if (Tileset.isPurchased(Tileset.tilesetList[x]))
+
+						if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+						{
+							if (Tileset.isPurchased(Tileset.tilesetList[x]))
+							{
+								addButton(buttons[x].getButton());
+								buttons[x].getButton().center(nextYPos);
+								nextYPos = buttons[x].getButton().getBottom();
+							}
+						} else
 						{
 							addButton(buttons[x].getButton());
 							buttons[x].getButton().center(nextYPos);
 							nextYPos = buttons[x].getButton().getBottom();
 						}
-					} else
-					{
-						addButton(buttons[x].getButton());
-						buttons[x].getButton().center(nextYPos);
-						nextYPos = buttons[x].getButton().getBottom();
+
 					}
+					buyTilesetsButton.center(nextYPos);
+					nextYPos = buyTilesetsButton.getBottom();
+					addButton(buyTilesetsButton);
+
+					registerTouchAreas();
+
+					MAX_Y = nextYPos + 70;
 
 				}
-				buyTilesetsButton.center(nextYPos);
-				nextYPos = buyTilesetsButton.getBottom();
-				addButton(buyTilesetsButton);
-
-				registerTouchAreas();
-
-				MAX_Y = nextYPos + 70;
-
-				reloadIsDone = true;
 			}
 		});
 

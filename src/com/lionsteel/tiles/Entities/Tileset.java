@@ -219,7 +219,6 @@ public class Tileset implements TilesConstants
 			}
 
 		}
-
 		currentScene.sortChildren();
 	}
 
@@ -363,7 +362,7 @@ public class Tileset implements TilesConstants
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerTwoGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
-				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
+				//currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
 
 			break;
@@ -396,7 +395,7 @@ public class Tileset implements TilesConstants
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerOneGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
-				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
+				//currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
 			break;
 		case DISPLAY_BUTTONS:
@@ -605,6 +604,9 @@ public class Tileset implements TilesConstants
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerTwoGameButtons[x].buttonSprite.setColor(1, 1, 1, 1);
 				playerTwoGameButtons[x].buttonSprite.setScale(1.0f);
+				while(currentScene.unregisterTouchArea(playerTwoGameButtons[x].buttonSprite))
+					;
+				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
 		}
 
@@ -637,7 +639,10 @@ public class Tileset implements TilesConstants
 				playerOneGameButtons[x].buttonSprite.setRotation(0);
 				playerOneGameButtons[x].buttonSprite.setColor(1, 1, 1, 1);
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
-				playerOneGameButtons[x].buttonSprite.setAlpha(1);
+				playerOneGameButtons[x].buttonSprite.setScale(1.0f);
+				while(currentScene.unregisterTouchArea(playerOneGameButtons[x].buttonSprite))
+					;
+				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
 		}
 	}
