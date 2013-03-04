@@ -104,7 +104,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			@Override
 			public void run()
 			{
-				if(TilesMainActivity.getInstance().getIABHelper() == null)
+				if(!TilesMainActivity.getInstance().getIABHelper().isSetup())
 					TilesMainActivity.getInstance().setupIABHelper();
 				else
 					if(!TilesMainActivity.getInstance().getArePurchasesLoaded())

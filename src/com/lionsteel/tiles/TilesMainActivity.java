@@ -14,6 +14,7 @@ import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.util.modifier.IModifier;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -471,11 +473,10 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	public IabHelper getIABHelper()
 	{
-		if (mHelper.isSetup())
-			return mHelper;
-		else
-			return null;
+		return mHelper;
 	}
+	
+	//----Inner AsyncTask Classes
 
 	private class QueryIABInventory extends AsyncTask<Void, Void, Void>
 	{
@@ -491,7 +492,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			final QueryIABInventory thisThread = this;
 			queryDialog.setOnCancelListener(new OnCancelListener()
 			{
-				
+
 				@Override
 				public void onCancel(DialogInterface dialog)
 				{
@@ -507,8 +508,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			final ArrayList<String> additionalSkuList = new ArrayList<String>();
 			for (String s : Tileset.purchaseableTilesets)
 				additionalSkuList.add(s);
-			
-			IabResult result =new IabResult(IabHelper.BILLING_RESPONSE_RESULT_OK, "Inventory refresh successful.");
+
+			IabResult result = new IabResult(IabHelper.BILLING_RESPONSE_RESULT_OK, "Inventory refresh successful.");
 			Inventory inventory = null;
 			try
 			{
@@ -618,7 +619,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 					}
 					Log.d("IAB", "SUCCESS");
 
-
 				}
 			});
 			return null;
@@ -628,23 +628,26 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		protected void onPostExecute(Void result)
 		{
 			IABSetupProgressDialog.dismiss();
-			runOnUiThread(new Runnable()
-			{
-				@Override
-				public void run()
+			if (mHelper.isSetup())
+				runOnUiThread(new Runnable()
 				{
-					new QueryIABInventory().execute();
-				}
-			});
+					@Override
+					public void run()
+					{
+						new QueryIABInventory().execute();
+					}
+				});
 			super.onPostExecute(result);
 		}
 	}
+	
+	//---- End of Inner AsyncTask Classes
 
 	public void setupIABHelper()
 	{
 		if (mHelper.isSetup())
 			return;
-		
+
 		runOnUiThread(new Runnable()
 		{
 
@@ -662,7 +665,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		runOnUiThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -670,6 +673,5 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			}
 		});
 	}
-
 
 }
