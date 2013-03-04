@@ -104,17 +104,14 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 			@Override
 			public void run()
 			{
-				if (TilesMainActivity.getInstance().getIABHelper() != null && TilesMainActivity.getInstance().canQuery() && TilesMainActivity.getInstance().getArePurchasesLoaded())
-					transitionChildScene(BuyTilesetSelectScene.getInstance());
+				if(TilesMainActivity.getInstance().getIABHelper() == null)
+					TilesMainActivity.getInstance().setupIABHelper();
 				else
-				{
-					if (TilesMainActivity.getInstance().getIABHelper() == null)
-						TilesMainActivity.getInstance().setupIABHelper();
+					if(!TilesMainActivity.getInstance().getArePurchasesLoaded())
+						TilesMainActivity.getInstance().startGetPurchasesTask();
 					else
-					{
-						TilesMainActivity.getInstance().queryPurchases();
-					}
-				}
+				transitionChildScene(BuyTilesetSelectScene.getInstance());
+				
 			}
 		});
 		buyTilesetsButton.center(nextYPos);
@@ -123,7 +120,7 @@ public class TilesetSelectScene extends TilesMenuScene implements TilesConstants
 
 		MAX_Y = nextYPos + 70;
 		
-		activity.setupIAB();
+		activity.setupIABHelper();
 
 	}
 

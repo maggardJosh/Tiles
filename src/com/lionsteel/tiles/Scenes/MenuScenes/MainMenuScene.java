@@ -42,7 +42,7 @@ public class MainMenuScene extends TilesMenuScene
 		super();
 		activity = TilesMainActivity.getInstance();
 
-		setupScene = SetupScene.getInstance();
+		
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
@@ -106,7 +106,7 @@ public class MainMenuScene extends TilesMenuScene
 
 		//Have to register own touch areas because we are the first scene
 		registerTouchAreas();
-
+		setupScene = SetupScene.getInstance();
 	}
 
 	@Override

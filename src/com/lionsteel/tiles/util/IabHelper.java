@@ -164,6 +164,11 @@ public class IabHelper {
         logDebug("IAB helper created.");
     }
     
+    public boolean isSetup()
+    {
+    	return this.mSetupDone;
+    }
+    
     /**
      * Enables or disable debug logging through LogCat.
      */
