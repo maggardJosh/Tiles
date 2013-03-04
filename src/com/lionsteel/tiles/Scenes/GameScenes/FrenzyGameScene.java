@@ -6,11 +6,13 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.text.Text;
 import org.andengine.util.modifier.IModifier;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
 import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
+import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.TimerRect;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
@@ -146,6 +148,7 @@ public class FrenzyGameScene extends PracticeGameScene
 		if(getBestTiles() < getTilesCollected(PLAYER_ONE))
 		{
 			activity.saveInt(getSaveString(), getTilesCollected(PLAYER_ONE));
+			FlurryAgent.logEvent(FlurryAgentEventStrings.NEW_FRENZY_RECORD);
 			practiceGameOverScene.pulseNewRecord();
 		}
 		showPracticeGameOver();

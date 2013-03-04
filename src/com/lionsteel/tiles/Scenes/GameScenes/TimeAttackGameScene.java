@@ -7,11 +7,13 @@ import org.andengine.entity.text.Text;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
 
+import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
 import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
+import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.TimerRect;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
@@ -177,6 +179,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 
 			if (bestTimeAttackSeconds > totalSecondsPlayed || bestTimeAttackSeconds == 0)
 			{
+				FlurryAgent.logEvent(FlurryAgentEventStrings.NEW_TIME_ATTACK_RECORD);
 				activity.saveFloat(getSaveString(), totalSecondsPlayed);
 				practiceGameOverScene.pulseNewRecord();
 			}
