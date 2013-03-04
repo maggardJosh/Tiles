@@ -1,8 +1,11 @@
 package com.lionsteel.tiles.Entities;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
+import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +14,7 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.BuyTilesetSelectScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
+import com.lionsteel.tiles.util.IabException;
 import com.lionsteel.tiles.util.IabHelper.OnIabPurchaseFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
 import com.lionsteel.tiles.util.Purchase;
@@ -34,36 +38,49 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 			public void run()
 			{
 				BuyTilesetSelectScene.getInstance().resetScrollDetector();
-				TilesMainActivity.getInstance().load(new Runnable()
+				TilesMainActivity.getInstance().runOnUiThread(new Runnable()
 				{
 
 					@Override
 					public void run()
 					{
-						// TODO Real In-App Purchases here.
-						TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
-						{
-
-							@Override
-							public void onIabPurchaseFinished(final IabResult result, final Purchase info)
-							{
-								if (result.isFailure())
-								{
-									Log.d("IAB", "Purchase Failure " + result.getMessage());
-									TilesMainActivity.getInstance().clearLoadingScreen();
-									return;
-								}
-
-								if (info != null)
-									TilesMainActivity.getInstance().getIABHelper().consumeAsync(info, null);
-								Tileset.purchasedTilesets.add(basePath);
-								TilesetSelectScene.getInstance().redoButtons();
-								TilesMainActivity.getInstance().clearLoadingScreen();
-
-							}
-						}, "");
+						final ProgressDialog pd = TilesMainActivity.getInstance().progressDialog;
+						pd.setCancelable(false);
+						pd.setMessage("Launching Market");
+						pd.show();
 					}
-				}, false);
+				});
+
+				// TODO Real In-App Purchases here.
+				TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
+				{
+
+					@Override
+					public void onIabPurchaseFinished(final IabResult result, final Purchase info)
+					{
+						if (result.isFailure())
+						{
+							Log.d("IAB", "Purchase Failure " + result.getMessage());
+
+							TilesMainActivity.getInstance().progressDialog.dismiss();
+
+							return;
+						}
+
+						if (info != null)
+							try
+							{
+								TilesMainActivity.getInstance().getIABHelper().consume(info);
+							} catch (IabException e)
+							{
+								e.printStackTrace();
+							}
+						Tileset.purchasedTilesets.add(basePath);
+						TilesetSelectScene.getInstance().redoButtons();
+						TilesMainActivity.getInstance().progressDialog.dismiss();
+
+					}
+				}, "");
 
 			}
 		});

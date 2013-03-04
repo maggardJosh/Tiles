@@ -51,7 +51,7 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 		return instance;
 	}
 
-	public BuyTilesetSelectScene()
+	private BuyTilesetSelectScene()
 	{
 		super();
 

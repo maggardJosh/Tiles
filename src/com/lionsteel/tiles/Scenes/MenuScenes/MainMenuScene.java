@@ -20,16 +20,16 @@ import com.lionsteel.tiles.Constants.GameMode;
 
 public class MainMenuScene extends TilesMenuScene
 {
-	TilesMainActivity	activity;
+	TilesMainActivity			activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
 
-	private SetupScene	setupScene;
+	private SetupScene			setupScene;
 
-	final int			BUTTON_SPACING	= 150;
+	final int					BUTTON_SPACING	= 150;
 
-	final Sprite		titleSprite;
-	
-	final int TITLE_PADDING = 40;
+	final Sprite				titleSprite;
+
+	final int					TITLE_PADDING	= 40;
 
 	@Override
 	public void logFlurryEvent()
@@ -42,7 +42,7 @@ public class MainMenuScene extends TilesMenuScene
 		super();
 		activity = TilesMainActivity.getInstance();
 
-		setupScene = new SetupScene();
+		setupScene = SetupScene.getInstance();
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
@@ -63,7 +63,7 @@ public class MainMenuScene extends TilesMenuScene
 
 		this.setBackgroundEnabled(false);
 
-		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth())/2, TITLE_PADDING, titleRegion, activity.getVertexBufferObjectManager());
+		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_PADDING, titleRegion, activity.getVertexBufferObjectManager());
 		final TilesMenuButton versusButton = new TilesMenuButton(versusRegion, new Runnable()
 		{
 			@Override
@@ -106,6 +106,7 @@ public class MainMenuScene extends TilesMenuScene
 
 		//Have to register own touch areas because we are the first scene
 		registerTouchAreas();
+
 	}
 
 	@Override

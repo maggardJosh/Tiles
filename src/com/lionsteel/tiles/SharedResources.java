@@ -42,6 +42,7 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		musicNoteRegion;
 	public final TextureRegion		soundEffectImageRegion;
 	public final TextureRegion		buyTilesetButtonRegion;
+	public final TextureRegion		backArrowRegion;
 
 	public Sound					tileCollectSound;
 
@@ -97,7 +98,7 @@ public class SharedResources implements TilesConstants
 		soundEffectImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "soundEffectImage.png");
 		musicNoteRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "musicNote.png");
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
-
+		backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "backArrow.png");
 		try
 		{
 			buildableAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));

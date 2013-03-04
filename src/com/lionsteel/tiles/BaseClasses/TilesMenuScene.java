@@ -5,17 +5,13 @@ import java.util.ArrayList;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.Scene;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
-import com.lionsteel.tiles.Scenes.GameScenes.LoadingScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
-import com.lionsteel.tiles.Scenes.MenuScenes.QuitPromptScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
@@ -30,12 +26,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ReflexMenuShared/");
-		final BitmapTextureAtlas sceneAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256);
-		final TextureRegion backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "backArrow.png", 0, 0);
-		sceneAtlas.load();
 
-		backButton = new TilesMenuButton(backArrowRegion, new Runnable()
+		backButton = new TilesMenuButton(SharedResources.getInstance().backArrowRegion, new Runnable()
 		{
 			@Override
 			public void run()
@@ -144,18 +136,12 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			((TilesMenuScene) this.getChildScene()).clearTouchAreas();
 		super.clearChildScene();
 	}
-
-	@Override
-	public void clearChildScene()
+	
+	public void clearChildScene(final Runnable onFinished)
 	{
 		logFlurryEvent();
 		initScene();
-		if (this.mChildScene instanceof LoadingScene)
-		{
 
-			this.mChildScene = null;
-			return;
-		}
 		TilesMainActivity.getInstance().backEnabled = false;
 		this.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, getX(), 0));
 		mChildScene.clearTouchAreas();
@@ -166,11 +152,20 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			{
 				TilesMainActivity.getInstance().backEnabled = true;
 				setChildSceneNull();
+				if(onFinished != null)
+					onFinished.run();
 				super.onModifierFinished(pItem);
 			}
 		});
 		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
 			activity.moveBackground(true);
+		
+	}
+
+	@Override
+	public void clearChildScene()
+	{
+		clearChildScene(null);
 	}
 
 }

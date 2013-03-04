@@ -1,5 +1,8 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
@@ -16,6 +19,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
+
+import android.app.ProgressDialog;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -61,6 +66,9 @@ public class SetupScene extends TilesMenuScene
 
 	private static int					gameMode			= GameMode.REFLEX;
 	private static int					difficulty;
+	private static boolean				isCreated			= false;
+	
+	private static Object instanceLock;
 
 	@Override
 	public void logFlurryEvent()
@@ -71,12 +79,32 @@ public class SetupScene extends TilesMenuScene
 			FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_SETUP);
 
 	};
+	
+	public static void clear()
+	{
+		instance = null;
+	}
+	
+	public static boolean isNull()
+	{
+		return instance == null;
+	}
 
 	public static SetupScene getInstance()
 	{
-		if (instance == null)
-			instance = new SetupScene();
-		return instance;
+		if(instanceLock == null)
+			instanceLock = new Object();
+		synchronized (instanceLock)
+		{
+			if (instance == null)
+				instance = new SetupScene();
+			return instance;
+		}
+	}
+
+	public boolean isCreated()
+	{
+		return isCreated;
 	}
 
 	public static int getGameMode()
@@ -101,19 +129,44 @@ public class SetupScene extends TilesMenuScene
 			TilesMainActivity.getInstance().backToSetupScene();
 			return;
 		}
-		TilesMainActivity.getInstance().load(new Runnable()
+
+		TilesMainActivity.getInstance().runOnUiThread(new Runnable()
 		{
+
 			@Override
 			public void run()
 			{
-				currentTileset.clearTileset();
-				currentTileset = new Tileset(tileset, false);
-				SetupScene.getInstance().resetGraphics();
+				final ProgressDialog pd = TilesMainActivity.getInstance().progressDialog;
+				pd.setMessage("Loading Tileset");
+				pd.show();
 
-				TilesMainActivity.getInstance().backToSetupScene();
-				TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
+				TilesMainActivity.getInstance().runOnUpdateThread(new Runnable()
+				{
+					
+					@Override
+					public void run()
+					{
+						currentTileset.clearTileset();
+						currentTileset = new Tileset(tileset, false);
+						SetupScene.getInstance().resetGraphics();
+						
+						TilesMainActivity.getInstance().backToSetupScene();
+						TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
+						
+						instance.sortChildren();
+						
+						TilesMainActivity.getInstance().getEngine().registerUpdateHandler(new TimerHandler(.3f, new ITimerCallback()
+						{
+							
+							@Override
+							public void onTimePassed(TimerHandler pTimerHandler)
+							{
+								TilesMainActivity.getInstance().progressDialog.dismiss();
+							}
+						}));
+					}
+				});
 
-				instance.sortChildren();
 			}
 		});
 	}
@@ -205,7 +258,7 @@ public class SetupScene extends TilesMenuScene
 		TilesMainActivity.getInstance().saveInt(TilesSharedPreferenceStrings.lastDifficulty, difficulty);
 	}
 
-	public SetupScene()
+	private SetupScene()
 	{
 		super();
 		instance = this;
@@ -249,7 +302,7 @@ public class SetupScene extends TilesMenuScene
 		}
 		titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		practiceTitleSprite = new Sprite((CAMERA_WIDTH - practiceTitleRegion.getWidth()) / 2, TITLE_Y, practiceTitleRegion, activity.getVertexBufferObjectManager());
-		
+
 		for (int x = 0; x < 6; x++)
 		{
 			if (x < 3)
@@ -270,12 +323,11 @@ public class SetupScene extends TilesMenuScene
 						transitionChildScene(practiceModeSelectScene);
 					}
 				});
-			gameModeSprite[x].center(titleSprite.getY() + titleSprite.getHeight()+ BUTTON_PADDING);
+			gameModeSprite[x].center(titleSprite.getY() + titleSprite.getHeight() + BUTTON_PADDING);
 		}
 
-
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
-		
+
 		tilesButton = new TilesMenuButton(tilesetEntity.getButtonRegion(), new Runnable()
 		{
 			@Override
@@ -284,10 +336,10 @@ public class SetupScene extends TilesMenuScene
 				transitionChildScene(tilesetSelectScene);
 			}
 		});
-		tilesButton.center(gameModeSprite[0].getBottom()+BUTTON_PADDING);
+		tilesButton.center(gameModeSprite[0].getBottom() + BUTTON_PADDING);
 		tilesButton.attachChild(tilesetEntity.getButtonEntity());
 		addButton(tilesButton);
-		
+
 		for (int x = 0; x < 4; x++)
 		{
 			difficultyButtons[x] = new TilesMenuButton(SharedResources.getInstance().difficultyRegion[x], new Runnable()
@@ -341,6 +393,8 @@ public class SetupScene extends TilesMenuScene
 
 		setupLabels();
 		setupChangeSprites(changeRegion);
+
+		isCreated = true;
 
 	}
 
@@ -445,5 +499,7 @@ public class SetupScene extends TilesMenuScene
 		musicMute.refreshButton();
 		soundEffectMute.refreshButton();
 	}
+
+	
 
 }
