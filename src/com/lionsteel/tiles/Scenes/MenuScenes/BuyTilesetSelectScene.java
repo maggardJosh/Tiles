@@ -104,7 +104,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 	@Override
 	public void logFlurryEvent()
 	{
-		FlurryAgent.logEvent(FlurryAgentEventStrings.TILESET_MENU);
+		FlurryAgent.logEvent(FlurryAgentEventStrings.BUY_TILESET_MENU);
 	}
 
 	public static void clear()

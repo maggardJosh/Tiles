@@ -11,6 +11,7 @@ public class FlurryAgentEventStrings
 	public static final String	PRACTICE_GAME_MODE_MENU		= "Practice_Mode_Select";
 	public static final String	DIFFICULTY_MENU				= "Skill_Select_Scene";
 	public static final String	TILESET_MENU				= "Tileset_Select_Scene";
+	public static final String	BUY_TILESET_MENU			= "Buy_Tileset_Scene";
 	public static final String	GAME_PLAYED					= "Game_Played";
 	public static final String	QUIT_BUTTON					= "Quit_Button";
 	public static final String	REMATCH						= "Rematch";

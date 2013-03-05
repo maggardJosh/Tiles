@@ -85,7 +85,6 @@ public abstract class PracticeGameScene extends GameScene
 		this.clearChildScene();
 		SongManager.getInstance().setVolumeMultiplier(1.0f);
 		FlurryAgent.logEvent(FlurryAgentEventStrings.RESTART_PRACTICE);
-		TilesMainActivity.startGameEvent();
 		resetGame();
 		currentTileset.resetPlayerTiles();
 

@@ -440,7 +440,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 	{
 		this.clearChildScene();
 		FlurryAgent.logEvent(FlurryAgentEventStrings.REMATCH);
-		TilesMainActivity.startGameEvent();
 		resetGame();
 		currentTileset.resetPlayerTiles();
 		resetValues();
