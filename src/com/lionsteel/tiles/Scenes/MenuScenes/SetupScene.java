@@ -500,6 +500,13 @@ public class SetupScene extends TilesMenuScene
 		soundEffectMute.refreshButton();
 	}
 
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

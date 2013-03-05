@@ -52,6 +52,7 @@ public class TilesMenuButton extends Entity implements TilesConstants
 			}
 		};
 		this.attachChild(buttonSprite);
+		this.setRotationCenter(buttonSprite.getWidth()/2, buttonSprite.getHeight()/2);
 	}
 	
 	public void unsetButton()

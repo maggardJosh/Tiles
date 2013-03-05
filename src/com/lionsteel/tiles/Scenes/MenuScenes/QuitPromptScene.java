@@ -108,4 +108,11 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 			controls.initButton();
 	}
 
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

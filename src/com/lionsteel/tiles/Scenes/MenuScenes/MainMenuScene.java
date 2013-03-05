@@ -116,4 +116,11 @@ public class MainMenuScene extends TilesMenuScene
 
 	}
 
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

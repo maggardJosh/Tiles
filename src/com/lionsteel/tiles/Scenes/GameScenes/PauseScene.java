@@ -201,4 +201,11 @@ public class PauseScene extends TilesMenuScene
 
 		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
+
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

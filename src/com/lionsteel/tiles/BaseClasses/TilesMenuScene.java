@@ -76,7 +76,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		transitionChildScene(childScene, false);
 	}
 
-	protected void addButton(TilesMenuButton button)
+	public void addButton(TilesMenuButton button)
 	{
 		buttonList.add(button);
 		this.attachChild(button);
@@ -122,6 +122,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	}
 
 	public abstract void initScene();
+	protected abstract void exitScene();
 
 	protected void transitionOff()
 	{
@@ -129,6 +130,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
 			activity.moveBackground(false);
 	}
+	
 
 	public void setChildSceneNull()
 	{
@@ -140,6 +142,8 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	public void clearChildScene(final Runnable onFinished)
 	{
 		logFlurryEvent();
+		if(mChildScene instanceof TilesMenuScene)
+			((TilesMenuScene)mChildScene).exitScene();
 		initScene();
 
 		TilesMainActivity.getInstance().backEnabled = false;

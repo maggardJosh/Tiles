@@ -271,4 +271,11 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		SongManager.getInstance().setVolumeMultiplier(MUFFLED_VOLUME);
 	}
 
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

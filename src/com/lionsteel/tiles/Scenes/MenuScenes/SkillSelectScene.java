@@ -154,4 +154,11 @@ public class SkillSelectScene extends TilesMenuScene
 		//Nothing to init
 	}
 
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

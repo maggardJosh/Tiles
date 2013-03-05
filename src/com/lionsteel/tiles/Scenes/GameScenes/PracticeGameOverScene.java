@@ -191,4 +191,11 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 		this.newRecordText.registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new RotationModifier(pulseSeconds, -PULSE_ROTATION / 4, PULSE_ROTATION / 4), new RotationModifier(pulseSeconds, PULSE_ROTATION / 4, -PULSE_ROTATION / 4))));
 
 	}
+
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
