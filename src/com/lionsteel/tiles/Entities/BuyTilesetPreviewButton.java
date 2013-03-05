@@ -1,13 +1,12 @@
 package com.lionsteel.tiles.Entities;
 
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
@@ -26,6 +25,60 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 	final String			basePath;
 	final TilesMenuButton	button;
 
+	private class BuyTilesetTask extends AsyncTask<String, Void, Void>
+	{
+		ProgressDialog progressDialog;
+		@Override
+		protected void onPreExecute()
+		{
+			progressDialog = new ProgressDialog(TilesMainActivity.getInstance());
+			progressDialog.setMessage("Launching Market");
+			progressDialog.setCancelable(false);
+			progressDialog.show();
+			super.onPreExecute();
+		}
+		@Override
+		protected Void doInBackground(String... params)
+		{
+			TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
+			{
+
+				@Override
+				public void onIabPurchaseFinished(final IabResult result, final Purchase info)
+				{
+					if (result.isFailure())
+					{
+						Log.d("IAB", "Purchase Failure " + result.getMessage());
+
+						TilesMainActivity.getInstance().progressDialog.dismiss();
+
+						return;
+					}
+
+					if (info != null)
+						try
+						{
+							TilesMainActivity.getInstance().getIABHelper().consume(info);
+						} catch (IabException e)
+						{
+							e.printStackTrace();
+						}
+					Tileset.purchasedTilesets.add(basePath);
+					TilesetSelectScene.getInstance().redoButtons();
+					TilesMainActivity.getInstance().progressDialog.dismiss();
+
+				}
+			}, "");
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			progressDialog.dismiss();
+			super.onPostExecute(result);
+		}
+	}
+	
 	public BuyTilesetPreviewButton(final String basePath)
 	{
 		this.basePath = basePath;
@@ -40,47 +93,13 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 				BuyTilesetSelectScene.getInstance().resetScrollDetector();
 				TilesMainActivity.getInstance().runOnUiThread(new Runnable()
 				{
-
+					
 					@Override
 					public void run()
 					{
-						final ProgressDialog pd = TilesMainActivity.getInstance().progressDialog;
-						pd.setCancelable(false);
-						pd.setMessage("Launching Market");
-						pd.show();
+						new BuyTilesetTask().execute(basePath);
 					}
 				});
-
-				// TODO Real In-App Purchases here.
-				TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
-				{
-
-					@Override
-					public void onIabPurchaseFinished(final IabResult result, final Purchase info)
-					{
-						if (result.isFailure())
-						{
-							Log.d("IAB", "Purchase Failure " + result.getMessage());
-
-							TilesMainActivity.getInstance().progressDialog.dismiss();
-
-							return;
-						}
-
-						if (info != null)
-							try
-							{
-								TilesMainActivity.getInstance().getIABHelper().consume(info);
-							} catch (IabException e)
-							{
-								e.printStackTrace();
-							}
-						Tileset.purchasedTilesets.add(basePath);
-						TilesetSelectScene.getInstance().redoButtons();
-						TilesMainActivity.getInstance().progressDialog.dismiss();
-
-					}
-				}, "");
 
 			}
 		});

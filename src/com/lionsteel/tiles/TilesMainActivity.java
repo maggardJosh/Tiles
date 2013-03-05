@@ -513,7 +513,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			Inventory inventory = null;
 			try
 			{
-				inventory = mHelper.queryInventory(true, additionalSkuList);
+				inventory = mHelper.queryInventory(false, additionalSkuList);
 			} catch (IabException e)
 			{
 				result = e.getResult();
