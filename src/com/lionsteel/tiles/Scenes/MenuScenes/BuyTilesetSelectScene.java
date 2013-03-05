@@ -15,7 +15,6 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.BuyTilesetPreviewButton;
 import com.lionsteel.tiles.Entities.Tileset;
-import com.lionsteel.tiles.Scenes.TilesScrollableScene;
 
 public class BuyTilesetSelectScene extends TilesScrollableScene
 {

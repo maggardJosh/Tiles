@@ -1,4 +1,4 @@
-package com.lionsteel.tiles.Scenes;
+package com.lionsteel.tiles.Scenes.MenuScenes;
 
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;

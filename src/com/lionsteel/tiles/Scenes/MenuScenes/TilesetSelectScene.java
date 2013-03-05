@@ -18,7 +18,6 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetPreviewButton;
-import com.lionsteel.tiles.Scenes.TilesScrollableScene;
 
 public class TilesetSelectScene extends TilesScrollableScene
 {

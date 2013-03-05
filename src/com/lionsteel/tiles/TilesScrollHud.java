@@ -6,7 +6,7 @@ import org.andengine.util.modifier.ease.EaseCubicInOut;
 
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.TilesConstants;
-import com.lionsteel.tiles.Scenes.TilesScrollableScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.TilesScrollableScene;
 
 public class TilesScrollHud extends HUD implements TilesConstants
 {
