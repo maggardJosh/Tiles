@@ -150,7 +150,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		playerTwoIntro.setRotation(180);
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
 
-		final int TUTORIAL_BUTTON_PADDING = 10;
+		final int TUTORIAL_BUTTON_PADDING = 30;
 
 		for (int x = 0; x < 2; x++)
 		{
@@ -165,16 +165,25 @@ public abstract class GameScene extends Scene implements TilesConstants
 				}
 			});
 			tutorialButton[x].registerOwnTouchArea(this);
+			final int BUTTON_Y_SPACING = 20;
 			if (x == PLAYER_ONE)
 			{
 				playerOneIntro.attachChild(tutorialButton[x]);
 				tutorialButton[x].setPosition(playerOneIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
+				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
+				helpText.setPosition(tutorialButton[x].getX()+(tutorialButton[x].getWidth()-helpText.getWidth())/2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
+				playerOneIntro.attachChild(helpText);
 			} else
 			{
 				playerTwoIntro.attachChild(tutorialButton[x]);
 				tutorialButton[x].setPosition(playerTwoIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
+				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
+				helpText.setPosition(tutorialButton[x].getX()+(tutorialButton[x].getWidth()-helpText.getWidth())/2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
+				playerTwoIntro.attachChild(helpText);
 			}
 		}
+		
+		final int TUTORIAL_EXIT_PADDING = 20;
 
 		for (int x = 0; x < 2; x++)
 		{
@@ -190,7 +199,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 				}
 			});
 			playerTutorials[x].attachChild(tutorialExitButton[x]);
-			tutorialExitButton[x].setPosition(playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, TUTORIAL_BUTTON_PADDING);
+			tutorialExitButton[x].setPosition(playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth() - TUTORIAL_EXIT_PADDING, TUTORIAL_EXIT_PADDING);
 			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
 		}
 		playerTutorials[PLAYER_TWO].setRotation(180);
