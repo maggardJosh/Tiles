@@ -183,8 +183,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 			}
 		}
 		
-		final int TUTORIAL_EXIT_PADDING = 20;
-
+		final int TUTORIAL_EXIT_Y_PADDING = 20;
+		final int TUTORIAL_EXIT_X_PADDING = 80;
 		for (int x = 0; x < 2; x++)
 		{
 			playerTutorials[x] = new Sprite((CAMERA_WIDTH - tutorialRegion.getWidth()) / 2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
@@ -199,12 +199,13 @@ public abstract class GameScene extends Scene implements TilesConstants
 				}
 			});
 			playerTutorials[x].attachChild(tutorialExitButton[x]);
-			tutorialExitButton[x].setPosition(playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth() - TUTORIAL_EXIT_PADDING, TUTORIAL_EXIT_PADDING);
+			tutorialExitButton[x].setPosition((playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth())/2 + TUTORIAL_EXIT_X_PADDING, playerTutorials[x].getHeight() - tutorialExitButton[x].getHeight() - TUTORIAL_EXIT_Y_PADDING);
 			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
 		}
 		playerTutorials[PLAYER_TWO].setRotation(180);
 		playerTutorials[PLAYER_TWO].setY(-playerTutorials[PLAYER_TWO].getHeight());
 		playerTutorials[PLAYER_ONE].setY(CAMERA_HEIGHT);
+		
 
 		prepareTouchControls();
 
@@ -238,6 +239,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
+		
+		moveTutorialIn(PLAYER_ONE);
+		moveTutorialIn(PLAYER_TWO);
 	}
 
 	protected void moveTutorialIn(int playerIndex)
@@ -383,9 +387,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
-
+		final int TOUCH_CONTROL_Y = 130;
 		final Sprite touchImage = introTouchControls[PLAYER_TWO].touchImage;
-		introTouchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, 150);
+		introTouchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, TOUCH_CONTROL_Y);
 		playerOneIntro.attachChild(introTouchControls[PLAYER_TWO]);
 		this.registerTouchArea(touchImage);
 
@@ -407,9 +411,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 			}
 		});
 		final Sprite secondTouchImage = introTouchControls[PLAYER_ONE].touchImage;
-		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - secondTouchImage.getWidth()) / 2, 150);
+		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - secondTouchImage.getWidth()) / 2, TOUCH_CONTROL_Y);
 		playerTwoIntro.attachChild(introTouchControls[PLAYER_ONE]);
-		//		introTouchControls[PLAYER_ONE].setRotation(180);
 		this.registerTouchArea(secondTouchImage);
 
 	}

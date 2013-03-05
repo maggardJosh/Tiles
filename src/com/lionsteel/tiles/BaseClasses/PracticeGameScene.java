@@ -25,6 +25,7 @@ public abstract class PracticeGameScene extends GameScene
 		practiceGameOverScene = new PracticeGameOverScene();
 		this.detachChild(barSprite);
 		this.detachChild(playerTwoIntro);
+		this.detachChild(playerTutorials[PLAYER_TWO]);
 
 		gameModeText = new Text(0, 0, SharedResources.getInstance().mFont, "Game Mode", 20, activity.getVertexBufferObjectManager());
 		gameModeText.setScale(GAME_MODE_SCALE);
