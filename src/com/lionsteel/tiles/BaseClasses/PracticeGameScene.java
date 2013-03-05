@@ -1,5 +1,6 @@
 package com.lionsteel.tiles.BaseClasses;
 
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.text.Text;
 
@@ -8,6 +9,7 @@ import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
 
 public abstract class PracticeGameScene extends GameScene
@@ -29,6 +31,7 @@ public abstract class PracticeGameScene extends GameScene
 
 		gameModeText = new Text(0, 0, SharedResources.getInstance().mFont, "Game Mode", 20, activity.getVertexBufferObjectManager());
 		gameModeText.setScale(GAME_MODE_SCALE);
+		gameModeText.setAlpha(0);
 		this.attachChild(gameModeText);
 		gameModeText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - gameModeText.getWidth()) / 2, START_Y);
 
@@ -60,6 +63,13 @@ public abstract class PracticeGameScene extends GameScene
 			}
 			break;
 		}
+	}
+	
+	@Override
+	protected void startAnimateIn()
+	{
+		gameModeText.registerEntityModifier(new AlphaModifier(TILE_BASE_ANIMATE_IN, 0, 1.0f));
+		super.startAnimateIn();
 	}
 
 	protected void showPracticeGameOver()
