@@ -6,6 +6,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.color.Color;
 
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
@@ -18,10 +19,15 @@ public class TilesMenuButton extends Entity implements TilesConstants
 	private int		mPointerID	= -1;
 
 	final Runnable	action;
+	Color inactiveColor;
+	Color activeColor;
 
 	public TilesMenuButton(final TextureRegion buttonRegion, final Runnable action)
 	{
 		this.action = action;
+		
+		activeColor = new Color(.8f, .8f, .8f);
+		inactiveColor = new Color(1.0f,1.0f,1.0f);
 		buttonSprite = new Sprite(0, 0, buttonRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
 			@Override
@@ -31,7 +37,7 @@ public class TilesMenuButton extends Entity implements TilesConstants
 				{
 				case TouchEvent.ACTION_DOWN:
 					mPointerID = pSceneTouchEvent.getPointerID();
-					buttonSprite.setColor(.8f, .8f, .8f);
+					buttonSprite.setColor(activeColor);
 					return true;
 				case TouchEvent.ACTION_MOVE:
 					if (pTouchAreaLocalX < 0 || pTouchAreaLocalY < 0 || pTouchAreaLocalX > buttonSprite.getWidth() || pTouchAreaLocalY > buttonSprite.getHeight())
@@ -55,10 +61,19 @@ public class TilesMenuButton extends Entity implements TilesConstants
 		this.setRotationCenter(buttonSprite.getWidth()/2, buttonSprite.getHeight()/2);
 	}
 	
+	public void setActiveColor(Color color)
+	{
+		this.activeColor = color;
+	}
+	public void setInactiveColor(Color color)
+	{
+		this.inactiveColor = color;
+	}
+	
 	public void unsetButton()
 	{
 		mPointerID = -1;
-		buttonSprite.setColor(1.0f, 1.0f, 1.0f);
+		buttonSprite.setColor(inactiveColor);
 	}
 
 	@Override

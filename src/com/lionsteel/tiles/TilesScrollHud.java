@@ -2,6 +2,7 @@ package com.lionsteel.tiles;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.modifier.MoveYModifier;
+import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseCubicInOut;
 
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
@@ -23,6 +24,8 @@ public class TilesScrollHud extends HUD implements TilesConstants
 		final float BUTTON_MOVE_TIME = 2.0f;
 		final float BUTTON_X_PADDING = 30;
 		final float BUTTON_Y_PADDING = 200;
+		final Color ACTIVE_COLOR = new Color(.8f,.8f,.8f,.6f);
+		final Color INACTIVE_COLOR = new Color(1.0f,1.0f,1.0f,.4f);
 
 		upButton = new TilesMenuButton(SharedResources.getInstance().upArrowRegion, new Runnable()
 		{
@@ -36,6 +39,9 @@ public class TilesScrollHud extends HUD implements TilesConstants
 				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicInOut.getInstance()));
 			}
 		});
+		upButton.setActiveColor(ACTIVE_COLOR);
+		upButton.setInactiveColor(INACTIVE_COLOR);
+		upButton.unsetButton();
 		this.attachChild(upButton);
 		upButton.registerOwnTouchArea(this);
 		upButton.setX(CAMERA_WIDTH - upButton.getWidth() - BUTTON_X_PADDING);
@@ -53,6 +59,9 @@ public class TilesScrollHud extends HUD implements TilesConstants
 				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicInOut.getInstance()));
 			}
 		});
+		downButton.setActiveColor(ACTIVE_COLOR);
+		downButton.setInactiveColor(INACTIVE_COLOR);
+		downButton.unsetButton();
 		this.attachChild(downButton);
 		downButton.registerOwnTouchArea(this);
 		downButton.setRotation(180);
