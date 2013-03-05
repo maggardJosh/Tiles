@@ -50,7 +50,6 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 		this.setBackgroundEnabled(false);
 
-		
 		final BuildableBitmapTextureAtlas sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/TilesetSelectScene/");
 
@@ -87,14 +86,21 @@ public class TilesetSelectScene extends TilesScrollableScene
 			@Override
 			public void run()
 			{
-				if(!TilesMainActivity.getInstance().getIABHelper().isSetup())
+				if (!TilesMainActivity.getInstance().getIABHelper().isSetup())
 					TilesMainActivity.getInstance().setupIABHelper();
+				else if (!TilesMainActivity.getInstance().getArePurchasesLoaded())
+					TilesMainActivity.getInstance().startGetPurchasesTask(new Runnable[] { new Runnable()
+					{
+
+						@Override
+						public void run()
+						{
+							transitionChildScene(BuyTilesetSelectScene.getInstance());
+						}
+					} });
 				else
-					if(!TilesMainActivity.getInstance().getArePurchasesLoaded())
-						TilesMainActivity.getInstance().startGetPurchasesTask();
-					else
-				transitionChildScene(BuyTilesetSelectScene.getInstance());
-				
+					transitionChildScene(BuyTilesetSelectScene.getInstance());
+
 			}
 		});
 		buyTilesetsButton.center(nextYPos);
@@ -102,7 +108,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + 70;
-		
+
 		activity.setupIABHelper();
 
 	}
@@ -119,7 +125,8 @@ public class TilesetSelectScene extends TilesScrollableScene
 		removeButton(buyTilesetsButton);
 	}
 
-	private Object reloadLock = new Object();
+	private Object	reloadLock	= new Object();
+
 	public void redoButtons()
 	{
 
@@ -174,7 +181,6 @@ public class TilesetSelectScene extends TilesScrollableScene
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.TILESET_MENU);
 	}
-
 
 	public static void clear()
 	{

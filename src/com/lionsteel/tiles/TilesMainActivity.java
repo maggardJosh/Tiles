@@ -478,7 +478,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	
 	//----Inner AsyncTask Classes
 
-	private class QueryIABInventory extends AsyncTask<Void, Void, Void>
+	private class QueryIABInventory extends AsyncTask<Runnable, Void, Void>
 	{
 		ProgressDialog	queryDialog;
 
@@ -503,7 +503,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		}
 
 		@Override
-		protected Void doInBackground(Void... params)
+		protected Void doInBackground(Runnable... params)
 		{
 			final ArrayList<String> additionalSkuList = new ArrayList<String>();
 			for (String s : Tileset.purchaseableTilesets)
@@ -547,6 +547,9 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			reloadTilesets();
 
 			arePurchasesLoaded = true;
+			
+			for(Runnable r : params)
+				r.run();
 
 			runOnUiThread(new Runnable()
 			{
@@ -661,7 +664,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 	}
 
-	public void startGetPurchasesTask()
+	public void startGetPurchasesTask(final Runnable[] endAction)
 	{
 		runOnUiThread(new Runnable()
 		{
@@ -669,7 +672,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			@Override
 			public void run()
 			{
-				new QueryIABInventory().execute();
+				new QueryIABInventory().execute(endAction);
 			}
 		});
 	}
