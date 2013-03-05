@@ -25,11 +25,12 @@ public class MainMenuScene extends TilesMenuScene
 
 	private SetupScene			setupScene;
 
-	final int					BUTTON_SPACING	= 150;
+	final int					BUTTON_SPACING			= 10;
 
 	final Sprite				titleSprite;
 
-	final int					TITLE_PADDING	= 40;
+	final int					TITLE_PADDING			= 40;
+	final int					TITLE_BOTTOM_PADDING	= 20;
 
 	@Override
 	public void logFlurryEvent()
@@ -41,8 +42,6 @@ public class MainMenuScene extends TilesMenuScene
 	{
 		super();
 		activity = TilesMainActivity.getInstance();
-
-		
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
@@ -74,7 +73,7 @@ public class MainMenuScene extends TilesMenuScene
 
 			}
 		});
-		versusButton.center(230);
+		versusButton.center(titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING);
 		addButton(versusButton);
 
 		final TilesMenuButton practiceButton = new TilesMenuButton(practiceRegion, new Runnable()
@@ -86,7 +85,7 @@ public class MainMenuScene extends TilesMenuScene
 				transitionChildScene(setupScene);
 			}
 		});
-		practiceButton.center(versusButton.getBottom());
+		practiceButton.center(versusButton.getBottom() + BUTTON_SPACING);
 		addButton(practiceButton);
 
 		final MainMenuScene instance = this;
@@ -99,7 +98,7 @@ public class MainMenuScene extends TilesMenuScene
 				activity.showQuitPrompt(instance);
 			}
 		});
-		exitButton.center(practiceButton.getBottom());
+		exitButton.center(practiceButton.getBottom() + BUTTON_SPACING);
 		addButton(exitButton);
 
 		this.attachChild(titleSprite);
@@ -120,7 +119,7 @@ public class MainMenuScene extends TilesMenuScene
 	protected void exitScene()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

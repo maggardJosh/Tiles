@@ -19,7 +19,7 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 
-public class MultiplayerModeSelectScene extends TilesMenuScene
+public class VersusModeSelectScene extends TilesMenuScene
 {
 	TilesMainActivity				activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
@@ -28,7 +28,9 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 	final TilesMenuButton		nonStopButton;
 	final TilesMenuButton		raceButton;
 
-	final int TITLE_Y = 60;
+	final int					TITLE_Y					= 60;
+	final int					TITLE_BOTTOM_PADDING	= 40;
+	final int					BUTTON_SPACING			= 35;
 	
 	@Override
 	public void logFlurryEvent()
@@ -36,7 +38,7 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 		FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_GAME_MODE_MENU);
 	}
 	
-	public MultiplayerModeSelectScene()
+	public VersusModeSelectScene()
 	{
 		super();
 		activity = TilesMainActivity.getInstance();
@@ -59,7 +61,6 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 		final Sprite titleSprite = new Sprite((CAMERA_WIDTH-titleRegion.getWidth())/2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
-		final int START_Y = (int) ((CAMERA_HEIGHT + TITLE_Y+ titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
 		reflexButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
 		{
 			@Override
@@ -70,7 +71,7 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 
 			}
 		});
-		reflexButton.center(START_Y);
+		reflexButton.center(titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING);
 		addButton(reflexButton);
 
 		nonStopButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.NON_STOP], new Runnable()
@@ -82,7 +83,7 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		nonStopButton.center(reflexButton.getBottom());
+		nonStopButton.center(reflexButton.getBottom() + BUTTON_SPACING);
 		addButton(nonStopButton);
 
 		raceButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.RACE], new Runnable()
@@ -94,7 +95,7 @@ public class MultiplayerModeSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		raceButton.center(nonStopButton.getBottom());
+		raceButton.center(nonStopButton.getBottom() + BUTTON_SPACING);
 		addButton(raceButton);
 
 		this.attachChild(titleSprite);

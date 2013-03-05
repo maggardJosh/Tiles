@@ -20,6 +20,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 {
 	final int								TITLE_Y					= 40;
 	final int								TITLE_BOTTOM_PADDING	= 10;
+	final int								BUTTON_PADDING			= 10;
 
 	final Sprite							titleSprite;
 
@@ -65,7 +66,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 			buttons[x] = new BuyTilesetPreviewButton(Tileset.purchaseableTilesets[x]);
 			addButton(buttons[x].getButton());
 			buttons[x].getButton().center(nextYPos);
-			nextYPos = buttons[x].getButton().getBottom();
+			nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 
 		}
 		MAX_Y = nextYPos + 70;
@@ -93,7 +94,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 			{
 				addButton(buttons[x].getButton());
 				buttons[x].getButton().center(nextYPos);
-				nextYPos = buttons[x].getButton().getBottom();
+				nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 			}
 		}
 		MAX_Y = nextYPos + 70;

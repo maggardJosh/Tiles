@@ -27,6 +27,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 	final int							TITLE_Y					= 40;
 	final int							TITLE_BOTTOM_PADDING	= 10;
+	final int							BUTTON_PADDING			= 10;
 
 	final TilesetPreviewButton			buttons[]				= new TilesetPreviewButton[Tileset.tilesetList.length];
 	final TilesMenuButton				buyTilesetsButton;
@@ -75,7 +76,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 			{
 				addButton(buttons[x].getButton());
 				buttons[x].getButton().center(nextYPos);
-				nextYPos = buttons[x].getButton().getBottom();
+				nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 			}
 
 		}
@@ -150,15 +151,17 @@ public class TilesetSelectScene extends TilesScrollableScene
 						{
 							if (Tileset.isPurchased(Tileset.tilesetList[x]))
 							{
+								//Display purchased tilesets
 								addButton(buttons[x].getButton());
 								buttons[x].getButton().center(nextYPos);
-								nextYPos = buttons[x].getButton().getBottom();
+								nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 							}
 						} else
 						{
+							//Display default tilesets
 							addButton(buttons[x].getButton());
 							buttons[x].getButton().center(nextYPos);
-							nextYPos = buttons[x].getButton().getBottom();
+							nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 						}
 
 					}

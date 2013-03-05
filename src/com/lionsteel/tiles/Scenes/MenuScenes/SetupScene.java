@@ -49,7 +49,7 @@ public class SetupScene extends TilesMenuScene
 	final SoundEffectMuteControl		soundEffectMute;
 	final MusicMuteControl				musicMute;
 
-	final MultiplayerModeSelectScene	modeSelectScreen;
+	final VersusModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
 	final TilesetSelectScene			tilesetSelectScene;
 	final PracticeModeSelectScene		practiceModeSelectScene;
@@ -61,7 +61,7 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							BUTTON_PADDING		= 20;
+	final int							BUTTON_PADDING		= 15;
 
 	private static Tileset				currentTileset;
 
@@ -271,7 +271,7 @@ public class SetupScene extends TilesMenuScene
 
 		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
 
-		modeSelectScreen = new MultiplayerModeSelectScene();
+		modeSelectScreen = new VersusModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = TilesetSelectScene.getInstance();
 		practiceModeSelectScene = new PracticeModeSelectScene();
