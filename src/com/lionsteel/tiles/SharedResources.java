@@ -29,7 +29,8 @@ public class SharedResources implements TilesConstants
 	private static SharedResources	instance;
 
 	public final TextureRegion		backgroundRegion;
-	public final TextureRegion		touchImageRegion;
+	public final TextureRegion		innerTouchImageRegion;
+	public final TextureRegion outerTouchImageRegion;
 	public final TextureRegion		modeRegion[]		= new TextureRegion[6];
 	public final TextureRegion		difficultyRegion[]	= new TextureRegion[4];
 	public final TextureRegion		displayIndicatorRegion;
@@ -86,7 +87,8 @@ public class SharedResources implements TilesConstants
 
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
-		touchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "touchImage.png");
+		innerTouchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "innerTouchImage.png");
+		outerTouchImageRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "outerTouchImage.png");
 		modeRegion[GameMode.REFLEX] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "reflex.png");
 		modeRegion[GameMode.NON_STOP] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "nonStop.png");
 		modeRegion[GameMode.RACE] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "race.png");

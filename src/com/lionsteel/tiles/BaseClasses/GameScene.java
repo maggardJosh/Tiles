@@ -246,7 +246,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void moveTutorialIn(int playerIndex)
 	{
-		this.unregisterTouchArea(introTouchControls[(playerIndex + 1) % 2].touchImage);
+		this.unregisterTouchArea(introTouchControls[(playerIndex + 1) % 2].outerImage);
 		tutorialButton[playerIndex].unregisterOwnTouchArea(this);
 		tutorialExitButton[playerIndex].registerOwnTouchArea(this);
 		introTouchControls[(playerIndex + 1) % 2].resetButton();
@@ -270,7 +270,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		playerTutorials[playerIndex].clearEntityModifiers();
 		tutorialExitButton[playerIndex].unregisterOwnTouchArea(this);
 		tutorialButton[playerIndex].registerOwnTouchArea(this);
-		this.registerTouchArea(introTouchControls[(playerIndex + 1) % 2].touchImage);
+		this.registerTouchArea(introTouchControls[(playerIndex + 1) % 2].outerImage);
 		float targetY = 0;
 		switch (playerIndex)
 		{
@@ -387,9 +387,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
-		final int TOUCH_CONTROL_Y = 130;
-		final Sprite touchImage = introTouchControls[PLAYER_TWO].touchImage;
-		introTouchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - touchImage.getWidth()) / 2, TOUCH_CONTROL_Y);
+		final int TOUCH_CONTROL_Y = 170;
+		final Sprite touchImage = introTouchControls[PLAYER_TWO].outerImage;
+		introTouchControls[PLAYER_TWO].center((playerOneIntro.getWidth()) / 2, TOUCH_CONTROL_Y);
 		playerOneIntro.attachChild(introTouchControls[PLAYER_TWO]);
 		this.registerTouchArea(touchImage);
 
@@ -410,8 +410,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
-		final Sprite secondTouchImage = introTouchControls[PLAYER_ONE].touchImage;
-		introTouchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - secondTouchImage.getWidth()) / 2, TOUCH_CONTROL_Y);
+		final Sprite secondTouchImage = introTouchControls[PLAYER_ONE].outerImage;
+		introTouchControls[PLAYER_ONE].center((playerTwoIntro.getWidth()) / 2, TOUCH_CONTROL_Y);
 		playerTwoIntro.attachChild(introTouchControls[PLAYER_ONE]);
 		this.registerTouchArea(secondTouchImage);
 

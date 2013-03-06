@@ -168,17 +168,17 @@ public class PauseScene extends TilesMenuScene
 
 		final int PAUSE_TOUCH_PADDING = 120;
 
-		playerOneTouch.setPosition((CAMERA_WIDTH - playerOneTouch.touchImage.getWidth()) / 2, CAMERA_HEIGHT - playerOneTouch.touchImage.getHeight() - PAUSE_TOUCH_PADDING);
-		playerTwoTouch.setPosition((CAMERA_WIDTH - playerTwoTouch.touchImage.getWidth()) / 2, PAUSE_TOUCH_PADDING);
+		playerOneTouch.setPosition((CAMERA_WIDTH - playerOneTouch.outerImage.getWidth()) / 2, CAMERA_HEIGHT - playerOneTouch.outerImage.getHeight() - PAUSE_TOUCH_PADDING);
+		playerTwoTouch.setPosition((CAMERA_WIDTH - playerTwoTouch.outerImage.getWidth()) / 2, PAUSE_TOUCH_PADDING);
 		playerTwoTouch.setRotation(180);
 	}
 
 	@Override
 	public void registerTouchAreas()
 	{
-		registerTouchArea(playerOneTouch.touchImage);
+		registerTouchArea(playerOneTouch.outerImage);
 		if (isTwoPlayerMode)
-			registerTouchArea(playerTwoTouch.touchImage);
+			registerTouchArea(playerTwoTouch.outerImage);
 		super.registerTouchAreas();
 	}
 

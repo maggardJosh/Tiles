@@ -103,7 +103,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 					Debug.e(mParentScene + " not PracticeGameScene");
 			}
 		}, null);
-		restartTouchControl.setPosition((CAMERA_WIDTH - restartTouchControl.touchImage.getWidth()) / 2, CAMERA_HEIGHT - restartTouchControl.touchImage.getHeight() - 100);
+		restartTouchControl.setPosition((CAMERA_WIDTH - restartTouchControl.outerImage.getWidth()) / 2, CAMERA_HEIGHT - restartTouchControl.outerImage.getHeight() - 100);
 		this.attachChild(restartTouchControl);
 
 		final TilesMenuButton quitButton = new TilesMenuButton(SharedResources.getInstance().exitGameButtonRegion, new Runnable()
@@ -166,7 +166,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 	@Override
 	public void registerTouchAreas()
 	{
-		registerTouchArea(restartTouchControl.touchImage);
+		registerTouchArea(restartTouchControl.outerImage);
 		super.registerTouchAreas();
 	}
 

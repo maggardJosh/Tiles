@@ -75,7 +75,7 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 
 		final Rectangle background = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		background.setColor(0, 0, 0, .9f);
-		final float TOUCH_CONTROL_WIDTH = touchControls[0].touchImage.getWidth();
+		final float TOUCH_CONTROL_WIDTH = touchControls[0].outerImage.getWidth();
 		areYouSureSprite = new Sprite((CAMERA_WIDTH - areYouSureRegion.getWidth()) / 2, (CAMERA_HEIGHT - areYouSureRegion.getHeight()) / 2, areYouSureRegion, activity.getVertexBufferObjectManager());
 		touchControls[0].setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) / 3, areYouSureSprite.getY() + 140);
 		touchControls[1].setPosition((CAMERA_WIDTH - TOUCH_CONTROL_WIDTH) * 2 / 3, areYouSureSprite.getY() + 140);
@@ -96,8 +96,8 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 	public void registerTouchAreas()
 	{
 		super.registerTouchAreas();
-		this.registerTouchArea(touchControls[0].touchImage);
-		this.registerTouchArea(touchControls[1].touchImage);
+		this.registerTouchArea(touchControls[0].outerImage);
+		this.registerTouchArea(touchControls[1].outerImage);
 
 	}
 

@@ -14,22 +14,31 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 
 public class TouchControl extends Entity implements TilesConstants
 {
-	public final Sprite	touchImage;
-	public final Text	readyText;
+	private final Sprite	innerImage;
+	public final Sprite		outerImage;
+	public final Text		readyText;
 
-	boolean				isPressed	= false;
-	final Runnable		action;
-	final Runnable		resetAction;
-	int					pointerID	= -1;
-	final float			READY_ALPHA	= .3f;
+	private final float		START_SCALE		= .1f;
+	private final float		FINISH_SCALE	= 1.0f;
+
+	boolean					isPressed		= false;
+	final Runnable			action;
+	final Runnable			resetAction;
+	int						pointerID		= -1;
+	final float				READY_ALPHA		= .3f;
 
 	public TouchControl(final String readyTextValue, final Runnable action, final Runnable resetAction)
 	{
 		this.action = action;
 		this.resetAction = resetAction;
-		readyText = new Text(0,0,SharedResources.getInstance().mFont,readyTextValue, TilesMainActivity.getInstance().getVertexBufferObjectManager());
+		readyText = new Text(0, 0, SharedResources.getInstance().mFont, readyTextValue, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 		readyText.setAlpha(READY_ALPHA);
-		touchImage = new Sprite(0, 0, SharedResources.getInstance().touchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
+
+		innerImage = new Sprite(0, 0, SharedResources.getInstance().innerTouchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager());
+		innerImage.setScaleCenter(innerImage.getWidth() / 2, innerImage.getHeight() / 2);
+		innerImage.setScale(START_SCALE);
+
+		outerImage = new Sprite(0, 0, SharedResources.getInstance().outerTouchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
@@ -40,8 +49,8 @@ public class TouchControl extends Entity implements TilesConstants
 					{
 						isPressed = true;
 						pointerID = pSceneTouchEvent.getPointerID();
-						touchImage.clearEntityModifiers();
-						touchImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, touchImage.getScaleX(), 1.6f)
+						innerImage.clearEntityModifiers();
+						innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, innerImage.getScaleX(), FINISH_SCALE)
 						{
 							@Override
 							protected void onModifierFinished(IEntity pItem)
@@ -59,12 +68,12 @@ public class TouchControl extends Entity implements TilesConstants
 						});
 					} else if (pSceneTouchEvent.isActionMove())
 					{
-						if (pTouchAreaLocalX > 0 && pTouchAreaLocalX < touchImage.getWidth() && pTouchAreaLocalY > 0 && pTouchAreaLocalY < touchImage.getHeight())
+						if (pTouchAreaLocalX > 0 && pTouchAreaLocalX < innerImage.getWidth() && pTouchAreaLocalY > 0 && pTouchAreaLocalY < innerImage.getHeight())
 						{
 							isPressed = true;
 							pointerID = pSceneTouchEvent.getPointerID();
-							touchImage.clearEntityModifiers();
-							touchImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, touchImage.getScaleX(), 1.6f)
+							innerImage.clearEntityModifiers();
+							innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, innerImage.getScaleX(), FINISH_SCALE)
 							{
 								@Override
 								protected void onModifierFinished(IEntity pItem)
@@ -86,9 +95,8 @@ public class TouchControl extends Entity implements TilesConstants
 				{
 					if (pSceneTouchEvent.isActionMove())
 					{
-						if (pTouchAreaLocalX < 0 || pTouchAreaLocalX > touchImage.getWidth() || pTouchAreaLocalY < 0 || pTouchAreaLocalY > touchImage.getHeight())
+						if (pTouchAreaLocalX < 0 || pTouchAreaLocalX > innerImage.getWidth() || pTouchAreaLocalY < 0 || pTouchAreaLocalY > innerImage.getHeight())
 						{
-
 							resetButton();
 						}
 					} else if (pSceneTouchEvent.isActionUp())
@@ -100,35 +108,45 @@ public class TouchControl extends Entity implements TilesConstants
 				return true;
 			}
 		};
-		touchImage.setScaleCenter(touchImage.getWidth() / 2, touchImage.getHeight() / 2);
-		this.setRotationCenter(touchImage.getWidth() / 2, touchImage.getHeight() / 2);
-		this.attachChild(touchImage);
+		readyText.setPosition((outerImage.getWidth() - readyText.getWidth()) / 2, -45);
+
+		this.setRotationCenter(outerImage.getWidth() / 2, outerImage.getHeight() / 2);
+
+		this.attachChild(outerImage);
+		this.attachChild(innerImage);
 		this.attachChild(readyText);
 	}
 
 	public void setPosition(float pX, float pY)
 	{
-		this.setRotationCenter(pX + touchImage.getWidth() / 2, pY + touchImage.getHeight() / 2);
-		touchImage.setPosition(pX, pY);
-		readyText.setPosition(pX + touchImage.getWidth() / 2 - readyText.getWidth() / 2, pY - 80);
+		//this.setRotationCenter(pX + outerImage.getWidth() / 2, pY + outerImage.getHeight() / 2);
+		super.setPosition(pX, pY);
+		//readyText.setPosition(pX + outerImage.getWidth() / 2 - readyText.getWidth() / 2, pY - 80);
+	}
+
+	public void center(float pX, float pY)
+	{
+		//this.setRotationCenter(pX + outerImage.getWidth() / 2, pY + outerImage.getHeight() / 2);
+		super.setPosition(pX - outerImage.getWidth() / 2, pY - outerImage.getHeight() / 2);
+		//readyText.setPosition(pX - readyText.getWidth() / 2, pY - 150);
 	}
 
 	public void initButton()
 	{
-		touchImage.clearEntityModifiers();
+		innerImage.clearEntityModifiers();
 		readyText.clearEntityModifiers();
-		touchImage.setScale(1.0f);
+		innerImage.setScale(START_SCALE);
 		readyText.setAlpha(READY_ALPHA);
 	}
 
 	public void resetButton()
 	{
-		touchImage.clearEntityModifiers();
+		innerImage.clearEntityModifiers();
 		readyText.clearEntityModifiers();
 		isPressed = false;
 		if (resetAction != null)
 			resetAction.run();
-		touchImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_RESET, touchImage.getScaleX(), 1.0f));
+		innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_RESET, innerImage.getScaleX(), START_SCALE));
 		readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_RESET, readyText.getAlpha(), READY_ALPHA));
 	}
 }

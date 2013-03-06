@@ -160,7 +160,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 				playerTwoRematch = false;
 			}
 		});
-		final float TOUCH_WIDTH = playerRematchControls[0].touchImage.getWidth();
+		final float TOUCH_WIDTH = playerRematchControls[0].outerImage.getWidth();
 		playerRematchControls[PLAYER_TWO].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, CAMERA_HEIGHT - TOUCH_WIDTH - REMATCH_TOUCH_PADDING);
 		playerRematchControls[PLAYER_ONE].setPosition((CAMERA_WIDTH - TOUCH_WIDTH) / 2, REMATCH_TOUCH_PADDING);
 		playerRematchControls[PLAYER_ONE].setRotation(180);
@@ -177,8 +177,8 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	@Override
 	public void registerTouchAreas()
 	{
-		registerTouchArea(playerRematchControls[PLAYER_TWO].touchImage);
-		registerTouchArea(playerRematchControls[PLAYER_ONE].touchImage);
+		registerTouchArea(playerRematchControls[PLAYER_TWO].outerImage);
+		registerTouchArea(playerRematchControls[PLAYER_ONE].outerImage);
 
 		super.registerTouchAreas();
 	}
