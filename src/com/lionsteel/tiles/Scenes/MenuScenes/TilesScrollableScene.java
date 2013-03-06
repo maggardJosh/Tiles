@@ -36,7 +36,14 @@ public abstract class TilesScrollableScene extends TilesMenuScene implements Til
 	{
 		scrollDetector.reset();
 		setY(0);
+		
+	}
+	
+	@Override
+	protected void enterScene()
+	{
 		activity.getEngine().getCamera().setHUD(controlHud);
+		super.enterScene();
 	}
 
 	@Override
@@ -78,6 +85,7 @@ public abstract class TilesScrollableScene extends TilesMenuScene implements Til
 	@Override
 	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
 	{
+		activity.backEnabled = false;
 		clearEntityModifiers();
 		unsetAllButtons();
 		this.controlHud.unsetButtons();
@@ -97,6 +105,7 @@ public abstract class TilesScrollableScene extends TilesMenuScene implements Til
 	@Override
 	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
 	{
+		activity.backEnabled = true;
 		clearEntityModifiers();
 		this.controlHud.unsetButtons();
 		this.setY(getY() + pDistanceY * SCROLL_SPEED);

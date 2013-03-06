@@ -18,7 +18,7 @@ public class TouchControl extends Entity implements TilesConstants
 	public final Sprite		outerImage;
 	public final Text		readyText;
 
-	private final float		START_SCALE		= .1f;
+	private final float		START_SCALE		= .01f;
 	private final float		FINISH_SCALE	= 1.0f;
 
 	boolean					isPressed		= false;
@@ -37,6 +37,7 @@ public class TouchControl extends Entity implements TilesConstants
 		innerImage = new Sprite(0, 0, SharedResources.getInstance().innerTouchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager());
 		innerImage.setScaleCenter(innerImage.getWidth() / 2, innerImage.getHeight() / 2);
 		innerImage.setScale(START_SCALE);
+		innerImage.setVisible(false);
 
 		outerImage = new Sprite(0, 0, SharedResources.getInstance().outerTouchImageRegion, TilesMainActivity.getInstance().getVertexBufferObjectManager())
 		{
@@ -49,6 +50,7 @@ public class TouchControl extends Entity implements TilesConstants
 					{
 						isPressed = true;
 						pointerID = pSceneTouchEvent.getPointerID();
+						innerImage.setVisible(true);
 						innerImage.clearEntityModifiers();
 						innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, innerImage.getScaleX(), FINISH_SCALE)
 						{
@@ -117,18 +119,9 @@ public class TouchControl extends Entity implements TilesConstants
 		this.attachChild(readyText);
 	}
 
-	public void setPosition(float pX, float pY)
-	{
-		//this.setRotationCenter(pX + outerImage.getWidth() / 2, pY + outerImage.getHeight() / 2);
-		super.setPosition(pX, pY);
-		//readyText.setPosition(pX + outerImage.getWidth() / 2 - readyText.getWidth() / 2, pY - 80);
-	}
-
 	public void center(float pX, float pY)
 	{
-		//this.setRotationCenter(pX + outerImage.getWidth() / 2, pY + outerImage.getHeight() / 2);
 		super.setPosition(pX - outerImage.getWidth() / 2, pY - outerImage.getHeight() / 2);
-		//readyText.setPosition(pX - readyText.getWidth() / 2, pY - 150);
 	}
 
 	public void initButton()
@@ -136,6 +129,7 @@ public class TouchControl extends Entity implements TilesConstants
 		innerImage.clearEntityModifiers();
 		readyText.clearEntityModifiers();
 		innerImage.setScale(START_SCALE);
+		innerImage.setVisible(false);
 		readyText.setAlpha(READY_ALPHA);
 	}
 
@@ -146,7 +140,14 @@ public class TouchControl extends Entity implements TilesConstants
 		isPressed = false;
 		if (resetAction != null)
 			resetAction.run();
-		innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_RESET, innerImage.getScaleX(), START_SCALE));
+		innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_RESET, innerImage.getScaleX(), START_SCALE){
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				innerImage.setVisible(false);
+				super.onModifierFinished(pItem);
+			}
+		});
 		readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_RESET, readyText.getAlpha(), READY_ALPHA));
 	}
 }
