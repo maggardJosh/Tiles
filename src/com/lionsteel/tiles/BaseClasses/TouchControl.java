@@ -18,10 +18,11 @@ public class TouchControl extends Entity implements TilesConstants
 	public final Sprite		outerImage;
 	public final Text		readyText;
 
-	private final float		START_SCALE		= .01f;
-	private final float		FINISH_SCALE	= 1.0f;
+	private final float		START_SCALE		= 0.01f;
+	private final float		FINISH_SCALE	= 1.1f;
 
 	boolean					isPressed		= false;
+	
 	final Runnable			action;
 	final Runnable			resetAction;
 	int						pointerID		= -1;
@@ -57,7 +58,7 @@ public class TouchControl extends Entity implements TilesConstants
 							@Override
 							protected void onModifierFinished(IEntity pItem)
 							{
-								readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyText.getAlpha(), 1.0f)
+								readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION*.5f, readyText.getAlpha(), 1.0f)
 								{
 									protected void onModifierFinished(IEntity pItem)
 									{
@@ -74,13 +75,14 @@ public class TouchControl extends Entity implements TilesConstants
 						{
 							isPressed = true;
 							pointerID = pSceneTouchEvent.getPointerID();
+							innerImage.setVisible(true);
 							innerImage.clearEntityModifiers();
 							innerImage.registerEntityModifier(new ScaleModifier(TOUCH_CONTROL_DURATION, innerImage.getScaleX(), FINISH_SCALE)
 							{
 								@Override
 								protected void onModifierFinished(IEntity pItem)
 								{
-									readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION, readyText.getAlpha(), 1.0f)
+									readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION*.5f, readyText.getAlpha(), 1.0f)
 									{
 										protected void onModifierFinished(IEntity pItem)
 										{
