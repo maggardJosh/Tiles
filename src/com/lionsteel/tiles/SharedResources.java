@@ -30,7 +30,7 @@ public class SharedResources implements TilesConstants
 
 	public final TextureRegion		backgroundRegion;
 	public final TextureRegion		innerTouchImageRegion;
-	public final TextureRegion outerTouchImageRegion;
+	public final TextureRegion		outerTouchImageRegion;
 	public final TextureRegion		modeRegion[]		= new TextureRegion[6];
 	public final TextureRegion		difficultyRegion[]	= new TextureRegion[4];
 	public final TextureRegion		displayIndicatorRegion;
@@ -57,6 +57,7 @@ public class SharedResources implements TilesConstants
 	public Sound					pauseSound;
 	public Sound					countdownHit;
 	public Sound					countdownFinalHit;
+	public Sound					timerClick;
 
 	public Music					menuMusic;
 	public Music					versusMusic;
@@ -154,7 +155,7 @@ public class SharedResources implements TilesConstants
 			insaneSound.setVolume(SOUND_EFFECT_VOLUME);
 			insaneJump = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "insaneJump.wav");
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
-			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdown.wav");
+			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "finalFiveCountdown.ogg");
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
 			menuBlip = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
 			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
@@ -164,6 +165,8 @@ public class SharedResources implements TilesConstants
 			countdownHit.setVolume(SOUND_EFFECT_VOLUME);
 			countdownFinalHit = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdownFinalHit.ogg");
 			countdownFinalHit.setVolume(SOUND_EFFECT_VOLUME);
+			timerClick = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "timerClick.ogg");
+			timerClick.setVolume(SOUND_EFFECT_VOLUME);
 
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");

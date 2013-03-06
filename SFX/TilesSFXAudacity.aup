@@ -1,8 +1,9 @@
 <?xml version="1.0" standalone="no" ?>
 <!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
-<project xmlns="http://audacity.sourceforge.net/xml/" projname="TilesSFXAudacity_data" version="1.3.0" audacityversion="1.3.12-beta" sel0="0.0000000000" sel1="50.4301814059" vpos="944" h="0.0000000000" zoom="31.5287357745" rate="44100">
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="TilesSFXAudacity_data" version="1.3.0" audacityversion="1.3.12-beta" sel0="0.0000000000" sel1="50.4301814059" vpos="1312" h="0.0000000000" zoom="22.0701169215" rate="44100">
 	<tags>
 		<tag name="id3v2" value="1"/>
+		<tag name="Cool" value="This song has been made using Linux MultiMedia Studio"/>
 	</tags>
 	<wavetrack name="menuBlip" channel="2" linked="0" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="1" pan="0">
 		<waveclip offset="0.00000000">
@@ -145,7 +146,7 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name=" 1" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.141254" pan="0">
+	<wavetrack name=" 1" channel="0" linked="1" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.141254" pan="0">
 		<waveclip offset="0.00000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="74132">
 				<waveblock start="0">
@@ -155,11 +156,31 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.141254" pan="0">
+	<wavetrack name="" channel="1" linked="0" mute="1" solo="0" height="150" minimized="0" rate="44100" gain="0.141254" pan="0">
 		<waveclip offset="0.00000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="74132">
 				<waveblock start="0">
 					<simpleblockfile filename="e0000df2.au" len="74132" min="-0.69277" max="0.983411" rms="0.058549"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="countdownFinalHit 1" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.281838" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="524288" sampleformat="131073" numsamples="47577">
+				<waveblock start="0">
+					<simpleblockfile filename="e00000be.au" len="47577" min="-0.218567" max="0.215759" rms="0.055671"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="countdownFinalHit" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" rate="44100" gain="0.281838" pan="0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="524288" sampleformat="131073" numsamples="47577">
+				<waveblock start="0">
+					<simpleblockfile filename="e000004b.au" len="47577" min="-0.212433" max="0.213257" rms="0.054863"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>

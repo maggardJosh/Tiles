@@ -98,7 +98,7 @@ public class TimerRect extends Entity implements TilesConstants
 			{
 				value += 1.0f;
 				countText.setText(String.format("%02d", (int) (maxValue - value)));
-
+				SharedResources.getInstance().timerClick.play();
 				if (maxValue - value <= 0)
 					endAction.run();
 				else
