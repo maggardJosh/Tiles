@@ -1,6 +1,5 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
-import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
@@ -8,7 +7,6 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -17,7 +15,6 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import android.app.ProgressDialog;
@@ -411,7 +408,7 @@ public class SetupScene extends TilesMenuScene
 	private void positionLabels()
 	{
 		final int LABEL_X_PADDING = 12;
-		final int LABEL_PADDING = 12;
+		final int LABEL_PADDING = 18;
 
 		tilesetLabelSprite.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
 		tilesetLabelSprite.setZIndex(FOREGROUND_Z);

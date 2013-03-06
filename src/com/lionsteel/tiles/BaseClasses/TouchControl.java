@@ -18,7 +18,7 @@ public class TouchControl extends Entity implements TilesConstants
 	public final Sprite		outerImage;
 	public final Text		readyText;
 
-	private final float		START_SCALE		= .1f;
+	private final float		START_SCALE		= .01f;
 	private final float		FINISH_SCALE	= 1.0f;
 
 	boolean					isPressed		= false;
