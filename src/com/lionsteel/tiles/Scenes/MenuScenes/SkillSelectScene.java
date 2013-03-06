@@ -32,6 +32,7 @@ public class SkillSelectScene extends TilesMenuScene
 
 	final int				TITLE_Y					= 50;
 	final int				TITLE_BOTTOM_PADDING	= 20;
+	final int				BUTTON_PADDING			= 5;
 
 	@Override
 	public void logFlurryEvent()
@@ -92,7 +93,7 @@ public class SkillSelectScene extends TilesMenuScene
 
 			}
 		});
-		normalButton.center(easyButton.getBottom());
+		normalButton.center(easyButton.getBottom() + BUTTON_PADDING);
 		normalButton.attachChild(diffEntities[Difficulty.NORMAL]);
 		addButton(normalButton);
 
@@ -105,7 +106,7 @@ public class SkillSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		hardButton.center(normalButton.getBottom());
+		hardButton.center(normalButton.getBottom() + BUTTON_PADDING);
 		hardButton.attachChild(diffEntities[Difficulty.HARD]);
 		addButton(hardButton);
 
@@ -118,7 +119,7 @@ public class SkillSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		insaneButton.center(hardButton.getBottom());
+		insaneButton.center(hardButton.getBottom() + BUTTON_PADDING);
 		insaneButton.attachChild(diffEntities[Difficulty.INSANE]);
 		addButton(insaneButton);
 
@@ -152,6 +153,13 @@ public class SkillSelectScene extends TilesMenuScene
 	public void initScene()
 	{
 		//Nothing to init
+	}
+
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 }

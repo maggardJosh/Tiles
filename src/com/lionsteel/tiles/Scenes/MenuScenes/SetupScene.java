@@ -49,16 +49,19 @@ public class SetupScene extends TilesMenuScene
 	final SoundEffectMuteControl		soundEffectMute;
 	final MusicMuteControl				musicMute;
 
-	final MultiplayerModeSelectScene	modeSelectScreen;
+	final VersusModeSelectScene	modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
 	final TilesetSelectScene			tilesetSelectScene;
 	final PracticeModeSelectScene		practiceModeSelectScene;
 
 	final Sprite						titleSprite;
 	final Sprite						practiceTitleSprite;
+	final Sprite						tilesetLabelSprite;
+	final Sprite						skillLabelSprite;
+	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							BUTTON_PADDING		= 20;
+	final int							BUTTON_PADDING		= 15;
 
 	private static Tileset				currentTileset;
 
@@ -67,8 +70,8 @@ public class SetupScene extends TilesMenuScene
 	private static int					gameMode			= GameMode.REFLEX;
 	private static int					difficulty;
 	private static boolean				isCreated			= false;
-	
-	private static Object instanceLock;
+
+	private static Object				instanceLock;
 
 	@Override
 	public void logFlurryEvent()
@@ -79,12 +82,12 @@ public class SetupScene extends TilesMenuScene
 			FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_SETUP);
 
 	};
-	
+
 	public static void clear()
 	{
 		instance = null;
 	}
-	
+
 	public static boolean isNull()
 	{
 		return instance == null;
@@ -92,7 +95,7 @@ public class SetupScene extends TilesMenuScene
 
 	public static SetupScene getInstance()
 	{
-		if(instanceLock == null)
+		if (instanceLock == null)
 			instanceLock = new Object();
 		synchronized (instanceLock)
 		{
@@ -142,22 +145,22 @@ public class SetupScene extends TilesMenuScene
 
 				TilesMainActivity.getInstance().runOnUpdateThread(new Runnable()
 				{
-					
+
 					@Override
 					public void run()
 					{
 						currentTileset.clearTileset();
 						currentTileset = new Tileset(tileset, false);
 						SetupScene.getInstance().resetGraphics();
-						
+
 						TilesMainActivity.getInstance().backToSetupScene();
 						TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
-						
+
 						instance.sortChildren();
-						
+
 						TilesMainActivity.getInstance().getEngine().registerUpdateHandler(new TimerHandler(.3f, new ITimerCallback()
 						{
-							
+
 							@Override
 							public void onTimePassed(TimerHandler pTimerHandler)
 							{
@@ -268,7 +271,7 @@ public class SetupScene extends TilesMenuScene
 
 		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
 
-		modeSelectScreen = new MultiplayerModeSelectScene();
+		modeSelectScreen = new VersusModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = TilesetSelectScene.getInstance();
 		practiceModeSelectScene = new PracticeModeSelectScene();
@@ -291,6 +294,9 @@ public class SetupScene extends TilesMenuScene
 
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
 		final TextureRegion changeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "changeButton.png");
+		final TextureRegion tilesetLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tilesetLabel.png");
+		final TextureRegion skillLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "skillLabel.png");
+		final TextureRegion modeLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "modeLabel.png");
 
 		try
 		{
@@ -391,10 +397,33 @@ public class SetupScene extends TilesMenuScene
 			difficultyButtons[x].attachChild(currentTileset.getDifficultySprite(x));
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 
-		setupLabels();
+		tilesetLabelSprite = new Sprite(0,0,tilesetLabelRegion, activity.getVertexBufferObjectManager());
+		skillLabelSprite = new Sprite(0,0,skillLabelRegion, activity.getVertexBufferObjectManager());
+		modeLabelSprite = new Sprite(0,0,modeLabelRegion, activity.getVertexBufferObjectManager());
+		
+		positionLabels();
 		setupChangeSprites(changeRegion);
 
 		isCreated = true;
+
+	}
+
+	private void positionLabels()
+	{
+		final int LABEL_X_PADDING = 12;
+		final int LABEL_PADDING = 12;
+
+		tilesetLabelSprite.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
+		tilesetLabelSprite.setZIndex(FOREGROUND_Z);
+		attachChild(tilesetLabelSprite);
+
+		skillLabelSprite.setPosition(difficultyButtons[0].getX() + LABEL_X_PADDING, difficultyButtons[0].getY() - LABEL_PADDING);
+		skillLabelSprite.setZIndex(FOREGROUND_Z);
+		attachChild(skillLabelSprite);
+
+		modeLabelSprite.setPosition(gameModeSprite[0].getX() + LABEL_X_PADDING, gameModeSprite[0].getY() - LABEL_PADDING);
+		modeLabelSprite.setZIndex(FOREGROUND_Z);
+		attachChild(modeLabelSprite);
 
 	}
 
@@ -422,43 +451,6 @@ public class SetupScene extends TilesMenuScene
 			changeSprites[x].setZIndex(FOREGROUND_Z);
 			this.attachChild(changeSprites[x]);
 		}
-
-	}
-
-	private void setupLabels()
-	{
-		final int LABEL_X_PADDING = 12;
-		final int LABEL_PADDING = 8;
-
-		final Text tilesetLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
-		final Text tilesetLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Tileset", activity.getVertexBufferObjectManager());
-		tilesetLabelShadow.setColor(Color.BLACK);
-		tilesetLabel.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
-		tilesetLabelShadow.setPosition(tilesetLabel.getX() + 2, tilesetLabel.getY() - 2);
-		tilesetLabel.setZIndex(FOREGROUND_Z);
-		tilesetLabelShadow.setZIndex(FOREGROUND_Z);
-		attachChild(tilesetLabelShadow);
-		attachChild(tilesetLabel);
-
-		final Text difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
-		final Text difficultyLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Skill", activity.getVertexBufferObjectManager());
-		difficultyLabelShadow.setColor(Color.BLACK);
-		difficultyLabel.setPosition(difficultyButtons[0].getX() + LABEL_X_PADDING, difficultyButtons[0].getY() - LABEL_PADDING);
-		difficultyLabelShadow.setPosition(difficultyLabel.getX() + 2, difficultyLabel.getY() - 2);
-		difficultyLabel.setZIndex(FOREGROUND_Z);
-		difficultyLabelShadow.setZIndex(FOREGROUND_Z);
-		attachChild(difficultyLabelShadow);
-		attachChild(difficultyLabel);
-
-		final Text modeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
-		final Text modeLabelShadow = new Text(0, 0, SharedResources.getInstance().mFont, "Mode", activity.getVertexBufferObjectManager());
-		modeLabelShadow.setColor(Color.BLACK);
-		modeLabel.setPosition(gameModeSprite[0].getX() + LABEL_X_PADDING, gameModeSprite[0].getY() - LABEL_PADDING);
-		modeLabelShadow.setPosition(modeLabel.getX() + 2, modeLabel.getY() - 2);
-		modeLabel.setZIndex(FOREGROUND_Z);
-		modeLabelShadow.setZIndex(FOREGROUND_Z);
-		attachChild(modeLabelShadow);
-		attachChild(modeLabel);
 
 	}
 
@@ -500,6 +492,11 @@ public class SetupScene extends TilesMenuScene
 		soundEffectMute.refreshButton();
 	}
 
-	
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+
+	}
 
 }

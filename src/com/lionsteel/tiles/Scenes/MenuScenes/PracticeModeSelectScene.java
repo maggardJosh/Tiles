@@ -21,21 +21,23 @@ import com.lionsteel.tiles.Constants.GameMode;
 
 public class PracticeModeSelectScene extends TilesMenuScene
 {
-	TilesMainActivity				activity;
+	TilesMainActivity			activity;
 	BuildableBitmapTextureAtlas	sceneAtlas;
 
 	final TilesMenuButton		freePlayButton;
 	final TilesMenuButton		frenzyButton;
 	final TilesMenuButton		timeAttackButton;
-	
-	final int TITLE_Y = 60;
+
+	final int					TITLE_Y					= 60;
+	final int					TITLE_BOTTOM_PADDING	= 40;
+	final int					BUTTON_SPACING			= 35;
 
 	@Override
 	public void logFlurryEvent()
-	{	
-		FlurryAgent.logEvent(FlurryAgentEventStrings.MULTIPLAYER_GAME_MODE_MENU);
+	{
+		FlurryAgent.logEvent(FlurryAgentEventStrings.PRACTICE_GAME_MODE_MENU);
 	}
-	
+
 	public PracticeModeSelectScene()
 	{
 		super();
@@ -56,10 +58,8 @@ public class PracticeModeSelectScene extends TilesMenuScene
 		}
 		this.setBackgroundEnabled(false);
 
-		final Sprite titleSprite = new Sprite((CAMERA_WIDTH-titleRegion.getWidth())/2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
-		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
+		final Sprite titleSprite = new Sprite((CAMERA_WIDTH - titleRegion.getWidth()) / 2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
 
-		final int START_Y = (int) ((CAMERA_HEIGHT + TITLE_Y + titleSprite.getHeight() - BUTTON_HEIGHT * 3) / 2) - 20;
 		freePlayButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.FREE_PLAY], new Runnable()
 		{
 			@Override
@@ -70,7 +70,7 @@ public class PracticeModeSelectScene extends TilesMenuScene
 
 			}
 		});
-		freePlayButton.center(START_Y);
+		freePlayButton.center(titleSprite.getY() + titleSprite.getHeight() + TITLE_BOTTOM_PADDING);
 		addButton(freePlayButton);
 
 		frenzyButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.FRENZY], new Runnable()
@@ -82,7 +82,7 @@ public class PracticeModeSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		frenzyButton.center(freePlayButton.getBottom());
+		frenzyButton.center(freePlayButton.getBottom() + BUTTON_SPACING);
 		addButton(frenzyButton);
 
 		timeAttackButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.TIME_ATTACK], new Runnable()
@@ -94,7 +94,7 @@ public class PracticeModeSelectScene extends TilesMenuScene
 				mParentScene.clearChildScene();
 			}
 		});
-		timeAttackButton.center(frenzyButton.getBottom());
+		timeAttackButton.center(frenzyButton.getBottom() + BUTTON_SPACING);
 		addButton(timeAttackButton);
 
 		this.attachChild(titleSprite);
@@ -105,6 +105,13 @@ public class PracticeModeSelectScene extends TilesMenuScene
 	public void initScene()
 	{
 		//Nothing to init
+	}
+
+	@Override
+	protected void exitScene()
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 }

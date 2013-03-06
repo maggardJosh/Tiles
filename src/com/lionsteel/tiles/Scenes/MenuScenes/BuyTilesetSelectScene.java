@@ -1,12 +1,6 @@
 package com.lionsteel.tiles.Scenes.MenuScenes;
 
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.input.touch.detector.ScrollDetector;
-import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
-import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -18,25 +12,15 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.tiles.TilesMainActivity;
-import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.BuyTilesetPreviewButton;
 import com.lionsteel.tiles.Entities.Tileset;
-import com.lionsteel.tiles.util.Inventory;
 
-public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConstants, IScrollDetectorListener, IOnSceneTouchListener
+public class BuyTilesetSelectScene extends TilesScrollableScene
 {
-	final TilesMainActivity					activity;
-
-	final SurfaceScrollDetector				scrollDetector;
-
-	final float								SCROLL_SPEED			= .8f;
-	final int								START_Y					= 160;
-	float									MAX_Y;
 	final int								TITLE_Y					= 40;
 	final int								TITLE_BOTTOM_PADDING	= 10;
+	final int								BUTTON_PADDING			= 10;
 
 	final Sprite							titleSprite;
 
@@ -57,10 +41,6 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 
 		instance = this;
 
-		scrollDetector = new SurfaceScrollDetector(this);
-		setOnSceneTouchListener(this);
-
-		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
 		final BuildableBitmapTextureAtlas sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
@@ -86,7 +66,7 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 			buttons[x] = new BuyTilesetPreviewButton(Tileset.purchaseableTilesets[x]);
 			addButton(buttons[x].getButton());
 			buttons[x].getButton().center(nextYPos);
-			nextYPos = buttons[x].getButton().getBottom();
+			nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 
 		}
 		MAX_Y = nextYPos + 70;
@@ -103,11 +83,6 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 		}
 	}
 
-	public void resetScrollDetector()
-	{
-		this.scrollDetector.reset();
-	}
-
 	public void redoButtons()
 	{
 		clearButtons();
@@ -119,7 +94,7 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 			{
 				addButton(buttons[x].getButton());
 				buttons[x].getButton().center(nextYPos);
-				nextYPos = buttons[x].getButton().getBottom();
+				nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 			}
 		}
 		MAX_Y = nextYPos + 70;
@@ -129,57 +104,16 @@ public class BuyTilesetSelectScene extends TilesMenuScene implements TilesConsta
 	@Override
 	public void logFlurryEvent()
 	{
-		FlurryAgent.logEvent(FlurryAgentEventStrings.TILESET_MENU);
-	}
-
-	@Override
-	public void initScene()
-	{
-		resetScrollDetector();
-		setY(0);
-	}
-
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
-	{
-		scrollDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
-		return true;
-	}
-
-	private void boundScene()
-	{
-		if (getY() - CAMERA_HEIGHT < -MAX_Y)
-			setY(-MAX_Y + CAMERA_HEIGHT);
-		if (getY() > 0)
-			setY(0);
-	}
-
-	@Override
-	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
-	{
-		unsetAllButtons();
-		this.setY(getY() + pDistanceY * SCROLL_SPEED);
-		boundScene();
-	}
-
-	@Override
-	public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
-	{
-		this.setY(getY() + pDistanceY * SCROLL_SPEED);
-		boundScene();
-	}
-
-	@Override
-	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY)
-	{
-		this.setY(getY() + pDistanceY * SCROLL_SPEED);
-		boundScene();
+		FlurryAgent.logEvent(FlurryAgentEventStrings.BUY_TILESET_MENU);
 	}
 
 	public static void clear()
 	{
 		instance = null;
-
 	}
 
+	public void resetScrollDetector()
+	{
+		this.scrollDetector.reset();
+	}
 }
