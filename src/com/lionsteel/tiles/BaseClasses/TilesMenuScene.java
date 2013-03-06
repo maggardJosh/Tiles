@@ -32,7 +32,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			@Override
 			public void run()
 			{
-				if (backButton.isVisible())
+				if (backButton.isVisible() && activity.backEnabled)
 					mParentScene.clearChildScene();
 			}
 		});
@@ -98,6 +98,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			childScene.clearChildScene();
 		if (overlay)
 		{
+			childScene.enterScene();
 			childScene.setX(0);
 			childScene.registerTouchAreas();
 
@@ -114,6 +115,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 				{
 					TilesMainActivity.getInstance().backEnabled = true;
 					childScene.registerTouchAreas();
+					childScene.enterScene();
 					childScene.backButton.registerOwnTouchArea(childScene);
 					super.onModifierFinished(pItem);
 				}
@@ -122,6 +124,11 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 	}
 
 	public abstract void initScene();
+
+	protected void enterScene()
+	{
+	}
+
 	protected abstract void exitScene();
 
 	protected void transitionOff()
@@ -130,20 +137,21 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
 			activity.moveBackground(false);
 	}
-	
 
 	public void setChildSceneNull()
 	{
 		if (this.getChildScene() instanceof TilesMenuScene)
+		{
 			((TilesMenuScene) this.getChildScene()).clearTouchAreas();
+		}
 		super.clearChildScene();
 	}
-	
+
 	public void clearChildScene(final Runnable onFinished)
 	{
 		logFlurryEvent();
-		if(mChildScene instanceof TilesMenuScene)
-			((TilesMenuScene)mChildScene).exitScene();
+		if (mChildScene instanceof TilesMenuScene)
+			((TilesMenuScene) mChildScene).exitScene();
 		initScene();
 
 		TilesMainActivity.getInstance().backEnabled = false;
@@ -156,14 +164,15 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			{
 				TilesMainActivity.getInstance().backEnabled = true;
 				setChildSceneNull();
-				if(onFinished != null)
+				enterScene();
+				if (onFinished != null)
 					onFinished.run();
 				super.onModifierFinished(pItem);
 			}
 		});
 		if (!(this instanceof PauseScene || this instanceof GameOverScreen || this instanceof PracticeGameOverScene))
 			activity.moveBackground(true);
-		
+
 	}
 
 	@Override
