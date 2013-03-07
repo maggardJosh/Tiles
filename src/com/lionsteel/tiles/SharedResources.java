@@ -1,6 +1,7 @@
 package com.lionsteel.tiles;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -60,8 +61,10 @@ public class SharedResources implements TilesConstants
 	public Sound					timerClick;
 
 	public Music					menuMusic;
-	public Music[]					versusMusic = new Music[2];
+	public Music[]					versusMusic			= new Music[2];
 	public Music					freePlayMusic;
+
+	private int						versusSongNum;
 
 	public static SharedResources getInstance()
 	{
@@ -74,6 +77,9 @@ public class SharedResources implements TilesConstants
 	{
 		instance = this;
 		activity = TilesMainActivity.getInstance();
+
+		final Random rand = new Random();
+		versusSongNum = rand.nextInt(2);
 
 		FontFactory.setAssetBasePath("fonts/");
 		fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
@@ -177,6 +183,13 @@ public class SharedResources implements TilesConstants
 			Debug.e(e);
 		}
 
+	}
+
+	public Music getVersusSong()
+	{
+		versusSongNum++;
+		versusSongNum %= 2;
+		return versusMusic[versusSongNum];
 	}
 
 	public static void clear()
