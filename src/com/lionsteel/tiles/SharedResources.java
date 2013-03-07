@@ -60,8 +60,10 @@ public class SharedResources implements TilesConstants
 	public Sound					timerClick;
 
 	public Music					menuMusic;
-	public Music[]					versusMusic = new Music[2];
+	public Music[]					versusMusic			= new Music[2];
 	public Music					freePlayMusic;
+
+	private boolean					gameSoundsLoaded		= false;
 
 	public static SharedResources getInstance()
 	{
@@ -144,6 +146,25 @@ public class SharedResources implements TilesConstants
 		try
 		{
 
+			menuBlip = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
+			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
+
+
+			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
+
+		} catch (IOException e)
+		{
+			Debug.e(e);
+		}
+
+	}
+	
+	public void loadGameSounds()
+	{
+		if (gameSoundsLoaded)
+			return;
+		try
+		{
 			tileCollectSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile1.wav");
 			tileCollectSound.setVolume(SOUND_EFFECT_VOLUME * .7f);
 			tileCollectSound.setRate(MIN_TILE_COLLECT_RATE);
@@ -157,8 +178,6 @@ public class SharedResources implements TilesConstants
 			insaneJump.setVolume(SOUND_EFFECT_VOLUME);
 			countdownSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "finalFiveCountdown.ogg");
 			countdownSound.setVolume(SOUND_EFFECT_VOLUME);
-			menuBlip = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
-			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
 			pauseSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "pause.ogg");
 			pauseSound.setVolume(SOUND_EFFECT_VOLUME);
 			countdownHit = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "countdownHit.ogg");
@@ -167,16 +186,15 @@ public class SharedResources implements TilesConstants
 			countdownFinalHit.setVolume(SOUND_EFFECT_VOLUME);
 			timerClick = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "timerClick.ogg");
 			timerClick.setVolume(SOUND_EFFECT_VOLUME);
-
-			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
+			
 			versusMusic[0] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
 			versusMusic[1] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSongTwo.ogg");
 			freePlayMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesFreePlaySong.ogg");
+			gameSoundsLoaded = true;
 		} catch (IOException e)
 		{
-			Debug.e(e);
+			e.printStackTrace();
 		}
-
 	}
 
 	public static void clear()
