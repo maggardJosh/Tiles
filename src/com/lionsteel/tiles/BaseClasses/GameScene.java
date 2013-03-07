@@ -537,7 +537,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		if (this instanceof PracticeGameScene)
 			SongManager.getInstance().playSong(SharedResources.getInstance().freePlayMusic);
 		else
-			SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic);
+			SongManager.getInstance().playSong(SharedResources.getInstance().versusMusic[1]);
 	}
 
 	protected void moveBar(final float distance)

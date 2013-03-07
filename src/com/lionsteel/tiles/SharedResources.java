@@ -60,7 +60,7 @@ public class SharedResources implements TilesConstants
 	public Sound					timerClick;
 
 	public Music					menuMusic;
-	public Music					versusMusic;
+	public Music[]					versusMusic = new Music[2];
 	public Music					freePlayMusic;
 
 	public static SharedResources getInstance()
@@ -169,7 +169,8 @@ public class SharedResources implements TilesConstants
 			timerClick.setVolume(SOUND_EFFECT_VOLUME);
 
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
-			versusMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
+			versusMusic[0] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
+			versusMusic[1] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSongTwo.ogg");
 			freePlayMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesFreePlaySong.ogg");
 		} catch (IOException e)
 		{
