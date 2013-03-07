@@ -10,7 +10,6 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
-import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;

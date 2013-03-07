@@ -1,7 +1,5 @@
 package com.lionsteel.tiles.Entities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.andengine.entity.Entity;
@@ -19,8 +17,6 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicInOut;
-
-import android.os.FileObserver;
 
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.TilesConstants;

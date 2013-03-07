@@ -7,9 +7,7 @@ import org.andengine.entity.text.Text;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.SongManager;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
 
 public abstract class PracticeGameScene extends GameScene

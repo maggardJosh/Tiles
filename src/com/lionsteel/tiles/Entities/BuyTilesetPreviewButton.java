@@ -6,19 +6,15 @@ import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
-import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.BuyTilesetSelectScene;
-import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 import com.lionsteel.tiles.util.IabException;
 import com.lionsteel.tiles.util.IabHelper.OnIabPurchaseFinishedListener;

@@ -3,8 +3,6 @@ package com.lionsteel.tiles;
 import org.andengine.audio.music.Music;
 import org.andengine.engine.handler.IUpdateHandler;
 
-import android.media.MediaRouter.VolumeCallback;
-
 import com.lionsteel.tiles.Constants.TilesConstants;
 
 public class SongManager implements IUpdateHandler

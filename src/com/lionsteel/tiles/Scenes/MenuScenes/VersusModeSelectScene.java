@@ -12,8 +12,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import com.flurry.android.FlurryAgent;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.SharedResources;
+import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
@@ -59,7 +59,6 @@ public class VersusModeSelectScene extends TilesMenuScene
 		this.setBackgroundEnabled(false);
 
 		final Sprite titleSprite = new Sprite((CAMERA_WIDTH-titleRegion.getWidth())/2, TITLE_Y, titleRegion, activity.getVertexBufferObjectManager());
-		final float BUTTON_HEIGHT = SharedResources.getInstance().modeRegion[0].getHeight();
 
 		reflexButton = new TilesMenuButton(SharedResources.getInstance().modeRegion[GameMode.REFLEX], new Runnable()
 		{

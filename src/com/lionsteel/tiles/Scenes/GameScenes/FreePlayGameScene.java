@@ -2,15 +2,11 @@ package com.lionsteel.tiles.Scenes.GameScenes;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.text.Text;
-import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
 
 import com.lionsteel.tiles.SharedResources;
-import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
 import com.lionsteel.tiles.Entities.GameButton;
 

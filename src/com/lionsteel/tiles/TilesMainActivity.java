@@ -14,18 +14,13 @@ import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.util.modifier.IModifier;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,7 +50,6 @@ import com.lionsteel.tiles.Scenes.MenuScenes.SplashScene;
 import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 import com.lionsteel.tiles.util.IabException;
 import com.lionsteel.tiles.util.IabHelper;
-import com.lionsteel.tiles.util.IabHelper.QueryInventoryFinishedListener;
 import com.lionsteel.tiles.util.IabResult;
 import com.lionsteel.tiles.util.Inventory;
 import com.lionsteel.tiles.util.Purchase;
