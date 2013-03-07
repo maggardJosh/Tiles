@@ -18,6 +18,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -46,7 +47,7 @@ public class SetupScene extends TilesMenuScene
 	final SoundEffectMuteControl		soundEffectMute;
 	final MusicMuteControl				musicMute;
 
-	final VersusModeSelectScene	modeSelectScreen;
+	final VersusModeSelectScene			modeSelectScreen;
 	final SkillSelectScene				skillSelectScene;
 	final TilesetSelectScene			tilesetSelectScene;
 	final PracticeModeSelectScene		practiceModeSelectScene;
@@ -122,6 +123,67 @@ public class SetupScene extends TilesMenuScene
 		return currentTileset;
 	}
 
+	public class LoadTilesetTask extends AsyncTask<String, Void, Void>
+	{
+		private ProgressDialog	loadProgressDialog;
+
+		@Override
+		protected void onPreExecute()
+		{
+			activity.runOnUiThread(new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					loadProgressDialog = new ProgressDialog(activity);
+					loadProgressDialog.setMessage("Loading Tileset");
+					loadProgressDialog.setCancelable(false);
+					loadProgressDialog.show();
+				}
+			});
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(final String... params)
+		{
+			TilesMainActivity.getInstance().runOnUpdateThread(new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					currentTileset.clearTileset();
+					currentTileset = new Tileset(params[0], false);
+					SetupScene.getInstance().resetGraphics();
+
+					TilesMainActivity.getInstance().backToSetupScene();
+					TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, params[0]);
+
+					instance.sortChildren();
+					
+				}
+			});
+			return null;
+		}
+
+		protected void onPostExecute(Void result)
+		{
+			activity.getEngine().registerUpdateHandler(new TimerHandler(.5f, new ITimerCallback()
+			{
+				
+				@Override
+				public void onTimePassed(TimerHandler pTimerHandler)
+				{
+					activity.getEngine().unregisterUpdateHandler(pTimerHandler);
+					loadProgressDialog.dismiss();
+				}
+			}));
+			super.onPostExecute(result);
+		};
+	}
+
 	public static void loadTileset(final String tileset)
 	{
 		if (currentTileset.getBasePath().compareTo(tileset) == 0)
@@ -130,45 +192,7 @@ public class SetupScene extends TilesMenuScene
 			return;
 		}
 
-		TilesMainActivity.getInstance().runOnUiThread(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-				final ProgressDialog pd = TilesMainActivity.getInstance().progressDialog;
-				pd.setMessage("Loading Tileset");
-				pd.show();
-
-				TilesMainActivity.getInstance().runOnUpdateThread(new Runnable()
-				{
-
-					@Override
-					public void run()
-					{
-						currentTileset.clearTileset();
-						currentTileset = new Tileset(tileset, false);
-						SetupScene.getInstance().resetGraphics();
-
-						TilesMainActivity.getInstance().backToSetupScene();
-						TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, tileset);
-
-						instance.sortChildren();
-
-						TilesMainActivity.getInstance().getEngine().registerUpdateHandler(new TimerHandler(.3f, new ITimerCallback()
-						{
-
-							@Override
-							public void onTimePassed(TimerHandler pTimerHandler)
-							{
-								TilesMainActivity.getInstance().progressDialog.dismiss();
-							}
-						}));
-					}
-				});
-
-			}
-		});
+		instance.new LoadTilesetTask().execute(new String[] { tileset });
 	}
 
 	public static void setGameMode(final int gameMode)
@@ -394,10 +418,10 @@ public class SetupScene extends TilesMenuScene
 			difficultyButtons[x].attachChild(currentTileset.getDifficultySprite(x));
 		currentTileset.getDifficultySprite(SetupScene.getDifficulty()).fadeIn();
 
-		tilesetLabelSprite = new Sprite(0,0,tilesetLabelRegion, activity.getVertexBufferObjectManager());
-		skillLabelSprite = new Sprite(0,0,skillLabelRegion, activity.getVertexBufferObjectManager());
-		modeLabelSprite = new Sprite(0,0,modeLabelRegion, activity.getVertexBufferObjectManager());
-		
+		tilesetLabelSprite = new Sprite(0, 0, tilesetLabelRegion, activity.getVertexBufferObjectManager());
+		skillLabelSprite = new Sprite(0, 0, skillLabelRegion, activity.getVertexBufferObjectManager());
+		modeLabelSprite = new Sprite(0, 0, modeLabelRegion, activity.getVertexBufferObjectManager());
+
 		positionLabels();
 		setupChangeSprites(changeRegion);
 
