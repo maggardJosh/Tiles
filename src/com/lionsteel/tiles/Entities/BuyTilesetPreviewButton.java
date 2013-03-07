@@ -53,7 +53,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 					{
 						Log.d("IAB", "Purchase Failure " + result.getMessage());
 
-						TilesMainActivity.getInstance().progressDialog.dismiss();
+						progressDialog.dismiss();
 
 						return;
 					}
@@ -73,7 +73,6 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 					
 					Tileset.purchasedTilesets.add(basePath);
 					TilesetSelectScene.getInstance().redoButtons();
-					TilesMainActivity.getInstance().progressDialog.dismiss();
 
 				}
 			}, "");
