@@ -353,7 +353,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		});
 
 		SetupScene.getTileset().createGameAssets();
-		SharedResources.getInstance().loadGameSounds();
+		SharedResources.getInstance().loadGameAssets();
 		switch (SetupScene.getGameMode())
 		{
 		case GameMode.REFLEX:

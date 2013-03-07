@@ -38,7 +38,7 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		exitGameButtonRegion;
 	public final TextureRegion		cancelImageRegion;
 	public final Font				mFont;
-	public final Font				headingFont;
+	public Font						headingFont;
 	public final ITexture			fontTexture;
 	public final TextureRegion		musicNoteRegion;
 	public final TextureRegion		soundEffectImageRegion;
@@ -63,7 +63,7 @@ public class SharedResources implements TilesConstants
 	public Music[]					versusMusic			= new Music[2];
 	public Music					freePlayMusic;
 
-	private boolean					gameSoundsLoaded		= false;
+	private boolean					gameAssetsLoaded	= false;
 
 	public static SharedResources getInstance()
 	{
@@ -82,11 +82,6 @@ public class SharedResources implements TilesConstants
 		mFont = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "gameFont.ttf", 18f, true, android.graphics.Color.WHITE);
 		fontTexture.load();
 		mFont.load();
-
-		final BitmapTextureAtlas headingFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-		headingFont = FontFactory.createFromAsset(activity.getFontManager(), headingFontTexture, activity.getAssets(), "gameFont.ttf", 45f, true, android.graphics.Color.WHITE);
-		headingFontTexture.load();
-		headingFont.load();
 
 		final BuildableBitmapTextureAtlas buildableAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/SharedResources/");
@@ -149,7 +144,6 @@ public class SharedResources implements TilesConstants
 			menuBlip = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "menuBlip.wav");
 			menuBlip.setVolume(SOUND_EFFECT_VOLUME);
 
-
 			menuMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesMenuSong.ogg");
 
 		} catch (IOException e)
@@ -158,11 +152,17 @@ public class SharedResources implements TilesConstants
 		}
 
 	}
-	
-	public void loadGameSounds()
+
+	public void loadGameAssets()
 	{
-		if (gameSoundsLoaded)
+		if (gameAssetsLoaded)
 			return;
+
+		final BitmapTextureAtlas headingFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		headingFont = FontFactory.createFromAsset(activity.getFontManager(), headingFontTexture, activity.getAssets(), "gameFont.ttf", 45f, true, android.graphics.Color.WHITE);
+		headingFontTexture.load();
+		headingFont.load();
+
 		try
 		{
 			tileCollectSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "collectTile1.wav");
@@ -186,11 +186,11 @@ public class SharedResources implements TilesConstants
 			countdownFinalHit.setVolume(SOUND_EFFECT_VOLUME);
 			timerClick = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "timerClick.ogg");
 			timerClick.setVolume(SOUND_EFFECT_VOLUME);
-			
+
 			versusMusic[0] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
 			versusMusic[1] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSongTwo.ogg");
 			freePlayMusic = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesFreePlaySong.ogg");
-			gameSoundsLoaded = true;
+			gameAssetsLoaded = true;
 		} catch (IOException e)
 		{
 			e.printStackTrace();
