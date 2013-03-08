@@ -72,7 +72,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 				activity.onBackPressed();
 			}
 		});
-		quitButton.setPosition(3, (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
+		quitButton.setPosition(CAMERA_WIDTH - 3 - quitButton.getWidth(), (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
 
 		winnerSprite = new Sprite(0, 0, winnerRegion, activity.getVertexBufferObjectManager());
 		winnerSprite.setRotationCenter(winnerSprite.getWidth() / 2, winnerSprite.getHeight() / 2);
@@ -85,7 +85,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		tieSprite[PLAYER_ONE].setRotation(180);
 
 		Rectangle backgroundRect = new Rectangle(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
-		backgroundRect.setColor(0, 0, 0, .8f);
+		backgroundRect.setColor(0, 0, 0, .9f);
 
 		this.attachChild(backgroundRect);
 		this.attachChild(winnerSprite);
