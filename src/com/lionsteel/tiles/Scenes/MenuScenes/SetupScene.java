@@ -224,11 +224,19 @@ public class SetupScene extends TilesMenuScene
 			instance.gameModeSprite[SetupScene.gameMode].setAlpha(0);
 			instance.gameModeSprite[gameMode].setAlpha(1.0f);
 			instance.sortChildren();
+			instance.modeLabelSprite.setAlpha(1.0f);
 		} else
 		{
 			final int currentGameMode = SetupScene.gameMode;
 			instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
 			{
+				
+				@Override
+				public float onUpdate(float pSecondsElapsed, IEntity pItem)
+				{
+					instance.modeLabelSprite.setAlpha(instance.gameModeSprite[currentGameMode].getAlpha());
+					return super.onUpdate(pSecondsElapsed, pItem);
+				}
 				@Override
 				protected void onModifierFinished(IEntity pItem)
 				{
@@ -236,8 +244,14 @@ public class SetupScene extends TilesMenuScene
 					instance.addButton(instance.gameModeSprite[gameMode]);
 					instance.clearTouchAreas();
 					instance.registerTouchAreas();
-
-					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f){
+						@Override
+						protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
+						{
+							instance.modeLabelSprite.setAlpha(instance.gameModeSprite[gameMode].getAlpha());
+							super.onManagedUpdate(pSecondsElapsed, pItem);
+						}
+					});
 					instance.sortChildren();
 					super.onModifierFinished(pItem);
 				}
@@ -261,6 +275,13 @@ public class SetupScene extends TilesMenuScene
 				currentTileset.getDifficultySprite(currentDifficulty).fadeOut();
 				super.onModifierStarted(pItem);
 			};
+			
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
+			{
+				instance.skillLabelSprite.setAlpha(instance.difficultyButtons[currentDifficulty].getAlpha());
+				super.onManagedUpdate(pSecondsElapsed, pItem);
+			}
 		})
 		{
 
@@ -273,7 +294,14 @@ public class SetupScene extends TilesMenuScene
 				instance.registerTouchAreas();
 
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
-				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f));
+				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f){
+					@Override
+					protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
+					{
+						instance.skillLabelSprite.setAlpha(instance.difficultyButtons[difficulty].getAlpha());
+						super.onManagedUpdate(pSecondsElapsed, pItem);
+					}
+				});
 				instance.sortChildren();
 				super.onModifierFinished(pItem);
 			}
