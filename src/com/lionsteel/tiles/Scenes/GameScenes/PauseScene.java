@@ -24,6 +24,8 @@ import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 
 public class PauseScene extends TilesMenuScene
 {
+	private static PauseScene instance;
+	
 	private boolean					playerOneReady	= false;
 	private boolean					playerTwoReady	= false;
 
@@ -40,13 +42,20 @@ public class PauseScene extends TilesMenuScene
 	private SoundEffectMuteControl	soundEffectMute;
 	private MusicMuteControl		musicMute;
 
+	public synchronized static PauseScene getInsance()
+	{
+		if(instance == null)
+			instance = new PauseScene();
+		return instance;
+	}
+	
 	@Override
 	public void logFlurryEvent()
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.PAUSE);
 	}
 
-	public PauseScene()
+	private PauseScene()
 	{
 		activity = TilesMainActivity.getInstance();
 		BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256);
