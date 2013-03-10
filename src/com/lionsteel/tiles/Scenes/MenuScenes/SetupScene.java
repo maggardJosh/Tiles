@@ -259,6 +259,7 @@ public class SetupScene extends TilesMenuScene
 		}
 		SetupScene.gameMode = gameMode;
 	}
+	
 
 	public static void setDifficulty(final int difficulty)
 	{
