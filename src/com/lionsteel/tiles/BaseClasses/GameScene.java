@@ -129,7 +129,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 
 		BitmapTextureAtlas ropeAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 16, 8, TextureOptions.REPEATING_BILINEAR);
-		final TextureRegion ropeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ropeAtlas, activity, "bar.png", 0, 0);
+		final TextureRegion ropeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ropeAtlas, activity, "bar.png", 2, 0);
 		ropeAtlas.load();
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
@@ -153,10 +153,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 		final int ropePadding = 20;
 
 		barSprite = new Sprite((CAMERA_WIDTH - ropeRegion.getWidth()) - ropePadding, (CAMERA_HEIGHT - ropeRegion.getHeight()) / 2, ropeRegion, activity.getVertexBufferObjectManager());
-		barSprite.setZIndex(FOREGROUND_Z);
+		barSprite.setZIndex(BUTTON_Z-1);
 		
 		ropeKnotSprite = new Sprite((barSprite.getWidth()-barKnotRegion.getWidth())/2  - 2,(barSprite.getHeight()-barKnotRegion.getHeight())/2,barKnotRegion, activity.getVertexBufferObjectManager());
-		ropeKnotSprite.setZIndex(FOREGROUND_Z+1);
 
 		playerOneIntro = new Sprite((CAMERA_WIDTH - playerOneIntroRegion.getWidth()) / 2, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);

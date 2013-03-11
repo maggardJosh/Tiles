@@ -778,6 +778,7 @@ public class Tileset implements TilesConstants
 		{
 			currentStreamButtons[i] = newStreamButton();
 			currentStreamButtons[i].buttonSprite.setScale(0.1f);
+			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 		}

@@ -355,6 +355,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected Void doInBackground(Void... params)
 		{
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			SetupScene.getTileset().createGameAssets();
 			SharedResources.getInstance().loadGameAssets();
 			switch (SetupScene.getGameMode())
