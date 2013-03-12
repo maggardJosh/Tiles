@@ -274,7 +274,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 						backToMainMenu();
 					}
 				});
-				
+
 				PauseScene.getInsance();
 				mainMenuScene = new MainMenuScene();
 				backgroundScene = new BackgroundMenuScene(mainMenuScene);
@@ -330,11 +330,12 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		SetupScene.clear();
 		super.onDestroyResources();
 	}
-	
+
 	private class StartGameTask extends AsyncTask<Void, Void, Void>
 	{
-		
-		private ProgressDialog progressDialog;
+
+		private ProgressDialog	progressDialog;
+
 		@Override
 		protected void onPreExecute()
 		{
@@ -352,6 +353,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			});
 			super.onPreExecute();
 		}
+
 		@Override
 		protected Void doInBackground(Void... params)
 		{
@@ -383,6 +385,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 			return null;
 		}
+
 		@Override
 		protected void onPostExecute(Void result)
 		{
@@ -485,7 +488,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		return mHelper;
 	}
-	
+
 	//----Inner AsyncTask Classes
 
 	private class QueryIABInventory extends AsyncTask<Runnable, Void, Void>
@@ -548,22 +551,29 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 
 			Log.d("IAB", "Query Success");
 
-			Purchase fakePurchase = inventory.getPurchase("android.test.purchased");
+			final Purchase fakePurchase = inventory.getPurchase("android.test.purchased");
 			if (fakePurchase != null)
-				mHelper.consumeAsync(fakePurchase, null);
+			{
+				runOnUiThread(new Runnable()
+				{
+					public void run()
+					{
+						mHelper.consumeAsync(fakePurchase, null);
+					};
+				});
+			}
 
 			currentInventory = inventory;
 
 			reloadTilesets();
 
 			arePurchasesLoaded = true;
-			
-			for(Runnable r : params)
+
+			for (Runnable r : params)
 				r.run();
 
 			runOnUiThread(new Runnable()
 			{
-
 				@Override
 				public void run()
 				{
@@ -649,11 +659,11 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		protected void onPostExecute(Void result)
 		{
 			IABSetupProgressDialog.dismiss();
-			
+
 			super.onPostExecute(result);
 		}
 	}
-	
+
 	//---- End of Inner AsyncTask Classes
 
 	public void setupIABHelper()
