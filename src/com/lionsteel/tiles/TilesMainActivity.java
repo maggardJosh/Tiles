@@ -319,15 +319,21 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-
-	@Override
-	public void onDestroyResources() throws Exception
+	
+	private void clearAllSingletons()
 	{
 		SharedResources.clear();
 		SongManager.clear();
 		TilesetSelectScene.clear();
 		BuyTilesetSelectScene.clear();
 		SetupScene.clear();
+		PauseScene.clear();
+	}
+
+	@Override
+	public void onDestroyResources() throws Exception
+	{
+		clearAllSingletons();
 		super.onDestroyResources();
 	}
 

@@ -49,6 +49,11 @@ public class PauseScene extends TilesMenuScene
 		return instance;
 	}
 	
+	public static void clear()
+	{
+		instance = null;
+	}
+	
 	@Override
 	public void logFlurryEvent()
 	{
