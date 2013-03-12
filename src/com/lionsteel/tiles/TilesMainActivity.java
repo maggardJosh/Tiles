@@ -1,5 +1,6 @@
 package com.lionsteel.tiles;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -240,77 +241,98 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		backgroundScene.moveBackground(moveToLeft);
 	}
 
+	private class InitalLoadTask extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected void onPreExecute()
+		{
+			splashScene = new SplashScene();
+
+			try
+			{
+				Tileset.tilesetList = getAssets().list("gfx/tilesets");
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			mEngine.setScene(splashScene);
+
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params)
+		{
+
+			instance.getEngine().registerUpdateHandler(SongManager.getInstance());
+			SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
+			menuQuitPromptScene = new QuitPromptScene(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					finish();
+				}
+			});
+			gameQuitPromptScene = new QuitPromptScene(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (GameScene.isGameEventStarted)
+						TilesMainActivity.endGameEvent();
+					backToMainMenu();
+				}
+			});
+
+			PauseScene.getInsance();
+			mainMenuScene = new MainMenuScene();
+			backgroundScene = new BackgroundMenuScene(mainMenuScene);
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			splashScene.fadeOut(new IEntityModifierListener()
+			{
+
+				@Override
+				public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
+				{
+
+				}
+
+				@Override
+				public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
+				{
+
+					mainMenuScene.logFlurryEvent();
+					SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
+					mEngine.setScene(backgroundScene);
+					backEnabled = true;
+				}
+			});
+			super.onPostExecute(result);
+		}
+	}
+
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-		splashScene = new SplashScene();
 
-		Tileset.tilesetList = getAssets().list("gfx/tilesets");
-
-		mEngine.registerUpdateHandler(new TimerHandler(.1f, new ITimerCallback()
+		pOnCreateSceneCallback.onCreateSceneFinished(new Scene());
+		runOnUiThread(new Runnable()
 		{
-
+			
 			@Override
-			public void onTimePassed(TimerHandler pTimerHandler)
+			public void run()
 			{
-				mEngine.unregisterUpdateHandler(pTimerHandler);
-				mEngine.registerUpdateHandler(SongManager.getInstance());
-				SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
-				menuQuitPromptScene = new QuitPromptScene(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						finish();
-					}
-				});
-				gameQuitPromptScene = new QuitPromptScene(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						if (GameScene.isGameEventStarted)
-							TilesMainActivity.endGameEvent();
-						backToMainMenu();
-					}
-				});
-
-				PauseScene.getInsance();
-				mainMenuScene = new MainMenuScene();
-				backgroundScene = new BackgroundMenuScene(mainMenuScene);
-
-				mEngine.registerUpdateHandler(new TimerHandler(1.0f, new ITimerCallback()
-				{
-
-					@Override
-					public void onTimePassed(TimerHandler pTimerHandler)
-					{
-						splashScene.fadeOut(new IEntityModifierListener()
-						{
-
-							@Override
-							public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
-							{
-
-							}
-
-							@Override
-							public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
-							{
-
-								mainMenuScene.logFlurryEvent();
-								SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
-								mEngine.setScene(backgroundScene);
-								backEnabled = true;
-							}
-						});
-					}
-				}));
-
+				new InitalLoadTask().execute();
 			}
-		}));
-
-		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+		});
 
 	}
 
@@ -319,7 +341,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	{
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-	
+
 	private void clearAllSingletons()
 	{
 		SharedResources.clear();
