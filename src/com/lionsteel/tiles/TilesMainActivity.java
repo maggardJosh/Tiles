@@ -286,7 +286,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				}
 			});
 
-			PauseScene.getInsance();
+			PauseScene.getInstance();
 			mainMenuScene = new MainMenuScene();
 			backgroundScene = new BackgroundMenuScene(mainMenuScene);
 
