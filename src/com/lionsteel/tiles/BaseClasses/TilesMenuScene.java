@@ -72,7 +72,6 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 
 	public void transitionChildScene(final TilesMenuScene childScene)
 	{
-
 		transitionChildScene(childScene, false);
 	}
 
@@ -110,6 +109,13 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 			transitionOff();
 			childScene.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, CAMERA_WIDTH, 0)
 			{
+				
+				@Override
+				protected void onModifierStarted(IEntity pItem)
+				{
+					SharedResources.getInstance().menuSlideSound.play();
+					super.onModifierStarted(pItem);
+				}
 				@Override
 				protected void onModifierFinished(IEntity pItem)
 				{
@@ -159,6 +165,12 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 		mChildScene.clearTouchAreas();
 		this.getChildScene().registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, this.getChildScene().getX(), CAMERA_WIDTH)
 		{
+			@Override
+			protected void onModifierStarted(IEntity pItem)
+			{
+				SharedResources.getInstance().menuSlideSound.play();
+				super.onModifierStarted(pItem);
+			}
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{

@@ -158,7 +158,6 @@ public class SetupScene extends TilesMenuScene
 					currentTileset = new Tileset(params[0], false);
 					SetupScene.getInstance().resetGraphics();
 
-					TilesMainActivity.getInstance().backToSetupScene();
 					TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, params[0]);
 
 					instance.sortChildren();
@@ -177,6 +176,7 @@ public class SetupScene extends TilesMenuScene
 				public void onTimePassed(TimerHandler pTimerHandler)
 				{
 					activity.getEngine().unregisterUpdateHandler(pTimerHandler);
+					TilesMainActivity.getInstance().backToSetupScene();
 					loadProgressDialog.dismiss();
 				}
 			}));
