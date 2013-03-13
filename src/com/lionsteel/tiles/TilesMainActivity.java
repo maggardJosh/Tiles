@@ -150,7 +150,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			sb.append((char) (valueOne[x] ^ key.charAt(x % key.length())));
 
 		mHelper = new IabHelper(this, sb.toString());
-		mHelper.enableDebugLogging(true, "IABDebug");
+//		mHelper.enableDebugLogging(true, "IABDebug");
 
 	}
 
@@ -301,7 +301,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		{
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			instance.getEngine().registerUpdateHandler(SongManager.getInstance());
-			onProgressUpdate("Loading Shared Assets");
+			publishProgress("Loading Shared Assets");
 			SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
 			menuQuitPromptScene = new QuitPromptScene(new Runnable()
 			{
@@ -321,10 +321,10 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 					backToMainMenu();
 				}
 			});
-			onProgressUpdate("Loading Pause Screen");
+			publishProgress("Loading Pause Screen");
 
 			PauseScene.getInstance();
-			onProgressUpdate("Loading Menu Assets");
+			publishProgress("Loading Menu Assets");
 			mainMenuScene = new MainMenuScene();
 			backgroundScene = new BackgroundMenuScene(mainMenuScene);
 
