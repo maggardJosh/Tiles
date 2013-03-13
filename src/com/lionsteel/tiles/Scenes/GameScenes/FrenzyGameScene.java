@@ -101,13 +101,15 @@ public class FrenzyGameScene extends PracticeGameScene
 	}
 
 	@Override
-	public void buttonPressed(final GameButton button)
+	public boolean buttonPressed(final GameButton button)
 	{
 		switch (gameState)
 		{
+		case GameState.IN_COUNTDOWN:
+			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
-				return;
+				return false;
 			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
 			{
@@ -136,8 +138,9 @@ public class FrenzyGameScene extends PracticeGameScene
 			{
 				disablePlayer(button);
 			}
-			break;
+			return true;
 		}
+		return false;
 	}
 
 	private void gameOver()

@@ -85,7 +85,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected float						barSpeedMulti			= 1.0f;
 
-	public abstract void buttonPressed(GameButton button);
+	public abstract boolean buttonPressed(GameButton button);
 
 	protected abstract void resetGame();
 
@@ -153,9 +153,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 		final int ropePadding = 20;
 
 		barSprite = new Sprite((CAMERA_WIDTH - ropeRegion.getWidth()) - ropePadding, (CAMERA_HEIGHT - ropeRegion.getHeight()) / 2, ropeRegion, activity.getVertexBufferObjectManager());
-		barSprite.setZIndex(BUTTON_Z-1);
-		
-		ropeKnotSprite = new Sprite((barSprite.getWidth()-barKnotRegion.getWidth())/2  - 2,(barSprite.getHeight()-barKnotRegion.getHeight())/2,barKnotRegion, activity.getVertexBufferObjectManager());
+		barSprite.setZIndex(BUTTON_Z - 1);
+
+		ropeKnotSprite = new Sprite((barSprite.getWidth() - barKnotRegion.getWidth()) / 2 - 2, (barSprite.getHeight() - barKnotRegion.getHeight()) / 2, barKnotRegion, activity.getVertexBufferObjectManager());
 
 		playerOneIntro = new Sprite((CAMERA_WIDTH - playerOneIntroRegion.getWidth()) / 2, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);
@@ -224,7 +224,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		this.attachChild(barSprite);
 		barSprite.setAlpha(0);
-		
+
 		barSprite.attachChild(ropeKnotSprite);
 		ropeKnotSprite.setAlpha(0);
 
@@ -532,7 +532,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void startCountdown()
 	{
-		changeState(GameState.START_COUNTDOWN);
+		changeState(GameState.IN_COUNTDOWN);
 		gameCountdown.startCountdown(new Runnable()
 		{
 
@@ -630,7 +630,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 		public static final int	INTRO				= 0;
 		public static final int	ANIMATING_TILES_IN	= INTRO + 1;
 		public static final int	START_COUNTDOWN		= ANIMATING_TILES_IN + 1;
-		public static final int	WAITING_FOR_INPUT	= START_COUNTDOWN + 1;
+		public static final int	IN_COUNTDOWN		= START_COUNTDOWN + 1;
+		public static final int	WAITING_FOR_INPUT	= IN_COUNTDOWN + 1;
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 		public static final int	GAME_OVER			= SHOWING_WIN + 1;

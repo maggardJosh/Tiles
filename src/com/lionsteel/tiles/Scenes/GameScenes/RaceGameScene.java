@@ -51,13 +51,15 @@ public class RaceGameScene extends GameScene
 
 	}
 
-	public void buttonPressed(final GameButton button)
+	public boolean buttonPressed(final GameButton button)
 	{
 		switch (gameState)
 		{
+		case GameState.IN_COUNTDOWN:
+			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
-				return;
+				return false;
 			final GameButton displayButtonPressed = currentTileset.isRaceButtonCurrentlyActive(button);
 			if (displayButtonPressed != null)
 			{
@@ -88,8 +90,9 @@ public class RaceGameScene extends GameScene
 				breakStreak(button.getPlayer());
 				disablePlayer(button);
 			}
-			break;
+			return true;
 		}
+		return false;
 	}
 
 	private final float	NEUTRAL_TEXT_SCALE	= 2.0f;

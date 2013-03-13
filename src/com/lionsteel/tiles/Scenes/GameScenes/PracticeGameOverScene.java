@@ -114,7 +114,7 @@ public class PracticeGameOverScene extends TilesMenuScene implements TilesConsta
 				activity.onBackPressed();
 			}
 		});
-		quitButton.setPosition(3, (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
+		quitButton.setPosition(CAMERA_WIDTH - 3 - quitButton.getWidth(), (CAMERA_HEIGHT - quitButton.getHeight()) / 2);
 		addButton(quitButton);
 
 		this.sortChildren();
