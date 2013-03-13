@@ -45,6 +45,9 @@ public class SkillSelectScene extends TilesMenuScene
 		super();
 
 		activity = TilesMainActivity.getInstance();
+		
+		activity.updateLoadProgress("Loading Skill Menu");
+		
 		final BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256);
 
 		this.setBackgroundEnabled(false);

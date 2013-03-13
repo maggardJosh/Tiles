@@ -241,8 +241,19 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		backgroundScene.moveBackground(moveToLeft);
 	}
 
-	private class InitalLoadTask extends AsyncTask<Void, Void, Void>
+	private static InitialLoadTask	loadTaskInstance;
+
+	public static InitialLoadTask getLoadTaskInstance()
 	{
+		if (loadTaskInstance == null)
+			loadTaskInstance = getInstance().new InitialLoadTask();
+		return loadTaskInstance;
+	}
+
+	private class InitialLoadTask extends AsyncTask<Void, String, Void>
+	{
+		ProgressDialog	progressDialog;
+
 		@Override
 		protected void onPreExecute()
 		{
@@ -255,17 +266,45 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			{
 				e.printStackTrace();
 			}
-			
+
 			mEngine.setScene(splashScene);
+
+			progressDialog = new ProgressDialog(instance);
+			progressDialog.setMessage("Loading Menu Assets");
+			progressDialog.setCancelable(false);
+			runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					progressDialog.show();
+				}
+			});
 
 			super.onPreExecute();
 		}
 
 		@Override
+		protected void onProgressUpdate(final String... values)
+		{
+			runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (values.length > 0)
+						progressDialog.setMessage(values[0]);
+				}
+			});
+			super.onProgressUpdate(values);
+		}
+
+		@Override
 		protected Void doInBackground(Void... params)
 		{
-
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			instance.getEngine().registerUpdateHandler(SongManager.getInstance());
+			onProgressUpdate("Loading Shared Assets");
 			SharedResources.getInstance(); //Make sure shared resources is initialized during splash screen.
 			menuQuitPromptScene = new QuitPromptScene(new Runnable()
 			{
@@ -285,8 +324,10 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 					backToMainMenu();
 				}
 			});
+			onProgressUpdate("Loading Pause Screen");
 
 			PauseScene.getInstance();
+			onProgressUpdate("Loading Menu Assets");
 			mainMenuScene = new MainMenuScene();
 			backgroundScene = new BackgroundMenuScene(mainMenuScene);
 
@@ -296,41 +337,48 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected void onPostExecute(Void result)
 		{
-			splashScene.fadeOut(new IEntityModifierListener()
+			progressDialog.dismiss();
+			instance.getEngine().registerUpdateHandler(new TimerHandler(.5f, new ITimerCallback()
 			{
 
 				@Override
-				public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem)
+				public void onTimePassed(TimerHandler pTimerHandler)
 				{
-
+					instance.getEngine().unregisterUpdateHandler(pTimerHandler);
+					splashScene.fadeOut(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							mainMenuScene.logFlurryEvent();
+							SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
+							mEngine.setScene(backgroundScene);
+							backEnabled = true;
+						}
+					});
 				}
-
-				@Override
-				public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem)
-				{
-
-					mainMenuScene.logFlurryEvent();
-					SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
-					mEngine.setScene(backgroundScene);
-					backEnabled = true;
-				}
-			});
+			}));
 			super.onPostExecute(result);
 		}
+	}
+
+	public void updateLoadProgress(String progressString)
+	{
+		getLoadTaskInstance().onProgressUpdate(progressString);
 	}
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-
 		pOnCreateSceneCallback.onCreateSceneFinished(new Scene());
 		runOnUiThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
-				new InitalLoadTask().execute();
+				loadTaskInstance = new InitialLoadTask();
+				loadTaskInstance.execute();
 			}
 		});
 
