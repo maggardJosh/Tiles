@@ -8,6 +8,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.Constants.TilesConstants;
@@ -72,6 +73,7 @@ public class GameButton implements TilesConstants
 	
 	private void pulseButton()
 	{
+		SharedResources.getInstance().buttonTouchSound.play();
 		buttonSprite.registerEntityModifier(new ScaleModifier(PULSE_TIME, PULSE_SCALE, 1.0f, EaseCubicOut.getInstance()){
 			@Override
 			protected void onModifierStarted(IEntity pItem)

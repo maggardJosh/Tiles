@@ -59,11 +59,11 @@ public class SharedResources implements TilesConstants
 	public Sound					countdownHit;
 	public Sound					countdownFinalHit;
 	public Sound					timerClick;
+	public Sound					buttonTouchSound;
 
 	public Music					menuMusic;
 	public Music[]					versusMusic			= new Music[2];
 	public Music					freePlayMusic;
-
 
 	private int						versusSongNum;
 	private boolean					gameAssetsLoaded	= false;
@@ -192,6 +192,8 @@ public class SharedResources implements TilesConstants
 			countdownFinalHit.setVolume(SOUND_EFFECT_VOLUME);
 			timerClick = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "timerClick.ogg");
 			timerClick.setVolume(SOUND_EFFECT_VOLUME);
+			buttonTouchSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "buttonTouchSound.ogg");
+			buttonTouchSound.setVolume(SOUND_EFFECT_VOLUME);
 
 			versusMusic[0] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSong.ogg");
 			versusMusic[1] = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity, "TilesVersusSongTwo.ogg");
