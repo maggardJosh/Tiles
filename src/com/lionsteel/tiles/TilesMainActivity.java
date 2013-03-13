@@ -10,10 +10,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.util.modifier.IModifier;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -557,7 +554,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		SetupScene.getInstance().logFlurryEvent();
 		SetupScene.getInstance().initScene();
 		mEngine.setScene(backgroundScene);
-
 	}
 
 	public IabHelper getIABHelper()
@@ -566,6 +562,14 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	}
 
 	//----Inner AsyncTask Classes
+
+	private boolean	doneSettingUpIAB	= false;
+	private boolean	doneQuerying		= false;
+
+	public boolean isReadyToFadeOut()
+	{
+		return doneSettingUpIAB && doneQuerying;
+	}
 
 	private class QueryIABInventory extends AsyncTask<Runnable, Void, Void>
 	{
@@ -662,6 +666,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			doneQuerying = true;
 			queryDialog.dismiss();
 			super.onPostExecute(result);
 		}
@@ -714,6 +719,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 								Toast.makeText(instance, "Cannot connect to Google Play service", Toast.LENGTH_SHORT).show();
 							}
 						});
+						doneQuerying = true;
 						return;
 					}
 					Log.d("IAB", "SUCCESS");
@@ -734,6 +740,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected void onPostExecute(Void result)
 		{
+			doneSettingUpIAB = true;
 			IABSetupProgressDialog.dismiss();
 
 			super.onPostExecute(result);
