@@ -318,14 +318,18 @@ public class SetupScene extends TilesMenuScene
 
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
+		
+		
 
 		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
 
 		modeSelectScreen = new VersusModeSelectScene();
+		practiceModeSelectScene = new PracticeModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = TilesetSelectScene.getInstance();
-		practiceModeSelectScene = new PracticeModeSelectScene();
 
+		activity.updateLoadProgress("Loading Setup Menu");
+		
 		musicMute = new MusicMuteControl();
 		soundEffectMute = new SoundEffectMuteControl();
 

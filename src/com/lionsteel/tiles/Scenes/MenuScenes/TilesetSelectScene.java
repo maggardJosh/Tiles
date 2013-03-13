@@ -46,6 +46,8 @@ public class TilesetSelectScene extends TilesScrollableScene
 		super();
 
 		instance = this;
+		
+		activity.updateLoadProgress("Loading Tileset Menu");
 
 		buyTilesetSelectScene = BuyTilesetSelectScene.getInstance();
 

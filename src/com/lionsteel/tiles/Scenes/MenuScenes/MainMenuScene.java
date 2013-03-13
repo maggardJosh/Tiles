@@ -42,6 +42,8 @@ public class MainMenuScene extends TilesMenuScene
 	{
 		super();
 		activity = TilesMainActivity.getInstance();
+		
+		activity.updateLoadProgress("Loading Main Menu");
 
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 512);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/MainMenuScene/");
