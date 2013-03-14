@@ -42,11 +42,16 @@ public class PauseScene extends TilesMenuScene
 	private SoundEffectMuteControl	soundEffectMute;
 	private MusicMuteControl		musicMute;
 
-	public synchronized static PauseScene getInsance()
+	public synchronized static PauseScene getInstance()
 	{
 		if(instance == null)
 			instance = new PauseScene();
 		return instance;
+	}
+	
+	public static void clear()
+	{
+		instance = null;
 	}
 	
 	@Override

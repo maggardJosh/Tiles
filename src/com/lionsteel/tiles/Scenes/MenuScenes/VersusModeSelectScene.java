@@ -43,6 +43,8 @@ public class VersusModeSelectScene extends TilesMenuScene
 		super();
 		activity = TilesMainActivity.getInstance();
 
+		activity.updateLoadProgress("Loading Game Mode Menu");
+		
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ModeSelectScene/");
 

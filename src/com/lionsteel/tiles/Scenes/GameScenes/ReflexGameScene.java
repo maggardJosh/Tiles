@@ -37,13 +37,15 @@ public class ReflexGameScene extends GameScene
 
 	}
 
-	public void buttonPressed(final GameButton button)
+	public boolean buttonPressed(final GameButton button)
 	{
 		switch (gameState)
 		{
+		case GameState.IN_COUNTDOWN:
+			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
-				return;
+				return false;
 
 			final GameButton displayButtonPressed = currentTileset.isButtonCurrentlyActive(button.getButtonNumber());
 			if (displayButtonPressed != null)
@@ -82,9 +84,9 @@ public class ReflexGameScene extends GameScene
 				if (!currentTileset.isButtonVisible(button.getButtonNumber()))
 					disablePlayer(button);
 			}
-
-			break;
+			return true;
 		}
+		return false;
 	}
 
 	@Override

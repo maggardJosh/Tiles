@@ -15,6 +15,7 @@ import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -55,6 +56,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected final Sprite[]			playerTutorials			= new Sprite[2];
 	private boolean[]					playerInTutorial		= new boolean[2];
 	protected final Sprite				barSprite;
+	protected final Sprite				ropeKnotSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
 	final TilesMenuButton[]				tutorialButton			= new TilesMenuButton[2];
@@ -83,7 +85,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected float						barSpeedMulti			= 1.0f;
 
-	public abstract void buttonPressed(GameButton button);
+	public abstract boolean buttonPressed(GameButton button);
 
 	protected abstract void resetGame();
 
@@ -108,7 +110,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		gameOverScreen = new GameOverScreen();
 		gameOverScreen.setLabels("Tiles", "Streak");
-		pauseScene = PauseScene.getInsance();
+		pauseScene = PauseScene.getInstance();
 		pauseScene.setChildSceneNull();
 
 		pauseButton = new TilesMenuButton(SharedResources.getInstance().pauseButtonRegion, new Runnable()
@@ -125,8 +127,13 @@ public abstract class GameScene extends Scene implements TilesConstants
 		this.setOnAreaTouchTraversalFrontToBack();
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
+
+		BitmapTextureAtlas ropeAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 16, 8, TextureOptions.REPEATING_BILINEAR);
+		final TextureRegion ropeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ropeAtlas, activity, "bar.png", 2, 0);
+		ropeAtlas.load();
+
 		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-		final TextureRegion barRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "bar.png");
+		final TextureRegion barKnotRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "barKnot.png");
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
 		final TextureRegion tutorialRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, GameMode.getName(SetupScene.getGameMode()) + "Tutorial.png");
@@ -141,8 +148,14 @@ public abstract class GameScene extends Scene implements TilesConstants
 			Debug.e(e);
 		}
 
-		barSprite = new Sprite((CAMERA_WIDTH - barRegion.getWidth() * 1.5f), (CAMERA_HEIGHT - barRegion.getHeight()) / 2, barRegion, activity.getVertexBufferObjectManager());
-		barSprite.setZIndex(FOREGROUND_Z);
+		ropeRegion.setTextureHeight(1700);
+
+		final int ropePadding = 20;
+
+		barSprite = new Sprite((CAMERA_WIDTH - ropeRegion.getWidth()) - ropePadding, (CAMERA_HEIGHT - ropeRegion.getHeight()) / 2, ropeRegion, activity.getVertexBufferObjectManager());
+		barSprite.setZIndex(BUTTON_Z - 1);
+
+		ropeKnotSprite = new Sprite((barSprite.getWidth() - barKnotRegion.getWidth()) / 2 - 2, (barSprite.getHeight() - barKnotRegion.getHeight()) / 2, barKnotRegion, activity.getVertexBufferObjectManager());
 
 		playerOneIntro = new Sprite((CAMERA_WIDTH - playerOneIntroRegion.getWidth()) / 2, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);
@@ -172,18 +185,18 @@ public abstract class GameScene extends Scene implements TilesConstants
 				playerOneIntro.attachChild(tutorialButton[x]);
 				tutorialButton[x].setPosition(playerOneIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
 				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
-				helpText.setPosition(tutorialButton[x].getX()+(tutorialButton[x].getWidth()-helpText.getWidth())/2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
+				helpText.setPosition(tutorialButton[x].getX() + (tutorialButton[x].getWidth() - helpText.getWidth()) / 2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
 				playerOneIntro.attachChild(helpText);
 			} else
 			{
 				playerTwoIntro.attachChild(tutorialButton[x]);
 				tutorialButton[x].setPosition(playerTwoIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
 				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
-				helpText.setPosition(tutorialButton[x].getX()+(tutorialButton[x].getWidth()-helpText.getWidth())/2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
+				helpText.setPosition(tutorialButton[x].getX() + (tutorialButton[x].getWidth() - helpText.getWidth()) / 2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
 				playerTwoIntro.attachChild(helpText);
 			}
 		}
-		
+
 		final int TUTORIAL_EXIT_Y_PADDING = 20;
 		final int TUTORIAL_EXIT_X_PADDING = 80;
 		for (int x = 0; x < 2; x++)
@@ -200,18 +213,20 @@ public abstract class GameScene extends Scene implements TilesConstants
 				}
 			});
 			playerTutorials[x].attachChild(tutorialExitButton[x]);
-			tutorialExitButton[x].setPosition((playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth())/2 + TUTORIAL_EXIT_X_PADDING, playerTutorials[x].getHeight() - tutorialExitButton[x].getHeight() - TUTORIAL_EXIT_Y_PADDING);
+			tutorialExitButton[x].setPosition((playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth()) / 2 + TUTORIAL_EXIT_X_PADDING, playerTutorials[x].getHeight() - tutorialExitButton[x].getHeight() - TUTORIAL_EXIT_Y_PADDING);
 			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
 		}
 		playerTutorials[PLAYER_TWO].setRotation(180);
 		playerTutorials[PLAYER_TWO].setY(-playerTutorials[PLAYER_TWO].getHeight());
 		playerTutorials[PLAYER_ONE].setY(CAMERA_HEIGHT);
-		
 
 		prepareTouchControls();
 
 		this.attachChild(barSprite);
 		barSprite.setAlpha(0);
+
+		barSprite.attachChild(ropeKnotSprite);
+		ropeKnotSprite.setAlpha(0);
 
 		this.attachChild(playerOneIntro);
 		this.attachChild(playerTwoIntro);
@@ -240,7 +255,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
-		
+
 		moveTutorialIn(PLAYER_ONE);
 		moveTutorialIn(PLAYER_TWO);
 	}
@@ -469,17 +484,17 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void checkBar()
 	{
-		if(barSprite.getY() +barSprite.getHeight() > CAMERA_HEIGHT)
+		if (barSprite.getY() + ropeKnotSprite.getY() + ropeKnotSprite.getHeight() > CAMERA_HEIGHT)
 		{
 			showGameOver(PLAYER_ONE);
 			changeState(GameState.GAME_OVER);
-		}else if(barSprite.getY() < 0 )
+		} else if (barSprite.getY() + ropeKnotSprite.getY() < 0)
 		{
 			showGameOver(PLAYER_TWO);
 			changeState(GameState.GAME_OVER);
 		}
 	}
-	
+
 	protected void showGameOver(int player)
 	{
 		SongManager.getInstance().fadeOut();
@@ -503,6 +518,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		pauseButton.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
 		barSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		ropeKnotSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
 		currentTileset.animatePlayerTilesIn(new Runnable()
 		{
@@ -516,7 +532,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void startCountdown()
 	{
-		changeState(GameState.START_COUNTDOWN);
+		changeState(GameState.IN_COUNTDOWN);
 		gameCountdown.startCountdown(new Runnable()
 		{
 
@@ -550,6 +566,9 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected void resetBar()
 	{
 		barSprite.clearEntityModifiers();
+		barSprite.setScaleX(1.0f);
+		ropeKnotSprite.clearEntityModifiers();
+		ropeKnotSprite.setScaleX(1.0f);
 		barSprite.setY((CAMERA_HEIGHT - barSprite.getHeight()) / 2);
 	}
 
@@ -611,7 +630,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 		public static final int	INTRO				= 0;
 		public static final int	ANIMATING_TILES_IN	= INTRO + 1;
 		public static final int	START_COUNTDOWN		= ANIMATING_TILES_IN + 1;
-		public static final int	WAITING_FOR_INPUT	= START_COUNTDOWN + 1;
+		public static final int	IN_COUNTDOWN		= START_COUNTDOWN + 1;
+		public static final int	WAITING_FOR_INPUT	= IN_COUNTDOWN + 1;
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
 		public static final int	SHOWING_WIN			= PICKING_NEW_BUTTON + 1;
 		public static final int	GAME_OVER			= SHOWING_WIN + 1;

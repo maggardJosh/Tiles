@@ -1,8 +1,14 @@
 package com.lionsteel.tiles.Entities;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.modifier.ease.EaseCubicIn;
+import org.andengine.util.modifier.ease.EaseCubicOut;
 
+import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.Constants.TilesConstants;
@@ -62,10 +68,28 @@ public class GameButton implements TilesConstants
 	{
 		return buttonSprite.getX();
 	}
+	final float PULSE_TIME = .5f;
+	final float PULSE_SCALE = 3.0f;
+	
+	private void pulseButton()
+	{
+		SharedResources.getInstance().buttonTouchSound.play();
+		buttonSprite.registerEntityModifier(new ScaleModifier(PULSE_TIME, PULSE_SCALE, 1.0f, EaseCubicOut.getInstance()){
+			@Override
+			protected void onModifierStarted(IEntity pItem)
+			{
+				buttonSprite.setZIndex(BUTTON_Z);
+				super.onModifierStarted(pItem);
+			}
+		});
+		buttonSprite.setZIndex(BUTTON_Z+1);
+		parent.sortChildren();
+	}
 	
 	private void onTouched()
 	{
-		parent.buttonPressed(this);
+		if(parent.buttonPressed(this))
+			pulseButton();
 	}
 
 	public float getY()

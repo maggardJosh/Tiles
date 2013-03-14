@@ -3,6 +3,8 @@ package com.lionsteel.tiles.Entities;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.DelayModifier;
@@ -484,17 +486,17 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 			if (currentStreamButtons[i] != null)
 				return;
-
-		//TODO: Rigged delay. Maybe change this later.
-		playerOneGameButtons[0].buttonSprite.registerEntityModifier(new DelayModifier(REFLEX_MIN_TIME + rand.nextFloat() * (REFLEX_MAX_TIME - REFLEX_MIN_TIME))
+		
+		activity.getEngine().registerUpdateHandler(new TimerHandler(REFLEX_MIN_TIME + rand.nextFloat() * (REFLEX_MAX_TIME - REFLEX_MIN_TIME), new ITimerCallback()
 		{
+			
 			@Override
-			protected void onModifierFinished(IEntity pItem)
+			public void onTimePassed(TimerHandler pTimerHandler)
 			{
+				activity.getEngine().unregisterUpdateHandler(pTimerHandler);
 				startNonStop();
-				super.onModifierFinished(pItem);
 			}
-		});
+		}));
 	}
 
 	public void resetDisplayButton(final GameButton pItem)
@@ -778,6 +780,7 @@ public class Tileset implements TilesConstants
 		{
 			currentStreamButtons[i] = newStreamButton();
 			currentStreamButtons[i].buttonSprite.setScale(0.1f);
+			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 		}
@@ -885,12 +888,12 @@ public class Tileset implements TilesConstants
 							protected void onModifierFinished(IEntity pItem)
 							{
 								playTileCrash();
+								onFinishedAction.run();
 								super.onModifierFinished(pItem);
 							}
 
 						});
 						pItem.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME / 2, 0, 1.0f));
-						onFinishedAction.run();
 
 					};
 				});

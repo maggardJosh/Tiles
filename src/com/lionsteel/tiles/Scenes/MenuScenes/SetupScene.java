@@ -158,7 +158,6 @@ public class SetupScene extends TilesMenuScene
 					currentTileset = new Tileset(params[0], false);
 					SetupScene.getInstance().resetGraphics();
 
-					TilesMainActivity.getInstance().backToSetupScene();
 					TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, params[0]);
 
 					instance.sortChildren();
@@ -177,6 +176,7 @@ public class SetupScene extends TilesMenuScene
 				public void onTimePassed(TimerHandler pTimerHandler)
 				{
 					activity.getEngine().unregisterUpdateHandler(pTimerHandler);
+					TilesMainActivity.getInstance().backToSetupScene();
 					loadProgressDialog.dismiss();
 				}
 			}));
@@ -259,6 +259,7 @@ public class SetupScene extends TilesMenuScene
 		}
 		SetupScene.gameMode = gameMode;
 	}
+	
 
 	public static void setDifficulty(final int difficulty)
 	{
@@ -317,14 +318,18 @@ public class SetupScene extends TilesMenuScene
 
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
+		
+		
 
 		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
 
 		modeSelectScreen = new VersusModeSelectScene();
+		practiceModeSelectScene = new PracticeModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
 		tilesetSelectScene = TilesetSelectScene.getInstance();
-		practiceModeSelectScene = new PracticeModeSelectScene();
 
+		activity.updateLoadProgress("Loading Setup Menu");
+		
 		musicMute = new MusicMuteControl();
 		soundEffectMute = new SoundEffectMuteControl();
 
