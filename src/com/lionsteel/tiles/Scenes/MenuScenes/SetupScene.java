@@ -59,8 +59,9 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							TITLE_PADDING		= 30;
-	final int							BUTTON_PADDING		= 10;
+	final int							TITLE_PADDING		= 32;
+	final int							BUTTON_PADDING		= 8;
+	final int							PLAY_PADDING		= 12;
 
 	private static Tileset				currentTileset;
 
@@ -422,7 +423,7 @@ public class SetupScene extends TilesMenuScene
 				activity.startGame();
 			}
 		});
-		playButton.center(difficultyButtons[0].getBottom() + BUTTON_PADDING);
+		playButton.center(difficultyButtons[0].getBottom() + PLAY_PADDING);
 		addButton(playButton);
 
 		attachChild(titleSprite);
