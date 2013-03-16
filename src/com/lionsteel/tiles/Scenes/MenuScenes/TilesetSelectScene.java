@@ -26,8 +26,9 @@ public class TilesetSelectScene extends TilesScrollableScene
 	final Sprite						titleSprite;
 
 	final int							TITLE_Y					= 40;
-	final int							TITLE_BOTTOM_PADDING	= 10;
-	final int							BUTTON_PADDING			= 10;
+	final int							TITLE_BOTTOM_PADDING	= 20;
+	final int							BUTTON_PADDING			= 7;
+	final int							BOTTOM_PADDING			= 10;
 
 	final TilesetPreviewButton			buttons[]				= new TilesetPreviewButton[Tileset.tilesetList.length];
 	final TilesMenuButton				buyTilesetsButton;
@@ -110,7 +111,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 		nextYPos = buyTilesetsButton.getBottom();
 		addButton(buyTilesetsButton);
 
-		MAX_Y = nextYPos + 70;
+		MAX_Y = nextYPos + BOTTOM_PADDING;
 
 		activity.setupIABHelper();
 
@@ -173,7 +174,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 					registerTouchAreas();
 
-					MAX_Y = nextYPos + 70;
+					MAX_Y = nextYPos + BOTTOM_PADDING;
 
 				}
 			}

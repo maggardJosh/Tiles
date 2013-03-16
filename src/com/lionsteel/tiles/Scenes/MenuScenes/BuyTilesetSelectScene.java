@@ -19,8 +19,9 @@ import com.lionsteel.tiles.Entities.Tileset;
 public class BuyTilesetSelectScene extends TilesScrollableScene
 {
 	final int								TITLE_Y					= 40;
-	final int								TITLE_BOTTOM_PADDING	= 10;
-	final int								BUTTON_PADDING			= 10;
+	final int								TITLE_BOTTOM_PADDING	= 20;
+	final int								BUTTON_PADDING			= 7;
+	final int								BOTTOM_PADDING			= 10;
 
 	final Sprite							titleSprite;
 
@@ -69,7 +70,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 			nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 
 		}
-		MAX_Y = nextYPos + 70;
+		MAX_Y = nextYPos + BOTTOM_PADDING;
 
 	}
 
@@ -97,7 +98,7 @@ public class BuyTilesetSelectScene extends TilesScrollableScene
 				nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
 			}
 		}
-		MAX_Y = nextYPos + 70;
+		MAX_Y = nextYPos + BOTTOM_PADDING;
 		registerTouchAreas();
 	}
 
