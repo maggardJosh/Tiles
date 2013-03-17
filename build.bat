@@ -1,0 +1,1 @@
+ant full-debug-install
