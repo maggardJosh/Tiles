@@ -42,7 +42,8 @@ public abstract class TilesScrollableScene extends TilesMenuScene implements Til
 	@Override
 	protected void enterScene()
 	{
-		activity.getEngine().getCamera().setHUD(controlHud);
+		if(this.MAX_Y > CAMERA_HEIGHT)
+			activity.getEngine().getCamera().setHUD(controlHud);
 		super.enterScene();
 	}
 

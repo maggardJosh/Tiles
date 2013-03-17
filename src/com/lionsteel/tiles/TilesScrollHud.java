@@ -24,8 +24,8 @@ public class TilesScrollHud extends HUD implements TilesConstants
 		final float BUTTON_MOVE_TIME = 2.0f;
 		final float BUTTON_X_PADDING = 30;
 		final float BUTTON_Y_PADDING = 200;
-		final Color ACTIVE_COLOR = new Color(.8f,.8f,.8f,.6f);
-		final Color INACTIVE_COLOR = new Color(1.0f,1.0f,1.0f,.4f);
+		final Color ACTIVE_COLOR = new Color(.8f,.8f,.8f,.9f);
+		final Color INACTIVE_COLOR = new Color(1.0f,1.0f,1.0f,.6f);
 
 		upButton = new TilesMenuButton(SharedResources.getInstance().upArrowRegion, new Runnable()
 		{

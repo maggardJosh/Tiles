@@ -59,7 +59,9 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							BUTTON_PADDING		= 15;
+	final int							TITLE_PADDING		= 32;
+	final int							BUTTON_PADDING		= 8;
+	final int							PLAY_PADDING		= 12;
 
 	private static Tileset				currentTileset;
 
@@ -132,7 +134,7 @@ public class SetupScene extends TilesMenuScene
 		{
 			activity.runOnUiThread(new Runnable()
 			{
-				
+
 				@Override
 				public void run()
 				{
@@ -161,7 +163,7 @@ public class SetupScene extends TilesMenuScene
 					TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, params[0]);
 
 					instance.sortChildren();
-					
+
 				}
 			});
 			return null;
@@ -171,7 +173,7 @@ public class SetupScene extends TilesMenuScene
 		{
 			activity.getEngine().registerUpdateHandler(new TimerHandler(.5f, new ITimerCallback()
 			{
-				
+
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler)
 				{
@@ -230,13 +232,14 @@ public class SetupScene extends TilesMenuScene
 			final int currentGameMode = SetupScene.gameMode;
 			instance.gameModeSprite[SetupScene.gameMode].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0))
 			{
-				
+
 				@Override
 				public float onUpdate(float pSecondsElapsed, IEntity pItem)
 				{
 					instance.modeLabelSprite.setAlpha(instance.gameModeSprite[currentGameMode].getAlpha());
 					return super.onUpdate(pSecondsElapsed, pItem);
 				}
+
 				@Override
 				protected void onModifierFinished(IEntity pItem)
 				{
@@ -244,7 +247,8 @@ public class SetupScene extends TilesMenuScene
 					instance.addButton(instance.gameModeSprite[gameMode]);
 					instance.clearTouchAreas();
 					instance.registerTouchAreas();
-					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f){
+					instance.gameModeSprite[gameMode].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f)
+					{
 						@Override
 						protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
 						{
@@ -259,7 +263,6 @@ public class SetupScene extends TilesMenuScene
 		}
 		SetupScene.gameMode = gameMode;
 	}
-	
 
 	public static void setDifficulty(final int difficulty)
 	{
@@ -276,7 +279,7 @@ public class SetupScene extends TilesMenuScene
 				currentTileset.getDifficultySprite(currentDifficulty).fadeOut();
 				super.onModifierStarted(pItem);
 			};
-			
+
 			@Override
 			protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
 			{
@@ -295,7 +298,8 @@ public class SetupScene extends TilesMenuScene
 				instance.registerTouchAreas();
 
 				currentTileset.getDifficultySprite(difficulty).fadeIn();
-				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f){
+				instance.difficultyButtons[difficulty].registerEntityModifier(new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 0, 1.0f)
+				{
 					@Override
 					protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
 					{
@@ -318,8 +322,6 @@ public class SetupScene extends TilesMenuScene
 
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
-		
-		
 
 		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
 
@@ -329,7 +331,7 @@ public class SetupScene extends TilesMenuScene
 		tilesetSelectScene = TilesetSelectScene.getInstance();
 
 		activity.updateLoadProgress("Loading Setup Menu");
-		
+
 		musicMute = new MusicMuteControl();
 		soundEffectMute = new SoundEffectMuteControl();
 
@@ -383,7 +385,7 @@ public class SetupScene extends TilesMenuScene
 						transitionChildScene(practiceModeSelectScene);
 					}
 				});
-			gameModeSprite[x].center(titleSprite.getY() + titleSprite.getHeight() + BUTTON_PADDING);
+			gameModeSprite[x].center(titleSprite.getY() + titleSprite.getHeight() + TITLE_PADDING);
 		}
 
 		final TilesetEntity tilesetEntity = currentTileset.getTilesetEntity();
@@ -421,7 +423,7 @@ public class SetupScene extends TilesMenuScene
 				activity.startGame();
 			}
 		});
-		playButton.center(difficultyButtons[0].getBottom() + BUTTON_PADDING);
+		playButton.center(difficultyButtons[0].getBottom() + PLAY_PADDING);
 		addButton(playButton);
 
 		attachChild(titleSprite);
