@@ -68,14 +68,14 @@
     -->
     <target name="full-debug-install" depends="debug,install-apk,run"/>
     <target name="install-apk">
-    <exec executable="adb">
+    <exec executable="adb" failonerror="true">
         <arg value="install"/>
         <arg value="-r"/>
         <arg value="./bin/TilesMainActivity-debug.apk"/>
     </exec>
 </target>
     <target name="run">
-    <exec executable="adb">
+    <exec executable="adb"  failonerror="true">
         <arg value="shell"/>
         <arg value="am"/>
         <arg value="start"/>
