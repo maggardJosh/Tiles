@@ -23,7 +23,9 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
@@ -45,12 +47,13 @@ public class Tileset implements TilesConstants
 
 	public static String[]					tilesetList;
 
-	public static final String[]			purchaseableTilesets		= {}; //{ "dice", "blocks" };
+	public static final String[]			purchaseableTilesets		= {};									//{ "dice", "blocks" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
 
 	private final TextureRegion[]			buttonRegions				= new TextureRegion[NUM_BUTTONS];
+	private final TiledTextureRegion[]		tiledButtonRegions			= new TiledTextureRegion[NUM_BUTTONS];
 	private final TextureRegion				backgroundRegion;
 
 	private GameButton[]					playerOneGameButtons		= new GameButton[NUM_BUTTONS];
@@ -95,8 +98,14 @@ public class Tileset implements TilesConstants
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 
 		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+
 		for (int i = 0; i < NUM_BUTTONS; i++)
+		{
 			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
+			int buttonColumn = (int) (buttonRegions[i].getWidth() / BUTTON_WIDTH);
+			if (buttonColumn > 1)
+				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, (i + 1) + ".png", buttonColumn, 1);
+		}
 		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png");//, BUTTON_WIDTH * 3, 0);
 
 		try
@@ -445,14 +454,14 @@ public class Tileset implements TilesConstants
 			if (displayButton == currentStreamButtons[i])
 				break;
 
-		if (tilesLeft-this.numberOfStreamTilesToSpawn >= 0)
+		if (tilesLeft - this.numberOfStreamTilesToSpawn >= 0)
 		{
 			currentStreamButtons[i] = newStreamButton();
 			currentStreamButtons[i].buttonSprite.setPosition(displayButton.buttonSprite);
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 			currentStreamButtons[i].buttonSprite.setZIndex(BUTTON_Z);
-		}else
+		} else
 		{
 			currentStreamButtons[i] = null;
 		}
@@ -486,10 +495,10 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 			if (currentStreamButtons[i] != null)
 				return;
-		
+
 		activity.getEngine().registerUpdateHandler(new TimerHandler(REFLEX_MIN_TIME + rand.nextFloat() * (REFLEX_MAX_TIME - REFLEX_MIN_TIME), new ITimerCallback()
 		{
-			
+
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler)
 			{
@@ -606,7 +615,7 @@ public class Tileset implements TilesConstants
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerTwoGameButtons[x].buttonSprite.setColor(1, 1, 1, 1);
 				playerTwoGameButtons[x].buttonSprite.setScale(1.0f);
-				while(currentScene.unregisterTouchArea(playerTwoGameButtons[x].buttonSprite))
+				while (currentScene.unregisterTouchArea(playerTwoGameButtons[x].buttonSprite))
 					;
 				currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
@@ -642,7 +651,7 @@ public class Tileset implements TilesConstants
 				playerOneGameButtons[x].buttonSprite.setColor(1, 1, 1, 1);
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerOneGameButtons[x].buttonSprite.setScale(1.0f);
-				while(currentScene.unregisterTouchArea(playerOneGameButtons[x].buttonSprite))
+				while (currentScene.unregisterTouchArea(playerOneGameButtons[x].buttonSprite))
 					;
 				currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
@@ -863,6 +872,11 @@ public class Tileset implements TilesConstants
 	public String getBasePath()
 	{
 		return basePath;
+	}
+
+	public ITiledTextureRegion getTiledButtonRegion(int buttonNumber)
+	{
+		return tiledButtonRegions[buttonNumber];
 	}
 
 	public ITextureRegion getButtonRegion(int buttonNumber)

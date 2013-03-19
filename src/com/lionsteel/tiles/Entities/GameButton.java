@@ -3,8 +3,10 @@ package com.lionsteel.tiles.Entities;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
@@ -16,65 +18,83 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 public class GameButton implements TilesConstants
 {
 	final TilesMainActivity	activity;
-	
+
 	public final Sprite		buttonSprite;
 	private final int		playerOwner;
-	
+
 	private final int		buttonNumber;
 	private GameScene		parent;
-	
-	public GameButton(final int buttonNumber,final Tileset tileset, final GameScene parent,
-			final int player)
+
+	public GameButton(final int buttonNumber, final Tileset tileset, final GameScene parent, final int player)
 	{
 		activity = TilesMainActivity.getInstance();
 		this.buttonNumber = buttonNumber;
 		this.parent = parent;
 		playerOwner = player;
 		
-		buttonSprite = new Sprite(0, 0, tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
+		ITiledTextureRegion tiledRegion= tileset.getTiledButtonRegion(buttonNumber);
+		if(tiledRegion != null)
 		{
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					float pTouchAreaLocalX, float pTouchAreaLocalY)
+			
+			buttonSprite = new AnimatedSprite(0, 0, tiledRegion, activity.getVertexBufferObjectManager())
 			{
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
-					onTouched();
-				return false;
-			}
-		};
-	}
+				@Override
+				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+				{
+					if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
+						onTouched();
+					return false;
+				}
+			};
 	
+			((AnimatedSprite)buttonSprite).animate(TILE_ANIMATE_LENGTH);
+		}else{
+			buttonSprite = new Sprite(0,0,tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
+			{
+				@Override
+				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
+				{
+					if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN)
+						onTouched();
+					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+				}
+			};
+		}
+	}
+
 	public void clear()
 	{
 		buttonSprite.detachSelf();
 	}
-	
+
 	public void setParent(GameScene parent)
 	{
 		this.parent = parent;
 	}
-	
+
 	public int getButtonNumber()
 	{
 		return buttonNumber;
 	}
-	
+
 	public int getPlayer()
 	{
 		return playerOwner;
 	}
-	
+
 	public float getX()
 	{
 		return buttonSprite.getX();
 	}
-	final float PULSE_TIME = .5f;
-	final float PULSE_SCALE = 3.0f;
-	
+
+	final float	PULSE_TIME	= .5f;
+	final float	PULSE_SCALE	= 3.0f;
+
 	private void pulseButton()
 	{
 		SharedResources.getInstance().buttonTouchSound.play();
-		buttonSprite.registerEntityModifier(new ScaleModifier(PULSE_TIME, PULSE_SCALE, 1.0f, EaseCubicOut.getInstance()){
+		buttonSprite.registerEntityModifier(new ScaleModifier(PULSE_TIME, PULSE_SCALE, 1.0f, EaseCubicOut.getInstance())
+		{
 			@Override
 			protected void onModifierStarted(IEntity pItem)
 			{
@@ -82,13 +102,13 @@ public class GameButton implements TilesConstants
 				super.onModifierStarted(pItem);
 			}
 		});
-		buttonSprite.setZIndex(BUTTON_Z+1);
+		buttonSprite.setZIndex(BUTTON_Z + 1);
 		parent.sortChildren();
 	}
-	
+
 	private void onTouched()
 	{
-		if(parent.buttonPressed(this))
+		if (parent.buttonPressed(this))
 			pulseButton();
 	}
 
@@ -96,5 +116,5 @@ public class GameButton implements TilesConstants
 	{
 		return buttonSprite.getY();
 	}
-	
+
 }
