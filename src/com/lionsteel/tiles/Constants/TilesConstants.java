@@ -13,7 +13,10 @@ public interface TilesConstants
 
 	public static final int		BUTTON_WIDTH					= 110;
 	public static final int		PAUSE_BAR_WIDTH					= 30;
-	
+
+	public static final int		DAYS_UNTIL_RATE_PROMPT			= 0;
+	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 3;
+
 	public static final int		BAR_SPEED						= 40;
 
 	public static final int		DISPLAY_BUTTONS					= -1;
@@ -98,6 +101,9 @@ public interface TilesConstants
 	public static final float	TEXT_PULSE_START_SCALE			= 4.0f;
 
 	public static final float	COMBO_SECONDS					= .6f;
+
+	//------ Animate Times
+	public static final long	TILE_ANIMATE_LENGTH				= 250L;
 
 	//---- Z-Indexing
 	public static final int		BACKGROUND_Z					= 0;
