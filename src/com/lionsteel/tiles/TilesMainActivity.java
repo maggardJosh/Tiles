@@ -502,8 +502,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			return;
 		Scene parentScene = this.mEngine.getScene();
 
-		SharedResources.getInstance().menuBlip.play();
-
 		if (!parentScene.hasChildScene() && parentScene instanceof GameScene)
 		{
 			((GameScene) parentScene).showPauseScene();
