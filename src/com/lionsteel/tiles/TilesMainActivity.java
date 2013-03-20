@@ -150,7 +150,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			sb.append((char) (valueOne[x] ^ key.charAt(x % key.length())));
 
 		mHelper = new IabHelper(this, sb.toString());
-//		mHelper.enableDebugLogging(true, "IABDebug");
+		//		mHelper.enableDebugLogging(true, "IABDebug");
 
 	}
 
@@ -351,6 +351,14 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 							SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 							mEngine.setScene(backgroundScene);
 							backEnabled = true;
+							runOnUiThread(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									AppRater.app_launched(instance);
+								}
+							});
 						}
 					});
 				}
