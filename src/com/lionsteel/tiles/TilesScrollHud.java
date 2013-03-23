@@ -20,7 +20,7 @@ public class TilesScrollHud extends HUD implements TilesConstants
 	{
 		this.sceneToControl = sceneToControl;
 
-		final float ARROW_BUTTON_MOVEMENT = 400;
+		final float ARROW_BUTTON_MOVEMENT = 700;
 		final float BUTTON_MOVE_TIME = 2.0f;
 		final float BUTTON_X_PADDING = 30;
 		final float BUTTON_Y_PADDING = 200;
