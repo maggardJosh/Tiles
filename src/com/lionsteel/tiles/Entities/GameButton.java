@@ -1,13 +1,14 @@
 package com.lionsteel.tiles.Entities;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.entity.sprite.AnimationData;
+import org.andengine.entity.sprite.IAnimationData;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.SharedResources;
@@ -46,8 +47,11 @@ public class GameButton implements TilesConstants
 					return false;
 				}
 			};
-	
-			((AnimatedSprite)buttonSprite).animate(TILE_ANIMATE_LENGTH);
+
+					((AnimatedSprite)buttonSprite).animate(TILE_ANIMATE_LENGTH);
+					((AnimatedSprite)buttonSprite).setCurrentFrameIndex((int)(Math.random()*(float)tiledRegion.getTileCount()));
+					
+			
 		}else{
 			buttonSprite = new Sprite(0,0,tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
 			{
