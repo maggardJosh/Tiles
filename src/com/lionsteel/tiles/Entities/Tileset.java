@@ -98,13 +98,13 @@ public class Tileset implements TilesConstants
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 
 		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-
+		BuildableBitmapTextureAtlas animationAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
 			int buttonColumn = (int) (buttonRegions[i].getWidth() / BUTTON_WIDTH);
 			if (buttonColumn > 1)
-				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, (i + 1) + ".png", buttonColumn, 1);
+				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(animationAtlas, activity, (i + 1) + ".png", buttonColumn, 1);
 		}
 		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png");//, BUTTON_WIDTH * 3, 0);
 
@@ -112,6 +112,8 @@ public class Tileset implements TilesConstants
 		{
 			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
 			atlas.load();
+			animationAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			animationAtlas.load();
 		} catch (TextureAtlasBuilderException e)
 		{
 			Debug.e(e);
