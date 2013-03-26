@@ -148,6 +148,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		gameOverScreen.setLabels("Tiles", "Streak");
 		pauseScene = PauseScene.getInstance();
 		pauseScene.setChildSceneNull();
+		pauseScene.setTwoPlayerMode(true);
 
 		pauseButton = new TilesMenuButton(SharedResources.getInstance().pauseButtonRegion, new Runnable()
 		{
