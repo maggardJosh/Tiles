@@ -48,6 +48,7 @@ public class Tileset implements TilesConstants
 
 	public static String[]					tilesetList;
 
+	//TODO: Purchaseable tilesets here
 	public static final String[]			purchaseableTilesets		= {};									//{ "dice", "blocks" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
@@ -341,7 +342,7 @@ public class Tileset implements TilesConstants
 				tilesetEntity.clear();
 				for (DifficultyEntity d : difficultyEntity)
 					d.clear();
-				
+
 				atlas.unload();
 				backgroundAtlas.unload();
 				animationAtlas.unload();
@@ -845,7 +846,7 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 		{
 			if (currentStreamButtons[i] != null)
-				if (currentStreamButtons[i].getButtonNumber() == buttonNumber && currentStreamButtons[i].buttonSprite.getScaleX() > lastButtonScale)
+				if (currentStreamButtons[i].getButtonNumber() == buttonNumber && currentStreamButtons[i].buttonSprite.getScaleX() > MIN_BUTTON_ACTIVE_SCALE && currentStreamButtons[i].buttonSprite.getScaleX() > lastButtonScale)
 				{
 					buttonIndex = i;
 					lastButtonScale = currentStreamButtons[i].buttonSprite.getScaleX();
