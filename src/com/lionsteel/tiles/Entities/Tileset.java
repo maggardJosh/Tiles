@@ -388,7 +388,6 @@ public class Tileset implements TilesConstants
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerTwoGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
-				//currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
 
 			break;
@@ -421,7 +420,6 @@ public class Tileset implements TilesConstants
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerOneGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
-				//currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
 			break;
 		case DISPLAY_BUTTONS:
