@@ -254,7 +254,7 @@ public abstract class JifBaseGameActivity extends BaseActivity implements IGameI
 
 		super.onPause();
 
-		this.mRenderSurfaceView.onPause();
+//		this.mRenderSurfaceView.onPause();
 		this.releaseWakeLock();
 
 		if(!this.mGamePaused) {
