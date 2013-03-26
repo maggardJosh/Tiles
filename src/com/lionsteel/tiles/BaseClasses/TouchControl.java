@@ -22,11 +22,20 @@ public class TouchControl extends Entity implements TilesConstants
 	private final float		FINISH_SCALE	= 1.0f;
 
 	boolean					isPressed		= false;
-	
+
 	final Runnable			action;
 	final Runnable			resetAction;
 	int						pointerID		= -1;
 	final float				READY_ALPHA		= .3f;
+
+	@Override
+	public void dispose()
+	{
+		innerImage.dispose();
+		outerImage.dispose();
+		readyText.dispose();
+		super.dispose();
+	}
 
 	public TouchControl(final String readyTextValue, final Runnable action, final Runnable resetAction)
 	{
@@ -58,7 +67,7 @@ public class TouchControl extends Entity implements TilesConstants
 							@Override
 							protected void onModifierFinished(IEntity pItem)
 							{
-								readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION*.5f, readyText.getAlpha(), 1.0f)
+								readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION * .5f, readyText.getAlpha(), 1.0f)
 								{
 									protected void onModifierFinished(IEntity pItem)
 									{
@@ -82,7 +91,7 @@ public class TouchControl extends Entity implements TilesConstants
 								@Override
 								protected void onModifierFinished(IEntity pItem)
 								{
-									readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION*.5f, readyText.getAlpha(), 1.0f)
+									readyText.registerEntityModifier(new AlphaModifier(TOUCH_CONTROL_DURATION * .5f, readyText.getAlpha(), 1.0f)
 									{
 										protected void onModifierFinished(IEntity pItem)
 										{

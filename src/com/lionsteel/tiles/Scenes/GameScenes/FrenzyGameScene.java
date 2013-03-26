@@ -76,7 +76,7 @@ public class FrenzyGameScene extends PracticeGameScene
 		roundTilesLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - roundTilesLabel.getWidth()) / 2, bestTilesValue.getY() + bestTilesValue.getHeight() + LABEL_SPACING * 2);
 		roundTilesText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - roundTilesText.getWidth()) / 2, roundTilesLabel.getY() + roundTilesLabel.getHeight() + LABEL_SPACING);
 
-		barSprite.setVisible(false);
+		ropeSprite.setVisible(false);
 		this.sortChildren();
 	}
 

@@ -22,6 +22,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
@@ -50,12 +51,14 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected Tileset					currentTileset;
 
+	final BitmapTextureAtlas			ropeAtlas;
 	final BuildableBitmapTextureAtlas	sceneAtlas;
+
 	protected final Sprite				playerOneIntro;
 	protected final Sprite				playerTwoIntro;
 	protected final Sprite[]			playerTutorials			= new Sprite[2];
 	private boolean[]					playerInTutorial		= new boolean[2];
-	protected final Sprite				barSprite;
+	protected final Sprite				ropeSprite;
 	protected final Sprite				ropeKnotSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
@@ -94,6 +97,39 @@ public abstract class GameScene extends Scene implements TilesConstants
 		return tilesCollected[player];
 	}
 
+	@Override
+	public void dispose()
+	{
+		ropeAtlas.unload();
+		sceneAtlas.unload();
+		activity.runOnUpdateThread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				detachChildren();
+			}
+		});
+		gameCountdown.dispose();
+		gameOverScreen.dispose();
+		pauseButton.dispose();
+		for (int i = 0; i < 2; i++)
+		{
+			tutorialButton[i].dispose();
+			tutorialExitButton[i].dispose();
+			errorIndicators[i].dispose();
+			playerTutorials[i].dispose();
+			introTouchControls[i].dispose();
+		}
+		ropeSprite.dispose();
+		ropeKnotSprite.dispose();
+		playerOneIntro.dispose();
+		playerTwoIntro.dispose();
+
+		super.dispose();
+	}
+
 	public GameScene()
 	{
 
@@ -128,11 +164,11 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameScene/");
 
-		BitmapTextureAtlas ropeAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 16, 8, TextureOptions.REPEATING_BILINEAR);
+		ropeAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 16, 8, TextureOptions.REPEATING_BILINEAR);
 		final TextureRegion ropeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ropeAtlas, activity, "bar.png", 2, 0);
 		ropeAtlas.load();
 
-		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
 		final TextureRegion barKnotRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "barKnot.png");
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
@@ -152,10 +188,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		final int ropePadding = 20;
 
-		barSprite = new Sprite((CAMERA_WIDTH - ropeRegion.getWidth()) - ropePadding, (CAMERA_HEIGHT - ropeRegion.getHeight()) / 2, ropeRegion, activity.getVertexBufferObjectManager());
-		barSprite.setZIndex(BUTTON_Z - 1);
+		ropeSprite = new Sprite((CAMERA_WIDTH - ropeRegion.getWidth()) - ropePadding, (CAMERA_HEIGHT - ropeRegion.getHeight()) / 2, ropeRegion, activity.getVertexBufferObjectManager());
+		ropeSprite.setZIndex(BUTTON_Z - 1);
 
-		ropeKnotSprite = new Sprite((barSprite.getWidth() - barKnotRegion.getWidth()) / 2 - 2, (barSprite.getHeight() - barKnotRegion.getHeight()) / 2, barKnotRegion, activity.getVertexBufferObjectManager());
+		ropeKnotSprite = new Sprite((ropeSprite.getWidth() - barKnotRegion.getWidth()) / 2 - 2, (ropeSprite.getHeight() - barKnotRegion.getHeight()) / 2, barKnotRegion, activity.getVertexBufferObjectManager());
 
 		playerOneIntro = new Sprite((CAMERA_WIDTH - playerOneIntroRegion.getWidth()) / 2, CAMERA_HEIGHT - playerTwoIntroRegion.getHeight(), playerOneIntroRegion, activity.getVertexBufferObjectManager());
 		playerOneIntro.setZIndex(FOREGROUND_Z);
@@ -222,10 +258,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		prepareTouchControls();
 
-		this.attachChild(barSprite);
-		barSprite.setAlpha(0);
+		this.attachChild(ropeSprite);
+		ropeSprite.setAlpha(0);
 
-		barSprite.attachChild(ropeKnotSprite);
+		ropeSprite.attachChild(ropeKnotSprite);
 		ropeKnotSprite.setAlpha(0);
 
 		this.attachChild(playerOneIntro);
@@ -475,7 +511,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void checkPlayerWillWin(int player)
 	{
-		if ((player == PLAYER_ONE && barSprite.getY() + barSprite.getHeight() + BAR_SPEED * barSpeedMulti > CAMERA_HEIGHT) || (player == PLAYER_TWO && barSprite.getY() - BAR_SPEED * barSpeedMulti < 0))
+		if ((player == PLAYER_ONE && ropeSprite.getY() + ropeSprite.getHeight() + BAR_SPEED * barSpeedMulti > CAMERA_HEIGHT) || (player == PLAYER_TWO && ropeSprite.getY() - BAR_SPEED * barSpeedMulti < 0))
 		{
 			showGameOver(player);
 			changeState(GameState.GAME_OVER);
@@ -484,11 +520,11 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void checkBar()
 	{
-		if (barSprite.getY() + ropeKnotSprite.getY() + ropeKnotSprite.getHeight() > CAMERA_HEIGHT)
+		if (ropeSprite.getY() + ropeKnotSprite.getY() + ropeKnotSprite.getHeight() > CAMERA_HEIGHT)
 		{
 			showGameOver(PLAYER_ONE);
 			changeState(GameState.GAME_OVER);
-		} else if (barSprite.getY() + ropeKnotSprite.getY() < 0)
+		} else if (ropeSprite.getY() + ropeKnotSprite.getY() < 0)
 		{
 			showGameOver(PLAYER_TWO);
 			changeState(GameState.GAME_OVER);
@@ -517,7 +553,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		pauseButton.registerOwnTouchArea(this);
 		pauseButton.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
-		barSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
+		ropeSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 		ropeKnotSprite.registerEntityModifier(new AlphaModifier(BUTTON_ANIMATE_IN_TIME * 3, 0, 1.0f));
 
 		currentTileset.animatePlayerTilesIn(new Runnable()
@@ -559,17 +595,17 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void moveBar(final float distance)
 	{
-		barSprite.registerEntityModifier(new MoveByModifier(WIN_MOVE_MOD_TIME, 0, distance));
-		barSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, barSprite.getScaleX(), 1.5f, 1.0f, 1.0f), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.5f, 1.0f, 1.0f, 1.0f)));
+		ropeSprite.registerEntityModifier(new MoveByModifier(WIN_MOVE_MOD_TIME, 0, distance));
+		ropeSprite.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME / 2, ropeSprite.getScaleX(), 1.5f, 1.0f, 1.0f), new ScaleModifier(WIN_MOVE_MOD_TIME / 2, 1.5f, 1.0f, 1.0f, 1.0f)));
 	}
 
 	protected void resetBar()
 	{
-		barSprite.clearEntityModifiers();
-		barSprite.setScaleX(1.0f);
+		ropeSprite.clearEntityModifiers();
+		ropeSprite.setScaleX(1.0f);
 		ropeKnotSprite.clearEntityModifiers();
 		ropeKnotSprite.setScaleX(1.0f);
-		barSprite.setY((CAMERA_HEIGHT - barSprite.getHeight()) / 2);
+		ropeSprite.setY((CAMERA_HEIGHT - ropeSprite.getHeight()) / 2);
 	}
 
 	protected boolean checkPlayerDisabled(int player)

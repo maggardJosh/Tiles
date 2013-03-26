@@ -34,7 +34,7 @@ public class RaceGameScene extends GameScene
 		});
 		timerRect.setZIndex(BUTTON_Z-1);
 		attachChild(timerRect);
-		this.barSprite.setVisible(false);
+		this.ropeSprite.setVisible(false);
 		
 		for (int i = 0; i < 2; i++)
 		{

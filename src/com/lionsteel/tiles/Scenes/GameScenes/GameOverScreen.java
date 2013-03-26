@@ -43,6 +43,23 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 	private final TouchControl[]				playerRematchControls	= new TouchControl[2];
 
+	@Override
+	public void dispose()
+	{
+		atlas.unload();
+		quitButton.dispose();
+		activity.runOnUpdateThread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				detachChildren();
+			}
+		});
+		super.dispose();
+	}
+	
 	public GameOverScreen()
 	{
 

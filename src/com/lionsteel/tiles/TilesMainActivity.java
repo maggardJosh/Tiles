@@ -1,6 +1,7 @@
 package com.lionsteel.tiles;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,12 +13,15 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -150,7 +154,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			sb.append((char) (valueOne[x] ^ key.charAt(x % key.length())));
 
 		mHelper = new IabHelper(this, sb.toString());
-		//		mHelper.enableDebugLogging(true, "IABDebug");
 
 	}
 
@@ -206,6 +209,31 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		super.onPause();
 	}
 
+	public static String getTotalRAM()
+	{
+		RandomAccessFile reader = null;
+		String load = null;
+		try
+		{
+			reader = new RandomAccessFile("/proc/meminfo", "r");
+			load = reader.readLine();
+		} catch (IOException ex)
+		{
+			ex.printStackTrace();
+		} finally
+		{
+			try
+			{
+				reader.close();
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return load;
+	}
+
 	@Override
 	public EngineOptions onCreateEngineOptions()
 	{
@@ -214,7 +242,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		sharedPrefs = getPreferences(MODE_PRIVATE);
 		Camera mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
-		engineOptions.getRenderOptions().setDithering(true);
+		engineOptions.getRenderOptions().setDithering(false);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		engineOptions.getAudioOptions().setNeedsMusic(true);
 		engineOptions.getAudioOptions().setNeedsSound(true);
@@ -254,8 +282,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected void onPreExecute()
 		{
-			splashScene = new SplashScene();
-
 			try
 			{
 				Tileset.tilesetList = getAssets().list("gfx/tilesets");
@@ -264,11 +290,10 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				e.printStackTrace();
 			}
 
-			mEngine.setScene(splashScene);
-
 			progressDialog = new ProgressDialog(instance);
 			progressDialog.setMessage("Loading Menu Assets");
 			progressDialog.setCancelable(false);
+
 			runOnUiThread(new Runnable()
 			{
 				@Override
@@ -373,19 +398,31 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	}
 
 	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
+	public void onCreateScene(final OnCreateSceneCallback pOnCreateSceneCallback) throws Exception
 	{
-		pOnCreateSceneCallback.onCreateSceneFinished(new Scene());
-		runOnUiThread(new Runnable()
+		splashScene = new SplashScene();
+		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+
+		instance.getEngine().registerUpdateHandler(new TimerHandler(.5f, new ITimerCallback()
 		{
 
 			@Override
-			public void run()
+			public void onTimePassed(TimerHandler arg0)
 			{
-				loadTaskInstance = new InitialLoadTask();
-				loadTaskInstance.execute();
+				instance.getEngine().unregisterUpdateHandler(arg0);
+				runOnUiThread(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						loadTaskInstance = new InitialLoadTask();
+						loadTaskInstance.execute();
+					}
+				});
 			}
-		});
+
+		}));
 
 	}
 
@@ -403,6 +440,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		BuyTilesetSelectScene.clear();
 		SetupScene.clear();
 		PauseScene.clear();
+		loadTaskInstance = null;
 	}
 
 	@Override
@@ -411,7 +449,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		clearAllSingletons();
 		super.onDestroyResources();
 	}
-
+	private int gameCount = 0;
 	private class StartGameTask extends AsyncTask<Void, Void, Void>
 	{
 
@@ -438,6 +476,9 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		@Override
 		protected Void doInBackground(Void... params)
 		{
+			gameCount++;
+			Log.v("GameCount",""+gameCount);
+			
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			SetupScene.getTileset().createGameAssets();
 			SharedResources.getInstance().loadGameAssets();
@@ -559,7 +600,13 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		SongManager.getInstance().playSong(SharedResources.getInstance().menuMusic);
 		SetupScene.getInstance().logFlurryEvent();
 		SetupScene.getInstance().initScene();
+
+		GameScene gameScene = null;
+		if (mEngine.getScene() instanceof GameScene)
+			gameScene = (GameScene) mEngine.getScene();
+
 		mEngine.setScene(backgroundScene);
+		gameScene.dispose();
 	}
 
 	public IabHelper getIABHelper()

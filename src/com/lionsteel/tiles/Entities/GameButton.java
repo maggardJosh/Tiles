@@ -1,14 +1,13 @@
 package com.lionsteel.tiles.Entities;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.AnimationData;
-import org.andengine.entity.sprite.IAnimationData;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.util.GLState;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.SharedResources;
@@ -32,13 +31,21 @@ public class GameButton implements TilesConstants
 		this.buttonNumber = buttonNumber;
 		this.parent = parent;
 		playerOwner = player;
-		
-		ITiledTextureRegion tiledRegion= tileset.getTiledButtonRegion(buttonNumber);
-		if(tiledRegion != null)
+
+		ITiledTextureRegion tiledRegion = tileset.getTiledButtonRegion(buttonNumber);
+		if (tiledRegion != null)
 		{
-			
+
 			buttonSprite = new AnimatedSprite(0, 0, tiledRegion, activity.getVertexBufferObjectManager())
 			{
+				
+				@Override
+				protected void preDraw(GLState pGLState, Camera pCamera)
+				{
+					pGLState.setDitherEnabled(true);
+					super.preDraw(pGLState, pCamera);
+				}
+				
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
 				{
@@ -48,13 +55,19 @@ public class GameButton implements TilesConstants
 				}
 			};
 
-					((AnimatedSprite)buttonSprite).animate(TILE_ANIMATE_LENGTH);
-					((AnimatedSprite)buttonSprite).setCurrentFrameIndex((int)(Math.random()*(float)tiledRegion.getTileCount()));
-					
-			
-		}else{
-			buttonSprite = new Sprite(0,0,tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
+			((AnimatedSprite) buttonSprite).animate(TILE_ANIMATE_LENGTH);
+			((AnimatedSprite) buttonSprite).setCurrentFrameIndex((int) (Math.random() * (float) tiledRegion.getTileCount()));
+
+		} else
+		{
+			buttonSprite = new Sprite(0, 0, tileset.getButtonRegion(buttonNumber), activity.getVertexBufferObjectManager())
 			{
+				@Override
+				protected void preDraw(GLState pGLState, Camera pCamera)
+				{
+					super.preDraw(pGLState, pCamera);
+					pGLState.enableDither();
+				}
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY)
 				{
@@ -69,6 +82,8 @@ public class GameButton implements TilesConstants
 	public void clear()
 	{
 		buttonSprite.detachSelf();
+		if(!buttonSprite.isDisposed())
+			buttonSprite.dispose();
 	}
 
 	public void setParent(GameScene parent)
