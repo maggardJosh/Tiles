@@ -4,6 +4,7 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseCubicInOut;
+import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.TilesConstants;
@@ -36,7 +37,7 @@ public class TilesScrollHud extends HUD implements TilesConstants
 				float targetY = sceneToControl.boundY(sceneToControl.getY() + ARROW_BUTTON_MOVEMENT);
 
 				sceneToControl.clearEntityModifiers();
-				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicInOut.getInstance()));
+				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicOut.getInstance()));
 			}
 		});
 		upButton.setActiveColor(ACTIVE_COLOR);
@@ -56,7 +57,7 @@ public class TilesScrollHud extends HUD implements TilesConstants
 				float targetY = sceneToControl.boundY(sceneToControl.getY() - ARROW_BUTTON_MOVEMENT);
 
 				sceneToControl.clearEntityModifiers();
-				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicInOut.getInstance()));
+				sceneToControl.registerEntityModifier(new MoveYModifier(BUTTON_MOVE_TIME, sceneToControl.getY(), targetY, EaseCubicOut.getInstance()));
 			}
 		});
 		downButton.setActiveColor(ACTIVE_COLOR);
