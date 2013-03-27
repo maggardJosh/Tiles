@@ -242,7 +242,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		sharedPrefs = getPreferences(MODE_PRIVATE);
 		Camera mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
-		engineOptions.getRenderOptions().setDithering(false);
+		engineOptions.getRenderOptions().setDithering(true);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		engineOptions.getAudioOptions().setNeedsMusic(true);
 		engineOptions.getAudioOptions().setNeedsSound(true);
