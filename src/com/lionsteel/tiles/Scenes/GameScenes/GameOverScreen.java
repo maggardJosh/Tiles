@@ -161,22 +161,24 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		loseColorMod = new ColorParticleModifier<Sprite>(0.0f, 5.5f, 0.7f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 		tieColorMod = new ColorParticleModifier<Sprite>(0.0f, 5.5f, 0.7f, 1.0f, 0.7f, 1.0f, 0.7f, 1.0f);
 
-		final float minYStartVel = 10;
-		final float maxYStartVel = 40;
+		final float minYStartVel = 20;
+		final float maxYStartVel = 60;
 		final float maxXAccel = 20;
 		final float minYAccel = 10;
 		final float maxYAccel = 20;
 		final float expireTime = 3.0f;
+		final float minScale = .1f;
+		final float maxScale = 2.0f;
 
-		playerTwoParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(CAMERA_WIDTH / 2, 0, CAMERA_WIDTH, 2), 1, 13, 40, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
+		playerTwoParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(CAMERA_WIDTH / 2, -50, CAMERA_WIDTH, 2), 1, 13, 40, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
 		playerTwoParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
 		playerTwoParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(0, 0, minYStartVel, maxYStartVel));
 		playerTwoParticleSystem.addParticleInitializer(new AccelerationParticleInitializer<Sprite>(-maxXAccel, maxXAccel, minYAccel, maxYAccel));
 		playerTwoParticleSystem.addParticleInitializer(new ColorParticleInitializer<Sprite>(0, 1.0f, 0.0f));
 		playerTwoParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(expireTime));
 
-		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.9f, 0.5f, 5.0f));
-		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.9f, expireTime, 5.0f, 0.1f));
+		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.7f, minScale, maxScale));
+		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.7f, expireTime, maxScale, 0));
 		playerTwoParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0, .3f, 0.0f, 1.0f));
 
 		playerTwoParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, 1.0f, 0.0f));
@@ -189,8 +191,8 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		playerOneParticleSystem.addParticleInitializer(new AccelerationParticleInitializer<Sprite>(-maxXAccel, maxXAccel, -maxYAccel, -minYAccel));
 		playerOneParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(expireTime));
 
-		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.9f, 0.5f, 5.0f));
-		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.9f, expireTime, 5.0f, 0.1f));
+		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.7f, minScale, maxScale));  
+		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.7f, expireTime, maxScale, 0));
 		playerOneParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0, .3f, 0.0f, 1.0f));
 
 		playerOneParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, 1.0f, 0.0f));
