@@ -1,5 +1,16 @@
 package com.lionsteel.tiles.Scenes.GameScenes;
 
+import org.andengine.entity.particle.SpriteParticleSystem;
+import org.andengine.entity.particle.emitter.RectangleParticleEmitter;
+import org.andengine.entity.particle.initializer.AccelerationParticleInitializer;
+import org.andengine.entity.particle.initializer.BlendFunctionParticleInitializer;
+import org.andengine.entity.particle.initializer.ColorParticleInitializer;
+import org.andengine.entity.particle.initializer.RotationParticleInitializer;
+import org.andengine.entity.particle.initializer.VelocityParticleInitializer;
+import org.andengine.entity.particle.modifier.AlphaParticleModifier;
+import org.andengine.entity.particle.modifier.ColorParticleModifier;
+import org.andengine.entity.particle.modifier.ExpireParticleInitializer;
+import org.andengine.entity.particle.modifier.ScaleParticleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -12,6 +23,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
+
+import android.opengl.GLES20;
 
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.SongManager;
@@ -43,6 +56,13 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 	private final TouchControl[]				playerRematchControls	= new TouchControl[2];
 
+	private final SpriteParticleSystem			playerOneParticleSystem;
+	private final SpriteParticleSystem			playerTwoParticleSystem;
+
+	private final ColorParticleModifier<Sprite>	winColorMod;
+	private final ColorParticleModifier<Sprite>	loseColorMod;
+	private final ColorParticleModifier<Sprite>	tieColorMod;
+
 	@Override
 	public void dispose()
 	{
@@ -50,7 +70,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		quitButton.dispose();
 		activity.runOnUpdateThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -59,7 +79,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 		});
 		super.dispose();
 	}
-	
+
 	public GameOverScreen()
 	{
 
@@ -115,7 +135,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 		final Font mFont = SharedResources.getInstance().mFont;
 		for (int i = 0; i < 2; i++)
-		{			
+		{
 			labelOne[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
 			labelTwo[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
 			valueOne[i] = new Text(0, 0, mFont, "", 15, activity.getVertexBufferObjectManager());
@@ -136,6 +156,46 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 				valueTwo[i].setRotationCenterY(mFont.getLineHeight());
 			}
 		}
+
+		winColorMod = new ColorParticleModifier<Sprite>(0.0f, 5.5f, 0.0f, 0.0f, .7f, 1.0f, 0.0f, 0.0f);
+		loseColorMod = new ColorParticleModifier<Sprite>(0.0f, 5.5f, 0.7f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		tieColorMod = new ColorParticleModifier<Sprite>(0.0f, 5.5f, 0.7f, 1.0f, 0.7f, 1.0f, 0.7f, 1.0f);
+
+		final float minYStartVel = 10;
+		final float maxYStartVel = 40;
+		final float maxXAccel = 20;
+		final float minYAccel = 10;
+		final float maxYAccel = 20;
+		final float expireTime = 3.0f;
+
+		playerTwoParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(CAMERA_WIDTH / 2, 0, CAMERA_WIDTH, 2), 1, 13, 40, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
+		playerTwoParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
+		playerTwoParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(0, 0, minYStartVel, maxYStartVel));
+		playerTwoParticleSystem.addParticleInitializer(new AccelerationParticleInitializer<Sprite>(-maxXAccel, maxXAccel, minYAccel, maxYAccel));
+		playerTwoParticleSystem.addParticleInitializer(new ColorParticleInitializer<Sprite>(0, 1.0f, 0.0f));
+		playerTwoParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(expireTime));
+
+		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.9f, 0.5f, 5.0f));
+		playerTwoParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.9f, expireTime, 5.0f, 0.1f));
+		playerTwoParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0, .3f, 0.0f, 1.0f));
+
+		playerTwoParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, 1.0f, 0.0f));
+
+		attachChild(playerTwoParticleSystem);
+
+		playerOneParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(CAMERA_WIDTH / 2, CAMERA_HEIGHT, CAMERA_WIDTH, 2), 1, 13, 40, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
+		playerOneParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
+		playerOneParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(0, 0, -maxYStartVel, -minYStartVel));
+		playerOneParticleSystem.addParticleInitializer(new AccelerationParticleInitializer<Sprite>(-maxXAccel, maxXAccel, -maxYAccel, -minYAccel));
+		playerOneParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(expireTime));
+
+		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime*.9f, 0.5f, 5.0f));
+		playerOneParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime*.9f, expireTime, 5.0f, 0.1f));
+		playerOneParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(0, .3f, 0.0f, 1.0f));
+
+		playerOneParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, 1.0f, 0.0f));
+
+		attachChild(playerOneParticleSystem);
 
 	}
 
@@ -219,6 +279,10 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			winnerSprite.setRotation(180);
 			loserSprite.setPosition(0, 620);
 			loserSprite.setRotation(0);
+			removeParticleColor();
+			playerTwoParticleSystem.addParticleModifier(winColorMod);
+			playerOneParticleSystem.addParticleModifier(loseColorMod);
+
 			break;
 		case PLAYER_ONE:
 			tieSprite[0].setVisible(false);
@@ -229,12 +293,19 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			winnerSprite.setRotation(0);
 			loserSprite.setPosition(0, 0);
 			loserSprite.setRotation(180);
+			removeParticleColor();
+			playerOneParticleSystem.addParticleModifier(winColorMod);
+			playerTwoParticleSystem.addParticleModifier(loseColorMod);
 			break;
 		case TIE:
 			winnerSprite.setVisible(false);
 			loserSprite.setVisible(false);
 			tieSprite[0].setVisible(true);
 			tieSprite[1].setVisible(true);
+
+			removeParticleColor();
+			playerOneParticleSystem.addParticleModifier(tieColorMod);
+			playerTwoParticleSystem.addParticleModifier(tieColorMod);
 			break;
 		}
 		TilesMainActivity.endGameEvent();
@@ -244,6 +315,16 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 
 	}
 
+	private void removeParticleColor()
+	{
+		playerOneParticleSystem.removeParticleModifier(winColorMod);
+		playerOneParticleSystem.removeParticleModifier(loseColorMod);
+		playerTwoParticleSystem.removeParticleModifier(winColorMod);
+		playerTwoParticleSystem.removeParticleModifier(loseColorMod);
+		playerOneParticleSystem.removeParticleModifier(tieColorMod);
+		playerTwoParticleSystem.removeParticleModifier(tieColorMod);
+	}
+
 	public void setLabels(final String labelOne, final String labelTwo)
 	{
 		for (int i = 0; i < 2; i++)
@@ -251,31 +332,31 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 			this.labelOne[i].setText(labelOne);
 			this.labelTwo[i].setText(labelTwo);
 		}
-		this.labelOne[PLAYER_TWO].setPosition(LABEL_ONE_CENTER.x - this.labelOne[PLAYER_TWO].getWidth()/2, LABEL_ONE_CENTER.y);
-		this.labelTwo[PLAYER_TWO].setPosition(LABEL_TWO_CENTER.x - this.labelTwo[PLAYER_TWO].getWidth()/2, LABEL_TWO_CENTER.y);
-		this.labelOne[PLAYER_ONE].setPosition(LABEL_TWO_CENTER.x - this.labelOne[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - LABEL_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
-		this.labelTwo[PLAYER_ONE].setPosition(LABEL_ONE_CENTER.x - this.labelTwo[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - LABEL_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
+		this.labelOne[PLAYER_TWO].setPosition(LABEL_ONE_CENTER.x - this.labelOne[PLAYER_TWO].getWidth() / 2, LABEL_ONE_CENTER.y);
+		this.labelTwo[PLAYER_TWO].setPosition(LABEL_TWO_CENTER.x - this.labelTwo[PLAYER_TWO].getWidth() / 2, LABEL_TWO_CENTER.y);
+		this.labelOne[PLAYER_ONE].setPosition(LABEL_TWO_CENTER.x - this.labelOne[PLAYER_ONE].getWidth() / 2, CAMERA_HEIGHT - LABEL_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
+		this.labelTwo[PLAYER_ONE].setPosition(LABEL_ONE_CENTER.x - this.labelTwo[PLAYER_ONE].getWidth() / 2, CAMERA_HEIGHT - LABEL_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
 
 	}
-	
+
 	public void setPlayerValues(final int player, final String valueOne, final String valueTwo)
 	{
-		this.valueOne[(player+1)%2].setText(valueOne);
-		this.valueTwo[(player+1)%2].setText(valueTwo);
-		centerPlayerValues((player+1)%2);
+		this.valueOne[(player + 1) % 2].setText(valueOne);
+		this.valueTwo[(player + 1) % 2].setText(valueTwo);
+		centerPlayerValues((player + 1) % 2);
 	}
-	
+
 	private void centerPlayerValues(final int player)
 	{
-		switch(player)
+		switch (player)
 		{
 		case PLAYER_TWO:
-			this.valueOne[PLAYER_TWO].setPosition(VALUE_ONE_CENTER.x - this.valueOne[PLAYER_TWO].getWidth()/2, VALUE_ONE_CENTER.y);
-			this.valueTwo[PLAYER_TWO].setPosition(VALUE_TWO_CENTER.x - this.valueTwo[PLAYER_TWO].getWidth()/2, VALUE_TWO_CENTER.y);
+			this.valueOne[PLAYER_TWO].setPosition(VALUE_ONE_CENTER.x - this.valueOne[PLAYER_TWO].getWidth() / 2, VALUE_ONE_CENTER.y);
+			this.valueTwo[PLAYER_TWO].setPosition(VALUE_TWO_CENTER.x - this.valueTwo[PLAYER_TWO].getWidth() / 2, VALUE_TWO_CENTER.y);
 			break;
 		case PLAYER_ONE:
-			this.valueOne[PLAYER_ONE].setPosition(VALUE_TWO_CENTER.x - this.valueOne[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - VALUE_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
-			this.valueTwo[PLAYER_ONE].setPosition(VALUE_ONE_CENTER.x - this.valueTwo[PLAYER_ONE].getWidth()/2, CAMERA_HEIGHT - VALUE_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
+			this.valueOne[PLAYER_ONE].setPosition(VALUE_TWO_CENTER.x - this.valueOne[PLAYER_ONE].getWidth() / 2, CAMERA_HEIGHT - VALUE_ONE_CENTER.y - this.labelOne[PLAYER_ONE].getHeight());
+			this.valueTwo[PLAYER_ONE].setPosition(VALUE_ONE_CENTER.x - this.valueTwo[PLAYER_ONE].getWidth() / 2, CAMERA_HEIGHT - VALUE_TWO_CENTER.y - this.labelTwo[PLAYER_ONE].getHeight());
 			break;
 		}
 	}
@@ -292,7 +373,7 @@ public class GameOverScreen extends TilesMenuScene implements TilesConstants
 	protected void exitScene()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
