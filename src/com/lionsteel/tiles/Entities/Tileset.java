@@ -101,7 +101,7 @@ public class Tileset implements TilesConstants
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 
-		backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGBA_4444);
+		backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGB_565);
 		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
 		backgroundAtlas.load();
 
@@ -109,7 +109,7 @@ public class Tileset implements TilesConstants
 		animationAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
+			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");
 			int buttonColumn = (int) (buttonRegions[i].getWidth() / BUTTON_WIDTH);
 			if (buttonColumn > 1)
 				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(animationAtlas, activity, (i + 1) + ".png", buttonColumn, 1);

@@ -58,8 +58,8 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							TITLE_PADDING		= 32;
-	final int							BUTTON_PADDING		= 8;
+	final int							TITLE_PADDING		= 20;
+	final int							BUTTON_PADDING		= 15;
 	final int							PLAY_PADDING		= 12;
 
 	private static Tileset				currentTileset;
@@ -485,7 +485,7 @@ public class SetupScene extends TilesMenuScene
 	private void positionLabels()
 	{
 		final int LABEL_X_PADDING = 0;
-		final int LABEL_PADDING = -15;
+		final int LABEL_PADDING = -20;
 
 		tilesetLabelSprite.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - tilesetLabelSprite.getHeight() - LABEL_PADDING);
 		tilesetLabelSprite.setZIndex(FOREGROUND_Z);
