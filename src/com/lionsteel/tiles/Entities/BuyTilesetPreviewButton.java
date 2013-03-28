@@ -43,7 +43,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 		@Override
 		protected Void doInBackground(String... params)
 		{
-			TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
+			TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), basePath, 10001, new OnIabPurchaseFinishedListener()
 			{
 
 				@Override
@@ -57,15 +57,6 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 
 						return;
 					}
-
-					if (info != null)
-						try
-						{
-							TilesMainActivity.getInstance().getIABHelper().consume(info);
-						} catch (IabException e)
-						{
-							e.printStackTrace();
-						}
 					
 					HashMap<String, String> gameParams = new HashMap<String, String>();
 					gameParams.put("Tileset_Bought", basePath);

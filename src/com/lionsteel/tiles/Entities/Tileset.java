@@ -49,7 +49,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {};									//{ "dice", "blocks" };
+	public static final String[]			purchaseableTilesets		= { "dice", "blocks" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
