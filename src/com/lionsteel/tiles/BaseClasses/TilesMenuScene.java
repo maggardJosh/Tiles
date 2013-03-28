@@ -12,6 +12,7 @@ import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.GameScenes.GameOverScreen;
 import com.lionsteel.tiles.Scenes.GameScenes.PauseScene;
 import com.lionsteel.tiles.Scenes.GameScenes.PracticeGameOverScene;
+import com.lionsteel.tiles.Scenes.MenuScenes.TilesScrollableScene;
 
 public abstract class TilesMenuScene extends Scene implements TilesConstants
 {
@@ -103,19 +104,21 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 
 		} else
 		{
-			childScene.showBackArrow();
+			if (!(childScene instanceof TilesScrollableScene))
+				childScene.showBackArrow();
 			TilesMainActivity.getInstance().backEnabled = false;
 			childScene.setX(CAMERA_WIDTH);
 			transitionOff();
 			childScene.registerEntityModifier(new MoveXModifier(SCENE_TRANSITION_SECONDS, CAMERA_WIDTH, 0)
 			{
-				
+
 				@Override
 				protected void onModifierStarted(IEntity pItem)
 				{
 					SharedResources.getInstance().menuSlideSound.play();
 					super.onModifierStarted(pItem);
 				}
+
 				@Override
 				protected void onModifierFinished(IEntity pItem)
 				{
@@ -171,6 +174,7 @@ public abstract class TilesMenuScene extends Scene implements TilesConstants
 				SharedResources.getInstance().menuSlideSound.play();
 				super.onModifierStarted(pItem);
 			}
+
 			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
