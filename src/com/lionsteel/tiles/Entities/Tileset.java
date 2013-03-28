@@ -49,7 +49,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {}; //{ "blocks", "dice" };
+	public static final String[]			purchaseableTilesets		= { "blocks", "blocks", "blocks", "blocks", "blocks", "blocks", "blocks" }; //{}; //{ "blocks", "dice" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
@@ -58,7 +58,6 @@ public class Tileset implements TilesConstants
 
 	private final TextureRegion[]			buttonRegions				= new TextureRegion[NUM_BUTTONS];
 	private final TiledTextureRegion[]		tiledButtonRegions			= new TiledTextureRegion[NUM_BUTTONS];
-	private final TextureRegion				backgroundRegion;
 
 	private GameButton[]					playerOneGameButtons		= new GameButton[NUM_BUTTONS];
 	private GameButton[]					playerTwoGameButtons		= new GameButton[NUM_BUTTONS];
@@ -101,10 +100,6 @@ public class Tileset implements TilesConstants
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 
-		backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGB_565);
-		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
-		backgroundAtlas.load();
-
 		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
 		animationAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
 		for (int i = 0; i < NUM_BUTTONS; i++)
@@ -140,11 +135,16 @@ public class Tileset implements TilesConstants
 		if (gameAssetsCreated)
 			return;
 
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
+		final TextureRegion backgroundRegion;
+		backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGB_565);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
+		backgroundAtlas.load();
+
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
 			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
-
 		}
 		for (int i = 0; i < NUM_BUTTONS * 3; i++)
 			displayGameButtons[i] = new GameButton(i % NUM_BUTTONS, this, currentScene, DISPLAY_BUTTONS);
@@ -349,7 +349,8 @@ public class Tileset implements TilesConstants
 				}
 
 				atlas.unload();
-				backgroundAtlas.unload();
+				if (backgroundAtlas != null)
+					backgroundAtlas.unload();
 				animationAtlas.unload();
 
 				System.gc();
