@@ -503,7 +503,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				gameScene = new FrenzyGameScene();
 				break;
 			}
-			mEngine.setScene(gameScene);
 
 			return null;
 		}
@@ -517,6 +516,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler)
 				{
+					mEngine.setScene(gameScene);
 					progressDialog.dismiss();
 				}
 			}));
