@@ -49,7 +49,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {};									//{ "dice", "blocks" };
+	public static final String[]			purchaseableTilesets		= {} //{ "blocks", "dice" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
@@ -339,9 +339,14 @@ public class Tileset implements TilesConstants
 					background.dispose();
 					particleSystem.clear();
 				}
-				tilesetEntity.clear();
+
+				if (tilesetEntity != null)
+					tilesetEntity.clear();
 				for (DifficultyEntity d : difficultyEntity)
-					d.clear();
+				{
+					if (difficultyEntity != null)
+						d.clear();
+				}
 
 				atlas.unload();
 				backgroundAtlas.unload();
