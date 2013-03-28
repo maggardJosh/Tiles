@@ -14,8 +14,8 @@ public interface TilesConstants
 	public static final int		BUTTON_WIDTH					= 110;
 	public static final int		PAUSE_BAR_WIDTH					= 30;
 
-	public static final int		DAYS_UNTIL_RATE_PROMPT			= 0;
-	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 3;
+	public static final int		DAYS_UNTIL_RATE_PROMPT			= 3;
+	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 7;
 
 	public static final int		BAR_SPEED						= 40;
 
