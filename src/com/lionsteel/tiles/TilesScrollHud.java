@@ -39,7 +39,7 @@ public class TilesScrollHud extends HUD implements TilesConstants
 		});
 		this.attachChild(backButton);
 		backButton.setPosition(BACK_ARROW_PADDING, BACK_ARROW_PADDING);
-		backButton.registerOwnTouchArea(sceneToControl);
+		backButton.registerOwnTouchArea(this);
 
 		upButton = new TilesMenuButton(SharedResources.getInstance().upArrowRegion, new Runnable()
 		{
