@@ -7,6 +7,7 @@ import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.lionsteel.tiles.SharedResources;
@@ -22,12 +23,18 @@ public class GameCountdown implements TilesConstants
 	public TiledSprite			countdownSprite;
 
 	GameScene			currentScene;
+	
+	public void dispose()
+	{
+		atlas.unload();
+		countdownSprite.dispose();
+	}
 
 	public GameCountdown(GameScene scene)
 	{
 		activity = TilesMainActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/GameCountdown/");
-		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		atlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, BitmapTextureFormat.RGBA_4444, TextureOptions.BILINEAR);
 		final TiledTextureRegion countdownRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, "countdown.png", 0, 0, 1,3);
 		atlas.load();
 

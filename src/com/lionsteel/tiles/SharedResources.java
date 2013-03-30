@@ -47,6 +47,8 @@ public class SharedResources implements TilesConstants
 	public final TextureRegion		backArrowRegion;
 	public final TextureRegion		upArrowRegion;
 
+	public final TextureRegion		particlePointRegion;
+
 	public Sound					tileCollectSound;
 
 	public Sound					wrongTileSound;
@@ -108,6 +110,7 @@ public class SharedResources implements TilesConstants
 		displayIndicatorRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "displayIndicator.png");
 		backArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "backArrow.png");
 		upArrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "upArrow.png");
+		particlePointRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(buildableAtlas, activity, "particle_point.png");
 		try
 		{
 			buildableAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));

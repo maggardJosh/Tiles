@@ -23,6 +23,12 @@ public class WrongSelectionIndicator implements TilesConstants
 	private GameScene			parent;
 	private final int			playerOwner;
 
+	public void dispose()
+	{
+		atlas.unload();
+		sprite.dispose();
+	}
+	
 	public WrongSelectionIndicator(final int player)
 	{
 		activity = TilesMainActivity.getInstance();

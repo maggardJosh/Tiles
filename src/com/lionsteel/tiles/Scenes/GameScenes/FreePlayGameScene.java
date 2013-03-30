@@ -69,7 +69,7 @@ public class FreePlayGameScene extends PracticeGameScene
 		inARowLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - inARowLabel.getWidth()) * 2 / 3, (CAMERA_HEIGHT - inARowLabel.getHeight()) / 2 - inARowLabel.getHeight() * 2 - BUTTON_WIDTH);
 		inARowText.setPosition(inARowLabel.getX() + (inARowLabel.getWidth() - inARowText.getWidth()) / 2, inARowLabel.getY() + inARowLabel.getHeight() + LABEL_SPACING);
 
-		barSprite.setVisible(false);
+		ropeSprite.setVisible(false);
 		this.sortChildren();
 
 	}

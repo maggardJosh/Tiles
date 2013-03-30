@@ -31,7 +31,6 @@ public class QuitPromptScene extends TilesMenuScene implements TilesConstants
 	public void logFlurryEvent()
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.QUIT_PROMPT);
-
 	}
 
 	public QuitPromptScene(final Runnable quitAction)

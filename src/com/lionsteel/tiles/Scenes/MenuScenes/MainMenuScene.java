@@ -96,7 +96,6 @@ public class MainMenuScene extends TilesMenuScene
 			@Override
 			public void run()
 			{
-				FlurryAgent.logEvent(FlurryAgentEventStrings.QUIT_BUTTON);
 				activity.showQuitPrompt(instance);
 			}
 		});

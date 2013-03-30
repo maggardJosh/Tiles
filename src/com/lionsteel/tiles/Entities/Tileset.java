@@ -22,6 +22,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -47,14 +48,16 @@ public class Tileset implements TilesConstants
 
 	public static String[]					tilesetList;
 
-	public static final String[]			purchaseableTilesets		= {};									//{ "dice", "blocks" };
+	//TODO: Purchaseable tilesets here
+	public static final String[]			purchaseableTilesets		= {}; //{ "blocks", "dice" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
+	private BitmapTextureAtlas				backgroundAtlas;
+	private BuildableBitmapTextureAtlas		animationAtlas;
 
 	private final TextureRegion[]			buttonRegions				= new TextureRegion[NUM_BUTTONS];
 	private final TiledTextureRegion[]		tiledButtonRegions			= new TiledTextureRegion[NUM_BUTTONS];
-	private final TextureRegion				backgroundRegion;
 
 	private GameButton[]					playerOneGameButtons		= new GameButton[NUM_BUTTONS];
 	private GameButton[]					playerTwoGameButtons		= new GameButton[NUM_BUTTONS];
@@ -97,21 +100,22 @@ public class Tileset implements TilesConstants
 		rand = new Random();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
 
-		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
-
+		atlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
+		animationAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
-			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");//, (i % 3) * BUTTON_WIDTH, (i / 3) * BUTTON_WIDTH);
+			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");
 			int buttonColumn = (int) (buttonRegions[i].getWidth() / BUTTON_WIDTH);
 			if (buttonColumn > 1)
-				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(atlas, activity, (i + 1) + ".png", buttonColumn, 1);
+				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(animationAtlas, activity, (i + 1) + ".png", buttonColumn, 1);
 		}
-		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, "background.png");//, BUTTON_WIDTH * 3, 0);
 
 		try
 		{
 			atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
 			atlas.load();
+			animationAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
+			animationAtlas.load();
 		} catch (TextureAtlasBuilderException e)
 		{
 			Debug.e(e);
@@ -131,11 +135,16 @@ public class Tileset implements TilesConstants
 		if (gameAssetsCreated)
 			return;
 
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/tilesets/" + basePath + "/");
+		final TextureRegion backgroundRegion;
+		backgroundAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGB_565);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundAtlas, activity, "background.png", 0, 0);
+		backgroundAtlas.load();
+
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			playerOneGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_ONE);
 			playerTwoGameButtons[i] = new GameButton(i, this, currentScene, PLAYER_TWO);
-
 		}
 		for (int i = 0; i < NUM_BUTTONS * 3; i++)
 			displayGameButtons[i] = new GameButton(i % NUM_BUTTONS, this, currentScene, DISPLAY_BUTTONS);
@@ -327,11 +336,23 @@ public class Tileset implements TilesConstants
 						displayGameButtons[i].clear();
 					}
 					background.detachSelf();
+					background.dispose();
 					particleSystem.clear();
 				}
-				tilesetEntity.clear();
+
+				if (tilesetEntity != null)
+					tilesetEntity.clear();
 				for (DifficultyEntity d : difficultyEntity)
-					d.clear();
+				{
+					if (difficultyEntity != null)
+						d.clear();
+				}
+
+				atlas.unload();
+				if (backgroundAtlas != null)
+					backgroundAtlas.unload();
+				animationAtlas.unload();
+
 				System.gc();
 
 			}
@@ -373,7 +394,6 @@ public class Tileset implements TilesConstants
 				playerTwoGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerTwoGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerTwoGameButtons[x].buttonSprite);
-				//currentScene.registerTouchArea(playerTwoGameButtons[x].buttonSprite);
 			}
 
 			break;
@@ -406,7 +426,6 @@ public class Tileset implements TilesConstants
 				playerOneGameButtons[x].buttonSprite.setZIndex(BUTTON_Z);
 				playerOneGameButtons[x].buttonSprite.setAlpha(0);
 				currentScene.attachChild(playerOneGameButtons[x].buttonSprite);
-				//currentScene.registerTouchArea(playerOneGameButtons[x].buttonSprite);
 			}
 			break;
 		case DISPLAY_BUTTONS:
@@ -831,7 +850,7 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < numberOfStreamTilesToSpawn; i++)
 		{
 			if (currentStreamButtons[i] != null)
-				if (currentStreamButtons[i].getButtonNumber() == buttonNumber && currentStreamButtons[i].buttonSprite.getScaleX() > lastButtonScale)
+				if (currentStreamButtons[i].getButtonNumber() == buttonNumber && currentStreamButtons[i].buttonSprite.getScaleX() > MIN_BUTTON_ACTIVE_SCALE && currentStreamButtons[i].buttonSprite.getScaleX() > lastButtonScale)
 				{
 					buttonIndex = i;
 					lastButtonScale = currentStreamButtons[i].buttonSprite.getScaleX();

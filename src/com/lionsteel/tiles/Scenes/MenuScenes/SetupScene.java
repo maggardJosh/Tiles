@@ -13,7 +13,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
@@ -59,8 +58,8 @@ public class SetupScene extends TilesMenuScene
 	final Sprite						modeLabelSprite;
 
 	final int							TITLE_Y				= 50;
-	final int							TITLE_PADDING		= 32;
-	final int							BUTTON_PADDING		= 8;
+	final int							TITLE_PADDING		= 20;
+	final int							BUTTON_PADDING		= 15;
 	final int							PLAY_PADDING		= 12;
 
 	private static Tileset				currentTileset;
@@ -156,10 +155,11 @@ public class SetupScene extends TilesMenuScene
 				@Override
 				public void run()
 				{
+					tilesButton.clearAffectedButtons();
 					currentTileset.clearTileset();
 					currentTileset = new Tileset(params[0], false);
 					SetupScene.getInstance().resetGraphics();
-
+					tilesButton.addAffectedButton(instance.tilesetLabelSprite);
 					TilesMainActivity.getInstance().savePreference(TilesSharedPreferenceStrings.lastTileset, params[0]);
 
 					instance.sortChildren();
@@ -217,6 +217,8 @@ public class SetupScene extends TilesMenuScene
 		}
 		if (SetupScene.getGameMode() == gameMode)
 			return;
+		instance.gameModeSprite[SetupScene.getGameMode()].clearAffectedButtons();
+		instance.gameModeSprite[gameMode].addAffectedButton(instance.modeLabelSprite);
 		if (instant)
 		{
 			instance.removeButton(instance.gameModeSprite[SetupScene.gameMode]);
@@ -255,6 +257,12 @@ public class SetupScene extends TilesMenuScene
 							instance.modeLabelSprite.setAlpha(instance.gameModeSprite[gameMode].getAlpha());
 							super.onManagedUpdate(pSecondsElapsed, pItem);
 						}
+						@Override
+						protected void onModifierFinished(IEntity pItem)
+						{
+							instance.modeLabelSprite.setAlpha(1.0f);
+							super.onModifierFinished(pItem);
+						}
 					});
 					instance.sortChildren();
 					super.onModifierFinished(pItem);
@@ -272,6 +280,8 @@ public class SetupScene extends TilesMenuScene
 
 		final int currentDifficulty = SetupScene.difficulty;
 
+		instance.difficultyButtons[currentDifficulty].clearAffectedButtons();
+		instance.difficultyButtons[difficulty].addAffectedButton(instance.skillLabelSprite);
 		instance.difficultyButtons[currentDifficulty].registerEntityModifier(new SequenceEntityModifier(new DelayModifier(SCENE_TRANSITION_SECONDS * 2), new AlphaModifier(SETUP_SCENE_BUTTON_TRANSITION, 1.0f, 0)
 		{
 			protected void onModifierStarted(IEntity pItem)
@@ -305,6 +315,12 @@ public class SetupScene extends TilesMenuScene
 					{
 						instance.skillLabelSprite.setAlpha(instance.difficultyButtons[difficulty].getAlpha());
 						super.onManagedUpdate(pSecondsElapsed, pItem);
+					}
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						instance.skillLabelSprite.setAlpha(1.0f);
+						super.onModifierFinished(pItem);
 					}
 				});
 				instance.sortChildren();
@@ -349,7 +365,6 @@ public class SetupScene extends TilesMenuScene
 		final TextureRegion practiceTitleRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "practiceTitle.png");
 
 		final TextureRegion playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "play.png");
-		final TextureRegion changeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "changeButton.png");
 		final TextureRegion tilesetLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tilesetLabel.png");
 		final TextureRegion skillLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "skillLabel.png");
 		final TextureRegion modeLabelRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "modeLabel.png");
@@ -456,9 +471,12 @@ public class SetupScene extends TilesMenuScene
 		tilesetLabelSprite = new Sprite(0, 0, tilesetLabelRegion, activity.getVertexBufferObjectManager());
 		skillLabelSprite = new Sprite(0, 0, skillLabelRegion, activity.getVertexBufferObjectManager());
 		modeLabelSprite = new Sprite(0, 0, modeLabelRegion, activity.getVertexBufferObjectManager());
+		
+		difficultyButtons[getDifficulty()].addAffectedButton(skillLabelSprite);
+		gameModeSprite[getGameMode()].addAffectedButton(modeLabelSprite);
+		tilesButton.addAffectedButton(tilesetLabelSprite);
 
 		positionLabels();
-		setupChangeSprites(changeRegion);
 
 		isCreated = true;
 
@@ -466,47 +484,20 @@ public class SetupScene extends TilesMenuScene
 
 	private void positionLabels()
 	{
-		final int LABEL_X_PADDING = 12;
-		final int LABEL_PADDING = 18;
+		final int LABEL_X_PADDING = 0;
+		final int LABEL_PADDING = -20;
 
-		tilesetLabelSprite.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - LABEL_PADDING);
+		tilesetLabelSprite.setPosition(tilesButton.getX() + LABEL_X_PADDING, tilesButton.getY() - tilesetLabelSprite.getHeight() - LABEL_PADDING);
 		tilesetLabelSprite.setZIndex(FOREGROUND_Z);
 		attachChild(tilesetLabelSprite);
 
-		skillLabelSprite.setPosition(difficultyButtons[0].getX() + LABEL_X_PADDING, difficultyButtons[0].getY() - LABEL_PADDING);
+		skillLabelSprite.setPosition(difficultyButtons[0].getX() + LABEL_X_PADDING, difficultyButtons[0].getY() - skillLabelSprite.getHeight() - LABEL_PADDING);
 		skillLabelSprite.setZIndex(FOREGROUND_Z);
-		attachChild(skillLabelSprite);
+		attachChild(skillLabelSprite);		
 
-		modeLabelSprite.setPosition(gameModeSprite[0].getX() + LABEL_X_PADDING, gameModeSprite[0].getY() - LABEL_PADDING);
+		modeLabelSprite.setPosition(gameModeSprite[0].getX() + LABEL_X_PADDING, gameModeSprite[0].getY() - modeLabelSprite.getHeight() - LABEL_PADDING);
 		modeLabelSprite.setZIndex(FOREGROUND_Z);
 		attachChild(modeLabelSprite);
-
-	}
-
-	private void setupChangeSprites(final ITextureRegion changeRegion)
-	{
-		final Sprite[] changeSprites = new Sprite[3];
-		for (int x = 0; x < 3; x++)
-		{
-			changeSprites[x] = new Sprite(0, 0, changeRegion, activity.getVertexBufferObjectManager());
-			final TilesMenuButton button;
-			switch (x)
-			{
-			case 0:
-				button = difficultyButtons[0];
-				break;
-			case 1:
-				button = tilesButton;
-				break;
-			case 2:
-			default:
-				button = gameModeSprite[0];
-				break;
-			}
-			changeSprites[x].setPosition(button.getX() + button.getWidth() - changeSprites[0].getWidth(), button.getY());// + (button.getHeight() - changeSprites[0].getHeight()) / 2);
-			changeSprites[x].setZIndex(FOREGROUND_Z);
-			this.attachChild(changeSprites[x]);
-		}
 
 	}
 

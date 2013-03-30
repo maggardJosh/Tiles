@@ -254,7 +254,7 @@ public abstract class JifBaseGameActivity extends BaseActivity implements IGameI
 
 		super.onPause();
 
-		//this.mRenderSurfaceView.onPause();
+//		this.mRenderSurfaceView.onPause();
 		this.releaseWakeLock();
 
 		if(!this.mGamePaused) {
@@ -441,7 +441,7 @@ public abstract class JifBaseGameActivity extends BaseActivity implements IGameI
 				break;
 			case LANDSCAPE_SENSOR:
 				if(SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
-					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 				} else {
 					Debug.w(ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.LANDSCAPE_SENSOR + " is not supported on this device. Falling back to " + ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.LANDSCAPE_FIXED);
 					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -452,7 +452,7 @@ public abstract class JifBaseGameActivity extends BaseActivity implements IGameI
 				break;
 			case PORTRAIT_SENSOR:
 				if(SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
-					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 				} else {
 					Debug.w(ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.PORTRAIT_SENSOR + " is not supported on this device. Falling back to " + ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.PORTRAIT_FIXED);
 					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

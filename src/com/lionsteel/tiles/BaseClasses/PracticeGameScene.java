@@ -23,7 +23,7 @@ public abstract class PracticeGameScene extends GameScene
 	{
 		super();
 		practiceGameOverScene = new PracticeGameOverScene();
-		this.detachChild(barSprite);
+		this.detachChild(ropeSprite);
 		this.detachChild(playerTwoIntro);
 		this.detachChild(playerTutorials[PLAYER_TWO]);
 

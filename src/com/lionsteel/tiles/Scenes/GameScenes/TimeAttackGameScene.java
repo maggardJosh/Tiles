@@ -85,7 +85,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		timePlayedLabel.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - timePlayedLabel.getWidth()) / 2, bestTimeValue.getY() + bestTimeValue.getHeight() + LABEL_SPACING * 2);
 		timePlayedText.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - timePlayedText.getWidth()) / 2, timePlayedLabel.getY() + timePlayedLabel.getHeight() + LABEL_SPACING);
 
-		barSprite.setVisible(false);
+		ropeSprite.setVisible(false);
 		this.sortChildren();
 	}
 
@@ -109,7 +109,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		bestTimeAttackSeconds = bestTimeAttackSeconds % 60;
 
 		if (bestTimeAttackSeconds == 0)
-			return "99:99:99.999";
+			return "None";
 		else
 			return String.format("%02d:%02d:%06.3f", bestTimeHours, bestTimeMinutes, bestTimeAttackSeconds);
 
