@@ -104,13 +104,13 @@ public class TilesTutorial extends Entity implements TilesConstants
 			{
 			case PLAYER_ONE:
 
-				yourTilesAreaSprite[i].setPosition(81, 461);
+				yourTilesAreaSprite[i].setPosition(82, 461);
 				yourTilesWordsSprite[i].setPosition(yourTilesAreaSprite[i].getX() + (yourTilesAreaSprite[i].getWidth() - yourTilesWordsSprite[i].getWidth()) / 2, yourTilesAreaSprite[i].getY() + (yourTilesAreaSprite[i].getHeight() - yourTilesWordsSprite[i].getHeight()) / 2);
 				matchWordsSprite[i].setPosition(yourTilesAreaSprite[i].getX() + (yourTilesAreaSprite[i].getWidth() - matchWordsSprite[i].getWidth()) / 2, yourTilesAreaSprite[i].getY() + (yourTilesAreaSprite[i].getHeight() - matchWordsSprite[i].getHeight()) / 2);
 
 				break;
 			case PLAYER_TWO:
-				yourTilesAreaSprite[PLAYER_TWO].setPosition(81, 0);
+				yourTilesAreaSprite[PLAYER_TWO].setPosition(82, 0);
 				yourTilesWordsSprite[i].setPosition(yourTilesAreaSprite[i].getX() + (yourTilesAreaSprite[i].getWidth() - yourTilesWordsSprite[i].getWidth()) / 2, yourTilesAreaSprite[i].getY() + (yourTilesAreaSprite[i].getHeight() - yourTilesWordsSprite[i].getHeight()) / 2);
 				matchWordsSprite[i].setPosition(yourTilesAreaSprite[i].getX() + (yourTilesAreaSprite[i].getWidth() - matchWordsSprite[i].getWidth()) / 2, yourTilesAreaSprite[i].getY() + (yourTilesAreaSprite[i].getHeight() - matchWordsSprite[i].getHeight()) / 2);
 				break;
