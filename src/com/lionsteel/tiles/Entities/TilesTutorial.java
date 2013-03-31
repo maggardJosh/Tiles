@@ -123,6 +123,23 @@ public class TilesTutorial extends Entity implements TilesConstants
 
 		arrowSprite[PLAYER_ONE].setY(matchAreaSprite.getY() + matchAreaSprite.getHeight() + ARROW_SPACING);
 		arrowSprite[PLAYER_TWO].setY(matchAreaSprite.getY() - arrowSprite[PLAYER_TWO].getHeight() - ARROW_SPACING);
+
+		for (int i = 0; i < 2; i++)
+		{
+			attachChild(arrowSprite[i]);
+			attachChild(matchWordsSprite[i]);
+			attachChild(yourTilesWordsSprite[i]);
+			attachChild(yourTilesAreaSprite[i]);
+			attachChild(raceAreaSprite[i]);
+
+			arrowSprite[i].setVisible(false);
+			matchWordsSprite[i].setVisible(false);
+			yourTilesWordsSprite[i].setVisible(false);
+			yourTilesAreaSprite[i].setVisible(false);
+			raceAreaSprite[i].setVisible(false);
+		}
+		attachChild(matchAreaSprite);
+		matchAreaSprite.setVisible(false);
 	}
 
 	public void startTutorial(final int gameMode, final Runnable endAction)
@@ -132,7 +149,6 @@ public class TilesTutorial extends Entity implements TilesConstants
 			@Override
 			public void run()
 			{
-				detachChildren();
 				switch (gameMode)
 				{
 				case GameMode.REFLEX:
@@ -147,7 +163,7 @@ public class TilesTutorial extends Entity implements TilesConstants
 				case GameMode.FREE_PLAY:
 				case GameMode.FRENZY:
 				case GameMode.TIME_ATTACK:
-					//Single Player game tutorial
+					startPractice(endAction);
 					break;
 				}
 
@@ -155,24 +171,86 @@ public class TilesTutorial extends Entity implements TilesConstants
 		});
 	}
 
-	
+	private void startPractice(final Runnable endAction)
+	{
+
+		yourTilesAreaSprite[PLAYER_ONE].setVisible(true);
+		yourTilesWordsSprite[PLAYER_ONE].setVisible(true);
+
+		arrowSprite[0].registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				yourTilesAreaSprite[PLAYER_ONE].setVisible(false);
+				yourTilesWordsSprite[PLAYER_ONE].setVisible(false);
+				super.onModifierFinished(pItem);
+			}
+		}, new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+		{
+			protected void onModifierFinished(IEntity pItem)
+			{
+				yourTilesAreaSprite[PLAYER_ONE].setVisible(true);
+				yourTilesWordsSprite[PLAYER_ONE].setVisible(true);
+				super.onModifierFinished(pItem);
+			};
+		}), 4)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				arrowSprite[PLAYER_ONE].setVisible(true);
+				matchWordsSprite[PLAYER_ONE].setVisible(true);
+				yourTilesAreaSprite[PLAYER_ONE].setVisible(false);
+				yourTilesWordsSprite[PLAYER_ONE].setVisible(false);
+				matchAreaSprite.setVisible(true);
+				arrowSprite[0].registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						arrowSprite[PLAYER_ONE].setVisible(false);
+						matchWordsSprite[PLAYER_ONE].setVisible(false);
+						matchAreaSprite.setVisible(false);
+						super.onModifierFinished(pItem);
+					}
+				}, new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+				{
+					protected void onModifierFinished(IEntity pItem)
+					{
+						arrowSprite[PLAYER_ONE].setVisible(true);
+						matchWordsSprite[PLAYER_ONE].setVisible(true);
+						matchAreaSprite.setVisible(true);
+						super.onModifierFinished(pItem);
+					};
+				}), 4)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						endAction.run();
+						for (int i = 0; i < 2; i++)
+						{
+							arrowSprite[PLAYER_ONE].setVisible(false);
+							matchWordsSprite[PLAYER_ONE].setVisible(false);
+							matchAreaSprite.setVisible(false);
+						}
+						detachSelf();
+						super.onModifierFinished(pItem);
+					}
+				});
+				super.onModifierFinished(pItem);
+			}
+		});
+	}
 
 	private void startNormalVersus(final Runnable endAction)
 	{
 		for (int i = 0; i < 2; i++)
 		{
-			attachChild(arrowSprite[i]);
-			attachChild(matchWordsSprite[i]);
-			attachChild(yourTilesWordsSprite[i]);
-			attachChild(yourTilesAreaSprite[i]);
-
-			arrowSprite[i].setVisible(false);
-			matchWordsSprite[i].setVisible(false);
 			yourTilesAreaSprite[i].setVisible(true);
 			yourTilesWordsSprite[i].setVisible(true);
 		}
-		attachChild(matchAreaSprite);
-		matchAreaSprite.setVisible(false);
 		arrowSprite[0].registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
 		{
 			@Override
