@@ -33,6 +33,7 @@ import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Entities.TilesTutorial;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.FrenzyGameScene;
@@ -440,6 +441,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		BuyTilesetSelectScene.clear();
 		SetupScene.clear();
 		PauseScene.clear();
+		TilesTutorial.clear();
 		loadTaskInstance = null;
 	}
 
@@ -482,6 +484,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			SetupScene.getTileset().createGameAssets();
 			SharedResources.getInstance().loadGameAssets();
+			TilesTutorial.getInstance();
 			switch (SetupScene.getGameMode())
 			{
 			case GameMode.REFLEX:

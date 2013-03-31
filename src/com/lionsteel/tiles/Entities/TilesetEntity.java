@@ -41,7 +41,7 @@ public class TilesetEntity extends Entity implements TilesConstants
 		}
 
 		buttonEntity = new Entity();
-		final float buttonWidth = BUTTON_WIDTH * buttonScale;
+		final float buttonWidth = TILE_WIDTH * buttonScale;
 		displayButtons = new GameButton[NUM_BUTTONS];
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{

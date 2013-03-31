@@ -11,11 +11,13 @@ public interface TilesConstants
 
 	public static final int		NUM_BUTTONS						= 9;
 
-	public static final int		BUTTON_WIDTH					= 110;
+	public static final int		TILE_WIDTH						= 110;
 	public static final int		PAUSE_BAR_WIDTH					= 30;
 
 	public static final int		DAYS_UNTIL_RATE_PROMPT			= 0;
 	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 3;
+
+	final float					TUTORIAL_SEGMENT_LENGTH			= 3.0f;
 
 	public static final int		BAR_SPEED						= 40;
 
@@ -33,7 +35,7 @@ public interface TilesConstants
 	public static final float	PLAYER_TILE_START_X				= 90;
 
 	public static final float	TILE_BASE_PADDING				= 10;
-	public static final float	TILE_BASE_RIGHT_SIDE			= PLAYER_TILE_START_X + BUTTON_WIDTH * 3 + TILE_BASE_PADDING;
+	public static final float	TILE_BASE_RIGHT_SIDE			= PLAYER_TILE_START_X + TILE_WIDTH * 3 + TILE_BASE_PADDING;
 
 	public static final float	PLAYER_TILES_ALPHA				= .3f;
 	public static final int		PLAYER_RACE_TILE_PADDING		= 5;

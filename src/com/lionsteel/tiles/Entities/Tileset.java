@@ -105,7 +105,7 @@ public class Tileset implements TilesConstants
 		for (int i = 0; i < NUM_BUTTONS; i++)
 		{
 			buttonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, activity, (i + 1) + ".png");
-			int buttonColumn = (int) (buttonRegions[i].getWidth() / BUTTON_WIDTH);
+			int buttonColumn = (int) (buttonRegions[i].getWidth() / TILE_WIDTH);
 			if (buttonColumn > 1)
 				tiledButtonRegions[i] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(animationAtlas, activity, (i + 1) + ".png", buttonColumn, 1);
 		}
@@ -203,7 +203,7 @@ public class Tileset implements TilesConstants
 		createButtons(PLAYER_ONE);
 		createButtons(DISPLAY_BUTTONS);
 
-		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, BUTTON_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
+		tileBase = new Rectangle(playerOneGameButtons[0].getX() - TILE_BASE_PADDING, 0, TILE_WIDTH * 3 + TILE_BASE_PADDING * 2, CAMERA_HEIGHT, activity.getVertexBufferObjectManager());
 		tileBase.setColor(0, 0, 0, 0);
 
 		currentScene.attachChild(background);
@@ -215,8 +215,8 @@ public class Tileset implements TilesConstants
 		{
 			numberOfStreamTilesToSpawn = 2;
 			{//Player One Tiles
-				playerOneTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerOneGameButtons[3].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
-				playerOneDisplay = new Rectangle(displayIndicators[1].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[1].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, 1, activity.getVertexBufferObjectManager());
+				playerOneTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerOneGameButtons[3].getY() - PLAYER_RACE_TILE_PADDING, TILE_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, TILE_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerOneDisplay = new Rectangle(displayIndicators[1].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[1].getY() - PLAYER_RACE_TILE_PADDING, TILE_WIDTH + PLAYER_RACE_TILE_PADDING * 2, 1, activity.getVertexBufferObjectManager());
 				playerOneDisplay.setHeight(playerOneTiles.getY() - playerOneDisplay.getY());
 				playerOneTiles.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
 				playerOneDisplay.setColor(1.0f, 0, 0, PLAYER_TILES_ALPHA);
@@ -226,8 +226,8 @@ public class Tileset implements TilesConstants
 				tileBase.attachChild(playerOneDisplay);
 			}
 			{//Player Two Tiles
-				playerTwoTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerTwoGameButtons[4].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
-				playerTwoDisplay = new Rectangle(displayIndicators[0].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[0].getY() - PLAYER_RACE_TILE_PADDING, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, BUTTON_WIDTH + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoTiles = new Rectangle(TILE_BASE_PADDING - PLAYER_RACE_TILE_PADDING, playerTwoGameButtons[4].getY() - PLAYER_RACE_TILE_PADDING, TILE_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, TILE_WIDTH * 3 + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
+				playerTwoDisplay = new Rectangle(displayIndicators[0].getX() - tileBase.getX() - PLAYER_RACE_TILE_PADDING, displayIndicators[0].getY() - PLAYER_RACE_TILE_PADDING, TILE_WIDTH + PLAYER_RACE_TILE_PADDING * 2, TILE_WIDTH + PLAYER_RACE_TILE_PADDING * 2, activity.getVertexBufferObjectManager());
 				playerTwoDisplay.setHeight((playerTwoDisplay.getY() + playerTwoDisplay.getHeight()) - (playerTwoTiles.getY() + playerTwoTiles.getHeight()));
 				playerTwoDisplay.setY(playerTwoTiles.getY() + playerTwoTiles.getHeight());
 				playerTwoTiles.setColor(0, 0, 1.0f, PLAYER_TILES_ALPHA);
@@ -369,21 +369,21 @@ public class Tileset implements TilesConstants
 			//Easy Buttons
 			for (int x = 0; x < 3; x++)
 			{
-				playerTwoGameButtons[x].buttonSprite.setPosition(PLAYER_TILE_START_X + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+				playerTwoGameButtons[x].buttonSprite.setPosition(PLAYER_TILE_START_X + ((2 - x) % 3) * TILE_WIDTH, TILE_WIDTH);
 			}
 
 			//Medium Buttons
 			{
-				playerTwoGameButtons[3].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[4].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH, 0);
+				playerTwoGameButtons[3].buttonSprite.setPosition(PLAYER_TILE_START_X + TILE_WIDTH, TILE_WIDTH * 2);
+				playerTwoGameButtons[4].buttonSprite.setPosition(PLAYER_TILE_START_X + TILE_WIDTH, 0);
 			}
 
 			//Hard Buttons
 			{
 
-				playerTwoGameButtons[5].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[6].buttonSprite.setPosition(PLAYER_TILE_START_X, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[7].buttonSprite.setPosition(PLAYER_TILE_START_X + BUTTON_WIDTH * 2, 0);
+				playerTwoGameButtons[5].buttonSprite.setPosition(PLAYER_TILE_START_X + TILE_WIDTH * 2, TILE_WIDTH * 2);
+				playerTwoGameButtons[6].buttonSprite.setPosition(PLAYER_TILE_START_X, TILE_WIDTH * 2);
+				playerTwoGameButtons[7].buttonSprite.setPosition(PLAYER_TILE_START_X + TILE_WIDTH * 2, 0);
 				playerTwoGameButtons[8].buttonSprite.setPosition(PLAYER_TILE_START_X, 0);
 
 			}
@@ -402,22 +402,22 @@ public class Tileset implements TilesConstants
 			//Easy Buttons
 			for (int x = 0; x < 3; x++)
 			{
-				playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
+				playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * TILE_WIDTH, 470 + TILE_WIDTH);
 			}
 
 			//Medium Buttons
 			{
-				playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
-				playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
+				playerOneGameButtons[3].buttonSprite.setPosition(90 + TILE_WIDTH, 470 + 0);
+				playerOneGameButtons[4].buttonSprite.setPosition(90 + TILE_WIDTH, 470 + TILE_WIDTH * 2);
 			}
 
 			//Hard Buttons
 			{
 
 				playerOneGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
-				playerOneGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
-				playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
-				playerOneGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
+				playerOneGameButtons[6].buttonSprite.setPosition(90 + TILE_WIDTH * 2, 470 + 0);
+				playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + TILE_WIDTH * 2);
+				playerOneGameButtons[8].buttonSprite.setPosition(90 + TILE_WIDTH * 2, 470 + TILE_WIDTH * 2);
 
 			}
 
@@ -537,7 +537,7 @@ public class Tileset implements TilesConstants
 			{
 				pItem.buttonSprite.clearEntityModifiers();
 				pItem.buttonSprite.setRotation(90);
-				pItem.buttonSprite.setPosition(((CAMERA_WIDTH - BUTTON_WIDTH + PAUSE_BAR_WIDTH) / 2), (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+				pItem.buttonSprite.setPosition(((CAMERA_WIDTH - TILE_WIDTH + PAUSE_BAR_WIDTH) / 2), (CAMERA_HEIGHT - TILE_WIDTH) / 2);
 				pItem.buttonSprite.setVisible(false);
 
 			}
@@ -609,20 +609,20 @@ public class Tileset implements TilesConstants
 	{
 		{ //Player Two Buttons
 			for (int x = 0; x < 3; x++)
-				playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * BUTTON_WIDTH, BUTTON_WIDTH);
+				playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * TILE_WIDTH, TILE_WIDTH);
 
 			//Medium Buttons
 			{
-				playerTwoGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 0);
+				playerTwoGameButtons[3].buttonSprite.setPosition(90 + TILE_WIDTH, TILE_WIDTH * 2);
+				playerTwoGameButtons[4].buttonSprite.setPosition(90 + TILE_WIDTH, 0);
 			}
 
 			//Hard Buttons
 			{
 
-				playerTwoGameButtons[5].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[6].buttonSprite.setPosition(90, BUTTON_WIDTH * 2);
-				playerTwoGameButtons[7].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 0);
+				playerTwoGameButtons[5].buttonSprite.setPosition(90 + TILE_WIDTH * 2, TILE_WIDTH * 2);
+				playerTwoGameButtons[6].buttonSprite.setPosition(90, TILE_WIDTH * 2);
+				playerTwoGameButtons[7].buttonSprite.setPosition(90 + TILE_WIDTH * 2, 0);
 				playerTwoGameButtons[8].buttonSprite.setPosition(90, 0);
 
 			}
@@ -644,22 +644,22 @@ public class Tileset implements TilesConstants
 			//Easy Buttons
 			for (int x = 0; x < 3; x++)
 			{
-				playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * BUTTON_WIDTH, 470 + BUTTON_WIDTH);
+				playerOneGameButtons[x].buttonSprite.setPosition(90 + (x % 3) * TILE_WIDTH, 470 + TILE_WIDTH);
 			}
 
 			//Medium Buttons
 			{
-				playerOneGameButtons[3].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + 0);
-				playerOneGameButtons[4].buttonSprite.setPosition(90 + BUTTON_WIDTH, 470 + BUTTON_WIDTH * 2);
+				playerOneGameButtons[3].buttonSprite.setPosition(90 + TILE_WIDTH, 470 + 0);
+				playerOneGameButtons[4].buttonSprite.setPosition(90 + TILE_WIDTH, 470 + TILE_WIDTH * 2);
 			}
 
 			//Hard Buttons
 			{
 
 				playerOneGameButtons[5].buttonSprite.setPosition(90, 470 + 0);
-				playerOneGameButtons[6].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + 0);
-				playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + BUTTON_WIDTH * 2);
-				playerOneGameButtons[8].buttonSprite.setPosition(90 + BUTTON_WIDTH * 2, 470 + BUTTON_WIDTH * 2);
+				playerOneGameButtons[6].buttonSprite.setPosition(90 + TILE_WIDTH * 2, 470 + 0);
+				playerOneGameButtons[7].buttonSprite.setPosition(90, 470 + TILE_WIDTH * 2);
+				playerOneGameButtons[8].buttonSprite.setPosition(90 + TILE_WIDTH * 2, 470 + TILE_WIDTH * 2);
 
 			}
 
@@ -815,17 +815,17 @@ public class Tileset implements TilesConstants
 		switch (SetupScene.getDifficulty())
 		{
 		case Difficulty.EASY:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
 			break;
 		case Difficulty.NORMAL:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 - TILE_WIDTH / 2, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
+			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 + TILE_WIDTH / 2, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
 			break;
 		case Difficulty.HARD:
 		case Difficulty.INSANE:
-			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-			currentStreamButtons[2].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+			currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 - TILE_WIDTH, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
+			currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
+			currentStreamButtons[2].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 + TILE_WIDTH, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
 			break;
 		}
 	}
@@ -839,8 +839,8 @@ public class Tileset implements TilesConstants
 			currentStreamButtons[i].buttonSprite.setVisible(true);
 			currentStreamButtons[i].buttonSprite.registerEntityModifier(new ScaleModifier(WIN_MOVE_MOD_TIME, 0, 1.0f));
 		}
-		currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 - BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
-		currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - BUTTON_WIDTH) / 2 + BUTTON_WIDTH, (CAMERA_HEIGHT - BUTTON_WIDTH) / 2);
+		currentStreamButtons[0].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 - TILE_WIDTH, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
+		currentStreamButtons[1].buttonSprite.setPosition((CAMERA_WIDTH + PAUSE_BAR_WIDTH - TILE_WIDTH) / 2 + TILE_WIDTH, (CAMERA_HEIGHT - TILE_WIDTH) / 2);
 	}
 
 	public GameButton isButtonCurrentlyActive(int buttonNumber)

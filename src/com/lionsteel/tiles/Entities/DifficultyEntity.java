@@ -37,7 +37,7 @@ public class DifficultyEntity extends Entity implements TilesConstants
 			difficultyDisplayButtons[i].buttonSprite.setAlpha(0);
 		}
 		
-		final float buttonWidth = BUTTON_WIDTH * buttonScale;
+		final float buttonWidth = TILE_WIDTH * buttonScale;
 		final int XPos = 170;
 		final int YPos = -15;
 		//Easy Buttons
