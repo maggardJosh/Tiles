@@ -132,13 +132,14 @@ public class TilesTutorial extends Entity implements TilesConstants
 		raceArrowSprite[PLAYER_ONE].setPosition(arrowSprite[PLAYER_ONE]);
 		raceArrowSprite[PLAYER_TWO].setPosition(arrowSprite[PLAYER_TWO]);
 
+		attachChild(matchAreaSprite);
 		for (int i = 0; i < 2; i++)
 		{
 			attachChild(arrowSprite[i]);
 			attachChild(matchWordsSprite[i]);
-			attachChild(yourTilesWordsSprite[i]);
 			attachChild(yourTilesAreaSprite[i]);
 			attachChild(raceAreaSprite[i]);
+			attachChild(yourTilesWordsSprite[i]);
 			attachChild(raceArrowSprite[i]);
 
 			arrowSprite[i].setVisible(false);
@@ -148,7 +149,6 @@ public class TilesTutorial extends Entity implements TilesConstants
 			raceAreaSprite[i].setVisible(false);
 			raceArrowSprite[i].setVisible(false);
 		}
-		attachChild(matchAreaSprite);
 		matchAreaSprite.setVisible(false);
 	}
 
