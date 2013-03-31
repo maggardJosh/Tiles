@@ -33,9 +33,9 @@ import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
+import com.lionsteel.tiles.Entities.TilesTutorial;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.WrongSelectionIndicator;
 import com.lionsteel.tiles.Scenes.GameScenes.GameCountdown;
@@ -56,13 +56,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected final Sprite				playerOneIntro;
 	protected final Sprite				playerTwoIntro;
-	protected final Sprite[]			playerTutorials			= new Sprite[2];
-	private boolean[]					playerInTutorial		= new boolean[2];
 	protected final Sprite				ropeSprite;
 	protected final Sprite				ropeKnotSprite;
 
 	private final TouchControl[]		introTouchControls		= new TouchControl[2];
-	final TilesMenuButton[]				tutorialButton			= new TilesMenuButton[2];
 
 	protected boolean					playerOneReady			= false;
 	protected boolean					playerTwoReady			= false;
@@ -77,7 +74,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 	private final int[]					currentStreak			= new int[2];
 
 	protected TilesMenuButton			pauseButton;
-	final TilesMenuButton[]				tutorialExitButton		= new TilesMenuButton[2];
 
 	protected int						gameState				= GameState.INTRO;
 	protected float						secondsOnCurrentState	= 0;
@@ -116,10 +112,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		pauseButton.dispose();
 		for (int i = 0; i < 2; i++)
 		{
-			tutorialButton[i].dispose();
-			tutorialExitButton[i].dispose();
 			errorIndicators[i].dispose();
-			playerTutorials[i].dispose();
 			introTouchControls[i].dispose();
 		}
 		ropeSprite.dispose();
@@ -173,9 +166,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 		final TextureRegion barKnotRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "barKnot.png");
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
-		final TextureRegion tutorialRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, GameMode.getName(SetupScene.getGameMode()) + "Tutorial.png");
-		final TextureRegion tutorialButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tutorialButton.png");
-		final TextureRegion tutorialExitButtonRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "tutorialExitButton.png");
 		try
 		{
 			sceneAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(2, 2, 4));
@@ -201,62 +191,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 		playerTwoIntro.setRotation(180);
 		playerTwoIntro.setZIndex(FOREGROUND_Z);
 
-		final int TUTORIAL_BUTTON_PADDING = 30;
-
-		for (int x = 0; x < 2; x++)
-		{
-			final int playerIndex = x;
-			tutorialButton[x] = new TilesMenuButton(tutorialButtonRegion, new Runnable()
-			{
-
-				@Override
-				public void run()
-				{
-					moveTutorialIn(playerIndex);
-				}
-			});
-			tutorialButton[x].registerOwnTouchArea(this);
-			final int BUTTON_Y_SPACING = 20;
-			if (x == PLAYER_ONE)
-			{
-				playerOneIntro.attachChild(tutorialButton[x]);
-				tutorialButton[x].setPosition(playerOneIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerOneIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
-				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
-				helpText.setPosition(tutorialButton[x].getX() + (tutorialButton[x].getWidth() - helpText.getWidth()) / 2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
-				playerOneIntro.attachChild(helpText);
-			} else
-			{
-				playerTwoIntro.attachChild(tutorialButton[x]);
-				tutorialButton[x].setPosition(playerTwoIntro.getWidth() - tutorialButton[x].getWidth() - TUTORIAL_BUTTON_PADDING, (playerTwoIntro.getHeight() - tutorialButton[x].getHeight()) / 2);
-				final Text helpText = new Text(0, 0, SharedResources.getInstance().mFont, "Help", activity.getVertexBufferObjectManager());
-				helpText.setPosition(tutorialButton[x].getX() + (tutorialButton[x].getWidth() - helpText.getWidth()) / 2, tutorialButton[x].getY() - BUTTON_Y_SPACING);
-				playerTwoIntro.attachChild(helpText);
-			}
-		}
-
-		final int TUTORIAL_EXIT_Y_PADDING = 20;
-		final int TUTORIAL_EXIT_X_PADDING = 80;
-		for (int x = 0; x < 2; x++)
-		{
-			playerTutorials[x] = new Sprite((CAMERA_WIDTH - tutorialRegion.getWidth()) / 2, 0, tutorialRegion, activity.getVertexBufferObjectManager());
-			final int playerIndex = x;
-			tutorialExitButton[x] = new TilesMenuButton(tutorialExitButtonRegion, new Runnable()
-			{
-
-				@Override
-				public void run()
-				{
-					moveTutorialOut(playerIndex);
-				}
-			});
-			playerTutorials[x].attachChild(tutorialExitButton[x]);
-			tutorialExitButton[x].setPosition((playerTutorials[x].getWidth() - tutorialExitButton[x].getWidth()) / 2 + TUTORIAL_EXIT_X_PADDING, playerTutorials[x].getHeight() - tutorialExitButton[x].getHeight() - TUTORIAL_EXIT_Y_PADDING);
-			playerTutorials[x].setZIndex(FOREGROUND_Z + 1);
-		}
-		playerTutorials[PLAYER_TWO].setRotation(180);
-		playerTutorials[PLAYER_TWO].setY(-playerTutorials[PLAYER_TWO].getHeight());
-		playerTutorials[PLAYER_ONE].setY(CAMERA_HEIGHT);
-
 		prepareTouchControls();
 
 		this.attachChild(ropeSprite);
@@ -267,9 +201,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 		this.attachChild(playerOneIntro);
 		this.attachChild(playerTwoIntro);
-
-		this.attachChild(playerTutorials[PLAYER_ONE]);
-		this.attachChild(playerTutorials[PLAYER_TWO]);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -292,50 +223,6 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 			}
 		});
-
-		moveTutorialIn(PLAYER_ONE);
-		moveTutorialIn(PLAYER_TWO);
-	}
-
-	protected void moveTutorialIn(int playerIndex)
-	{
-		this.unregisterTouchArea(introTouchControls[(playerIndex + 1) % 2].outerImage);
-		tutorialButton[playerIndex].unregisterOwnTouchArea(this);
-		tutorialExitButton[playerIndex].registerOwnTouchArea(this);
-		introTouchControls[(playerIndex + 1) % 2].resetButton();
-		playerTutorials[playerIndex].clearEntityModifiers();
-		float targetY = 0;
-		switch (playerIndex)
-		{
-		case PLAYER_ONE:
-			targetY = CAMERA_HEIGHT - playerTutorials[playerIndex].getHeight();
-			break;
-		case PLAYER_TWO:
-			targetY = 0;
-			break;
-		}
-		playerInTutorial[playerIndex] = true;
-		playerTutorials[playerIndex].registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTutorials[playerIndex].getY(), targetY));
-	}
-
-	private void moveTutorialOut(final int playerIndex)
-	{
-		playerTutorials[playerIndex].clearEntityModifiers();
-		tutorialExitButton[playerIndex].unregisterOwnTouchArea(this);
-		tutorialButton[playerIndex].registerOwnTouchArea(this);
-		this.registerTouchArea(introTouchControls[(playerIndex + 1) % 2].outerImage);
-		float targetY = 0;
-		switch (playerIndex)
-		{
-		case PLAYER_ONE:
-			targetY = CAMERA_HEIGHT;
-			break;
-		case PLAYER_TWO:
-			targetY = -playerTutorials[playerIndex].getHeight();
-			break;
-		}
-		playerInTutorial[playerIndex] = false;
-		playerTutorials[playerIndex].registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerTutorials[playerIndex].getY(), targetY));
 
 	}
 
@@ -475,7 +362,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		switch (gameState)
 		{
 		case GameState.INTRO:
-			if (playerOneReady && playerTwoReady && !playerInTutorial[PLAYER_ONE] && !playerInTutorial[PLAYER_TWO])
+			if (playerOneReady && playerTwoReady)
 			{
 				SongManager.getInstance().fadeOut();
 				playerOneIntro.registerEntityModifier(new MoveYModifier(INTRO_OUT_DURATION, playerOneIntro.getY(), CAMERA_HEIGHT));
@@ -545,7 +432,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void startAnimateIn()
 	{
-		changeState(GameState.START_COUNTDOWN);
+		changeState(GameState.TUTORIAL_ANIM);
 
 		final int BUTTON_PADDING = 3;
 		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT - pauseButton.getHeight()) / 2);
@@ -562,6 +449,21 @@ public abstract class GameScene extends Scene implements TilesConstants
 			@Override
 			public void run()
 			{
+				startTutorialAnim();
+			}
+		});
+	}
+	
+	protected void startTutorialAnim()
+	{
+		attachChild(TilesTutorial.getInstance());
+		TilesTutorial.getInstance().startTutorial(SetupScene.getGameMode(), new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				changeState(GameState.START_COUNTDOWN);
 				startCountdown();
 			}
 		});
@@ -666,7 +568,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 	{
 		public static final int	INTRO				= 0;
 		public static final int	ANIMATING_TILES_IN	= INTRO + 1;
-		public static final int	START_COUNTDOWN		= ANIMATING_TILES_IN + 1;
+		public static final int	TUTORIAL_ANIM		= ANIMATING_TILES_IN + 1;
+		public static final int	START_COUNTDOWN		= TUTORIAL_ANIM + 1;
 		public static final int	IN_COUNTDOWN		= START_COUNTDOWN + 1;
 		public static final int	WAITING_FOR_INPUT	= IN_COUNTDOWN + 1;
 		public static final int	PICKING_NEW_BUTTON	= WAITING_FOR_INPUT + 1;
@@ -687,5 +590,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 		tileCollectSound.setRate(MIN_TILE_COLLECT_RATE + rand.nextFloat() * (MAX_TILE_COLLECT_RATE - MIN_TILE_COLLECT_RATE));
 
 		tileCollectSound.play();
+	}
+
+	public int getGameState()
+	{
+		return gameState;
 	}
 }

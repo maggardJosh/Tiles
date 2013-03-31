@@ -29,10 +29,12 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
+import com.lionsteel.tiles.Entities.TilesTutorial;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Scenes.GameScenes.FreePlayGameScene;
 import com.lionsteel.tiles.Scenes.GameScenes.FrenzyGameScene;
@@ -343,6 +345,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				{
 					if (GameScene.isGameEventStarted)
 						TilesMainActivity.endGameEvent();
+					if(gameScene.getGameState() == GameState.TUTORIAL_ANIM)
+						TilesTutorial.getInstance().cancelTutorial();
 					backToMainMenu();
 				}
 			});
@@ -440,6 +444,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 		BuyTilesetSelectScene.clear();
 		SetupScene.clear();
 		PauseScene.clear();
+		TilesTutorial.clear();
 		loadTaskInstance = null;
 	}
 
@@ -482,6 +487,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			SetupScene.getTileset().createGameAssets();
 			SharedResources.getInstance().loadGameAssets();
+			TilesTutorial.getInstance();
 			switch (SetupScene.getGameMode())
 			{
 			case GameMode.REFLEX:
