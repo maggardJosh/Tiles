@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
@@ -57,7 +58,7 @@ public class TilesTutorial extends Entity implements TilesConstants
 	{
 		activity = TilesMainActivity.getInstance();
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/Tutorial/");
-		tutorialAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024);
+		tutorialAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGBA_4444);
 		final TextureRegion arrowRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(tutorialAtlas, activity, "tutorialArrow.png");
 		final TextureRegion matchWordsRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(tutorialAtlas, activity, "tutorialMatchWords.png");
 		final TextureRegion matchAreaRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(tutorialAtlas, activity, "tutorialMatchArea.png");
