@@ -162,7 +162,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 		final TextureRegion ropeRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ropeAtlas, activity, "bar.png", 2, 0);
 		ropeAtlas.load();
 
-		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444);
+		sceneAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 1024, BitmapTextureFormat.RGBA_4444);
 		final TextureRegion barKnotRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "barKnot.png");
 		final TextureRegion playerOneIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerOneIntro.png");
 		final TextureRegion playerTwoIntroRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(sceneAtlas, activity, "playerTwoIntro.png");
