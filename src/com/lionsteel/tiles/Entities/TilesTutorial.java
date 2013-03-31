@@ -1,7 +1,5 @@
 package com.lionsteel.tiles.Entities;
 
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
@@ -41,6 +39,7 @@ public class TilesTutorial extends Entity implements TilesConstants
 	private BuildableBitmapTextureAtlas	tutorialAtlas;
 
 	private final Sprite[]				arrowSprite				= new Sprite[2];
+	private final Sprite[]				raceArrowSprite			= new Sprite[2];
 	private final Sprite[]				yourTilesAreaSprite		= new Sprite[2];
 	private final Sprite[]				yourTilesWordsSprite	= new Sprite[2];
 	private final Sprite[]				matchWordsSprite		= new Sprite[2];
@@ -50,7 +49,7 @@ public class TilesTutorial extends Entity implements TilesConstants
 	@Override
 	public void dispose()
 	{
-
+		tutorialAtlas.unload();
 		super.dispose();
 	}
 
@@ -78,6 +77,7 @@ public class TilesTutorial extends Entity implements TilesConstants
 		for (int i = 0; i < 2; i++)
 		{
 			arrowSprite[i] = new Sprite(0, 0, arrowRegion, activity.getVertexBufferObjectManager());
+			raceArrowSprite[i] = new Sprite(0, 0, arrowRegion, activity.getVertexBufferObjectManager());
 			matchWordsSprite[i] = new Sprite(0, 0, matchWordsRegion, activity.getVertexBufferObjectManager());
 			raceAreaSprite[i] = new Sprite(0, 0, raceAreaRegion, activity.getVertexBufferObjectManager());
 			yourTilesAreaSprite[i] = new Sprite(0, 0, yourTilesAreaRegion, activity.getVertexBufferObjectManager());
@@ -89,6 +89,8 @@ public class TilesTutorial extends Entity implements TilesConstants
 		yourTilesWordsSprite[PLAYER_TWO].setRotation(180);
 		matchWordsSprite[PLAYER_TWO].setRotation(180);
 		arrowSprite[PLAYER_TWO].setRotation(180);
+		raceArrowSprite[PLAYER_ONE].setRotation(45);
+		raceArrowSprite[PLAYER_TWO].setRotation(180 + 45);
 
 		setPositions();
 
@@ -120,9 +122,15 @@ public class TilesTutorial extends Entity implements TilesConstants
 		matchAreaSprite.setPosition(yourTilesAreaSprite[PLAYER_ONE].getX(), (yourTilesAreaSprite[PLAYER_ONE].getY() + yourTilesAreaSprite[PLAYER_TWO].getHeight() - matchAreaSprite.getHeight()) / 2);
 		for (int i = 0; i < 2; i++)
 			arrowSprite[i].setX(matchAreaSprite.getX() + (matchAreaSprite.getWidth() - arrowSprite[i].getWidth()) / 2);
+		final int RACE_AREA_PADDING = 4;
+		raceAreaSprite[PLAYER_ONE].setPosition(matchAreaSprite.getX() + matchAreaSprite.getWidth() - raceAreaSprite[PLAYER_ONE].getWidth() - RACE_AREA_PADDING, matchAreaSprite.getY());
+		raceAreaSprite[PLAYER_TWO].setPosition(matchAreaSprite.getX() + RACE_AREA_PADDING, matchAreaSprite.getY());
 
 		arrowSprite[PLAYER_ONE].setY(matchAreaSprite.getY() + matchAreaSprite.getHeight() + ARROW_SPACING);
 		arrowSprite[PLAYER_TWO].setY(matchAreaSprite.getY() - arrowSprite[PLAYER_TWO].getHeight() - ARROW_SPACING);
+
+		raceArrowSprite[PLAYER_ONE].setPosition(arrowSprite[PLAYER_ONE]);
+		raceArrowSprite[PLAYER_TWO].setPosition(arrowSprite[PLAYER_TWO]);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -131,12 +139,14 @@ public class TilesTutorial extends Entity implements TilesConstants
 			attachChild(yourTilesWordsSprite[i]);
 			attachChild(yourTilesAreaSprite[i]);
 			attachChild(raceAreaSprite[i]);
+			attachChild(raceArrowSprite[i]);
 
 			arrowSprite[i].setVisible(false);
 			matchWordsSprite[i].setVisible(false);
 			yourTilesWordsSprite[i].setVisible(false);
 			yourTilesAreaSprite[i].setVisible(false);
 			raceAreaSprite[i].setVisible(false);
+			raceArrowSprite[i].setVisible(false);
 		}
 		attachChild(matchAreaSprite);
 		matchAreaSprite.setVisible(false);
@@ -144,29 +154,110 @@ public class TilesTutorial extends Entity implements TilesConstants
 
 	public void startTutorial(final int gameMode, final Runnable endAction)
 	{
-		activity.runOnUpdateThread(new Runnable()
+		switch (gameMode)
+		{
+		case GameMode.REFLEX:
+		case GameMode.NON_STOP:
+			startNormalVersus(endAction);
+			break;
+		case GameMode.RACE:
+			startRace(endAction);
+			break;
+		case GameMode.FREE_PLAY:
+		case GameMode.FRENZY:
+		case GameMode.TIME_ATTACK:
+			startPractice(endAction);
+			break;
+		}
+
+	}
+
+	private void startRace(final Runnable endAction)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			yourTilesAreaSprite[i].setVisible(true);
+			yourTilesWordsSprite[i].setVisible(true);
+		}
+		arrowSprite[0].registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
 		{
 			@Override
-			public void run()
+			protected void onModifierFinished(IEntity pItem)
 			{
-				switch (gameMode)
+				for (int i = 0; i < 2; i++)
 				{
-				case GameMode.REFLEX:
-				case GameMode.NON_STOP:
-
-					startNormalVersus(endAction);
-
-					break;
-				case GameMode.RACE:
-					//Race tutorial
-					break;
-				case GameMode.FREE_PLAY:
-				case GameMode.FRENZY:
-				case GameMode.TIME_ATTACK:
-					startPractice(endAction);
-					break;
+					yourTilesAreaSprite[i].setVisible(false);
+					yourTilesWordsSprite[i].setVisible(false);
+				}
+				super.onModifierFinished(pItem);
+			}
+		}, new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+		{
+			protected void onModifierFinished(IEntity pItem)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					yourTilesAreaSprite[i].setVisible(true);
+					yourTilesWordsSprite[i].setVisible(true);
+				}
+				super.onModifierFinished(pItem);
+			};
+		}), 4)
+		{
+			@Override
+			protected void onModifierFinished(IEntity pItem)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					raceArrowSprite[i].setVisible(true);
+					matchWordsSprite[i].setVisible(true);
+					raceAreaSprite[i].setVisible(true);
+					yourTilesAreaSprite[i].setVisible(false);
+					yourTilesWordsSprite[i].setVisible(false);
 				}
 
+				arrowSprite[0].registerEntityModifier(new LoopEntityModifier(new SequenceEntityModifier(new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						for (int i = 0; i < 2; i++)
+						{
+							raceArrowSprite[i].setVisible(false);
+							matchWordsSprite[i].setVisible(false);
+							raceAreaSprite[i].setVisible(false);
+						}
+						super.onModifierFinished(pItem);
+					}
+				}, new DelayModifier(TUTORIAL_SEGMENT_LENGTH / 8)
+				{
+					protected void onModifierFinished(IEntity pItem)
+					{
+						for (int i = 0; i < 2; i++)
+						{
+							raceArrowSprite[i].setVisible(true);
+							matchWordsSprite[i].setVisible(true);
+							raceAreaSprite[i].setVisible(true);
+						}
+						super.onModifierFinished(pItem);
+					};
+				}), 4)
+				{
+					@Override
+					protected void onModifierFinished(IEntity pItem)
+					{
+						endAction.run();
+						for (int i = 0; i < 2; i++)
+						{
+							raceArrowSprite[i].setVisible(false);
+							matchWordsSprite[i].setVisible(false);
+							raceAreaSprite[i].setVisible(false);
+						}
+						detachSelf();
+						super.onModifierFinished(pItem);
+					}
+				});
+				super.onModifierFinished(pItem);
 			}
 		});
 	}
