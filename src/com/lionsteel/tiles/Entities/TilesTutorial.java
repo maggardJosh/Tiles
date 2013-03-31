@@ -172,6 +172,21 @@ public class TilesTutorial extends Entity implements TilesConstants
 
 	}
 
+	public void cancelTutorial()
+	{
+		arrowSprite[0].clearEntityModifiers();
+		for (int i = 0; i < 2; i++)
+		{
+			arrowSprite[i].setVisible(false);
+			matchWordsSprite[i].setVisible(false);
+			yourTilesWordsSprite[i].setVisible(false);
+			yourTilesAreaSprite[i].setVisible(false);
+			raceAreaSprite[i].setVisible(false);
+			raceArrowSprite[i].setVisible(false);
+		}
+		matchAreaSprite.setVisible(false);
+	}
+
 	private void startRace(final Runnable endAction)
 	{
 		for (int i = 0; i < 2; i++)

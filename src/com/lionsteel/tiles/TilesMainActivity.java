@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
@@ -344,6 +345,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 				{
 					if (GameScene.isGameEventStarted)
 						TilesMainActivity.endGameEvent();
+					if(gameScene.getGameState() == GameState.TUTORIAL_ANIM)
+						TilesTutorial.getInstance().cancelTutorial();
 					backToMainMenu();
 				}
 			});

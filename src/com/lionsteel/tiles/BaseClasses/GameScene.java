@@ -33,7 +33,6 @@ import com.lionsteel.tiles.SongManager;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
-import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.TilesTutorial;
@@ -591,5 +590,10 @@ public abstract class GameScene extends Scene implements TilesConstants
 		tileCollectSound.setRate(MIN_TILE_COLLECT_RATE + rand.nextFloat() * (MAX_TILE_COLLECT_RATE - MIN_TILE_COLLECT_RATE));
 
 		tileCollectSound.play();
+	}
+
+	public int getGameState()
+	{
+		return gameState;
 	}
 }
