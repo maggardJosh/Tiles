@@ -339,7 +339,7 @@ public class SetupScene extends TilesMenuScene
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
-		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, Tileset.tilesetList[0]), false);
+		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, "basic"), false);
 
 		modeSelectScreen = new VersusModeSelectScene();
 		practiceModeSelectScene = new PracticeModeSelectScene();
