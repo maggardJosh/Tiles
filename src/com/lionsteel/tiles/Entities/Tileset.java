@@ -14,6 +14,17 @@ import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.particle.SpriteParticleSystem;
+import org.andengine.entity.particle.emitter.BaseParticleEmitter;
+import org.andengine.entity.particle.emitter.RectangleParticleEmitter;
+import org.andengine.entity.particle.initializer.AccelerationParticleInitializer;
+import org.andengine.entity.particle.initializer.AlphaParticleInitializer;
+import org.andengine.entity.particle.initializer.BlendFunctionParticleInitializer;
+import org.andengine.entity.particle.initializer.ColorParticleInitializer;
+import org.andengine.entity.particle.initializer.VelocityParticleInitializer;
+import org.andengine.entity.particle.modifier.AlphaParticleModifier;
+import org.andengine.entity.particle.modifier.ExpireParticleInitializer;
+import org.andengine.entity.particle.modifier.ScaleParticleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -30,6 +41,8 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.ease.EaseCubicIn;
 import org.andengine.util.modifier.ease.EaseCubicOut;
+
+import android.opengl.GLES20;
 
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
@@ -49,7 +62,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {}; //{ "blocks", "dice" };
+	public static final String[]			purchaseableTilesets		= {};									//{ "blocks", "dice" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
@@ -85,6 +98,8 @@ public class Tileset implements TilesConstants
 	private Rectangle						playerOneDisplay;
 	private Rectangle						playerTwoTiles;
 	private Rectangle						playerTwoDisplay;
+
+	private SpriteParticleSystem			displayButtonParticleSystem;
 
 	/**
 	 * 
@@ -211,6 +226,8 @@ public class Tileset implements TilesConstants
 		currentScene.attachChild(tileBase);
 		setupIndicators();
 
+		setupParticleSystems();
+
 		if (SetupScene.getGameMode() == GameMode.RACE)
 		{
 			numberOfStreamTilesToSpawn = 2;
@@ -240,6 +257,42 @@ public class Tileset implements TilesConstants
 
 		}
 		currentScene.sortChildren();
+	}
+
+	private void setupParticleSystems()
+	{
+		final float minYStartVel = -10;
+		final float maxYStartVel = 10;
+		final float maxXAccel = 20;
+		final float minYAccel = -20;
+		final float maxYAccel = 20;
+		final float expireTime = 1.0f;
+		final float minScale = 1.0f;
+		final float maxScale = .1f;
+		final float startAlpha = 1.0f;
+
+		final int minSpawn = 20;
+		final int maxSpawn = 30;
+		final int maxParticles = 100;
+
+		displayButtonParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(0, 0, TILE_WIDTH/2, TILE_WIDTH/2), minSpawn, maxSpawn, maxParticles, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
+
+		displayButtonParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA));
+		displayButtonParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(minYStartVel, maxYStartVel, minYStartVel, maxYStartVel));
+		displayButtonParticleSystem.addParticleInitializer(new AccelerationParticleInitializer<Sprite>(-maxXAccel, maxXAccel, minYAccel, maxYAccel));
+		displayButtonParticleSystem.addParticleInitializer(new ColorParticleInitializer<Sprite>(0, 1.0f, 0.0f));
+		displayButtonParticleSystem.addParticleInitializer(new AlphaParticleInitializer<Sprite>(startAlpha));
+		displayButtonParticleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(expireTime));
+
+		displayButtonParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(0, expireTime * .7f, minScale, maxScale));
+		displayButtonParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime * .7f, expireTime, maxScale, 0));
+
+		displayButtonParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, startAlpha, 0.0f));
+		
+		displayButtonParticleSystem.setParticlesSpawnEnabled(false);
+		displayButtonParticleSystem.setZIndex(FOREGROUND_Z-1);
+
+		currentScene.attachChild(displayButtonParticleSystem);
 	}
 
 	private void setupIndicators()
@@ -487,7 +540,7 @@ public class Tileset implements TilesConstants
 		animateDisplayButton(displayButton, playerButton, listener);
 	}
 
-	private void animateDisplayButton(GameButton displayButton, GameButton playerButton, IEntityModifierListener listener)
+	private void animateDisplayButton(GameButton displayButton, final GameButton playerButton, IEntityModifierListener listener)
 	{
 		FlurryAgent.logEvent(FlurryAgentEventStrings.WON_TILE);
 		currentScene.playTileCollectSound();
@@ -497,9 +550,18 @@ public class Tileset implements TilesConstants
 		displayButton.buttonSprite.registerEntityModifier(new MoveModifier(WIN_MOVE_MOD_TIME, displayButton.buttonSprite.getX(), playerButton.buttonSprite.getX(), displayButton.buttonSprite.getY(), playerButton.buttonSprite.getY(), listener)
 		{
 			@Override
+			protected void onManagedUpdate(float pSecondsElapsed, IEntity pItem)
+			{
+				((BaseParticleEmitter) displayButtonParticleSystem.getParticleEmitter()).setCenter(pItem.getX(), pItem.getY());
+				displayButtonParticleSystem.setParticlesSpawnEnabled(true);
+				super.onManagedUpdate(pSecondsElapsed, pItem);
+			}
+
+			@Override
 			protected void onModifierFinished(IEntity pItem)
 			{
 				playTileCrash();
+				displayButtonParticleSystem.setParticlesSpawnEnabled(false);
 				super.onModifierFinished(pItem);
 			}
 		});
