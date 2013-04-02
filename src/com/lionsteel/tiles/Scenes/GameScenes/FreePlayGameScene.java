@@ -79,6 +79,7 @@ public class FreePlayGameScene extends PracticeGameScene
 		switch (gameState)
 		{
 		case GameState.IN_COUNTDOWN:
+		case GameState.TUTORIAL_ANIM:
 			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))

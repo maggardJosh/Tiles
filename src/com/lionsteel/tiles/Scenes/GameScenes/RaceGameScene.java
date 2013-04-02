@@ -10,6 +10,7 @@ import org.andengine.util.modifier.IModifier;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.TimerRect;
 
@@ -56,6 +57,7 @@ public class RaceGameScene extends GameScene
 		switch (gameState)
 		{
 		case GameState.IN_COUNTDOWN:
+		case GameState.TUTORIAL_ANIM:
 			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))

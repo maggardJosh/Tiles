@@ -432,7 +432,7 @@ public abstract class GameScene extends Scene implements TilesConstants
 
 	protected void startAnimateIn()
 	{
-		changeState(GameState.TUTORIAL_ANIM);
+		changeState(GameState.ANIMATING_TILES_IN);
 
 		final int BUTTON_PADDING = 3;
 		pauseButton.setPosition(BUTTON_PADDING, (CAMERA_HEIGHT - pauseButton.getHeight()) / 2);
@@ -457,6 +457,8 @@ public abstract class GameScene extends Scene implements TilesConstants
 	protected void startTutorialAnim()
 	{
 		attachChild(TilesTutorial.getInstance());
+		TilesTutorial.getInstance().setZIndex(FOREGROUND_Z);
+		changeState(GameState.TUTORIAL_ANIM);
 		TilesTutorial.getInstance().startTutorial(SetupScene.getGameMode(), new Runnable()
 		{
 			
