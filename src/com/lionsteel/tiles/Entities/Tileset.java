@@ -669,6 +669,8 @@ public class Tileset implements TilesConstants
 
 	public void resetPlayerTiles()
 	{
+		if(displayButtonParticleSystem != null)
+			displayButtonParticleSystem.setParticlesSpawnEnabled(false);
 		{ //Player Two Buttons
 			for (int x = 0; x < 3; x++)
 				playerTwoGameButtons[x].buttonSprite.setPosition(90 + ((2 - x) % 3) * TILE_WIDTH, TILE_WIDTH);
