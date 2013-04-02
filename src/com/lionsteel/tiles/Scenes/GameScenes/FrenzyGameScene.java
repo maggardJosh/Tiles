@@ -10,6 +10,7 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
@@ -106,6 +107,7 @@ public class FrenzyGameScene extends PracticeGameScene
 		switch (gameState)
 		{
 		case GameState.IN_COUNTDOWN:
+		case GameState.TUTORIAL_ANIM:
 			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))

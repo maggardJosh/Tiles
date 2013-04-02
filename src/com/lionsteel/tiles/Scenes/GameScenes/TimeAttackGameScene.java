@@ -10,6 +10,7 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
+import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
@@ -52,7 +53,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		difficultyLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Difficulty", activity.getVertexBufferObjectManager());
 		difficultyText = new Text(0, 0, SharedResources.getInstance().mFont, Difficulty.getName(SetupScene.getDifficulty()), activity.getVertexBufferObjectManager());
 		bestTimeLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Best Time", activity.getVertexBufferObjectManager());
-		bestTimeValue = new Text(0, 0, SharedResources.getInstance().mFont, getBestTimeString(), activity.getVertexBufferObjectManager());
+		bestTimeValue = new Text(0, 0, SharedResources.getInstance().mFont, getBestTimeString(), 15, activity.getVertexBufferObjectManager());
 		timePlayedLabel = new Text(0, 0, SharedResources.getInstance().mFont, "Round Time", activity.getVertexBufferObjectManager());
 		timePlayedText = new Text(0, 0, SharedResources.getInstance().mFont, "00:00:00.000", 15, activity.getVertexBufferObjectManager());
 
@@ -121,6 +122,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 		switch (gameState)
 		{
 		case GameState.IN_COUNTDOWN:
+		case GameState.TUTORIAL_ANIM:
 			return true;
 		case GameState.WAITING_FOR_INPUT:
 			if (checkPlayerDisabled(button.getPlayer()))
