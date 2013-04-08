@@ -11,7 +11,9 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 
+import com.amazon.inapp.purchasing.PurchasingManager;
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.AmazonPurchaser;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
@@ -35,10 +37,17 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 	private static TilesetSelectScene	instance;
 
-	public static TilesetSelectScene getInstance()
+	public static TilesetSelectScene createInstance()
 	{
 		if (instance == null)
 			instance = new TilesetSelectScene();
+		return instance;
+	}
+
+	public static TilesetSelectScene getInstance()
+	{
+		while (instance == null)
+			;
 		return instance;
 	}
 
@@ -47,7 +56,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 		super();
 
 		instance = this;
-		
+
 		activity.updateLoadProgress("Loading Tileset Menu");
 
 		buyTilesetSelectScene = BuyTilesetSelectScene.getInstance();
@@ -86,35 +95,21 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 		buyTilesetsButton = new TilesMenuButton(SharedResources.getInstance().buyTilesetButtonRegion, new Runnable()
 		{
-
-			@Override
 			public void run()
 			{
-				if (!TilesMainActivity.getInstance().getIABHelper().isSetup())
-					TilesMainActivity.getInstance().setupIABHelper();
-				else if (!TilesMainActivity.getInstance().getArePurchasesLoaded())
-					TilesMainActivity.getInstance().startGetPurchasesTask(new Runnable[] { new Runnable()
-					{
+				transitionChildScene(BuyTilesetSelectScene.getInstance());
+			};
 
-						@Override
-						public void run()
-						{
-							transitionChildScene(BuyTilesetSelectScene.getInstance());
-						}
-					} });
-				else
-					transitionChildScene(BuyTilesetSelectScene.getInstance());
-
-			}
 		});
 		buyTilesetsButton.center(nextYPos);
 		nextYPos = buyTilesetsButton.getBottom();
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + BOTTOM_PADDING;
-
-		activity.setupIABHelper();
-
+		
+		AmazonPurchaser amazonIAP = new AmazonPurchaser(activity);
+		PurchasingManager.registerObserver(amazonIAP);
+		PurchasingManager.initiateGetUserIdRequest();
 	}
 
 	public void clearButtons()

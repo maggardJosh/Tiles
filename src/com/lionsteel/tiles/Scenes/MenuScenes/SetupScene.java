@@ -344,7 +344,7 @@ public class SetupScene extends TilesMenuScene
 		modeSelectScreen = new VersusModeSelectScene();
 		practiceModeSelectScene = new PracticeModeSelectScene();
 		skillSelectScene = new SkillSelectScene();
-		tilesetSelectScene = TilesetSelectScene.getInstance();
+		tilesetSelectScene = TilesetSelectScene.createInstance();
 
 		activity.updateLoadProgress("Loading Setup Menu");
 

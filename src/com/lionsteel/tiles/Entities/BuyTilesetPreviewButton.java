@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.amazon.inapp.purchasing.PurchasingManager;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
@@ -43,39 +44,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 		@Override
 		protected Void doInBackground(String... params)
 		{
-			TilesMainActivity.getInstance().getIABHelper().launchPurchaseFlow(TilesMainActivity.getInstance(), "android.test.purchased", 10001, new OnIabPurchaseFinishedListener()
-			{
-
-				@Override
-				public void onIabPurchaseFinished(final IabResult result, final Purchase info)
-				{
-					if (result.isFailure())
-					{
-						Log.d("IAB", "Purchase Failure " + result.getMessage());
-
-						progressDialog.dismiss();
-
-						return;
-					}
-
-					if (info != null)
-						try
-						{
-							TilesMainActivity.getInstance().getIABHelper().consume(info);
-						} catch (IabException e)
-						{
-							e.printStackTrace();
-						}
-					
-					HashMap<String, String> gameParams = new HashMap<String, String>();
-					gameParams.put("Tileset_Bought", basePath);
-					FlurryAgent.logEvent(FlurryAgentEventStrings.BUY_TILESET, gameParams);
-					
-					Tileset.purchasedTilesets.add(basePath);
-					TilesetSelectScene.getInstance().redoButtons();
-
-				}
-			}, "");
+			PurchasingManager.initiatePurchaseRequest("com.lionsteel.tiles."+basePath);
 			return null;
 		}
 		@Override

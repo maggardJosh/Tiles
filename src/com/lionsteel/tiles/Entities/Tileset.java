@@ -62,7 +62,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {};									//{ "blocks", "dice" };
+	public static final String[]			purchaseableTilesets		= {"autumn"};									//{ "blocks", "dice" };
 	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
@@ -100,6 +100,14 @@ public class Tileset implements TilesConstants
 	private Rectangle						playerTwoDisplay;
 
 	private SpriteParticleSystem			displayButtonParticleSystem;
+
+	public static void addPurchasedTileset(String purchasedTileset)
+	{
+		for (int i = 0; i < purchasedTilesets.size(); i++)
+			if (purchasedTilesets.get(i).equalsIgnoreCase(purchasedTileset))
+				return;
+		purchasedTilesets.add(purchasedTileset);
+	}
 
 	/**
 	 * 
@@ -275,7 +283,7 @@ public class Tileset implements TilesConstants
 		final int maxSpawn = 30;
 		final int maxParticles = 100;
 
-		displayButtonParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(0, 0, TILE_WIDTH/2, TILE_WIDTH/2), minSpawn, maxSpawn, maxParticles, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
+		displayButtonParticleSystem = new SpriteParticleSystem(new RectangleParticleEmitter(0, 0, TILE_WIDTH / 2, TILE_WIDTH / 2), minSpawn, maxSpawn, maxParticles, SharedResources.getInstance().particlePointRegion, activity.getVertexBufferObjectManager());
 
 		displayButtonParticleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA));
 		displayButtonParticleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(minYStartVel, maxYStartVel, minYStartVel, maxYStartVel));
@@ -288,9 +296,9 @@ public class Tileset implements TilesConstants
 		displayButtonParticleSystem.addParticleModifier(new ScaleParticleModifier<Sprite>(expireTime * .7f, expireTime, maxScale, 0));
 
 		displayButtonParticleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(expireTime * .9f, expireTime, startAlpha, 0.0f));
-		
+
 		displayButtonParticleSystem.setParticlesSpawnEnabled(false);
-		displayButtonParticleSystem.setZIndex(FOREGROUND_Z-1);
+		displayButtonParticleSystem.setZIndex(FOREGROUND_Z - 1);
 
 		currentScene.attachChild(displayButtonParticleSystem);
 	}
@@ -669,7 +677,7 @@ public class Tileset implements TilesConstants
 
 	public void resetPlayerTiles()
 	{
-		if(displayButtonParticleSystem != null)
+		if (displayButtonParticleSystem != null)
 			displayButtonParticleSystem.setParticlesSpawnEnabled(false);
 		{ //Player Two Buttons
 			for (int x = 0; x < 3; x++)
