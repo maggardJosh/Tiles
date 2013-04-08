@@ -53,7 +53,6 @@ import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.SetupScene;
-import com.lionsteel.tiles.util.Inventory;
 
 public class Tileset implements TilesConstants
 {
@@ -63,7 +62,6 @@ public class Tileset implements TilesConstants
 
 	//TODO: Purchaseable tilesets here
 	public static final String[]			purchaseableTilesets		= {"autumn"};									//{ "blocks", "dice" };
-	public static final ArrayList<String>	purchasedTilesets			= new ArrayList<String>();
 
 	private BuildableBitmapTextureAtlas		atlas;
 	private BitmapTextureAtlas				backgroundAtlas;
@@ -100,14 +98,6 @@ public class Tileset implements TilesConstants
 	private Rectangle						playerTwoDisplay;
 
 	private SpriteParticleSystem			displayButtonParticleSystem;
-
-	public static void addPurchasedTileset(String purchasedTileset)
-	{
-		for (int i = 0; i < purchasedTilesets.size(); i++)
-			if (purchasedTilesets.get(i).equalsIgnoreCase(purchasedTileset))
-				return;
-		purchasedTilesets.add(purchasedTileset);
-	}
 
 	/**
 	 * 
@@ -1065,20 +1055,10 @@ public class Tileset implements TilesConstants
 		return false;
 	}
 
-	public static void getPurchasedTilesets(Inventory inv)
-	{
-		purchasedTilesets.clear();
-		for (int x = 0; x < purchaseableTilesets.length; x++)
-			if (inv.getPurchase(purchaseableTilesets[x]) != null)
-				purchasedTilesets.add(purchaseableTilesets[x]);
-	}
-
 	public static boolean isPurchased(String tileset)
 	{
-		for (String purchasedTileset : purchasedTilesets)
-			if (purchasedTileset.compareTo(tileset) == 0)
-				return true;
-		return false;
+		return TilesMainActivity.getInstance().sharedPrefs.getBoolean(tileset, false);
+		
 	}
 
 }

@@ -2,6 +2,7 @@ package com.lionsteel.tiles;
 
 import java.util.Map;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -22,15 +23,25 @@ import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 
 public class AmazonPurchaser extends BasePurchasingObserver
 {
+	public static ProgressDialog purchaseDialog;
 
 	private TilesMainActivity	activity;
 	private static final String	TAG		= "Amazon-IAP";
 	private final String		OFFSET	= "offset";
 
-	public AmazonPurchaser(TilesMainActivity activity)
+	public AmazonPurchaser(final TilesMainActivity activity)
 	{
 		super(activity);
 		this.activity = activity;
+		activity.runOnUiThread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				AmazonPurchaser.purchaseDialog = new ProgressDialog(activity);
+			}
+		});
 	}
 
 	/**
@@ -233,7 +244,6 @@ public class AmazonPurchaser extends BasePurchasingObserver
 				case ENTITLED:
 					key = getKey(receipt.getSku());
 					editor.putBoolean(key, true);
-					Tileset.addPurchasedTileset(key);
 					break;
 				case SUBSCRIPTION:
 					break;
@@ -276,6 +286,7 @@ public class AmazonPurchaser extends BasePurchasingObserver
 			{
 				TilesetSelectScene.getInstance().redoButtons();
 			}
+			AmazonPurchaser.purchaseDialog.dismiss();
 		}
 	}
 
@@ -316,7 +327,6 @@ public class AmazonPurchaser extends BasePurchasingObserver
 						/*
 						 * If the receipt is for an entitlement, the customer is re-entitled.
 						 */
-						Tileset.addPurchasedTileset(key);
 						editor.putBoolean(key, true);
 						editor.commit();
 						break;

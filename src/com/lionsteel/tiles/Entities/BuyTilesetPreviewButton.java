@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.flurry.android.FlurryAgent;
+import com.lionsteel.tiles.AmazonPurchaser;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
@@ -35,7 +36,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 		@Override
 		protected void onPreExecute()
 		{
-			progressDialog = new ProgressDialog(TilesMainActivity.getInstance());
+			progressDialog = AmazonPurchaser.purchaseDialog;
 			progressDialog.setMessage("Launching Market");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
@@ -47,12 +48,7 @@ public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 			PurchasingManager.initiatePurchaseRequest("com.lionsteel.tiles."+basePath);
 			return null;
 		}
-		@Override
-		protected void onPostExecute(Void result)
-		{
-			progressDialog.dismiss();
-			super.onPostExecute(result);
-		}
+
 	}
 	
 	public BuyTilesetPreviewButton(final String basePath)

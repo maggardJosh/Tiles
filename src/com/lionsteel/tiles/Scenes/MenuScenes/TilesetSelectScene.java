@@ -84,7 +84,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 		{
 
 			buttons[x] = new TilesetPreviewButton(Tileset.tilesetList[x]);
-			if (!Tileset.isPurchasable(Tileset.tilesetList[x]))
+			if (!Tileset.isPurchasable(Tileset.tilesetList[x]) || Tileset.isPurchased(Tileset.tilesetList[x]))
 			{
 				addButton(buttons[x].getButton());
 				buttons[x].getButton().center(nextYPos);
@@ -106,7 +106,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 		addButton(buyTilesetsButton);
 
 		MAX_Y = nextYPos + BOTTOM_PADDING;
-		
+
 		AmazonPurchaser amazonIAP = new AmazonPurchaser(activity);
 		PurchasingManager.registerObserver(amazonIAP);
 		PurchasingManager.initiateGetUserIdRequest();
@@ -131,7 +131,6 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 		activity.runOnUpdateThread(new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
@@ -145,18 +144,9 @@ public class TilesetSelectScene extends TilesScrollableScene
 					for (int x = 0; x < buttons.length; x++)
 					{
 
-						if (Tileset.isPurchasable(Tileset.tilesetList[x]))
+						if (!Tileset.isPurchasable(Tileset.tilesetList[x]) || Tileset.isPurchased(Tileset.tilesetList[x]))
 						{
-							if (Tileset.isPurchased(Tileset.tilesetList[x]))
-							{
-								//Display purchased tilesets
-								addButton(buttons[x].getButton());
-								buttons[x].getButton().center(nextYPos);
-								nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
-							}
-						} else
-						{
-							//Display default tilesets
+							//Display purchased tilesets
 							addButton(buttons[x].getButton());
 							buttons[x].getButton().center(nextYPos);
 							nextYPos = buttons[x].getButton().getBottom() + BUTTON_PADDING;
