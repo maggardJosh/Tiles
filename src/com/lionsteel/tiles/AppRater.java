@@ -74,7 +74,7 @@ public class AppRater
 		{
 			public void onClick(View v)
 			{
-				mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+				mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("amzn://apps/android?p=" + APP_PNAME)));
 				editor.putBoolean("dontshowagain", true);
 				editor.commit();
 				dialog.dismiss();
