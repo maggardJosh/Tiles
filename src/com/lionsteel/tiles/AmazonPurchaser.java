@@ -285,6 +285,7 @@ public class AmazonPurchaser extends BasePurchasingObserver
 			if (success)
 			{
 				TilesetSelectScene.getInstance().redoButtons();
+				activity.backToTilesetSelect();
 			}
 			AmazonPurchaser.purchaseDialog.dismiss();
 		}
