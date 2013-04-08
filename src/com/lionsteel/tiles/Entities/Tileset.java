@@ -1,6 +1,5 @@
 package com.lionsteel.tiles.Entities;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -61,7 +60,7 @@ public class Tileset implements TilesConstants
 	public static String[]					tilesetList;
 
 	//TODO: Purchaseable tilesets here
-	public static final String[]			purchaseableTilesets		= {"autumn"};									//{ "blocks", "dice" };
+	public static final String[]			purchaseableTilesets		=  { "dice", "tech", "rune", "jewels", "autumn", "spring", "summer", "winter" };
 
 	private BuildableBitmapTextureAtlas		atlas;
 	private BitmapTextureAtlas				backgroundAtlas;

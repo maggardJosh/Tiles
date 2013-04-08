@@ -1,27 +1,17 @@
 package com.lionsteel.tiles.Entities;
 
-import java.util.HashMap;
-
 import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.amazon.inapp.purchasing.PurchasingManager;
-import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.AmazonPurchaser;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
-import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Scenes.MenuScenes.BuyTilesetSelectScene;
-import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
-import com.lionsteel.tiles.util.IabException;
-import com.lionsteel.tiles.util.IabHelper.OnIabPurchaseFinishedListener;
-import com.lionsteel.tiles.util.IabResult;
-import com.lionsteel.tiles.util.Purchase;
 
 public class BuyTilesetPreviewButton extends Entity implements TilesConstants
 {

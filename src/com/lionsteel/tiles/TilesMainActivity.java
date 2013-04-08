@@ -101,7 +101,8 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	@Override
 	protected void onStart()
 	{
-		FlurryAgent.onStartSession(this, "3ZV4J886JJR56QBBF9YX");
+		//TODO: Remove test stuff
+		FlurryAgent.onStartSession(this, "test3ZV4J886JJR56QBBF9YX");
 
 		
 		super.onStart();
