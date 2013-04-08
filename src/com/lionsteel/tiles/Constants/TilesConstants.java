@@ -14,8 +14,8 @@ public interface TilesConstants
 	public static final int		TILE_WIDTH						= 110;
 	public static final int		PAUSE_BAR_WIDTH					= 30;
 
-	public static final int		DAYS_UNTIL_RATE_PROMPT			= 0;
-	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 3;
+	public static final int		DAYS_UNTIL_RATE_PROMPT			= 3;
+	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 7;
 
 	public static final String	DEFAULT_TILESET					= "buttons";
 
