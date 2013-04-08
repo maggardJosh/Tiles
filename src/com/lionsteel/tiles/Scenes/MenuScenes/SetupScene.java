@@ -28,12 +28,13 @@ import com.lionsteel.tiles.BaseClasses.TilesMenuScene;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Constants.GameMode;
+import com.lionsteel.tiles.Constants.TilesConstants;
 import com.lionsteel.tiles.Entities.MusicMuteControl;
 import com.lionsteel.tiles.Entities.SoundEffectMuteControl;
 import com.lionsteel.tiles.Entities.Tileset;
 import com.lionsteel.tiles.Entities.TilesetEntity;
 
-public class SetupScene extends TilesMenuScene
+public class SetupScene extends TilesMenuScene implements TilesConstants
 {
 	final TilesMainActivity				activity;
 	final BuildableBitmapTextureAtlas	sceneAtlas;
@@ -339,7 +340,7 @@ public class SetupScene extends TilesMenuScene
 		activity = TilesMainActivity.getInstance();
 		this.setBackgroundEnabled(false);
 
-		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, "basic"), false);
+		currentTileset = new Tileset(activity.sharedPrefs.getString(TilesSharedPreferenceStrings.lastTileset, DEFAULT_TILESET), false);
 
 		modeSelectScreen = new VersusModeSelectScene();
 		practiceModeSelectScene = new PracticeModeSelectScene();
