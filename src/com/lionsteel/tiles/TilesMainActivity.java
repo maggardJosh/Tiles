@@ -1,7 +1,6 @@
 package com.lionsteel.tiles;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 import org.andengine.engine.camera.Camera;
@@ -19,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.amazon.inapp.purchasing.PurchasingManager;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
@@ -101,9 +99,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	@Override
 	protected void onStart()
 	{
-		//TODO: New Flurry Project Code ZVDZY326DS57FS4KCXTS
-		FlurryAgent.onStartSession(this, "3ZV4J886JJR56QBBF9YX");
-
+		FlurryAgent.onStartSession(this, "ZVDZY326DS57FS4KCXTS");
 		super.onStart();
 	}
 
