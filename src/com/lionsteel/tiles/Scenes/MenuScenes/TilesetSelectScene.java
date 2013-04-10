@@ -36,18 +36,12 @@ public class TilesetSelectScene extends TilesScrollableScene
 	final TilesMenuButton				buyTilesetsButton;
 
 	private static TilesetSelectScene	instance;
-
-	public static TilesetSelectScene createInstance()
-	{
-		if (instance == null)
-			instance = new TilesetSelectScene();
-		return instance;
-	}
+	public static boolean isDoneLoading = false;
 
 	public static TilesetSelectScene getInstance()
 	{
-		while (instance == null)
-			;
+		if (instance == null)
+			instance = new TilesetSelectScene();
 		return instance;
 	}
 
@@ -107,9 +101,7 @@ public class TilesetSelectScene extends TilesScrollableScene
 
 		MAX_Y = nextYPos + BOTTOM_PADDING;
 
-		AmazonPurchaser amazonIAP = new AmazonPurchaser(activity);
-		PurchasingManager.registerObserver(amazonIAP);
-		PurchasingManager.initiateGetUserIdRequest();
+		isDoneLoading = true;
 	}
 
 	public void clearButtons()

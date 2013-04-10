@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.amazon.inapp.purchasing.PurchasingManager;
 import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.BaseClasses.GameScene;
 import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
@@ -100,6 +101,12 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	protected void onStart()
 	{
 		FlurryAgent.onStartSession(this, "ZVDZY326DS57FS4KCXTS");
+		
+		TilesetSelectScene.isDoneLoading = false;
+		
+		AmazonPurchaser amazonIAP = new AmazonPurchaser(this);
+		PurchasingManager.registerObserver(amazonIAP);
+		PurchasingManager.initiateGetUserIdRequest();
 		super.onStart();
 	}
 

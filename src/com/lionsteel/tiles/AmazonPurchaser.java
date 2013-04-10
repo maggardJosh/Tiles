@@ -23,11 +23,11 @@ import com.lionsteel.tiles.Scenes.MenuScenes.TilesetSelectScene;
 
 public class AmazonPurchaser extends BasePurchasingObserver
 {
-	public static ProgressDialog purchaseDialog;
+	public static ProgressDialog	purchaseDialog;
 
-	private TilesMainActivity	activity;
-	private static final String	TAG		= "Amazon-IAP";
-	private final String		OFFSET	= "offset";
+	private TilesMainActivity		activity;
+	private static final String		TAG		= "Amazon-IAP";
+	private final String			OFFSET	= "offset";
 
 	public AmazonPurchaser(final TilesMainActivity activity)
 	{
@@ -35,7 +35,7 @@ public class AmazonPurchaser extends BasePurchasingObserver
 		this.activity = activity;
 		activity.runOnUiThread(new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -136,7 +136,7 @@ public class AmazonPurchaser extends BasePurchasingObserver
 	private String getKey(final String sku)
 	{
 		String[] parts = sku.split("\\.");
-		return parts[parts.length-1];
+		return parts[parts.length - 1];
 	}
 
 	/*
@@ -370,9 +370,8 @@ public class AmazonPurchaser extends BasePurchasingObserver
 		{
 			super.onPostExecute(success);
 			if (success)
-			{
-				TilesetSelectScene.getInstance().redoButtons();
-			}
+				if (TilesetSelectScene.isDoneLoading)
+					TilesetSelectScene.getInstance().redoButtons();
 		}
 	}
 
