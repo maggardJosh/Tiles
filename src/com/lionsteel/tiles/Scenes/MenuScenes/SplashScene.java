@@ -49,7 +49,7 @@ public class SplashScene extends Scene
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed)
 	{
-		if (isFadingOut && activity.isReadyToFadeOut())
+		if (isFadingOut)
 		{
 			if(pSecondsElapsed<.5)
 				backgroundSprite.setAlpha(backgroundSprite.getAlpha() - pSecondsElapsed / SECONDS_TO_FADE);

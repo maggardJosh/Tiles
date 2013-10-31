@@ -3,7 +3,6 @@ package com.lionsteel.tiles;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.util.color.Color;
-import org.andengine.util.modifier.ease.EaseCubicInOut;
 import org.andengine.util.modifier.ease.EaseCubicOut;
 
 import com.lionsteel.tiles.BaseClasses.TilesMenuButton;
