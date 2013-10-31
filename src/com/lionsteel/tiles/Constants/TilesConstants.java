@@ -14,7 +14,7 @@ public interface TilesConstants
 	public static final int		TILE_WIDTH						= 110;
 	public static final int		PAUSE_BAR_WIDTH					= 30;
 
-	public static final int		DAYS_UNTIL_RATE_PROMPT			= 0;
+	public static final int		DAYS_UNTIL_RATE_PROMPT			= 2;
 	public static final int		LAUNCHES_UNTIL_RATE_PROMPT		= 3;
 
 	final float					TUTORIAL_SEGMENT_LENGTH			= 3.0f;

@@ -1,6 +1,5 @@
 package com.lionsteel.tiles.Entities;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.engine.handler.timer.ITimerCallback;

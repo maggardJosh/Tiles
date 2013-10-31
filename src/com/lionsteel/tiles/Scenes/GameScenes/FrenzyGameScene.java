@@ -1,5 +1,7 @@
 package com.lionsteel.tiles.Scenes.GameScenes;
 
+import java.util.Locale;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -10,7 +12,6 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
-import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
@@ -93,12 +94,12 @@ public class FrenzyGameScene extends PracticeGameScene
 
 	private CharSequence getRoundTilesString()
 	{
-		return String.format("%03d", getTilesCollected(PLAYER_ONE));
+		return String.format(Locale.ENGLISH,"%03d", getTilesCollected(PLAYER_ONE));
 	}
 
 	private CharSequence getBestTilesString()
 	{
-		return String.format("%03d", getBestTiles());
+		return String.format(Locale.ENGLISH, "%03d", getBestTiles());
 	}
 
 	@Override

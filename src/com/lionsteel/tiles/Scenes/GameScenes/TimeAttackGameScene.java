@@ -1,5 +1,7 @@
 package com.lionsteel.tiles.Scenes.GameScenes;
 
+import java.util.Locale;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -10,7 +12,6 @@ import com.flurry.android.FlurryAgent;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesSharedPreferenceStrings;
 import com.lionsteel.tiles.BaseClasses.PracticeGameScene;
-import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Constants.Difficulty;
 import com.lionsteel.tiles.Constants.FlurryAgentEventStrings;
 import com.lionsteel.tiles.Entities.GameButton;
@@ -175,7 +176,7 @@ public class TimeAttackGameScene extends PracticeGameScene
 			if (bestTimeAttackSeconds == 0)
 				bestTimeValue = "None";
 			else
-				bestTimeValue = String.format("%02d:%02d:%06.3f", bestTimeHours, bestTimeMinutes, bestTimeAttackSeconds);
+				bestTimeValue = String.format(Locale.ENGLISH, "%02d:%02d:%06.3f", bestTimeHours, bestTimeMinutes, bestTimeAttackSeconds);
 
 			practiceGameOverScene.setValues(bestTimeValue, String.format("%02d:%02d:%06.3f", hoursPlayed, minutesPlayed, secondsPlayed));
 			showPracticeGameOver();

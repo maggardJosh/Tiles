@@ -10,7 +10,6 @@ import org.andengine.util.modifier.IModifier;
 import com.lionsteel.tiles.SharedResources;
 import com.lionsteel.tiles.TilesMainActivity;
 import com.lionsteel.tiles.BaseClasses.GameScene;
-import com.lionsteel.tiles.BaseClasses.GameScene.GameState;
 import com.lionsteel.tiles.Entities.GameButton;
 import com.lionsteel.tiles.Entities.TimerRect;
 
