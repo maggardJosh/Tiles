@@ -106,7 +106,7 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	@Override
 	protected void onStart()
 	{
-		FlurryAgent.onStartSession(this, "3ZV4J886JJR56QBBF9YX");
+		FlurryAgent.onStartSession(this, "ZVDZY326DS57FS4KCXTS");
 		super.onStart();
 	}
 
@@ -131,7 +131,6 @@ public class TilesMainActivity extends JifBaseGameActivity implements TilesConst
 	protected void onCreate(Bundle pSavedInstanceState)
 	{
 		super.onCreate(pSavedInstanceState);
-
 	}
 
 	protected void onDestroy()
